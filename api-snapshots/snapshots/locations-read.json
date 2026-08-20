@@ -1,0 +1,100 @@
+{
+  "name": "locations-read",
+  "controller": "LocationApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/locations/{facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": {
+      "id": "1",
+      "name": "Main Warehouse",
+      "description": null,
+      "locationNumber": null,
+      "locationGroup": null,
+      "parentLocation": null,
+      "locationType": {
+        "id": "2",
+        "name": "Depot",
+        "description": "Depot",
+        "locationTypeCode": "DEPOT"
+      },
+      "sortOrder": 0,
+      "hasBinLocationSupport": true,
+      "hasPackingSupport": false,
+      "hasPartialReceivingSupport": false,
+      "hasCentralPurchasingEnabled": false,
+      "organizationName": "Main Organization",
+      "organizationCode": "MO",
+      "backgroundColor": "FFFFFF",
+      "zoneName": null,
+      "zoneId": null,
+      "active": true,
+      "organization": {
+        "id": "1",
+        "name": "Main Organization",
+        "displayName": "MO - Main Organization",
+        "description": null,
+        "code": "MO",
+        "dateCreated": "<volatile>",
+        "lastUpdated": "<volatile>",
+        "defaultLocation": null,
+        "partyType": {
+          "id": "1",
+          "name": "Organization",
+          "code": "ORG",
+          "partyTypeCode": "ORGANIZATION"
+        },
+        "roles": [
+          {
+            "id": "1",
+            "roleType": "ROLE_ORGANIZATION",
+            "startDate": null,
+            "endDate": null
+          }
+        ],
+        "sequences": {}
+      },
+      "manager": {
+        "id": "1",
+        "name": "Miss Administrator",
+        "firstName": "Miss",
+        "lastName": "Administrator",
+        "email": "admin@admin.com",
+        "username": "admin",
+        "roles": [
+          "ROLE_FINANCE",
+          "ROLE_PRODUCT_NOTIFICATION",
+          "ROLE_SHIPMENT_NOTIFICATION",
+          "ROLE_SUPERUSER"
+        ]
+      },
+      "address": {
+        "address": "888 Commonwealth Avenue",
+        "address2": "Third Floor",
+        "city": "Boston",
+        "country": "United States",
+        "description": null,
+        "postalCode": "02215",
+        "stateOrProvince": "MA"
+      },
+      "supportedActivities": [
+        "ENABLE_REQUESTOR_APPROVAL_NOTIFICATIONS",
+        "PLACE_REQUEST",
+        "SEND_STOCK",
+        "SUBMIT_REQUEST",
+        "PLACE_ORDER",
+        "FULFILL_REQUEST",
+        "EXTERNAL",
+        "ENABLE_FULFILLER_APPROVAL_NOTIFICATIONS",
+        "RECEIVE_STOCK",
+        "PICK_STOCK",
+        "ADJUST_INVENTORY",
+        "PUTAWAY_STOCK",
+        "MANAGE_INVENTORY"
+      ]
+    }
+  }
+}

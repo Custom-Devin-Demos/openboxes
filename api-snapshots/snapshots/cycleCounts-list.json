@@ -1,0 +1,15 @@
+{
+  "name": "cycleCounts-list",
+  "controller": "CycleCountApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/facilities/{facilityId}/cycle-counts"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [],
+    "status": 200,
+    "count": 0
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "replenishments-requirements",
+  "controller": "ReplenishmentApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/requirements?location.id={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": []
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "name": "selectOptions-shipmentStatusCodes",
+  "controller": "SelectOptionsApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/stockMovements/shipmentStatusCodes"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [
+      {
+        "id": "CREATED",
+        "value": "CREATED",
+        "label": "Created",
+        "variant": "primary"
+      },
+      {
+        "id": "PENDING",
+        "value": "PENDING",
+        "label": "Pending",
+        "variant": "warning"
+      },
+      {
+        "id": "SHIPPED",
+        "value": "SHIPPED",
+        "label": "Shipped",
+        "variant": "success"
+      },
+      {
+        "id": "PARTIALLY_RECEIVED",
+        "value": "PARTIALLY_RECEIVED",
+        "label": "Receiving",
+        "variant": "primary"
+      },
+      {
+        "id": "RECEIVED",
+        "value": "RECEIVED",
+        "label": "Received",
+        "variant": "success"
+      }
+    ]
+  }
+}

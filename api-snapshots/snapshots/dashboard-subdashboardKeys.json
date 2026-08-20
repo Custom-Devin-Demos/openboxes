@@ -1,0 +1,11 @@
+{
+  "name": "dashboard-subdashboardKeys",
+  "controller": "DashboardApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/dashboard/personal/subdashboardKeys"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": []
+}

@@ -1,0 +1,13 @@
+{
+  "name": "locationGroups-list",
+  "controller": "LocationGroupApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/locationGroups"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": []
+  }
+}

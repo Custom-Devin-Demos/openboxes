@@ -1,0 +1,38 @@
+{
+  "name": "stockTransfers-statusOptions",
+  "controller": "StockTransferApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/stockTransfers/statusOptions"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [
+      {
+        "id": "PENDING",
+        "value": "PENDING",
+        "label": "Pending",
+        "variant": "WARNING"
+      },
+      {
+        "id": "APPROVED",
+        "value": "APPROVED",
+        "label": "Approved",
+        "variant": "PRIMARY"
+      },
+      {
+        "id": "COMPLETED",
+        "value": "COMPLETED",
+        "label": "Completed",
+        "variant": "SUCCESS"
+      },
+      {
+        "id": "CANCELED",
+        "value": "CANCELED",
+        "label": "Canceled",
+        "variant": "DANGER"
+      }
+    ]
+  }
+}

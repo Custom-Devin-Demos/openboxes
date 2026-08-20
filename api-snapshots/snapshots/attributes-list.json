@@ -1,0 +1,13 @@
+{
+  "name": "attributes-list",
+  "controller": "AttributeApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/attributes"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": []
+  }
+}

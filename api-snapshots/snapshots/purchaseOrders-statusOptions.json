@@ -1,0 +1,86 @@
+{
+  "name": "purchaseOrders-statusOptions",
+  "controller": "PurchaseOrderApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/orderSummaryStatus"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [
+      {
+        "id": "PENDING",
+        "value": "PENDING",
+        "label": "Pending",
+        "variant": "WARNING"
+      },
+      {
+        "id": "APPROVED",
+        "value": "APPROVED",
+        "label": "Approved",
+        "variant": "PRIMARY"
+      },
+      {
+        "id": "PLACED",
+        "value": "PLACED",
+        "label": "Placed",
+        "variant": "PRIMARY"
+      },
+      {
+        "id": "PARTIALLY_SHIPPED",
+        "value": "PARTIALLY_SHIPPED",
+        "label": "Partially Shipped",
+        "variant": "PRIMARY"
+      },
+      {
+        "id": "SHIPPED",
+        "value": "SHIPPED",
+        "label": "Shipped",
+        "variant": "PRIMARY"
+      },
+      {
+        "id": "PARTIALLY_RECEIVED",
+        "value": "PARTIALLY_RECEIVED",
+        "label": "Partially Received",
+        "variant": "PRIMARY"
+      },
+      {
+        "id": "RECEIVED",
+        "value": "RECEIVED",
+        "label": "Received",
+        "variant": "PRIMARY"
+      },
+      {
+        "id": "PARTIALLY_INVOICED",
+        "value": "PARTIALLY_INVOICED",
+        "label": "Partially Invoiced",
+        "variant": "PRIMARY"
+      },
+      {
+        "id": "INVOICED",
+        "value": "INVOICED",
+        "label": "Invoiced",
+        "variant": "PRIMARY"
+      },
+      {
+        "id": "COMPLETED",
+        "value": "COMPLETED",
+        "label": "Completed",
+        "variant": "SUCCESS"
+      },
+      {
+        "id": "CANCELED",
+        "value": "CANCELED",
+        "label": "Canceled",
+        "variant": "DANGER"
+      },
+      {
+        "id": "REJECTED",
+        "value": "REJECTED",
+        "label": "Rejected",
+        "variant": "DANGER"
+      }
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "generic-product-read",
+  "controller": "GenericApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/generic/product/{productId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": {
+      "id": "seed-product-01",
+      "productCode": "DM0001",
+      "name": "Acetaminophen 325mg tablet",
+      "description": null,
+      "category": "Medicines",
+      "unitOfMeasure": "EA",
+      "pricePerUnit": null,
+      "dateCreated": "<volatile>",
+      "lastUpdated": "<volatile>",
+      "updatedBy": null,
+      "color": null,
+      "handlingIcons": [],
+      "lotAndExpiryControl": null,
+      "active": true,
+      "displayNames": {
+        "default": null
+      }
+    }
+  }
+}

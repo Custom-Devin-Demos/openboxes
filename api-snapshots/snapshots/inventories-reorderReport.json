@@ -1,0 +1,254 @@
+{
+  "name": "inventories-reorderReport",
+  "controller": "InventoryApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/facilities/{facilityId}/inventories/reorderReport"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [
+      {
+        "expectedReorderCost": null,
+        "expiredQuantityAvailableToPromise": 0,
+        "finalQuantityAvailableToPromise": 300,
+        "inventoryLevel": null,
+        "inventoryStatus": "IN_STOCK",
+        "monthlyDemand": 0,
+        "product": {
+          "id": "seed-product-02",
+          "productCode": "DM0002",
+          "name": "Amoxicillin 500mg capsule",
+          "description": null,
+          "category": "Medicines",
+          "unitOfMeasure": "EA",
+          "pricePerUnit": null,
+          "dateCreated": "<volatile>",
+          "lastUpdated": "<volatile>",
+          "updatedBy": null,
+          "color": null,
+          "handlingIcons": [],
+          "lotAndExpiryControl": null,
+          "active": true,
+          "displayNames": {
+            "default": null
+          }
+        },
+        "quantityToOrder": null,
+        "tags": [],
+        "unitCost": null
+      },
+      {
+        "expectedReorderCost": null,
+        "expiredQuantityAvailableToPromise": 0,
+        "finalQuantityAvailableToPromise": 200,
+        "inventoryLevel": null,
+        "inventoryStatus": "IN_STOCK",
+        "monthlyDemand": 0,
+        "product": {
+          "id": "seed-product-08",
+          "productCode": "DS0004",
+          "name": "Surgical face mask",
+          "description": null,
+          "category": "Medical Supplies",
+          "unitOfMeasure": "BX",
+          "pricePerUnit": null,
+          "dateCreated": "<volatile>",
+          "lastUpdated": "<volatile>",
+          "updatedBy": null,
+          "color": null,
+          "handlingIcons": [],
+          "lotAndExpiryControl": null,
+          "active": true,
+          "displayNames": {
+            "default": null
+          }
+        },
+        "quantityToOrder": null,
+        "tags": [],
+        "unitCost": null
+      },
+      {
+        "expectedReorderCost": null,
+        "expiredQuantityAvailableToPromise": 0,
+        "finalQuantityAvailableToPromise": 1000,
+        "inventoryLevel": null,
+        "inventoryStatus": "IN_STOCK",
+        "monthlyDemand": 0,
+        "product": {
+          "id": "seed-product-06",
+          "productCode": "DS0002",
+          "name": "Syringe 5ml with needle",
+          "description": null,
+          "category": "Medical Supplies",
+          "unitOfMeasure": "EA",
+          "pricePerUnit": null,
+          "dateCreated": "<volatile>",
+          "lastUpdated": "<volatile>",
+          "updatedBy": null,
+          "color": null,
+          "handlingIcons": [],
+          "lotAndExpiryControl": null,
+          "active": true,
+          "displayNames": {
+            "default": null
+          }
+        },
+        "quantityToOrder": null,
+        "tags": [],
+        "unitCost": null
+      },
+      {
+        "expectedReorderCost": null,
+        "expiredQuantityAvailableToPromise": 0,
+        "finalQuantityAvailableToPromise": 250,
+        "inventoryLevel": null,
+        "inventoryStatus": "IN_STOCK",
+        "monthlyDemand": 0,
+        "product": {
+          "id": "seed-product-04",
+          "productCode": "DM0004",
+          "name": "Oral rehydration salts sachet",
+          "description": null,
+          "category": "Medicines",
+          "unitOfMeasure": "EA",
+          "pricePerUnit": null,
+          "dateCreated": "<volatile>",
+          "lastUpdated": "<volatile>",
+          "updatedBy": null,
+          "color": null,
+          "handlingIcons": [],
+          "lotAndExpiryControl": null,
+          "active": true,
+          "displayNames": {
+            "default": null
+          }
+        },
+        "quantityToOrder": null,
+        "tags": [],
+        "unitCost": null
+      },
+      {
+        "expectedReorderCost": null,
+        "expiredQuantityAvailableToPromise": 0,
+        "finalQuantityAvailableToPromise": 500,
+        "inventoryLevel": null,
+        "inventoryStatus": "IN_STOCK",
+        "monthlyDemand": 0,
+        "product": {
+          "id": "seed-product-01",
+          "productCode": "DM0001",
+          "name": "Acetaminophen 325mg tablet",
+          "description": null,
+          "category": "Medicines",
+          "unitOfMeasure": "EA",
+          "pricePerUnit": null,
+          "dateCreated": "<volatile>",
+          "lastUpdated": "<volatile>",
+          "updatedBy": null,
+          "color": null,
+          "handlingIcons": [],
+          "lotAndExpiryControl": null,
+          "active": true,
+          "displayNames": {
+            "default": null
+          }
+        },
+        "quantityToOrder": null,
+        "tags": [],
+        "unitCost": null
+      },
+      {
+        "expectedReorderCost": null,
+        "expiredQuantityAvailableToPromise": 0,
+        "finalQuantityAvailableToPromise": 600,
+        "inventoryLevel": null,
+        "inventoryStatus": "IN_STOCK",
+        "monthlyDemand": 0,
+        "product": {
+          "id": "seed-product-07",
+          "productCode": "DS0003",
+          "name": "Gauze roll 10cm x 4m",
+          "description": null,
+          "category": "Medical Supplies",
+          "unitOfMeasure": "EA",
+          "pricePerUnit": null,
+          "dateCreated": "<volatile>",
+          "lastUpdated": "<volatile>",
+          "updatedBy": null,
+          "color": null,
+          "handlingIcons": [],
+          "lotAndExpiryControl": null,
+          "active": true,
+          "displayNames": {
+            "default": null
+          }
+        },
+        "quantityToOrder": null,
+        "tags": [],
+        "unitCost": null
+      },
+      {
+        "expectedReorderCost": null,
+        "expiredQuantityAvailableToPromise": 0,
+        "finalQuantityAvailableToPromise": 400,
+        "inventoryLevel": null,
+        "inventoryStatus": "IN_STOCK",
+        "monthlyDemand": 0,
+        "product": {
+          "id": "seed-product-03",
+          "productCode": "DM0003",
+          "name": "Ibuprofen 200mg tablet",
+          "description": null,
+          "category": "Medicines",
+          "unitOfMeasure": "EA",
+          "pricePerUnit": null,
+          "dateCreated": "<volatile>",
+          "lastUpdated": "<volatile>",
+          "updatedBy": null,
+          "color": null,
+          "handlingIcons": [],
+          "lotAndExpiryControl": null,
+          "active": true,
+          "displayNames": {
+            "default": null
+          }
+        },
+        "quantityToOrder": null,
+        "tags": [],
+        "unitCost": null
+      },
+      {
+        "expectedReorderCost": null,
+        "expiredQuantityAvailableToPromise": 0,
+        "finalQuantityAvailableToPromise": 100,
+        "inventoryLevel": null,
+        "inventoryStatus": "IN_STOCK",
+        "monthlyDemand": 0,
+        "product": {
+          "id": "seed-product-05",
+          "productCode": "DS0001",
+          "name": "Examination gloves, nitrile, medium",
+          "description": null,
+          "category": "Medical Supplies",
+          "unitOfMeasure": "BX",
+          "pricePerUnit": null,
+          "dateCreated": "<volatile>",
+          "lastUpdated": "<volatile>",
+          "updatedBy": null,
+          "color": null,
+          "handlingIcons": [],
+          "lotAndExpiryControl": null,
+          "active": true,
+          "displayNames": {
+            "default": null
+          }
+        },
+        "quantityToOrder": null,
+        "tags": [],
+        "unitCost": null
+      }
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "invoices-typeCodes",
+  "controller": "InvoiceApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/invoiceTypeCodes"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [
+      {
+        "id": "INVOICE",
+        "value": "INVOICE",
+        "label": "Invoice"
+      },
+      {
+        "id": "CREDIT_NOTE",
+        "value": "CREDIT_NOTE",
+        "label": "Credit Note"
+      },
+      {
+        "id": "PREPAYMENT_INVOICE",
+        "value": "PREPAYMENT_INVOICE",
+        "label": "Prepayment Invoice"
+      }
+    ]
+  }
+}

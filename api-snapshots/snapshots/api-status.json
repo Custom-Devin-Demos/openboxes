@@ -1,0 +1,17 @@
+{
+  "name": "api-status",
+  "controller": "ApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/status"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "status": "OK",
+    "database": {
+      "status": true,
+      "message": "Database is available"
+    }
+  }
+}

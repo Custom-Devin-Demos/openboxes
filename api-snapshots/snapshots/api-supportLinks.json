@@ -1,0 +1,18 @@
+{
+  "name": "api-supportLinks",
+  "controller": "ApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/supportLinks"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": {
+      "configureOrganizationsAndLocations": "https://openboxes.atlassian.net/wiki/spaces/OBW/pages/1291452471/Configure+Organizations+and+Locations",
+      "manageBinLocations": "https://openboxes.atlassian.net/wiki/spaces/OBW/pages/1311572061/Manage+Bin+Locations",
+      "discussionForum": "https://discuss.openboxes.com/",
+      "knowledgeBase": "https://openboxes.helpscoutdocs.com/"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "unitOfMeasure-uomOptions",
+  "controller": "UnitOfMeasureApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/unitOfMeasures/options"
+  },
+  "status": 500,
+  "contentType": "application/json",
+  "body": {
+    "errorCode": 500,
+    "cause": "java.lang.NullPointerException",
+    "errorMessage": "Name is null"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "selectOptions-tagOptions",
+  "controller": "SelectOptionsApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/tagOptions"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": []
+  }
+}

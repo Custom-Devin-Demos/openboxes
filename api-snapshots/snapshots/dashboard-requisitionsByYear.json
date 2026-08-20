@@ -1,0 +1,38 @@
+{
+  "name": "dashboard-requisitionsByYear",
+  "controller": "DashboardApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/dashboard/requisitionsByYear?locationId={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": {
+      "labels": [
+        "FY 23",
+        "FY 24",
+        "FY 25",
+        "FY 26",
+        "FY 27"
+      ],
+      "datasets": [
+        {
+          "label": "Requisition count by year",
+          "data": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "links": null,
+          "type": null,
+          "yAxisID": null
+        }
+      ],
+      "colorNumber": null
+    },
+    "link": null
+  }
+}

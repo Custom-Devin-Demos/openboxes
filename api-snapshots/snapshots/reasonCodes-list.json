@@ -1,0 +1,69 @@
+{
+  "name": "reasonCodes-list",
+  "controller": "ReasonCodeApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/reasonCodes"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [
+      {
+        "id": "STOCKOUT",
+        "name": "Stock-out",
+        "sortOrder": 1
+      },
+      {
+        "id": "LOW_STOCK",
+        "name": "Low stock",
+        "sortOrder": 2
+      },
+      {
+        "id": "PACKAGE_SIZE",
+        "name": "Package size contains different quantity",
+        "sortOrder": 6
+      },
+      {
+        "id": "APPROVED_CHANGE",
+        "name": "Approved change",
+        "sortOrder": 22
+      },
+      {
+        "id": "EARLIER_EXPIRATION_DATE",
+        "name": "Earlier expiration date",
+        "sortOrder": 23
+      },
+      {
+        "id": "SUPPLIED_BY_GOVERNMENT",
+        "name": "Supplied by government",
+        "sortOrder": 21
+      },
+      {
+        "id": "COULD_NOT_LOCATE",
+        "name": "Could not locate",
+        "sortOrder": 14
+      },
+      {
+        "id": "REQUEST_ERROR",
+        "name": "Request error",
+        "sortOrder": 33
+      },
+      {
+        "id": "NOT_NEEDED_BASED_ON_CONSUMPTION",
+        "name": "Not needed based on consumption",
+        "sortOrder": 34
+      },
+      {
+        "id": "BACKORDER",
+        "name": "Backorder",
+        "sortOrder": 37
+      },
+      {
+        "id": "DUPLICATE_REQUEST",
+        "name": "Duplicate Request",
+        "sortOrder": 38
+      }
+    ]
+  }
+}

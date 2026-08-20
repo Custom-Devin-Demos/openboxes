@@ -1,0 +1,40 @@
+{
+  "name": "scenario-category-create-read-delete",
+  "controller": "CategoryApiController",
+  "steps": {
+    "create": {
+      "status": 200,
+      "body": {
+        "id": "<uuid>",
+        "description": null,
+        "name": "API Snapshot Scratch Category",
+        "version": 0,
+        "dateCreated": null,
+        "lastUpdated": null,
+        "sortOrder": 0,
+        "deleted": false,
+        "isRoot": false,
+        "categories": null
+      }
+    },
+    "read": {
+      "status": 200,
+      "body": {
+        "id": "<uuid>",
+        "description": null,
+        "name": "API Snapshot Scratch Category",
+        "version": 0,
+        "dateCreated": "<volatile>",
+        "lastUpdated": "<volatile>",
+        "sortOrder": 0,
+        "deleted": false,
+        "isRoot": false,
+        "categories": []
+      }
+    },
+    "delete": {
+      "status": 204,
+      "body": null
+    }
+  }
+}

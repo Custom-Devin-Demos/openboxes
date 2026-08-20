@@ -1,0 +1,124 @@
+{
+  "name": "locations-locationTypes",
+  "controller": "LocationApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/locations/locationTypes"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [
+      {
+        "id": "2",
+        "name": "Depot",
+        "description": "Depot",
+        "locationTypeCode": "DEPOT",
+        "supportedActivities": [
+          "ENABLE_REQUESTOR_APPROVAL_NOTIFICATIONS",
+          "PLACE_REQUEST",
+          "SEND_STOCK",
+          "SUBMIT_REQUEST",
+          "PLACE_ORDER",
+          "FULFILL_REQUEST",
+          "EXTERNAL",
+          "ENABLE_FULFILLER_APPROVAL_NOTIFICATIONS",
+          "RECEIVE_STOCK",
+          "PICK_STOCK",
+          "ADJUST_INVENTORY",
+          "PUTAWAY_STOCK",
+          "MANAGE_INVENTORY"
+        ]
+      },
+      {
+        "id": "3",
+        "name": "Dispensary",
+        "description": "Dispensary",
+        "locationTypeCode": "DISPENSARY",
+        "supportedActivities": [
+          "SEND_STOCK",
+          "DYNAMIC_CREATION",
+          "RECEIVE_STOCK"
+        ]
+      },
+      {
+        "id": "4",
+        "name": "Supplier",
+        "description": "Supplier",
+        "locationTypeCode": "SUPPLIER",
+        "supportedActivities": [
+          "FULFILL_ORDER",
+          "EXTERNAL",
+          "SEND_STOCK"
+        ]
+      },
+      {
+        "id": "5",
+        "name": "Ward",
+        "description": "Ward",
+        "locationTypeCode": "WARD",
+        "supportedActivities": [
+          "DYNAMIC_CREATION"
+        ]
+      },
+      {
+        "id": "6",
+        "name": "Pharmacy",
+        "description": "Pharmacy",
+        "locationTypeCode": "DISPENSARY",
+        "supportedActivities": [
+          "DYNAMIC_CREATION"
+        ]
+      },
+      {
+        "id": "<uuid>",
+        "name": "Cross-docking",
+        "description": "Default receiving location type",
+        "locationTypeCode": "INTERNAL",
+        "supportedActivities": [
+          "RECEIVE_STOCK",
+          "PICK_STOCK",
+          "PUTAWAY_STOCK"
+        ]
+      },
+      {
+        "id": "<uuid>",
+        "name": "Bin Location",
+        "description": "Default bin location type",
+        "locationTypeCode": "BIN_LOCATION",
+        "supportedActivities": [
+          "PICK_STOCK",
+          "PUTAWAY_STOCK"
+        ]
+      },
+      {
+        "id": "<uuid>",
+        "name": "Receiving",
+        "description": "Default receiving location type",
+        "locationTypeCode": "INTERNAL",
+        "supportedActivities": [
+          "RECEIVE_STOCK",
+          "PICK_STOCK",
+          "PUTAWAY_STOCK"
+        ]
+      },
+      {
+        "id": "HOLD_LOCATION",
+        "name": "Hold",
+        "description": "Default hold location type",
+        "locationTypeCode": "INTERNAL",
+        "supportedActivities": [
+          "PUTAWAY_STOCK",
+          "HOLD_STOCK"
+        ]
+      },
+      {
+        "id": "ZONE",
+        "name": "Zone",
+        "description": "Default zone location type",
+        "locationTypeCode": "ZONE",
+        "supportedActivities": []
+      }
+    ]
+  }
+}

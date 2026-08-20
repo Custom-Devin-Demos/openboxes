@@ -1,0 +1,30 @@
+{
+  "name": "dashboard-stockOutLastMonth",
+  "controller": "DashboardApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/dashboard/stockOutLastMonth?locationId={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": {
+      "labels": [
+        "Never"
+      ],
+      "datasets": [
+        {
+          "label": "Number of stockout",
+          "data": [
+            8
+          ],
+          "links": null,
+          "type": "doughnut",
+          "yAxisID": null
+        }
+      ],
+      "colorNumber": null
+    },
+    "link": null
+  }
+}

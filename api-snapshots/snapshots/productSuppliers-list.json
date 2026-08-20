@@ -1,0 +1,14 @@
+{
+  "name": "productSuppliers-list",
+  "controller": "ProductSupplierApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/productSuppliers"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [],
+    "totalCount": 0
+  }
+}

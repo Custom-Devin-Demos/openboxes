@@ -1,0 +1,15 @@
+{
+  "name": "dashboard-openStockRequests",
+  "controller": "DashboardApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/dashboard/openStockRequests?locationId={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "link": "/openboxes/stockMovement/list?direction=OUTBOUND&sourceType=ELECTRONIC",
+    "number": 0,
+    "tooltipData": null
+  }
+}

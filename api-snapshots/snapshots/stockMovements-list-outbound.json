@@ -1,0 +1,14 @@
+{
+  "name": "stockMovements-list-outbound",
+  "controller": "StockMovementApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/stockMovements?direction=OUTBOUND&origin={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [],
+    "totalCount": []
+  }
+}

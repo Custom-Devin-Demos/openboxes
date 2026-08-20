@@ -1,0 +1,14 @@
+{
+  "name": "stockTransfers-list",
+  "controller": "StockTransferApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/stockTransfers?location={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [],
+    "totalCount": 0
+  }
+}

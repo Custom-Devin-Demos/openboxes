@@ -1,0 +1,11 @@
+{
+  "name": "products-search",
+  "controller": "ProductApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/products/search?name=a&location.id={facilityId}"
+  },
+  "status": 200,
+  "contentType": "text/html",
+  "text": "['data':[]]"
+}

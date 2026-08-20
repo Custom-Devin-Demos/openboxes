@@ -1,0 +1,39 @@
+{
+  "name": "selectOptions-ratingTypeCodeOptions",
+  "controller": "SelectOptionsApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/ratingTypeCodeOptions"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [
+      {
+        "id": "OUTSTANDING",
+        "value": "OUTSTANDING",
+        "label": "Outstanding"
+      },
+      {
+        "id": "GOOD",
+        "value": "GOOD",
+        "label": "Good"
+      },
+      {
+        "id": "FAIR",
+        "value": "FAIR",
+        "label": "Fair"
+      },
+      {
+        "id": "POOR",
+        "value": "POOR",
+        "label": "Poor"
+      },
+      {
+        "id": "NOT_RATED",
+        "value": "NOT_RATED",
+        "label": "Not rated"
+      }
+    ]
+  }
+}

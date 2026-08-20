@@ -1,0 +1,29 @@
+{
+  "name": "replenishments-statusOptions",
+  "controller": "ReplenishmentApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/replenishments/statusOptions"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [
+      {
+        "id": "BELOW_MINIMUM",
+        "value": "BELOW_MINIMUM",
+        "label": "Below minimum"
+      },
+      {
+        "id": "BELOW_REORDER",
+        "value": "BELOW_REORDER",
+        "label": "Below reorder"
+      },
+      {
+        "id": "BELOW_MAXIMUM",
+        "value": "BELOW_MAXIMUM",
+        "label": "Below maximum"
+      }
+    ]
+  }
+}

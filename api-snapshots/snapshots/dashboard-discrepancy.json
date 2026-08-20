@@ -1,0 +1,19 @@
+{
+  "name": "dashboard-discrepancy",
+  "controller": "DashboardApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/dashboard/discrepancy?locationId={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": {
+      "body": [],
+      "name": "Name",
+      "number": "Shipment",
+      "value": "Discrepancy"
+    },
+    "link": null
+  }
+}

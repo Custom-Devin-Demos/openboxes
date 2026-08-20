@@ -1,0 +1,13 @@
+{
+  "name": "stockMovements-shippedItems",
+  "controller": "StockMovementApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/stockMovements/shippedItems?destination={facilityId}"
+  },
+  "status": 404,
+  "contentType": "application/json",
+  "body": {
+    "errorMessage": "No shipment items found"
+  }
+}
