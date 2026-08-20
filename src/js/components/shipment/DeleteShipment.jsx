@@ -27,7 +27,7 @@ const DeleteShipment = ({ match }) => {
             <div id="details" className="box">
               <h2>
                 <img
-                  src={`${CONTEXT_PATH}/images/icons/silk/delete.png`}
+                  src={`${CONTEXT_PATH}/static/images/icons/silk/delete.png`}
                   alt="Details"
                   style={{ verticalAlign: 'middle' }}
                 />
@@ -76,7 +76,7 @@ const DeleteShipment = ({ match }) => {
                         <td className="value left">
                           <div>
                             <button type="submit" className="positive">
-                              <img src={`${CONTEXT_PATH}/images/icons/silk/accept.png`} alt="" />
+                              <img src={`${CONTEXT_PATH}/static/images/icons/silk/accept.png`} alt="" />
                               {' '}
                               <Translate id="react.default.button.delete.label" defaultMessage="Delete" />
                             </button>

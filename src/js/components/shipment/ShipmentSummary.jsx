@@ -20,14 +20,14 @@ const ShipmentSummary = ({ summary }) => {
               {summary.shipmentType
                 ? (
                   <img
-                    src={`${CONTEXT_PATH}/images/icons/shipmentType/ShipmentType${summary.shipmentType.defaultName}.png`}
+                    src={`${CONTEXT_PATH}/static/images/icons/shipmentType/ShipmentType${summary.shipmentType.defaultName}.png`}
                     alt={summary.shipmentType.name}
                     style={{ verticalAlign: 'middle', width: '24px', height: '24px' }}
                   />
                 )
                 : (
                   <img
-                    src={`${CONTEXT_PATH}/images/icons/silk/lorry.png`}
+                    src={`${CONTEXT_PATH}/static/images/icons/silk/lorry.png`}
                     alt=""
                     style={{ verticalAlign: 'middle' }}
                   />

@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { SHIPMENT_COMMENT_FORM, SHIPMENT_SUMMARY } from 'api/urls';
 import ShipmentSummary from 'components/shipment/ShipmentSummary';
 import { SHIPMENT_URL } from 'consts/applicationUrls';
+import useTranslate from 'hooks/useTranslate';
 import apiClient from 'utils/apiClient';
 import Translate from 'utils/Translate';
 
@@ -15,6 +16,7 @@ const AddComment = ({ match }) => {
   const [summary, setSummary] = useState(null);
   const [users, setUsers] = useState([]);
   const currentUser = useSelector((state) => state.session.user);
+  const translate = useTranslate();
 
   useEffect(() => {
     apiClient.get(SHIPMENT_SUMMARY(shipmentId))
@@ -44,7 +46,7 @@ const AddComment = ({ match }) => {
                         <td valign="top" className="value">
                           <select id="recipientId" name="recipientId" defaultValue="">
                             <option value="">
-                              <Translate id="react.default.selectOne.label" defaultMessage="Select One ..." />
+                              {translate('react.default.selectOne.label', 'Select One ...')}
                             </option>
                             {users.map((user) => (
                               <option key={user.id} value={user.id}>{user.username}</option>

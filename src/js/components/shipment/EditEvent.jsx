@@ -7,6 +7,7 @@ import queryString from 'query-string';
 import { SHIPMENT_EVENT_FORM, SHIPMENT_SUMMARY } from 'api/urls';
 import ShipmentSummary from 'components/shipment/ShipmentSummary';
 import { SHIPMENT_URL } from 'consts/applicationUrls';
+import useTranslate from 'hooks/useTranslate';
 import apiClient from 'utils/apiClient';
 import Translate from 'utils/Translate';
 
@@ -77,6 +78,7 @@ const EditEvent = ({ match, location }) => {
   const [eventTypes, setEventTypes] = useState([]);
   const [locations, setLocations] = useState([]);
   const [loaded, setLoaded] = useState(false);
+  const translate = useTranslate();
 
   useEffect(() => {
     apiClient.get(SHIPMENT_SUMMARY(shipmentId))
@@ -118,7 +120,7 @@ const EditEvent = ({ match, location }) => {
                       ? (
                         <select id="eventType.id" name="eventType.id" defaultValue="">
                           <option value="">
-                            <Translate id="react.default.selectOne.label" defaultMessage="Select One ..." />
+                            {translate('react.default.selectOne.label', 'Select One ...')}
                           </option>
                           {eventTypes.map((eventType) => (
                             <option key={eventType.id} value={eventType.id}>
@@ -154,7 +156,7 @@ const EditEvent = ({ match, location }) => {
                   <td valign="top" className="value">
                     <select id="eventLocation.id" name="eventLocation.id" defaultValue={event?.eventLocation?.id || ''}>
                       <option value="">
-                        <Translate id="react.default.selectOne.label" defaultMessage="Select One ..." />
+                        {translate('react.default.selectOne.label', 'Select One ...')}
                       </option>
                       {locations.map((loc) => (
                         <option key={loc.id} value={loc.id}>{loc.name}</option>
