@@ -163,6 +163,21 @@ const AsyncStockMovementOutboundList = Loadable({
   loading: Loading,
 });
 
+const AsyncBudgetCodeList = Loadable({
+  loader: () => import('components/budgetCode/BudgetCodeList'),
+  loading: Loading,
+});
+
+const AsyncBudgetCodeForm = Loadable({
+  loader: () => import('components/budgetCode/BudgetCodeForm'),
+  loading: Loading,
+});
+
+const AsyncEventTypeForm = Loadable({
+  loader: () => import('components/eventType/EventTypeForm'),
+  loading: Loading,
+});
+
 const AsyncProductSupplierList = Loadable({
   loader: () => import('components/productSupplier/ProductSupplierList'),
   loading: Loading,
@@ -288,6 +303,11 @@ const Router = () => {
             <MainLayoutRoute path="**/requisitionTemplate/list" component={AsyncStockList} />
             <MainLayoutRoute path="**/product/list" component={AsyncProductsList} />
             <MainLayoutRoute path="**/stockTransfer/list" component={AsyncStockTransferList} />
+            <MainLayoutRoute path="**/budgetCode/list" component={AsyncBudgetCodeList} />
+            <MainLayoutRoute path="**/budgetCode/create" component={AsyncBudgetCodeForm} />
+            <MainLayoutRoute path="**/budgetCode/edit/:budgetCodeId" component={AsyncBudgetCodeForm} />
+            <MainLayoutRoute path="**/eventType/create" component={AsyncEventTypeForm} />
+            <MainLayoutRoute path="**/eventType/edit/:eventTypeId" component={AsyncEventTypeForm} />
             <MainLayoutRoute path="**/productSupplier/list" component={AsyncProductSupplierList} />
             <MainLayoutRoute path="**/productSupplier/create/:productSupplierId?" component={AsyncProductSupplierCreatePage} />
             <MainLayoutRoute path="**/dashboard/:configId?" component={Dashboard} />

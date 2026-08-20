@@ -150,6 +150,20 @@ const PRODUCT_SUPPLIER_URL = {
   export: () => `${PRODUCT_SUPPLIER_URL.base}/export?format=xls`,
 };
 
+const BUDGET_CODE_URL = {
+  base: `${CONTEXT_PATH}/budgetCode`,
+  list: () => `${BUDGET_CODE_URL.base}/list`,
+  create: () => `${BUDGET_CODE_URL.base}/create`,
+  edit: (id) => `${BUDGET_CODE_URL.base}/edit/${id}`,
+};
+
+const EVENT_TYPE_URL = {
+  base: `${CONTEXT_PATH}/eventType`,
+  list: () => `${EVENT_TYPE_URL.base}/list`,
+  create: () => `${EVENT_TYPE_URL.base}/create`,
+  edit: (id) => `${EVENT_TYPE_URL.base}/edit/${id}`,
+};
+
 const CYCLE_COUNT = {
   base: `${CONTEXT_PATH}/inventory/cycleCount`,
   list: (tab) => `${CYCLE_COUNT.base}?tab=${tab}`,
@@ -158,9 +172,11 @@ const CYCLE_COUNT = {
 };
 
 export {
+  BUDGET_CODE_URL,
   CATEGORY_URL,
   CYCLE_COUNT,
   DASHBOARD_URL,
+  EVENT_TYPE_URL,
   INVENTORY_ITEM_URL,
   INVENTORY_URL,
   INVOICE_URL,

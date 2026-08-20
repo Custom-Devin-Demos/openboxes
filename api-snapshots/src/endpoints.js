@@ -88,7 +88,7 @@ module.exports = [
   { name: 'internalLocations-receiving', controller: 'InternalLocationApiController', path: '/api/internalLocations/receiving?location.id={facilityId}' },
 
   // InventoryApiController
-  { name: 'inventories-reorderReport', controller: 'InventoryApiController', path: '/api/facilities/{facilityId}/inventories/reorderReport' },
+  { name: 'inventories-reorderReport', controller: 'InventoryApiController', path: '/api/facilities/{facilityId}/inventories/reorderReport', sortArrays: true },
   { name: 'inventories-expirationHistoryReport', controller: 'InventoryApiController', path: '/api/inventories/expirationHistoryReport?facility.id={facilityId}&startDate=01/01/2020&endDate=12/31/2025' },
 
   // InventoryLevelApiController
@@ -109,7 +109,7 @@ module.exports = [
   { name: 'localizations-list', controller: 'LocalizationApiController', path: '/api/localizations' },
 
   // LocationApiController
-  { name: 'locations-list', controller: 'LocationApiController', path: '/api/locations' },
+  { name: 'locations-list', controller: 'LocationApiController', path: '/api/locations', sortArrays: true },
   { name: 'locations-read', controller: 'LocationApiController', path: '/api/locations/{facilityId}' },
   { name: 'locations-locationTypes', controller: 'LocationApiController', path: '/api/locations/locationTypes' },
   { name: 'locations-supportedActivities', controller: 'LocationApiController', path: '/api/locations/supportedActivities' },
@@ -191,7 +191,7 @@ module.exports = [
   // StockTransferApiController
   { name: 'stockTransfers-list', controller: 'StockTransferApiController', path: '/api/stockTransfers?location={facilityId}' },
   { name: 'stockTransfers-statusOptions', controller: 'StockTransferApiController', path: '/api/stockTransfers/statusOptions' },
-  { name: 'stockTransfers-candidates', controller: 'StockTransferApiController', path: '/api/stockTransfers/candidates?location.id={facilityId}' },
+  { name: 'stockTransfers-candidates', controller: 'StockTransferApiController', path: '/api/stockTransfers/candidates?location.id={facilityId}', sortArrays: true },
 
   // StocklistApiController
   { name: 'stocklists-list', controller: 'StocklistApiController', path: '/api/stocklists' },

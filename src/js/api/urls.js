@@ -191,6 +191,15 @@ export const HANDLING_REQUIREMENTS_OPTIONS = `${API}/handlingRequirementsOptions
 // INTERNAL LOCATIONS
 export const INTERNAL_LOCATIONS = `${API}/internalLocations`;
 
+// BUDGET CODE
+export const BUDGET_CODE_API = `${API}/budgetCodes`;
+export const BUDGET_CODE_BY_ID = (id) => `${BUDGET_CODE_API}/${id}`;
+
+// EVENT TYPE
+export const EVENT_TYPE_API = `${API}/eventTypes`;
+export const EVENT_TYPE_BY_ID = (id) => `${EVENT_TYPE_API}/${id}`;
+export const EVENT_TYPE_EVENT_CODE_OPTIONS = `${EVENT_TYPE_API}/eventCodeOptions`;
+
 // CYCLE COUNT
 export const CYCLE_COUNT = (locationId) => `${API}/facilities/${locationId}/cycle-counts`;
 export const CYCLE_COUNT_CANDIDATES = (locationId) => `${CYCLE_COUNT(locationId)}/candidates`;
