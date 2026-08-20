@@ -49,7 +49,7 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | 2-requisitions-1 | requisitions-1 batch | IN_PROGRESS | [86b36670](https://app.devin.ai/sessions/86b3667030ff470baf5f9cefba57bfa4) | | |
 | 2-shipments-1 | shipments-1 batch | IN_PROGRESS | [88fb63b4](https://app.devin.ai/sessions/88fb63b4ceb549dd91fb4c04fe251333) | | |
 | 2-orders-1 | orders-1 batch | IN_PROGRESS | [aa39b608](https://app.devin.ai/sessions/aa39b60838c740ca8afa03ca9fad7a76) | | |
-| 2-admin-config-1 | admin-config-1 batch | IN_PROGRESS | [2bec6bb2](https://app.devin.ai/sessions/2bec6bb2245a4cb68c7e48ad754fb467) | | |
+| 2-admin-config-1 | admin-config-1 batch | MERGED | [2bec6bb2](https://app.devin.ai/sessions/2bec6bb2245a4cb68c7e48ad754fb467) | [#10](https://github.com/Custom-Devin-Demos/openboxes/pull/10) | UI 10/10, snapshots 117/122 (5 pre-existing dirty baselines), CI green. Fixed Hibernate5 evictQueries bug |
 | 2-finance-config-1 | finance-config-1 batch | MERGED | [b4493527](https://app.devin.ai/sessions/b449352701744466b15efb5dd64533c4) | [#9](https://github.com/Custom-Devin-Demos/openboxes/pull/9) | Playwright 10/10, snapshots 122/122, CI green |
 | 2-stock-card-1 | stock-card-1 batch | IN_PROGRESS | [7ba30033](https://app.devin.ai/sessions/7ba3003323244216bdb4bed9ab92ce27) | | |
 | 2-(remaining) | 48 remaining batches (see live-screen-inventory.md) | PENDING | | | Spawn in subsequent waves |
@@ -82,3 +82,4 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 - 2026-08-20: Wave 3 spawned (10 children): P1.1 Java 11 + 9 Phase 2 module batches (first batch of each major module).
 - 2026-08-20: finance-config-1 merged (PR #9). Parity suites green; harness normalization fixes (sortArrays for 3 endpoints) included.
 - 2026-08-20: inventory-1 merged (PR #5). 8 api-snapshot failures were pre-existing develop baseline issues (partially addressed by PR #9); consider baseline re-record.
+- 2026-08-20: admin-config-1 merged (PR #10). Follow-up needed: api-snapshots baseline repair (5 dirty category baselines on develop).
