@@ -14,6 +14,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    # Only run in the upstream repository: forks do not have the DBDOCS_TOKEN secret,
+    # so publishing dbdocs would always fail there.
+    if: github.repository == 'openboxes/openboxes'
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
