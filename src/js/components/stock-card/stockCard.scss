@@ -1,0 +1,73 @@
+.stock-card-page {
+  background-color: #fff;
+}
+
+.stock-card-header {
+  padding: 1rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.stock-card-tabs {
+  padding: 0 1rem 1rem;
+
+  .nav-link {
+    background: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+
+    &.active {
+      border-color: #dee2e6 #dee2e6 #fff;
+      background-color: #fff;
+    }
+  }
+}
+
+.stock-card-table-container {
+  overflow-x: auto;
+}
+
+.stock-card-table {
+  tr.recalled {
+    background-color: #ffcccb;
+  }
+
+  tr.restricted {
+    background-color: #f8f9fa;
+    color: #6c757d;
+  }
+}
+
+.stock-card-row-actions {
+  .dropdown-menu {
+    min-width: 12rem;
+  }
+}
+
+.stock-card-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+}
+
+.stock-card-modal {
+  background: #fff;
+  border-radius: 4px;
+  max-width: 540px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  outline: none;
+
+  .stock-card-modal-header {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  .stock-card-modal-body {
+    padding: 1rem;
+  }
+}

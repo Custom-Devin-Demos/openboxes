@@ -1265,6 +1265,90 @@ class UrlMappings {
         }
 
         /**
+         * Stock Card API endpoints
+         */
+
+        "/api/stockCard/$id/details" {
+            controller = "stockCardApi"
+            action = [GET: "details"]
+        }
+
+        "/api/stockCard/$id/currentStock" {
+            controller = "stockCardApi"
+            action = [GET: "currentStock"]
+        }
+
+        "/api/stockCard/$id/stockHistory" {
+            controller = "stockCardApi"
+            action = [GET: "stockHistory"]
+        }
+
+        "/api/stockCard/$id/allLocations" {
+            controller = "stockCardApi"
+            action = [GET: "allLocations"]
+        }
+
+        "/api/stockCard/$id/suppliers" {
+            controller = "stockCardApi"
+            action = [GET: "suppliers"]
+        }
+
+        "/api/stockCard/$id/associations" {
+            controller = "stockCardApi"
+            action = [GET: "associations"]
+        }
+
+        "/api/stockCard/$id/pendingInbound" {
+            controller = "stockCardApi"
+            action = [GET: "pendingInbound"]
+        }
+
+        "/api/stockCard/$id/pendingOutbound" {
+            controller = "stockCardApi"
+            action = [GET: "pendingOutbound"]
+        }
+
+        "/api/stockCard/$id/demand" {
+            controller = "stockCardApi"
+            action = [GET: "demand"]
+        }
+
+        "/api/stockCard/$id/snapshot" {
+            controller = "stockCardApi"
+            action = [GET: "snapshot"]
+        }
+
+        "/api/stockCard/$id/documents" {
+            controller = "stockCardApi"
+            action = [GET: "documents"]
+        }
+
+        "/api/stockCard/$id/lotNumbers" {
+            controller = "stockCardApi"
+            action = [GET: "lotNumbers"]
+        }
+
+        "/api/stockCard/actionContext" {
+            controller = "stockCardApi"
+            action = [GET: "actionContext"]
+        }
+
+        "/api/stockCard/binLocations" {
+            controller = "stockCardApi"
+            action = [GET: "binLocations"]
+        }
+
+        "/api/stockCard/recordInventory" {
+            controller = "stockCardApi"
+            action = [GET: "recordInventory"]
+        }
+
+        "/api/stockCard/inventoryLevel" {
+            controller = "stockCardApi"
+            action = [GET: "inventoryLevelDetails", POST: "updateInventoryLevel"]
+        }
+
+        /**
          * Inventory API endpoints
          */
 

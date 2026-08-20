@@ -302,6 +302,31 @@ const AsyncAdminShowSettings = Loadable({
   loading: Loading,
 });
 
+const AsyncStockCardPage = Loadable({
+  loader: () => import('components/stock-card/StockCardPage'),
+  loading: Loading,
+});
+
+const AsyncLotNumbersPage = Loadable({
+  loader: () => import('components/stock-card/LotNumbersPage'),
+  loading: Loading,
+});
+
+const AsyncGraphPage = Loadable({
+  loader: () => import('components/stock-card/GraphPage'),
+  loading: Loading,
+});
+
+const AsyncRecordInventoryPage = Loadable({
+  loader: () => import('components/stock-card/RecordInventoryPage'),
+  loading: Loading,
+});
+
+const AsyncInventoryLevelPage = Loadable({
+  loader: () => import('components/stock-card/InventoryLevelPage'),
+  loading: Loading,
+});
+
 const Router = () => {
   useConnectionListener();
 
@@ -322,6 +347,11 @@ const Router = () => {
         <FlashScopeListenerWrapper>
           <Switch>
             <MainLayoutRoute path="**/putAway/create/:putAwayId?" component={AsyncPutAwayMainPage} />
+            <MainLayoutRoute path="**/inventoryItem/showStockCard/:id?" component={AsyncStockCardPage} />
+            <MainLayoutRoute path="**/inventoryItem/showLotNumbers/:id?" component={AsyncLotNumbersPage} />
+            <MainLayoutRoute path="**/inventoryItem/showGraph/:id?" component={AsyncGraphPage} />
+            <MainLayoutRoute path="**/inventoryItem/showRecordInventory/:id?" component={AsyncRecordInventoryPage} />
+            <MainLayoutRoute path="**/inventoryItem/editInventoryLevel" component={AsyncInventoryLevelPage} />
             <MainLayoutRoute path="**/stockMovement/list" component={StockMovementList} />
             <MainLayoutRoute path="**/stockMovement/createOutbound/:stockMovementId?" component={AsyncStockMovement} />
             <MainLayoutRoute path="**/stockMovement/importOutboundStockMovement" component={AsyncOutboundImport} />
