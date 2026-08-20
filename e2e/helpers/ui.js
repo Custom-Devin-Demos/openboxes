@@ -9,7 +9,9 @@
 /** Click a wizard form field (by its aria-label), type a query and pick a matching option. */
 async function pickField(page, label, query, optionText) {
   const field = page.locator(`[data-testid="form-field"][aria-label="${label}"]`);
-  await field.click();
+  // Click the select's input rather than the wrapper: the wrapper spans the
+  // whole form row on some screens, so a center click can miss the control.
+  await field.locator('input:visible').first().click();
   await page.keyboard.type(query);
   const option = page
     .locator('[class*="option"]')

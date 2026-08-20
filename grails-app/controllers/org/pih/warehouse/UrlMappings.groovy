@@ -220,6 +220,26 @@ class UrlMappings {
             action = [GET: "list"]
         }
 
+        "/api/locations/search" {
+            controller = { "locationApi" }
+            action = [GET: "search"]
+        }
+
+        "/api/locations/$id/details" {
+            controller = { "locationApi" }
+            action = [GET: "details"]
+        }
+
+        "/api/locations/$id/contents" {
+            controller = { "locationApi" }
+            action = [GET: "contents"]
+        }
+
+        "/api/locations/$id/logo" {
+            controller = { "locationApi" }
+            action = [DELETE: "deleteLogo"]
+        }
+
         "/api/locations/locationTypes" {
             controller = { "locationApi" }
             action = [GET: "locationTypes"]

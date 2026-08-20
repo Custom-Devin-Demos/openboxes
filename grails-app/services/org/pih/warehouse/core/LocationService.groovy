@@ -704,6 +704,10 @@ class LocationService {
                 eq("parentLocation", Location.get(params.parentLocation.id))
             }
 
+            if (params.zone?.id) {
+                eq("zone", Location.get(params.zone.id))
+            }
+
             if (locationTypeCodes) {
                 locationType {
                     'in'("locationTypeCode", locationTypeCodes)

@@ -123,6 +123,36 @@ const AsyncImportLocations = Loadable({
   loading: Loading,
 });
 
+const AsyncLocationsList = Loadable({
+  loader: () => import('components/locations/LocationsList'),
+  loading: Loading,
+});
+
+const AsyncLocationEdit = Loadable({
+  loader: () => import('components/locations/LocationEdit'),
+  loading: Loading,
+});
+
+const AsyncLocationBinLocations = Loadable({
+  loader: () => import('components/locations/LocationBinLocations'),
+  loading: Loading,
+});
+
+const AsyncLocationZoneLocations = Loadable({
+  loader: () => import('components/locations/LocationZoneLocations'),
+  loading: Loading,
+});
+
+const AsyncLocationContents = Loadable({
+  loader: () => import('components/locations/LocationContents'),
+  loading: Loading,
+});
+
+const AsyncLocationUploadLogo = Loadable({
+  loader: () => import('components/locations/LocationUploadLogo'),
+  loading: Loading,
+});
+
 const AsyncWelcomePage = Loadable({
   loader: () => import('components/locations-configuration/WelcomePage'),
   loading: Loading,
@@ -412,6 +442,12 @@ const Router = () => {
             <MainLayoutRoute path="**/replenishment/create/:replenishmentId?" component={AsyncReplenishment} />
             <MainLayoutRoute path="**/productsConfiguration/index" component={AsyncProductsConfiguration} />
             <MainLayoutRoute path="**/locationsConfiguration/create/:locationId?" component={AsyncLocationsConfiguration} />
+            <MainLayoutRoute path="**/location/list" component={AsyncLocationsList} />
+            <MainLayoutRoute path="**/location/edit/:locationId?" component={AsyncLocationEdit} />
+            <MainLayoutRoute path="**/location/showBinLocations/:locationId" component={AsyncLocationBinLocations} />
+            <MainLayoutRoute path="**/location/showZoneLocations/:locationId" component={AsyncLocationZoneLocations} />
+            <MainLayoutRoute path="**/location/showContents/:locationId" component={AsyncLocationContents} />
+            <MainLayoutRoute path="**/location/uploadLogo/:locationId" component={AsyncLocationUploadLogo} />
             <MainLayoutRoute path="**/locationsConfiguration/upload" component={AsyncImportLocations} />
             <Route path="**/locationsConfiguration/index">
               <AsyncWelcomePage />
