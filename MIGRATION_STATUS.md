@@ -50,7 +50,7 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | 2-shipments-1 | shipments-1 batch | IN_PROGRESS | [88fb63b4](https://app.devin.ai/sessions/88fb63b4ceb549dd91fb4c04fe251333) | | |
 | 2-orders-1 | orders-1 batch | IN_PROGRESS | [aa39b608](https://app.devin.ai/sessions/aa39b60838c740ca8afa03ca9fad7a76) | | |
 | 2-admin-config-1 | admin-config-1 batch | IN_PROGRESS | [2bec6bb2](https://app.devin.ai/sessions/2bec6bb2245a4cb68c7e48ad754fb467) | | |
-| 2-finance-config-1 | finance-config-1 batch | IN_PROGRESS | [b4493527](https://app.devin.ai/sessions/b449352701744466b15efb5dd64533c4) | | |
+| 2-finance-config-1 | finance-config-1 batch | MERGED | [b4493527](https://app.devin.ai/sessions/b449352701744466b15efb5dd64533c4) | [#9](https://github.com/Custom-Devin-Demos/openboxes/pull/9) | Playwright 10/10, snapshots 122/122, CI green |
 | 2-stock-card-1 | stock-card-1 batch | IN_PROGRESS | [7ba30033](https://app.devin.ai/sessions/7ba3003323244216bdb4bed9ab92ce27) | | |
 | 2-(remaining) | 48 remaining batches (see live-screen-inventory.md) | PENDING | | | Spawn in subsequent waves |
 | 2.R | React 16.8→18 + Redux/router modernization of existing SPA | PENDING | | | |
@@ -80,3 +80,4 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 - 2026-08-20: 0.4 merged (PR #3). 0.3 still in progress.
 - 2026-08-20: 0.3 merged (PR #4). PHASE 0 COMPLETE. Parity gate active: e2e suite + api-snapshots must stay green on every later PR.
 - 2026-08-20: Wave 3 spawned (10 children): P1.1 Java 11 + 9 Phase 2 module batches (first batch of each major module).
+- 2026-08-20: finance-config-1 merged (PR #9). Parity suites green; harness normalization fixes (sortArrays for 3 endpoints) included.
