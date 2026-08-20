@@ -150,12 +150,6 @@ const SHIPMENT_URL = {
   addToShipmentPost: () => `${SHIPMENT_URL.base}/addToShipmentPost`,
 };
 
-const DOCUMENT_URL = {
-  base: `${CONTEXT_PATH}/document`,
-  uploadDocument: () => `${DOCUMENT_URL.base}/uploadDocument`,
-  saveDocument: () => `${DOCUMENT_URL.base}/saveDocument`,
-};
-
 const REQUISITION_TEMPLATE_URL = {
   base: `${CONTEXT_PATH}/requisitionTemplate`,
   create: () => `${REQUISITION_TEMPLATE_URL.base}/create`,
