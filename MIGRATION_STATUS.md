@@ -43,7 +43,7 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 |---|------|--------|---------|----|-------|
 | 2.0 | Module batching plan (from 0.2 live-screen inventory) | PENDING | | | Coordinator task |
 | 2.0 batching | 58 batches defined in docs/migration/live-screen-inventory.md | DONE | (coordinator) | [#1](https://github.com/Custom-Devin-Demos/openboxes/pull/1) | |
-| 2-inventory-1 | inventory-1 batch | IN_PROGRESS | [cce1d959](https://app.devin.ai/sessions/cce1d9599054469987104c9096928947) | | |
+| 2-inventory-1 | inventory-1 batch | MERGED | [cce1d959](https://app.devin.ai/sessions/cce1d9599054469987104c9096928947) | [#5](https://github.com/Custom-Devin-Demos/openboxes/pull/5) | E2E verified, CI green. Open decisions: CONSUME_STOCK seed, adjustment sign convention |
 | 2-product-catalog-1 | product-catalog-1 batch | IN_PROGRESS | [36acf165](https://app.devin.ai/sessions/36acf1659c1744f48fc9bcc3f36cf308) | | |
 | 2-locations-orgs-1 | locations-orgs-1 batch | IN_PROGRESS | [7be46dc0](https://app.devin.ai/sessions/7be46dc091cf49ffa359a3fdde470736) | | |
 | 2-requisitions-1 | requisitions-1 batch | IN_PROGRESS | [86b36670](https://app.devin.ai/sessions/86b3667030ff470baf5f9cefba57bfa4) | | |
@@ -81,3 +81,4 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 - 2026-08-20: 0.3 merged (PR #4). PHASE 0 COMPLETE. Parity gate active: e2e suite + api-snapshots must stay green on every later PR.
 - 2026-08-20: Wave 3 spawned (10 children): P1.1 Java 11 + 9 Phase 2 module batches (first batch of each major module).
 - 2026-08-20: finance-config-1 merged (PR #9). Parity suites green; harness normalization fixes (sortArrays for 3 endpoints) included.
+- 2026-08-20: inventory-1 merged (PR #5). 8 api-snapshot failures were pre-existing develop baseline issues (partially addressed by PR #9); consider baseline re-record.
