@@ -1,0 +1,13 @@
+{
+  "name": "stockMovements-pendingRequisitionItems",
+  "controller": "StockMovementApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/stockMovements/pendingRequisitionItems?origin={facilityId}"
+  },
+  "status": 404,
+  "contentType": "application/json",
+  "body": {
+    "errorMessage": "No pending requisition items found"
+  }
+}

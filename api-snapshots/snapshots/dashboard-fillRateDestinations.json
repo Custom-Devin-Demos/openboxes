@@ -1,0 +1,21 @@
+{
+  "name": "dashboard-fillRateDestinations",
+  "controller": "DashboardApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/dashboard/fillRateDestinations?locationId={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [
+      {
+        "id": "",
+        "name": {
+          "code": "react.dashboard.locationFilter.all.label",
+          "message": "react.dashboard.locationFilter.all"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "productClassifications-list",
+  "controller": "ProductClassificationApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/facilities/{facilityId}/products/classifications"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": []
+  }
+}

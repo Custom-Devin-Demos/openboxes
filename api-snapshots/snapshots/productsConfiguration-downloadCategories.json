@@ -1,0 +1,11 @@
+{
+  "name": "productsConfiguration-downloadCategories",
+  "controller": "ProductsConfigurationApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/productsConfiguration/downloadCategories"
+  },
+  "status": 200,
+  "contentType": "text/csv",
+  "text": "Category name,Parent Category Name\nMedicines,Categories\nMedical Supplies,Categories\nCategories,\nAPI Snapshot Scratch Category,Categories\n"
+}

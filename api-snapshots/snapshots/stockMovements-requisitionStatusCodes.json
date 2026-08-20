@@ -1,0 +1,54 @@
+{
+  "name": "stockMovements-requisitionStatusCodes",
+  "controller": "StockMovementApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/stockMovements/requisitionsStatusCodes"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [
+      {
+        "id": "CREATED",
+        "value": "CREATED",
+        "label": "Created"
+      },
+      {
+        "id": "EDITING",
+        "value": "EDITING",
+        "label": "Editing"
+      },
+      {
+        "id": "VERIFYING",
+        "value": "VERIFYING",
+        "label": "Verifying"
+      },
+      {
+        "id": "PICKING",
+        "value": "PICKING",
+        "label": "Picking"
+      },
+      {
+        "id": "PICKED",
+        "value": "PICKED",
+        "label": "Picked"
+      },
+      {
+        "id": "CHECKING",
+        "value": "CHECKING",
+        "label": "Checking"
+      },
+      {
+        "id": "ISSUED",
+        "value": "ISSUED",
+        "label": "Issued"
+      },
+      {
+        "id": "CANCELED",
+        "value": "CANCELED",
+        "label": "Canceled"
+      }
+    ]
+  }
+}

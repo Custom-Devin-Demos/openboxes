@@ -1,0 +1,82 @@
+{
+  "name": "dashboard-lossCausedByExpiry",
+  "controller": "DashboardApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/dashboard/lossCausedByExpiry?locationId={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": {
+      "labels": [
+        "Mar 2026",
+        "Apr 2026",
+        "May 2026",
+        "Jun 2026",
+        "Jul 2026",
+        "Aug 2026"
+      ],
+      "datasets": [
+        {
+          "label": "Percentage removed due to expiry",
+          "data": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "links": null,
+          "type": "line",
+          "yAxisID": null
+        },
+        {
+          "label": "Inventory value not expired last day of month",
+          "data": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "links": null,
+          "type": "bar",
+          "yAxisID": null
+        },
+        {
+          "label": "Inventory value expired last day of month",
+          "data": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "links": null,
+          "type": "bar",
+          "yAxisID": null
+        },
+        {
+          "label": "Inventory value removed due to expiry",
+          "data": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "links": null,
+          "type": "bar",
+          "yAxisID": null
+        }
+      ],
+      "colorNumber": null
+    },
+    "link": null
+  }
+}

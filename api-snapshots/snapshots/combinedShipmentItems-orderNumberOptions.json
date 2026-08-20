@@ -1,0 +1,13 @@
+{
+  "name": "combinedShipmentItems-orderNumberOptions",
+  "controller": "CombinedShipmentItemApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/orderNumberOptions?vendor={supplierId}&destination={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": []
+  }
+}

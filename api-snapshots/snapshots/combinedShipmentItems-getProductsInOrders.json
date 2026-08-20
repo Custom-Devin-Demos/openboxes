@@ -1,0 +1,13 @@
+{
+  "name": "combinedShipmentItems-getProductsInOrders",
+  "controller": "CombinedShipmentItemApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/combinedShipmentItems/getProductsInOrders?vendor={supplierId}&destination={facilityId}&orderIds="
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": []
+  }
+}

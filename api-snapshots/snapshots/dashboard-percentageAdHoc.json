@@ -1,0 +1,26 @@
+{
+  "name": "dashboard-percentageAdHoc",
+  "controller": "DashboardApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/dashboard/percentageAdHoc?locationId={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": {
+      "labels": [],
+      "datasets": [
+        {
+          "label": "Number of requests",
+          "data": [],
+          "links": null,
+          "type": "doughnut",
+          "yAxisID": null
+        }
+      ],
+      "colorNumber": null
+    },
+    "link": "/openboxes/stockMovement/list?direction=OUTBOUND"
+  }
+}

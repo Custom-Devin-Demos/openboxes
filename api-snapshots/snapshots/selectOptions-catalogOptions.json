@@ -1,0 +1,13 @@
+{
+  "name": "selectOptions-catalogOptions",
+  "controller": "SelectOptionsApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/catalogOptions"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": []
+  }
+}

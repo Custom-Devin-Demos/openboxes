@@ -1,0 +1,13 @@
+{
+  "name": "products-lotNumbersWithExpirationDate",
+  "controller": "ProductApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/products/inventoryItems/lotNumbersWithExpirationDate?product.id={productId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": {}
+  }
+}

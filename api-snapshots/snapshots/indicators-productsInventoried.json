@@ -1,0 +1,17 @@
+{
+  "name": "indicators-productsInventoried",
+  "controller": "IndicatorApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/reports/indicators/productsInventoried?facility.id={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": {
+      "name": "productsInventoried",
+      "value": 8,
+      "type": "SINGLE"
+    }
+  }
+}

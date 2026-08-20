@@ -1,0 +1,13 @@
+{
+  "name": "productsConfiguration-categoriesCount",
+  "controller": "ProductsConfigurationApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/productsConfiguration/categoriesCount"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": 4
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "inventoryLevels-list",
+  "controller": "InventoryLevelApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/facilities/{facilityId}/inventory-levels"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": []
+  }
+}

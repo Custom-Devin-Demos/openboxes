@@ -1,0 +1,15 @@
+{
+  "name": "noops-list",
+  "controller": "NoopApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/noops"
+  },
+  "status": 500,
+  "contentType": "application/json",
+  "body": {
+    "errorCode": 500,
+    "cause": "org.apache.commons.lang.NotImplementedException",
+    "errorMessage": "Action null not implemented"
+  }
+}

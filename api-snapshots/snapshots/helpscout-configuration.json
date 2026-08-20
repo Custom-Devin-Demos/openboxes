@@ -1,0 +1,19 @@
+{
+  "name": "helpscout-configuration",
+  "controller": "HelpScoutApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/helpscout/configuration"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "color": "#3AB4B1",
+    "enableFabAnimation": false,
+    "labels": {
+      "noTimeToWaitAround": null,
+      "responseTime": null
+    },
+    "localizedHelpScoutKey": "44ee4f01-5334-4b93-ad25-03037903eb80"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "name": "products-availableItems",
+  "controller": "ProductApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/products/availableItems?location.id={facilityId}&product.id={productId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [
+      {
+        "inventoryItem.id": "seed-invitem-01",
+        "product.name": "Acetaminophen 325mg tablet",
+        "product": {
+          "id": "seed-product-01",
+          "productCode": "DM0001",
+          "name": "Acetaminophen 325mg tablet",
+          "description": null,
+          "category": "Medicines",
+          "unitOfMeasure": "EA",
+          "pricePerUnit": null,
+          "dateCreated": "<volatile>",
+          "lastUpdated": "<volatile>",
+          "updatedBy": null,
+          "color": null,
+          "handlingIcons": [],
+          "lotAndExpiryControl": null,
+          "active": true,
+          "displayNames": {
+            "default": null
+          }
+        },
+        "productCode": "DM0001",
+        "lotNumber": "LOT-ACE-001",
+        "expirationDate": "<date>",
+        "binLocation": null,
+        "zone": null,
+        "quantityAvailable": 500,
+        "quantityOnHand": 500,
+        "status": "AVAILABLE",
+        "pickedRequisitionNumbers": "",
+        "binLocation.id": null,
+        "binLocation.name": null
+      }
+    ]
+  }
+}

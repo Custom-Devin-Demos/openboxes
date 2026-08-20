@@ -1,0 +1,49 @@
+{
+  "name": "selectOptions-paymentTermOptions",
+  "controller": "SelectOptionsApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/paymentTermOptions"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [
+      {
+        "id": "COD",
+        "label": "Cash On Delivery",
+        "value": "COD"
+      },
+      {
+        "id": "NET30",
+        "label": "Net 30",
+        "value": "NET30"
+      },
+      {
+        "id": "PIA",
+        "label": "Payment In Advance",
+        "value": "PIA"
+      },
+      {
+        "id": "PP100",
+        "label": "Prepayment 100",
+        "value": "PP100"
+      },
+      {
+        "id": "PP25",
+        "label": "Prepayment 25/Net 30",
+        "value": "PP25"
+      },
+      {
+        "id": "PP50",
+        "label": "Prepayment 50/Net 30",
+        "value": "PP50"
+      },
+      {
+        "id": "US",
+        "label": "Upon shipment",
+        "value": "US"
+      }
+    ]
+  }
+}

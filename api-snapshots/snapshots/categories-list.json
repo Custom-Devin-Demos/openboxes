@@ -1,0 +1,99 @@
+{
+  "name": "categories-list",
+  "controller": "CategoryApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/categories"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [
+      {
+        "id": "seed-category-medicines",
+        "description": null,
+        "name": "Medicines",
+        "version": 0,
+        "dateCreated": "<volatile>",
+        "lastUpdated": "<volatile>",
+        "sortOrder": 1,
+        "deleted": false,
+        "isRoot": null,
+        "categories": []
+      },
+      {
+        "id": "seed-category-supplies",
+        "description": null,
+        "name": "Medical Supplies",
+        "version": 0,
+        "dateCreated": "<volatile>",
+        "lastUpdated": "<volatile>",
+        "sortOrder": 2,
+        "deleted": false,
+        "isRoot": null,
+        "categories": []
+      },
+      {
+        "id": "seed-category-root",
+        "description": null,
+        "name": "Categories",
+        "version": 0,
+        "dateCreated": "<volatile>",
+        "lastUpdated": "<volatile>",
+        "sortOrder": 0,
+        "deleted": false,
+        "isRoot": true,
+        "categories": [
+          {
+            "id": "<uuid>",
+            "description": null,
+            "name": "API Snapshot Scratch Category",
+            "version": 0,
+            "dateCreated": "<volatile>",
+            "lastUpdated": "<volatile>",
+            "sortOrder": 0,
+            "deleted": false,
+            "isRoot": false,
+            "categories": []
+          },
+          {
+            "id": "seed-category-supplies",
+            "description": null,
+            "name": "Medical Supplies",
+            "version": 0,
+            "dateCreated": "<volatile>",
+            "lastUpdated": "<volatile>",
+            "sortOrder": 2,
+            "deleted": false,
+            "isRoot": null,
+            "categories": []
+          },
+          {
+            "id": "seed-category-medicines",
+            "description": null,
+            "name": "Medicines",
+            "version": 0,
+            "dateCreated": "<volatile>",
+            "lastUpdated": "<volatile>",
+            "sortOrder": 1,
+            "deleted": false,
+            "isRoot": null,
+            "categories": []
+          }
+        ]
+      },
+      {
+        "id": "<uuid>",
+        "description": null,
+        "name": "API Snapshot Scratch Category",
+        "version": 0,
+        "dateCreated": "<volatile>",
+        "lastUpdated": "<volatile>",
+        "sortOrder": 0,
+        "deleted": false,
+        "isRoot": false,
+        "categories": []
+      }
+    ]
+  }
+}

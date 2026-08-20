@@ -1,0 +1,16 @@
+{
+  "name": "inventories-expirationHistoryReport",
+  "controller": "InventoryApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/inventories/expirationHistoryReport?facility.id={facilityId}&startDate=01/01/2020&endDate=12/31/2025"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [],
+    "totalCount": 0,
+    "totalQuantityLostToExpiry": 0,
+    "totalValueLostToExpiry": 0
+  }
+}

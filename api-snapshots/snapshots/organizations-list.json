@@ -1,0 +1,64 @@
+{
+  "name": "organizations-list",
+  "controller": "OrganizationApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/organizations"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [
+      {
+        "id": "1",
+        "name": "Main Organization",
+        "displayName": "MO - Main Organization",
+        "description": null,
+        "code": "MO",
+        "dateCreated": "<volatile>",
+        "lastUpdated": "<volatile>",
+        "defaultLocation": null,
+        "partyType": {
+          "id": "1",
+          "name": "Organization",
+          "code": "ORG",
+          "partyTypeCode": "ORGANIZATION"
+        },
+        "roles": [
+          {
+            "id": "1",
+            "roleType": "ROLE_ORGANIZATION",
+            "startDate": null,
+            "endDate": null
+          }
+        ],
+        "sequences": {}
+      },
+      {
+        "id": "2",
+        "name": "Supplier Organization",
+        "displayName": "SO - Supplier Organization",
+        "description": null,
+        "code": "SO",
+        "dateCreated": "<volatile>",
+        "lastUpdated": "<volatile>",
+        "defaultLocation": null,
+        "partyType": {
+          "id": "1",
+          "name": "Organization",
+          "code": "ORG",
+          "partyTypeCode": "ORGANIZATION"
+        },
+        "roles": [
+          {
+            "id": "2",
+            "roleType": "ROLE_SUPPLIER",
+            "startDate": null,
+            "endDate": null
+          }
+        ],
+        "sequences": {}
+      }
+    ]
+  }
+}

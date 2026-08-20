@@ -1,0 +1,57 @@
+{
+  "name": "dashboard-productsInventoried",
+  "controller": "DashboardApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/dashboard/productsInventoried?locationId={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": {
+      "listColorNumber": [
+        {
+          "value": "100%",
+          "subtitle": "< 3 months",
+          "link": null,
+          "color": "success",
+          "value2": null,
+          "order": null
+        },
+        {
+          "value": "100%",
+          "subtitle": "< 6 months",
+          "link": null,
+          "color": "success",
+          "value2": null,
+          "order": null
+        },
+        {
+          "value": "100%",
+          "subtitle": "< 9 months",
+          "link": null,
+          "color": "success",
+          "value2": null,
+          "order": null
+        },
+        {
+          "value": "100%",
+          "subtitle": "< 12 months",
+          "link": null,
+          "color": "success",
+          "value2": null,
+          "order": null
+        },
+        {
+          "value": "100%",
+          "subtitle": "Ever",
+          "link": null,
+          "color": "success",
+          "value2": null,
+          "order": null
+        }
+      ]
+    },
+    "link": null
+  }
+}

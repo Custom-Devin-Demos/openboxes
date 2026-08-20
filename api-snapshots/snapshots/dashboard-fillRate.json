@@ -1,0 +1,86 @@
+{
+  "name": "dashboard-fillRate",
+  "controller": "DashboardApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/dashboard/fillRate?locationId={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": {
+      "labels": [
+        "February 2026",
+        "March 2026",
+        "April 2026",
+        "May 2026",
+        "June 2026",
+        "July 2026"
+      ],
+      "datasets": [
+        {
+          "label": "Request lines submitted",
+          "data": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "links": null,
+          "type": "bar",
+          "yAxisID": "left-y-axis",
+          "pointStyle": "circle"
+        },
+        {
+          "label": "Lines cancelled stock out",
+          "data": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "links": null,
+          "type": "bar",
+          "yAxisID": "left-y-axis",
+          "pointStyle": "circle"
+        },
+        {
+          "label": "Average Fill Rate",
+          "data": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "links": null,
+          "type": "line",
+          "yAxisID": "right-y-axis",
+          "pointStyle": "circle"
+        },
+        {
+          "label": "Average of target Fill Rate",
+          "data": [
+            90,
+            90,
+            90,
+            90,
+            90,
+            90
+          ],
+          "links": null,
+          "type": "line",
+          "yAxisID": "right-y-axis",
+          "pointStyle": "circle"
+        }
+      ],
+      "colorNumber": null
+    },
+    "link": null
+  }
+}

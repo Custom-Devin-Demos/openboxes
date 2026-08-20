@@ -1,0 +1,13 @@
+{
+  "name": "internalLocations-list",
+  "controller": "InternalLocationApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/internalLocations?location.id={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": []
+  }
+}

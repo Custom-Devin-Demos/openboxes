@@ -1,0 +1,14 @@
+{
+  "name": "stockMovements-list-inbound",
+  "controller": "StockMovementApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/stockMovements?direction=INBOUND&destination={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [],
+    "totalCount": 0
+  }
+}

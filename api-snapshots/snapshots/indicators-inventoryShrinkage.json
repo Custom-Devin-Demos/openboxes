@@ -1,0 +1,18 @@
+{
+  "name": "indicators-inventoryShrinkage",
+  "controller": "IndicatorApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/reports/indicators/inventoryShrinkage?facility.id={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": {
+      "name": "inventoryShrinkage",
+      "firstValue": 0,
+      "secondValue": 0,
+      "type": "DOUBLE"
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "name": "unitOfMeasure-currencies",
+  "controller": "UnitOfMeasureApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/unitOfMeasure/currencies"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [
+      {
+        "id": "EUR",
+        "dateCreated": "<volatile>",
+        "code": "EUR",
+        "lastUpdated": "<volatile>",
+        "name": "Euro",
+        "updatedBy": {
+          "id": "1"
+        },
+        "uomClass": {
+          "id": "CURRENCY"
+        },
+        "createdBy": {
+          "id": "1"
+        },
+        "description": "EUR (€)"
+      },
+      {
+        "id": "USD",
+        "dateCreated": "<volatile>",
+        "code": "USD",
+        "lastUpdated": "<volatile>",
+        "name": "US Dollar",
+        "updatedBy": {
+          "id": "1"
+        },
+        "uomClass": {
+          "id": "CURRENCY"
+        },
+        "createdBy": {
+          "id": "1"
+        },
+        "description": "USD (US$)"
+      }
+    ]
+  }
+}

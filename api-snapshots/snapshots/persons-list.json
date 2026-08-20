@@ -1,0 +1,39 @@
+{
+  "name": "persons-list",
+  "controller": "PersonApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/persons"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [
+      {
+        "id": "seed-user-manager",
+        "name": "Mary Manager",
+        "firstName": "Mary",
+        "lastName": "Manager",
+        "email": "manager@openboxes.com",
+        "username": "manager",
+        "roles": [
+          "ROLE_MANAGER"
+        ]
+      },
+      {
+        "id": "1",
+        "name": "Miss Administrator",
+        "firstName": "Miss",
+        "lastName": "Administrator",
+        "email": "admin@admin.com",
+        "username": "admin",
+        "roles": [
+          "ROLE_FINANCE",
+          "ROLE_PRODUCT_NOTIFICATION",
+          "ROLE_SHIPMENT_NOTIFICATION",
+          "ROLE_SUPERUSER"
+        ]
+      }
+    ]
+  }
+}

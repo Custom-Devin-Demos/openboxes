@@ -1,0 +1,13 @@
+{
+  "name": "openboxes-api-snapshots",
+  "version": "1.0.0",
+  "private": true,
+  "description": "API characterization (snapshot) tests for the OpenBoxes REST API. Zero runtime dependencies; requires Node >= 18.",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "snapshots:update": "node src/run.js update",
+    "snapshots:verify": "node src/run.js verify"
+  }
+}

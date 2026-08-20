@@ -1,0 +1,15 @@
+{
+  "name": "products-getLatestInventoryCountDate",
+  "controller": "ProductApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/products/getLatestInventoryCountDate?productIds={productId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": {
+      "seed-product-01": "<date>"
+    }
+  }
+}

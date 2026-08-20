@@ -1,0 +1,16 @@
+{
+  "name": "cycleCounts-pendingRequests",
+  "controller": "CycleCountApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/facilities/{facilityId}/cycle-counts/requests/pending"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [],
+    "status": 200,
+    "count": 0,
+    "totalCount": 0
+  }
+}

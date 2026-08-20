@@ -1,0 +1,30 @@
+{
+  "name": "selectOptions-categoryOptions",
+  "controller": "SelectOptionsApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/categoryOptions"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [
+      {
+        "id": "seed-category-medicines",
+        "label": "Categories > Medicines"
+      },
+      {
+        "id": "seed-category-supplies",
+        "label": "Categories > Medical Supplies"
+      },
+      {
+        "id": "seed-category-root",
+        "label": "Categories"
+      },
+      {
+        "id": "<uuid>",
+        "label": "Categories > API Snapshot Scratch Category"
+      }
+    ]
+  }
+}

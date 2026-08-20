@@ -1,0 +1,42 @@
+{
+  "name": "dashboard-backdatedInboundShipments",
+  "controller": "DashboardApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/dashboard/backdatedInboundShipments?locationId={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": {
+      "labels": [
+        "2 days",
+        "3 days",
+        "4 days",
+        "5 days",
+        "6 days",
+        "7 days",
+        "7+ days"
+      ],
+      "datasets": [
+        {
+          "label": "Backdated shipments",
+          "data": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "links": null,
+          "type": null,
+          "yAxisID": null
+        }
+      ],
+      "colorNumber": null
+    },
+    "link": null
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "dashboard-inProgressShipments",
+  "controller": "DashboardApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/dashboard/inProgressShipments?locationId={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "link": "/openboxes/stockMovement/list?direction=OUTBOUND&receiptStatusCode=PENDING&origin=1&createdBy=1",
+    "number": 0,
+    "tooltipData": null
+  }
+}

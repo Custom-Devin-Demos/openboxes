@@ -1,0 +1,159 @@
+{
+  "name": "generic-location-list",
+  "controller": "GenericApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/generic/location/"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [
+      {
+        "id": "1",
+        "name": "Main Warehouse",
+        "description": null,
+        "locationNumber": null,
+        "locationGroup": null,
+        "parentLocation": null,
+        "locationType": {
+          "id": "2",
+          "name": "Depot",
+          "description": "Depot",
+          "locationTypeCode": "DEPOT"
+        },
+        "sortOrder": 0,
+        "hasBinLocationSupport": true,
+        "hasPackingSupport": false,
+        "hasPartialReceivingSupport": false,
+        "hasCentralPurchasingEnabled": false,
+        "organizationName": "Main Organization",
+        "organizationCode": "MO",
+        "backgroundColor": "FFFFFF",
+        "zoneName": null,
+        "zoneId": null,
+        "active": true,
+        "organization": {
+          "id": "1",
+          "name": "Main Organization",
+          "displayName": "MO - Main Organization",
+          "description": null,
+          "code": "MO",
+          "dateCreated": "<volatile>",
+          "lastUpdated": "<volatile>",
+          "defaultLocation": null,
+          "partyType": {
+            "id": "1",
+            "name": "Organization",
+            "code": "ORG",
+            "partyTypeCode": "ORGANIZATION"
+          },
+          "roles": [
+            {
+              "id": "1",
+              "roleType": "ROLE_ORGANIZATION",
+              "startDate": null,
+              "endDate": null
+            }
+          ],
+          "sequences": {}
+        },
+        "manager": {
+          "id": "1",
+          "name": "Miss Administrator",
+          "firstName": "Miss",
+          "lastName": "Administrator",
+          "email": "admin@admin.com",
+          "username": "admin",
+          "roles": [
+            "ROLE_FINANCE",
+            "ROLE_PRODUCT_NOTIFICATION",
+            "ROLE_SHIPMENT_NOTIFICATION",
+            "ROLE_SUPERUSER"
+          ]
+        },
+        "address": {
+          "address": "888 Commonwealth Avenue",
+          "address2": "Third Floor",
+          "city": "Boston",
+          "country": "United States",
+          "description": null,
+          "postalCode": "02215",
+          "stateOrProvince": "MA"
+        },
+        "supportedActivities": [
+          "ADJUST_INVENTORY",
+          "ENABLE_FULFILLER_APPROVAL_NOTIFICATIONS",
+          "ENABLE_REQUESTOR_APPROVAL_NOTIFICATIONS",
+          "EXTERNAL",
+          "FULFILL_REQUEST",
+          "MANAGE_INVENTORY",
+          "PICK_STOCK",
+          "PLACE_ORDER",
+          "PLACE_REQUEST",
+          "PUTAWAY_STOCK",
+          "RECEIVE_STOCK",
+          "SEND_STOCK",
+          "SUBMIT_REQUEST"
+        ]
+      },
+      {
+        "id": "2",
+        "name": "Main Supplier",
+        "description": null,
+        "locationNumber": null,
+        "locationGroup": null,
+        "parentLocation": null,
+        "locationType": {
+          "id": "4",
+          "name": "Supplier",
+          "description": "Supplier",
+          "locationTypeCode": "SUPPLIER"
+        },
+        "sortOrder": 0,
+        "hasBinLocationSupport": false,
+        "hasPackingSupport": false,
+        "hasPartialReceivingSupport": false,
+        "hasCentralPurchasingEnabled": false,
+        "organizationName": "Supplier Organization",
+        "organizationCode": "SO",
+        "backgroundColor": "FFFFFF",
+        "zoneName": null,
+        "zoneId": null,
+        "active": true,
+        "organization": {
+          "id": "2",
+          "name": "Supplier Organization",
+          "displayName": "SO - Supplier Organization",
+          "description": null,
+          "code": "SO",
+          "dateCreated": "<volatile>",
+          "lastUpdated": "<volatile>",
+          "defaultLocation": null,
+          "partyType": {
+            "id": "1",
+            "name": "Organization",
+            "code": "ORG",
+            "partyTypeCode": "ORGANIZATION"
+          },
+          "roles": [
+            {
+              "id": "2",
+              "roleType": "ROLE_SUPPLIER",
+              "startDate": null,
+              "endDate": null
+            }
+          ],
+          "sequences": {}
+        },
+        "manager": null,
+        "address": null,
+        "supportedActivities": [
+          "EXTERNAL",
+          "FULFILL_ORDER",
+          "SEND_STOCK"
+        ]
+      }
+    ]
+  }
+}
