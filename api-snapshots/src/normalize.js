@@ -76,10 +76,6 @@ function normalizeValue(value, key) {
   if (typeof value === 'string') {
     if (isDateString(value)) return '<date>';
     let out = value;
-    if (DASHED_UUID_RE.test(out)) {
-      DASHED_UUID_RE.lastIndex = 0;
-      out = out.replace(DASHED_UUID_RE, '<uuid>');
-    }
     if (UUID_RE.test(out)) {
       UUID_RE.lastIndex = 0;
       out = out.replace(UUID_RE, '<uuid>');
