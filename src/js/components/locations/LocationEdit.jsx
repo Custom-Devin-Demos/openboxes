@@ -535,6 +535,7 @@ class LocationEdit extends Component {
             onSubmit={(values) => this.save(values)}
             validate={validate}
             initialValues={this.state.values}
+            keepDirtyOnReinitialize
             mutators={{
               resetSupportedActivities: ([locationType], state, utils) => {
                 const supportedActivities = this.getSupportedActivities(locationType);

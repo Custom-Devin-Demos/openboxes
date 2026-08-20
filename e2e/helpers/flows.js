@@ -23,11 +23,32 @@ async function ensureDepot(page) {
   const nameInput = page
     .locator('[data-testid="form-field"][aria-label="Name"] input:visible')
     .first();
-  await nameInput.fill(DEPOT_NAME);
-  await pickField(page, 'Organization', 'Main Organization');
-  await pickField(page, 'Location Type', 'Depot');
-  await page.locator('button:has-text("Save")').first().click();
-  await expect(page).toHaveURL(/location\/edit\/\w+/);
+  const typeField = page.locator('[data-testid="form-field"][aria-label="Location Type"]');
+  // The form re-initializes asynchronously after mount (location types load
+  // and set the default type), so verify the values settled and retry when a
+  // re-render wiped them.
+  await expect(typeField).toContainText('Depot', { timeout: 15_000 });
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    if (!(await nameInput.inputValue().catch(() => ''))) {
+      await nameInput.fill(DEPOT_NAME);
+    }
+    if (!(((await typeField.textContent().catch(() => '')) || '').includes('Depot'))) {
+      await pickField(page, 'Location Type', 'Depot');
+    }
+    const orgField = page.locator('[data-testid="form-field"][aria-label="Organization"]');
+    if (!(((await orgField.textContent().catch(() => '')) || '').includes('Main Organization'))) {
+      await pickField(page, 'Organization', 'Main Organization');
+    }
+    await page.waitForTimeout(1000);
+    if (!(await nameInput.inputValue().catch(() => ''))) continue;
+    await page.locator('button:has-text("Save")').first().click();
+    const saved = await page
+      .waitForURL(/location\/edit\/\w+/, { timeout: 20_000 })
+      .then(() => true)
+      .catch(() => false);
+    if (saved) return;
+  }
+  throw new Error('Could not create depot: location edit form kept resetting its fields');
 }
 
 /**
@@ -68,6 +89,9 @@ async function sendShipmentStep(page) {
   await page.waitForLoadState('networkidle').catch(() => {});
 
   for (let attempt = 0; attempt < 4; attempt += 1) {
+    // The click may have gone through even when the detached-wait below timed
+    // out (e.g. a slow re-render); if we already left the send step, be done.
+    if (!(await sendButton.isVisible().catch(() => false))) return;
     if (!(((await typeField.textContent().catch(() => '')) || '').includes('Land'))) {
       await typeField.click();
       await pickOption(page, 'Land');
