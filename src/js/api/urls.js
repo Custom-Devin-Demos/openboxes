@@ -265,3 +265,11 @@ export const ADMIN_SETTINGS = `${ADMIN_API}/settings`;
 export const ADMIN_TRIGGER_STOCK_ALERTS = `${ADMIN_API}/triggerStockAlerts`;
 export const ADMIN_SEND_MAIL = `${ADMIN_API}/sendMail`;
 export const ADMIN_MAIL_FORM = `${ADMIN_API}/mailForm`;
+
+// REQUISITIONS (legacy requisition screens migration)
+export const REQUISITION_API = `${API}/requisitions`;
+export const REQUISITION_TEMPLATES = `${REQUISITION_API}/templates`;
+export const REQUISITION_TEMPLATE_BY_ID = (id) => `${REQUISITION_TEMPLATES}/${id}`;
+export const REQUISITION_EDIT = (id) => `${REQUISITION_API}/${id}/edit`;
+export const REQUISITION_CONFIRM = (id) => `${REQUISITION_API}/${id}/confirm`;
+export const REQUISITION_DETAILS = (id) => `${REQUISITION_API}/${id}/details`;

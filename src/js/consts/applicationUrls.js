@@ -128,6 +128,21 @@ const REQUISITION_TEMPLATE_URL = {
   editHeader: (id) => `${REQUISITION_TEMPLATE_URL.base}/editHeader/${id}`,
 };
 
+const REQUISITION_URL = {
+  base: `${CONTEXT_PATH}/requisition`,
+  list: () => `${REQUISITION_URL.base}/list`,
+  chooseTemplate: () => `${REQUISITION_URL.base}/chooseTemplate`,
+  create: (type) => `${REQUISITION_URL.base}/create${type ? `?type=${type}` : ''}`,
+  createStockFromTemplate: (id) => `${REQUISITION_URL.base}/createStockFromTemplate/${id}`,
+  edit: (id) => `${REQUISITION_URL.base}/edit/${id}`,
+  review: (id) => `${REQUISITION_URL.base}/review/${id}`,
+  pick: (id) => `${REQUISITION_URL.base}/pick/${id}`,
+  confirm: (id) => `${REQUISITION_URL.base}/confirm/${id}`,
+  transfer: (id) => `${REQUISITION_URL.base}/transfer/${id}`,
+  show: (id) => `${REQUISITION_URL.base}/show/${id}`,
+  saveRequisitionItems: () => `${REQUISITION_URL.base}/saveRequisitionItems`,
+};
+
 const STOCKLIST_URL = {
   base: `${CONTEXT_PATH}/stocklist`,
   pdf: (id) => `${STOCKLIST_URL.base}/renderPdf/${id}`,
@@ -203,6 +218,7 @@ export {
   PUTAWAY_URL,
   REPLENISHMENT_URL,
   REQUISITION_TEMPLATE_URL,
+  REQUISITION_URL,
   STOCK_MOVEMENT_URL,
   STOCK_TRANSFER_URL,
   STOCKLIST_URL,

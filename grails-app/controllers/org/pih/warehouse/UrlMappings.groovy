@@ -42,6 +42,31 @@ class UrlMappings {
 
         // REST APIs with complex resource names or subresources
 
+        "/api/requisitions"(parseRequest: true) {
+            controller = { "requisitionApi" }
+            action = [POST: "create"]
+        }
+        "/api/requisitions/templates" {
+            controller = { "requisitionApi" }
+            action = [GET: "templates"]
+        }
+        "/api/requisitions/templates/$id" {
+            controller = { "requisitionApi" }
+            action = [GET: "template"]
+        }
+        "/api/requisitions/$id/edit" {
+            controller = { "requisitionApi" }
+            action = [GET: "edit"]
+        }
+        "/api/requisitions/$id/confirm" {
+            controller = { "requisitionApi" }
+            action = [GET: "confirm"]
+        }
+        "/api/requisitions/$id/details"(parseRequest: true) {
+            controller = { "requisitionApi" }
+            action = [POST: "updateDetails"]
+        }
+
         "/api/categories"(parseRequest: true) {
             controller = { "categoryApi" }
             action = [GET: "list", POST: "save"]
