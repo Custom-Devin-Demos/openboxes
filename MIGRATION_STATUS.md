@@ -32,7 +32,7 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | # | Task | Status | Session | PR | Notes |
 |---|------|--------|---------|----|-------|
 | 1.1 | Java 8→11 + dependency cleanup | MERGED | [c54a01cd](https://app.devin.ai/sessions/c54a01cdcc264e168324562d8958adeb) | [#7](https://github.com/Custom-Devin-Demos/openboxes/pull/7) | Snapshots 122/122, Playwright 10/10 on JDK 11, CI green |
-| 1.2 | Grails 3→4 | PENDING | | | Blocked by 1.1 |
+| 1.2 | Grails 3→4 | IN_PROGRESS | [e4c1b67a](https://app.devin.ai/sessions/e4c1b67a72bb47aa90fc41799a4e7271) | | |
 | 1.3 | Grails 4→5 | PENDING | | | Blocked by 1.2 |
 | 1.4 | Grails 5→6 / Java 21 / javax→jakarta | PENDING | | | Blocked by 1.3 |
 | 1.5 | Re-verify Quartz jobs, Liquibase, mail/reporting integrations | PENDING | | | Blocked by 1.4 |
