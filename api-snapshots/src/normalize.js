@@ -18,7 +18,7 @@
  *    replaced with "<volatile>" regardless of type:
  *    dateCreated, lastUpdated, dateImported, requestId, buildDate, buildNumber,
  *    branchName, revisionNumber, ipAddress, hostname, timestamp, serverName,
- *    time, responseTime, elapsedTime.
+ *    time, responseTime, elapsedTime, productAvailabilityId.
  * 4. Non-deterministic ordering: endpoints flagged with `sortArrays: true` in
  *    endpoints.js have all their JSON arrays sorted by the JSON serialization
  *    of the (already normalized) elements, because the underlying SQL has no
@@ -59,6 +59,9 @@ const VOLATILE_KEYS = new Set([
   'time',
   'responseTime',
   'elapsedTime',
+  // Hyphenated random UUID regenerated on every product-availability refresh
+  // (not a GORM 32-hex id, so the <uuid> replacement does not catch it).
+  'productAvailabilityId',
 ]);
 
 const DATE_KEY_RE = /(date|Date|expirationDate|dateShipped|dateRequested)$/;

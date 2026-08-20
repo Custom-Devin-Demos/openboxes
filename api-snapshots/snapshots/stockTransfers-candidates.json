@@ -11,7 +11,7 @@
     "data": [
       {
         "id": null,
-        "productAvailabilityId": "<uuid>",
+        "productAvailabilityId": "<volatile>",
         "product.id": "seed-product-01",
         "product.productCode": "DM0001",
         "product.name": "Acetaminophen 325mg tablet",
@@ -40,7 +40,7 @@
       },
       {
         "id": null,
-        "productAvailabilityId": "<uuid>",
+        "productAvailabilityId": "<volatile>",
         "product.id": "seed-product-02",
         "product.productCode": "DM0002",
         "product.name": "Amoxicillin 500mg capsule",
@@ -69,7 +69,7 @@
       },
       {
         "id": null,
-        "productAvailabilityId": "<uuid>",
+        "productAvailabilityId": "<volatile>",
         "product.id": "seed-product-03",
         "product.productCode": "DM0003",
         "product.name": "Ibuprofen 200mg tablet",
@@ -98,7 +98,7 @@
       },
       {
         "id": null,
-        "productAvailabilityId": "<uuid>",
+        "productAvailabilityId": "<volatile>",
         "product.id": "seed-product-04",
         "product.productCode": "DM0004",
         "product.name": "Oral rehydration salts sachet",
@@ -127,7 +127,7 @@
       },
       {
         "id": null,
-        "productAvailabilityId": "<uuid>",
+        "productAvailabilityId": "<volatile>",
         "product.id": "seed-product-05",
         "product.productCode": "DS0001",
         "product.name": "Examination gloves, nitrile, medium",
@@ -156,7 +156,7 @@
       },
       {
         "id": null,
-        "productAvailabilityId": "<uuid>",
+        "productAvailabilityId": "<volatile>",
         "product.id": "seed-product-06",
         "product.productCode": "DS0002",
         "product.name": "Syringe 5ml with needle",
@@ -185,7 +185,7 @@
       },
       {
         "id": null,
-        "productAvailabilityId": "<uuid>",
+        "productAvailabilityId": "<volatile>",
         "product.id": "seed-product-07",
         "product.productCode": "DS0003",
         "product.name": "Gauze roll 10cm x 4m",
@@ -214,7 +214,7 @@
       },
       {
         "id": null,
-        "productAvailabilityId": "<uuid>",
+        "productAvailabilityId": "<volatile>",
         "product.id": "seed-product-08",
         "product.productCode": "DS0004",
         "product.name": "Surgical face mask",

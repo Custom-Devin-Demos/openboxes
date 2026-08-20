@@ -26,9 +26,7 @@ class EventTypeController {
     }
 
     def create() {
-        def eventTypeInstance = new EventType()
-        eventTypeInstance.properties = params
-        return [eventTypeInstance: eventTypeInstance]
+        render(view: "/common/react")
     }
 
     def save() {
@@ -52,13 +50,7 @@ class EventTypeController {
     }
 
     def edit() {
-        def eventTypeInstance = EventType.get(params.id)
-        if (!eventTypeInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'eventType.label', default: 'EventType'), params.id])}"
-            redirect(action: "list")
-        } else {
-            return [eventTypeInstance: eventTypeInstance]
-        }
+        render(view: "/common/react")
     }
 
     def update() {

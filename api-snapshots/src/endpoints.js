@@ -191,7 +191,7 @@ module.exports = [
   // StockTransferApiController
   { name: 'stockTransfers-list', controller: 'StockTransferApiController', path: '/api/stockTransfers?location={facilityId}' },
   { name: 'stockTransfers-statusOptions', controller: 'StockTransferApiController', path: '/api/stockTransfers/statusOptions' },
-  { name: 'stockTransfers-candidates', controller: 'StockTransferApiController', path: '/api/stockTransfers/candidates?location.id={facilityId}' },
+  { name: 'stockTransfers-candidates', controller: 'StockTransferApiController', path: '/api/stockTransfers/candidates?location.id={facilityId}', sortArrays: true },
 
   // StocklistApiController
   { name: 'stocklists-list', controller: 'StocklistApiController', path: '/api/stocklists' },
