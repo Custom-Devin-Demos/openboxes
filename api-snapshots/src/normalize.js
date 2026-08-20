@@ -75,12 +75,11 @@ function isDateString(value) {
 function normalizeValue(value, key) {
   if (typeof value === 'string') {
     if (isDateString(value)) return '<date>';
-    let out = value;
-    if (UUID_RE.test(out)) {
+    if (UUID_RE.test(value)) {
       UUID_RE.lastIndex = 0;
-      out = out.replace(UUID_RE, '<uuid>');
+      return value.replace(UUID_RE, '<uuid>');
     }
-    return out;
+    return value;
   }
   if (typeof value === 'number' && key && DATE_KEY_RE.test(key) && value > 1e11) {
     return '<date>';
