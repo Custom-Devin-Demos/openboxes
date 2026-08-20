@@ -8,10 +8,12 @@ import queryString from 'query-string';
 
 import { SHIPMENT_ADD_TO_SHIPMENT_FORM } from 'api/urls';
 import { INVENTORY_ITEM_URL, INVENTORY_URL, SHIPMENT_URL } from 'consts/applicationUrls';
+import useTranslate from 'hooks/useTranslate';
 import apiClient from 'utils/apiClient';
 import Translate from 'utils/Translate';
 
 const AddToShipment = ({ location }) => {
+  const translate = useTranslate();
   const [items, setItems] = useState([]);
   const [pendingShipments, setPendingShipments] = useState([]);
   const [loaded, setLoaded] = useState(false);
@@ -69,21 +71,11 @@ const AddToShipment = ({ location }) => {
                         label={`${shipment.shipmentNumber} - ${shipment.name} to ${shipment.destination}, departing ${shipment.expectedShippingDate}`}
                       >
                         <option value={`${shipment.id}:0`}>
-                          {'\u00A0'}
-                          <Translate id="react.shipment.looseItems.label" defaultMessage="Loose items (no packing unit)" />
-                          {' \u203A '}
-                          {shipment.looseItemCount}
-                          {' '}
-                          <Translate id="react.default.items.label" defaultMessage="item(s)" />
+                          {`\u00A0${translate('react.shipment.looseItems.label', 'Loose items (no packing unit)')} \u203A ${shipment.looseItemCount} ${translate('react.default.items.label', 'item(s)')}`}
                         </option>
                         {shipment.containers.map((container) => (
                           <option key={container.id} value={`${shipment.id}:${container.id}`}>
-                            {'\u00A0'}
-                            {container.name}
-                            {' \u203A '}
-                            {container.itemCount}
-                            {' '}
-                            <Translate id="react.default.items.label" defaultMessage="item(s)" />
+                            {`\u00A0${container.name} \u203A ${container.itemCount} ${translate('react.default.items.label', 'item(s)')}`}
                           </option>
                         ))}
                       </optgroup>
