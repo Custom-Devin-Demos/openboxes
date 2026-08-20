@@ -112,6 +112,14 @@ export const PRODUCT_GROUP_OPTION = `${API}/productGroupOptions`;
 // SHIPMENT TYPES
 export const SHIPMENT_TYPES = `${GENERIC_API}/shipmentType`;
 
+// SHIPMENTS
+export const SHIPMENT_API = `${API}/shipments`;
+export const SHIPMENT_SUMMARY = (id) => `${SHIPMENT_API}/${id}/summary`;
+export const SHIPMENT_COMMENT_FORM = `${SHIPMENT_API}/commentForm`;
+export const SHIPMENT_DOCUMENT_FORM = (id) => `${SHIPMENT_API}/${id}/documentForm`;
+export const SHIPMENT_EVENT_FORM = (id) => `${SHIPMENT_API}/${id}/eventForm`;
+export const SHIPMENT_ADD_TO_SHIPMENT_FORM = `${SHIPMENT_API}/addToShipmentForm`;
+
 // PAYMENT TERMS
 export const PAYMENT_TERMS_OPTION = `${API}/paymentTermOptions`;
 

@@ -171,6 +171,31 @@ class UrlMappings {
             action = [GET: "shipmentStatusCodesOptions"]
         }
 
+        "/api/shipments/commentForm" {
+            controller = { "shipmentApi" }
+            action = [GET: "commentForm"]
+        }
+
+        "/api/shipments/addToShipmentForm" {
+            controller = { "shipmentApi" }
+            action = [GET: "addToShipmentForm"]
+        }
+
+        "/api/shipments/$id/summary" {
+            controller = { "shipmentApi" }
+            action = [GET: "summary"]
+        }
+
+        "/api/shipments/$id/documentForm" {
+            controller = { "shipmentApi" }
+            action = [GET: "documentForm"]
+        }
+
+        "/api/shipments/$id/eventForm" {
+            controller = { "shipmentApi" }
+            action = [GET: "eventForm"]
+        }
+
         "/api/products"(parseRequest: true) {
             controller = { "productApi" }
             action = [GET: "list", POST: "save"]
