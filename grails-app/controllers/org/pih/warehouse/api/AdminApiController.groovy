@@ -122,7 +122,7 @@ class AdminApiController extends BaseApiController {
         def domainClass = grailsApplication.getDomainClass(params.name)
         String message
         if (domainClass) {
-            sessionFactory.evict(domainClass.clazz)
+            sessionFactory.cache.evictEntityRegion(domainClass.clazz)
             message = "Domain cache '${params.name}' was invalidated"
         } else {
             message = "Domain cache '${params.name}' does not exist"
@@ -133,10 +133,10 @@ class AdminApiController extends BaseApiController {
     def evictQueryCache() {
         String message
         if (params.name) {
-            sessionFactory.evictQueries(params.name)
+            sessionFactory.cache.evictQueryRegion(params.name)
             message = "Query cache '${params.name}' was invalidated"
         } else {
-            sessionFactory.evictQueries()
+            sessionFactory.cache.evictQueryRegions()
             message = "All query caches were invalidated"
         }
         render([data: [message: message.toString()]] as JSON)
