@@ -302,6 +302,31 @@ const AsyncAdminShowSettings = Loadable({
   loading: Loading,
 });
 
+const AsyncRequisitionChooseTemplate = Loadable({
+  loader: () => import('components/requisition/ChooseTemplatePage'),
+  loading: Loading,
+});
+
+const AsyncRequisitionCreate = Loadable({
+  loader: () => import('components/requisition/CreateRequisitionPage'),
+  loading: Loading,
+});
+
+const AsyncRequisitionCreateStock = Loadable({
+  loader: () => import('components/requisition/CreateStockRequisitionPage'),
+  loading: Loading,
+});
+
+const AsyncRequisitionEdit = Loadable({
+  loader: () => import('components/requisition/EditRequisitionPage'),
+  loading: Loading,
+});
+
+const AsyncRequisitionConfirm = Loadable({
+  loader: () => import('components/requisition/ConfirmRequisitionPage'),
+  loading: Loading,
+});
+
 const Router = () => {
   useConnectionListener();
 
@@ -367,6 +392,11 @@ const Router = () => {
             </Route>
             <MainLayoutRoute path="**/purchaseOrder/list" component={AsyncPurchaseOrderList} />
             <MainLayoutRoute path="**/requisitionTemplate/list" component={AsyncStockList} />
+            <MainLayoutRoute path="**/requisition/chooseTemplate" component={AsyncRequisitionChooseTemplate} />
+            <MainLayoutRoute path="**/requisition/createStockFromTemplate/:templateId" component={AsyncRequisitionCreateStock} />
+            <MainLayoutRoute path="**/requisition/create" component={AsyncRequisitionCreate} />
+            <MainLayoutRoute path="**/requisition/edit/:requisitionId" component={AsyncRequisitionEdit} />
+            <MainLayoutRoute path="**/requisition/confirm/:requisitionId" component={AsyncRequisitionConfirm} />
             <MainLayoutRoute path="**/product/list" component={AsyncProductsList} />
             <MainLayoutRoute path="**/stockTransfer/list" component={AsyncStockTransferList} />
             <MainLayoutRoute path="**/budgetCode/list" component={AsyncBudgetCodeList} />
