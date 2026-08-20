@@ -24,7 +24,7 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 |---|------|--------|---------|----|-------|
 | 0.1 | App running via Docker (MySQL + seed data); fix fork CI | DONE | [0c3fd858](https://app.devin.ai/sessions/0c3fd85830d5442fbd068a84a4b9dbc7) | [#2](https://github.com/Custom-Devin-Demos/openboxes/pull/2) | Merged; CI green |
 | 0.2 | Dead-screen audit: GSPs with no route/menu refs; live-screen inventory | DONE | [0ec9e5d0](https://app.devin.ai/sessions/0ec9e5d0077d45bd94e8085415c9a5f0) | [#1](https://github.com/Custom-Devin-Demos/openboxes/pull/1) | Merged. 618 GSPs: LIVE 286, TEMPLATE 226, UNCERTAIN 29, DEAD 77; 58 proposed batches |
-| 0.3 | Playwright golden-path characterization flows (login, receive stock, requisition, stock movement, ship, putaway, cycle count, invoice) | IN_PROGRESS | [87546b52](https://app.devin.ai/sessions/87546b52359d44b393033571e0242af4) | | |
+| 0.3 | Playwright golden-path characterization flows (login, receive stock, requisition, stock movement, ship, putaway, cycle count, invoice) | DONE | [87546b52](https://app.devin.ai/sessions/87546b52359d44b393033571e0242af4) | [#4](https://github.com/Custom-Devin-Demos/openboxes/pull/4) | Merged. 10 tests, all 8 flows; run: cd e2e && npm run e2e. Caveat: invoice flow = header create/view only |
 | 0.4 | API snapshot tests: all 52 API controllers vs seeded data (parity oracle) | DONE | [f230708f](https://app.devin.ai/sessions/f230708f5a114176b3245197b9325c9f) | [#3](https://github.com/Custom-Devin-Demos/openboxes/pull/3) | Merged. 122 snapshots, 52/52 controllers addressed (15 documented gaps); verify: cd api-snapshots && npm run snapshots:verify |
 
 ## Phase 1 — Backend platform (sequential waves; app must boot after each step)
@@ -68,3 +68,4 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 - 2026-08-20: Phase 0 wave 1 spawned: 0.1 (Docker baseline + CI), 0.2 (dead-screen audit).
 - 2026-08-20: 0.1 (PR #2) and 0.2 (PR #1) merged. Wave 2 spawned: 0.3 (Playwright flows), 0.4 (API snapshots).
 - 2026-08-20: 0.4 merged (PR #3). 0.3 still in progress.
+- 2026-08-20: 0.3 merged (PR #4). PHASE 0 COMPLETE. Parity gate active: e2e suite + api-snapshots must stay green on every later PR.
