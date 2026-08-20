@@ -52,12 +52,9 @@ class AdminApiController extends BaseApiController {
     def controllerActions() {
         List actionNames = []
         grailsApplication.controllerClasses.sort { it.logicalPropertyName }.each { controller ->
-            controller.reference.propertyDescriptors.each { pd ->
-                def closure = controller.getPropertyOrStaticPropertyOrFieldValue(pd.name, Closure)
-                if (closure) {
-                    if (pd.name != 'beforeInterceptor' && pd.name != 'afterInterceptor') {
-                        actionNames << controller.logicalPropertyName + "." + pd.name + ".label = " + pd.name
-                    }
+            controller.actions.sort().each { actionName ->
+                if (actionName != 'beforeInterceptor' && actionName != 'afterInterceptor') {
+                    actionNames << controller.logicalPropertyName + "." + actionName + ".label = " + actionName
                 }
             }
         }
@@ -190,7 +187,7 @@ class AdminApiController extends BaseApiController {
                 appVersion         : grailsApplication.metadata.getProperty('info.app.version'),
                 showUpgradeLink    : user?.roles?.contains(Role.findByRoleType('ROLE_ADMIN')) ?: false,
                 buildNumber        : gitProperties.shortCommitId,
-                buildDate          : grailsApplication.metadata.getProperty('build.time'),
+                buildDate          : grailsApplication.metadata.getProperty('build.time', String),
                 branchName         : ConfigHelper.getBranchName(gitProperties),
                 grailsVersion      : grailsApplication.metadata.getProperty('info.app.grailsVersion'),
                 currentDate        : new Date().toString(),
