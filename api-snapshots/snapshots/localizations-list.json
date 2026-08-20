@@ -3634,7 +3634,7 @@
       "auth.login.label": "Login",
       "react.putAway.include.label": "Include",
       "product.description.label": "Product description",
-      "helpscout.beacon.key.label": "44ee4f01-5334-4b93-ad25-03037903eb80",
+      "helpscout.beacon.key.label": "<uuid>",
       "shipping.enterItemDetails.label": "Enter item details",
       "product.remaining.label": "Remaining",
       "requisitionItem.previous.label": "Previous",

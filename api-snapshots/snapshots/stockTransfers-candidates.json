@@ -11,7 +11,7 @@
     "data": [
       {
         "id": null,
-        "productAvailabilityId": "ac84abb6-e419-49a3-8694-e1bbe9b1a977",
+        "productAvailabilityId": "<uuid>",
         "product.id": "seed-product-01",
         "product.productCode": "DM0001",
         "product.name": "Acetaminophen 325mg tablet",
@@ -40,7 +40,7 @@
       },
       {
         "id": null,
-        "productAvailabilityId": "584af975-1c5d-45b4-b3e9-44e151f5be64",
+        "productAvailabilityId": "<uuid>",
         "product.id": "seed-product-02",
         "product.productCode": "DM0002",
         "product.name": "Amoxicillin 500mg capsule",
@@ -69,7 +69,7 @@
       },
       {
         "id": null,
-        "productAvailabilityId": "eb300ab2-2ca1-4c68-ab13-4989901c3ad6",
+        "productAvailabilityId": "<uuid>",
         "product.id": "seed-product-03",
         "product.productCode": "DM0003",
         "product.name": "Ibuprofen 200mg tablet",
@@ -98,7 +98,7 @@
       },
       {
         "id": null,
-        "productAvailabilityId": "985b0899-977b-488c-9664-3c40beec4cb2",
+        "productAvailabilityId": "<uuid>",
         "product.id": "seed-product-04",
         "product.productCode": "DM0004",
         "product.name": "Oral rehydration salts sachet",
@@ -127,7 +127,7 @@
       },
       {
         "id": null,
-        "productAvailabilityId": "fe4325ad-a958-4481-89e7-ea294527f42a",
+        "productAvailabilityId": "<uuid>",
         "product.id": "seed-product-05",
         "product.productCode": "DS0001",
         "product.name": "Examination gloves, nitrile, medium",
@@ -156,7 +156,7 @@
       },
       {
         "id": null,
-        "productAvailabilityId": "92154008-bfe1-4e7e-aa28-925105e36d51",
+        "productAvailabilityId": "<uuid>",
         "product.id": "seed-product-06",
         "product.productCode": "DS0002",
         "product.name": "Syringe 5ml with needle",
@@ -185,7 +185,7 @@
       },
       {
         "id": null,
-        "productAvailabilityId": "c6a78c4e-7f0a-4dd9-a624-a2185346f102",
+        "productAvailabilityId": "<uuid>",
         "product.id": "seed-product-07",
         "product.productCode": "DS0003",
         "product.name": "Gauze roll 10cm x 4m",
@@ -214,7 +214,7 @@
       },
       {
         "id": null,
-        "productAvailabilityId": "6d3c9c71-a65a-47f6-afa1-c7c3733cbfd6",
+        "productAvailabilityId": "<uuid>",
         "product.id": "seed-product-08",
         "product.productCode": "DS0004",
         "product.name": "Surgical face mask",

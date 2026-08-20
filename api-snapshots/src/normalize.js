@@ -5,7 +5,9 @@
  * Documented normalizations (see docs/migration/characterization-api.md):
  *
  * 1. Database-generated identifiers: OpenBoxes uses Hibernate "uuid" ids
- *    (32-char lowercase hex, e.g. ff8081817f7bc113017f7bc1e3a60001).
+ *    (32-char lowercase hex, e.g. ff8081817f7bc113017f7bc1e3a60001) as well
+ *    as dashed UUIDs (e.g. product_availability ids regenerated on every
+ *    refresh of the product-availability cache).
  *    Any string containing such an id is replaced with "<uuid>" (the id may be
  *    embedded in URLs). These ids differ every time the demo data is reseeded.
  * 2. Dates / timestamps: any string matching common date/timestamp formats
@@ -31,7 +33,7 @@
  *    deterministic; if they prove flaky they should be added here.
  */
 
-const UUID_RE = /[0-9a-f]{32}/g;
+const UUID_RE = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|[0-9a-f]{32}/g;
 
 const DATE_RES = [
   /^\d{4}-\d{2}-\d{2}([T ]\d{2}:\d{2}(:\d{2})?(\.\d+)?(Z|[+-]\d{2}:?\d{2})?)?$/, // ISO-ish

@@ -45,18 +45,6 @@
         "isRoot": true,
         "categories": [
           {
-            "id": "<uuid>",
-            "description": null,
-            "name": "API Snapshot Scratch Category",
-            "version": 0,
-            "dateCreated": "<volatile>",
-            "lastUpdated": "<volatile>",
-            "sortOrder": 0,
-            "deleted": false,
-            "isRoot": false,
-            "categories": []
-          },
-          {
             "id": "seed-category-supplies",
             "description": null,
             "name": "Medical Supplies",
@@ -81,18 +69,6 @@
             "categories": []
           }
         ]
-      },
-      {
-        "id": "<uuid>",
-        "description": null,
-        "name": "API Snapshot Scratch Category",
-        "version": 0,
-        "dateCreated": "<volatile>",
-        "lastUpdated": "<volatile>",
-        "sortOrder": 0,
-        "deleted": false,
-        "isRoot": false,
-        "categories": []
       }
     ]
   }

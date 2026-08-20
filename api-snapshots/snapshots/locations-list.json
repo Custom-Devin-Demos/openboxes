@@ -82,19 +82,19 @@
           "stateOrProvince": "MA"
         },
         "supportedActivities": [
-          "ENABLE_REQUESTOR_APPROVAL_NOTIFICATIONS",
-          "PLACE_REQUEST",
-          "SEND_STOCK",
-          "SUBMIT_REQUEST",
-          "PLACE_ORDER",
-          "FULFILL_REQUEST",
-          "EXTERNAL",
-          "ENABLE_FULFILLER_APPROVAL_NOTIFICATIONS",
-          "RECEIVE_STOCK",
-          "PICK_STOCK",
           "ADJUST_INVENTORY",
+          "ENABLE_FULFILLER_APPROVAL_NOTIFICATIONS",
+          "ENABLE_REQUESTOR_APPROVAL_NOTIFICATIONS",
+          "EXTERNAL",
+          "FULFILL_REQUEST",
+          "MANAGE_INVENTORY",
+          "PICK_STOCK",
+          "PLACE_ORDER",
+          "PLACE_REQUEST",
           "PUTAWAY_STOCK",
-          "MANAGE_INVENTORY"
+          "RECEIVE_STOCK",
+          "SEND_STOCK",
+          "SUBMIT_REQUEST"
         ]
       },
       {
@@ -149,8 +149,8 @@
         "manager": null,
         "address": null,
         "supportedActivities": [
-          "FULFILL_ORDER",
           "EXTERNAL",
+          "FULFILL_ORDER",
           "SEND_STOCK"
         ]
       }

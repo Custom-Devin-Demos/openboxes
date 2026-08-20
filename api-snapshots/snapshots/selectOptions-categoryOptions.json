@@ -20,10 +20,6 @@
       {
         "id": "seed-category-root",
         "label": "Categories"
-      },
-      {
-        "id": "<uuid>",
-        "label": "Categories > API Snapshot Scratch Category"
       }
     ]
   }

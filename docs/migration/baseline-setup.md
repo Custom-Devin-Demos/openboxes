@@ -5,7 +5,7 @@ application, frontend) on this fork.
 
 ## Prerequisites
 
-- Java 8 (e.g. `/usr/lib/jvm/java-8-openjdk-amd64` on Ubuntu)
+- Java 11 (e.g. `/usr/lib/jvm/java-11-openjdk-amd64` on Ubuntu; install with `apt install openjdk-11-jdk-headless`)
 - Node 14 (via [nvm](https://github.com/nvm-sh/nvm): `nvm install 14`)
 - Docker + Docker Compose (for the database)
 
@@ -82,7 +82,7 @@ docker compose -f docker/docker-compose-dev.yml up -d
 ## 4. Run the application
 
 ```bash
-JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 ./gradlew bootRun
+JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 ./gradlew bootRun
 ```
 
 - First boot runs all Liquibase migrations (~5–10 minutes). Later boots are much faster.
@@ -107,9 +107,9 @@ npm run watch      # hot-reload rebuild during development
 npm test           # React/Jest tests
 npm run eslint     # lint
 
-# Backend (Java 8; integration tests start their own DB via Testcontainers)
-JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 ./gradlew test
-JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 ./gradlew integrationTest
+# Backend (Java 11; integration tests start their own DB via Testcontainers)
+JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 ./gradlew test
+JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 ./gradlew integrationTest
 ```
 
 ## CI on this fork
