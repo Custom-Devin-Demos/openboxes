@@ -272,6 +272,36 @@ const AsyncStockTransferList = Loadable({
   loading: Loading,
 });
 
+const AsyncAdminIndex = Loadable({
+  loader: () => import('components/admin/AdminIndexPage'),
+  loading: Loading,
+});
+
+const AsyncControllerActions = Loadable({
+  loader: () => import('components/admin/ControllerActionsPage'),
+  loading: Loading,
+});
+
+const AsyncAdminPlugins = Loadable({
+  loader: () => import('components/admin/PluginsPage'),
+  loading: Loading,
+});
+
+const AsyncAdminCache = Loadable({
+  loader: () => import('components/admin/CachePage'),
+  loading: Loading,
+});
+
+const AsyncAdminSendMail = Loadable({
+  loader: () => import('components/admin/SendMailPage'),
+  loading: Loading,
+});
+
+const AsyncAdminShowSettings = Loadable({
+  loader: () => import('components/admin/ShowSettingsPage'),
+  loading: Loading,
+});
+
 const Router = () => {
   useConnectionListener();
 
@@ -344,6 +374,13 @@ const Router = () => {
             <MainLayoutRoute path="**/budgetCode/edit/:budgetCodeId" component={AsyncBudgetCodeForm} />
             <MainLayoutRoute path="**/eventType/create" component={AsyncEventTypeForm} />
             <MainLayoutRoute path="**/eventType/edit/:eventTypeId" component={AsyncEventTypeForm} />
+            <MainLayoutRoute path="**/admin/controllerActions" component={AsyncControllerActions} />
+            <MainLayoutRoute path="**/admin/plugins" component={AsyncAdminPlugins} />
+            <MainLayoutRoute path="**/admin/cache" component={AsyncAdminCache} />
+            <MainLayoutRoute path="**/admin/sendMail" component={AsyncAdminSendMail} />
+            <MainLayoutRoute path="**/admin/showSettings" component={AsyncAdminShowSettings} />
+            <MainLayoutRoute path="**/admin/index" component={AsyncAdminIndex} />
+            <MainLayoutRoute path="**/admin" exact component={AsyncAdminIndex} />
             <MainLayoutRoute path="**/productSupplier/list" component={AsyncProductSupplierList} />
             <MainLayoutRoute path="**/productSupplier/create/:productSupplierId?" component={AsyncProductSupplierCreatePage} />
             <MainLayoutRoute path="**/dashboard/:configId?" component={Dashboard} />
