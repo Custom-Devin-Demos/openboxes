@@ -113,6 +113,10 @@ const INVENTORY_ITEM_URL = {
 const INVENTORY_URL = {
   base: `${CONTEXT_PATH}/inventory`,
   showTransaction: (id) => `${INVENTORY_URL.base}/showTransaction/${id}`,
+  browse: () => `${INVENTORY_URL.base}/browse`,
+  list: () => `${INVENTORY_URL.base}/list`,
+  listTransactions: () => `${INVENTORY_URL.base}/listTransactions`,
+  editTransaction: (id) => `${INVENTORY_URL.base}/editTransaction/${id}`,
 };
 
 const REQUISITION_TEMPLATE_URL = {

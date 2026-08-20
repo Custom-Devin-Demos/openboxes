@@ -223,6 +223,31 @@ const AsyncExpirationHistoryReport = Loadable({
   loading: Loading,
 });
 
+const AsyncInventoryBrowser = Loadable({
+  loader: () => import('components/inventory/InventoryBrowser'),
+  loading: Loading,
+});
+
+const AsyncInventoryList = Loadable({
+  loader: () => import('components/inventory/InventoryList'),
+  loading: Loading,
+});
+
+const AsyncEditBinLocation = Loadable({
+  loader: () => import('components/inventory/EditBinLocation'),
+  loading: Loading,
+});
+
+const AsyncCreateTransaction = Loadable({
+  loader: () => import('components/inventory/CreateTransaction'),
+  loading: Loading,
+});
+
+const AsyncEditTransaction = Loadable({
+  loader: () => import('components/inventory/EditTransaction'),
+  loading: Loading,
+});
+
 const StockMovementList = (props) => {
   const parsedSearchQuery = queryString.parse(props?.location?.search);
   const direction = parsedSearchQuery?.direction?.toUpperCase();
@@ -272,6 +297,17 @@ const Router = () => {
             <MainLayoutRoute path="**/stockMovement/importOutboundStockMovement" component={AsyncOutboundImport} />
             <MainLayoutRoute path="**/report/expirationHistoryReport" component={AsyncExpirationHistoryReport} />
             <MainLayoutRoute path="**/inventory/reorderReport" component={AsyncReorderReport} />
+            <MainLayoutRoute path="**/inventory/browse" component={AsyncInventoryBrowser} />
+            <MainLayoutRoute path="**/inventory/list" component={AsyncInventoryList} />
+            <MainLayoutRoute path="**/inventory/editBinLocation" component={AsyncEditBinLocation} />
+            <MainLayoutRoute path="**/inventory/editTransaction/:id" component={AsyncEditTransaction} />
+            <MainLayoutRoute path="**/inventory/createTransaction" component={AsyncCreateTransaction} />
+            <MainLayoutRoute path="**/inventory/createInboundTransfer" component={AsyncCreateTransaction} />
+            <MainLayoutRoute path="**/inventory/createOutboundTransfer" component={AsyncCreateTransaction} />
+            <MainLayoutRoute path="**/inventory/createAdjustment" component={AsyncCreateTransaction} />
+            <MainLayoutRoute path="**/inventory/createConsumed" component={AsyncCreateTransaction} />
+            <MainLayoutRoute path="**/inventory/createExpired" component={AsyncCreateTransaction} />
+            <MainLayoutRoute path="**/inventory/createDamaged" component={AsyncCreateTransaction} />
             <MainLayoutRoute path="**/inventory/cycleCount/count" component={AsyncCycleCountCountStep} />
             <MainLayoutRoute path="**/inventory/cycleCount/resolve" component={AsyncCycleCountResolveStep} />
             <MainLayoutRoute path="**/inventory/cycleCount/reporting" component={AsyncCycleCountReporting} />

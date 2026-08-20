@@ -238,3 +238,17 @@ export const INDICATORS_INVENTORY_ACCURACY = `${INDICATORS_REPORT}/inventoryAccu
 export const INVENTORY_API = (id) => `${API}/facilities/${id}/inventories`;
 export const REORDER_REPORT = (id) => `${INVENTORY_API(id)}/reorderReport`;
 export const EXPIRATION_HISTORY_REPORT = `${API}/inventories/expirationHistoryReport`;
+
+// INVENTORY (legacy screen migration)
+export const INVENTORY_SCREEN_API = `${API}/inventory`;
+export const INVENTORY_BROWSE = `${INVENTORY_SCREEN_API}/browse`;
+export const INVENTORY_LIST = `${INVENTORY_SCREEN_API}/listInventory`;
+export const INVENTORY_EDIT_BIN_LOCATION = `${INVENTORY_SCREEN_API}/editBinLocation`;
+export const INVENTORY_ADJUST_STOCK = `${INVENTORY_SCREEN_API}/adjustStock`;
+export const INVENTORY_CREATE_TRANSACTION = `${INVENTORY_SCREEN_API}/createTransaction`;
+export const INVENTORY_SAVE_ADJUSTMENT_TRANSACTION = `${INVENTORY_SCREEN_API}/saveAdjustmentTransaction`;
+export const INVENTORY_SAVE_DEBIT_TRANSACTION = `${INVENTORY_SCREEN_API}/saveDebitTransaction`;
+export const INVENTORY_SAVE_CREDIT_TRANSACTION = `${INVENTORY_SCREEN_API}/saveCreditTransaction`;
+export const INVENTORY_TRANSACTION_BY_ID = (id) => `${INVENTORY_SCREEN_API}/transactions/${id}`;
+export const INVENTORY_SAVE_TRANSACTION = `${INVENTORY_SCREEN_API}/saveTransaction`;
+export const INVENTORY_TRANSACTION_ENTRY_DELETE = (id) => `${INVENTORY_SCREEN_API}/transactionEntries/${id}`;
