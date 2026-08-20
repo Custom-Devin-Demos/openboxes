@@ -22,8 +22,8 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 
 | # | Task | Status | Session | PR | Notes |
 |---|------|--------|---------|----|-------|
-| 0.1 | App running via Docker (MySQL + seed data); fix fork CI | PENDING | | | |
-| 0.2 | Dead-screen audit: GSPs with no route/menu refs; live-screen inventory | PENDING | | | |
+| 0.1 | App running via Docker (MySQL + seed data); fix fork CI | IN_PROGRESS | [0c3fd858](https://app.devin.ai/sessions/0c3fd85830d5442fbd068a84a4b9dbc7) | | |
+| 0.2 | Dead-screen audit: GSPs with no route/menu refs; live-screen inventory | IN_PROGRESS | [0ec9e5d0](https://app.devin.ai/sessions/0ec9e5d0077d45bd94e8085415c9a5f0) | | |
 | 0.3 | Playwright golden-path characterization flows (login, receive stock, requisition, stock movement, ship, putaway, cycle count, invoice) | PENDING | | | Blocked by 0.1 |
 | 0.4 | API snapshot tests: all 52 API controllers vs seeded data (parity oracle) | PENDING | | | Blocked by 0.1 |
 
@@ -65,3 +65,4 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 ## Log
 
 - 2026-08-20: Tracking branch created; Phase 0 wave 1 being prepared.
+- 2026-08-20: Phase 0 wave 1 spawned: 0.1 (Docker baseline + CI), 0.2 (dead-screen audit).
