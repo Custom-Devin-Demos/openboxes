@@ -41,8 +41,10 @@ jobs:
       # Additionally, because we're using pull_request instead of pull_request_target (for security purposes) when
       # running tests on PRs (see test-pull-request.yml), forks won't have access to GitHub secrets, so this step will
       # fail if we try to run it. As such, we have to skip publishing Codecov reports when running tests from forks.
+      # We also skip this step entirely when the workflow runs in a fork of openboxes/openboxes, because forks do
+      # not have the upstream CODECOV_TOKEN secret configured.
       - name: Upload results to Codecov
-        if: ${{ strategy.job-index == 0 && github.event.pull_request.head.repo.full_name == github.repository }}
+        if: ${{ strategy.job-index == 0 && github.repository == 'openboxes/openboxes' && github.event.pull_request.head.repo.full_name == github.repository }}
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}

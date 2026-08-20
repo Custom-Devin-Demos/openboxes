@@ -1,0 +1,619 @@
+path,classification,evidence,proposed_batch
+grails-app/views/admin/cache.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/admin/AdminController.groovy::cache (implicit); megamenu href /admin/cache (runtime.groovy),admin-config-1
+grails-app/views/admin/controllerActions.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/admin/AdminController.groovy::controllerActions (implicit),admin-config-1
+grails-app/views/admin/index.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/admin/AdminController.groovy::index (implicit),admin-config-1
+grails-app/views/admin/plugins.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/admin/AdminController.groovy::plugins (implicit),admin-config-1
+grails-app/views/admin/sendMail.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/admin/AdminController.groovy::sendMail (implicit); render(view:'sendMail') in grails-app/controllers/org/pih/warehouse/admin/AdminController.groovy; megamenu href /admin/sendMail (runtime.groovy),admin-config-1
+grails-app/views/admin/showSettings.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/admin/AdminController.groovy::showSettings (implicit); megamenu href /admin/showSettings (runtime.groovy); React SPA link in src/js/tests/menu/Menu.test.jsx,admin-config-1
+grails-app/views/admin/showUpgrade.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/admin/AdminController.groovy::showUpgrade (implicit),admin-config-2
+grails-app/views/admin/status.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/admin/AdminController.groovy::status (implicit),admin-config-2
+grails-app/views/api/index.gsp,DEAD,no static references found,
+grails-app/views/attribute/_renderFormList.gsp,TEMPLATE,included by productSupplier/_dialog.gsp (g:render template='/attribute/renderFormList'); included by productSupplier/edit.gsp (g:render template='/attribute/renderFormList'); included by productSupplier/create.gsp (g:render template='/attribute/renderFormList'),
+grails-app/views/attribute/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/AttributeController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/product/AttributeController.groovy,product-catalog-1
+grails-app/views/attribute/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/AttributeController.groovy::list (implicit); megamenu href /attribute/list (runtime.groovy),product-catalog-1
+grails-app/views/attribute/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/AttributeController.groovy::show (implicit),product-catalog-1
+grails-app/views/auth/login.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/user/AuthController.groovy::login (implicit); render(view:'login') in grails-app/controllers/org/pih/warehouse/user/AuthController.groovy,dashboard-auth
+grails-app/views/auth/signup.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/user/AuthController.groovy::signup (implicit); render(view:'signup') in grails-app/controllers/org/pih/warehouse/user/AuthController.groovy,dashboard-auth
+grails-app/views/batch/_uploadFileForm.gsp,TEMPLATE,included by batch/importData.gsp (g:render template='uploadFileForm'),
+grails-app/views/batch/importData.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/batch/BatchController.groovy::importData (implicit); render(view:'importData') in grails-app/controllers/org/pih/warehouse/batch/BatchController.groovy; megamenu href /batch/importData (runtime.groovy),admin-config-2
+grails-app/views/budgetCode/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/BudgetCodeController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/core/BudgetCodeController.groovy,finance-config-1
+grails-app/views/budgetCode/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/BudgetCodeController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/BudgetCodeController.groovy,finance-config-1
+grails-app/views/budgetCode/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/BudgetCodeController.groovy::list (implicit); megamenu href /budgetCode/list (runtime.groovy),finance-config-1
+grails-app/views/category/_selectOptions.gsp,TEMPLATE,render(template:'../category/selectOptions') in grails-app/taglib/org/pih/warehouse/CategorySelectTagLib.groovy; included by category/_selectOptions.gsp (g:render template='/category/selectOptions'),
+grails-app/views/category/_tree.gsp,TEMPLATE,included by category/tree.gsp (g:render template='tree'); included by category/_tree.gsp (g:render template='tree'),
+grails-app/views/category/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/CategoryController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/product/CategoryController.groovy,product-catalog-1
+grails-app/views/category/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/CategoryController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/product/CategoryController.groovy,product-catalog-1
+grails-app/views/category/tree.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/CategoryController.groovy::tree (implicit); render(view:'tree') in grails-app/controllers/org/pih/warehouse/product/CategoryController.groovy; megamenu href /category/tree (runtime.groovy),product-catalog-1
+grails-app/views/common/_breadcrumb.gsp,DEAD,no static references found,
+grails-app/views/common/_customCss.gsp,TEMPLATE,included by layouts/custom.gsp (g:render template='/common/customCss'); included by layouts/print.gsp (g:render template='/common/customCss'),
+grails-app/views/common/_customVariables.gsp,TEMPLATE,included by layouts/custom.gsp (g:render template='/common/customVariables'),
+grails-app/views/common/_dataTable.gsp,TEMPLATE,render(template:'/common/dataTable') in grails-app/controllers/org/pih/warehouse/data/MigrationController.groovy; view path string '/common/dataTable' in grails-app/controllers/org/pih/warehouse/data/MigrationController.groovy; included by stockMovement/_synchronizeDialog.gsp (g:render template='/common/dataTable'),
+grails-app/views/common/_footer.gsp,TEMPLATE,render(template:'/common/footer') in grails-app/controllers/org/pih/warehouse/user/DashboardController.groovy; view path string '/common/footer' in grails-app/controllers/org/pih/warehouse/user/DashboardController.groovy; included by layouts/email.gsp (g:render template='/common/footer'),
+grails-app/views/common/_fullstory.gsp,TEMPLATE,included by layouts/custom.gsp (g:render template='/common/fullstory'),
+grails-app/views/common/_header.gsp,DEAD,no static references found,
+grails-app/views/common/_hotjar.gsp,TEMPLATE,included by layouts/custom.gsp (g:render template='/common/hotjar'); included by layouts/main.gsp (g:render template='/common/hotjar'); included by layouts/react.gsp (g:render template='/common/hotjar'),
+grails-app/views/common/_localization.gsp,TEMPLATE,included by layouts/custom.gsp (g:render template='/common/localization'),
+grails-app/views/common/_menu.gsp,DEAD,no static references found,
+grails-app/views/common/_menuicons.gsp,TEMPLATE,included by dashboard/megamenu.gsp (g:render template='/common/menuicons'),
+grails-app/views/common/_navbar.gsp,TEMPLATE,included by layouts/analytics.gsp (g:render template='/common/navbar'),
+grails-app/views/common/_personAutocomplete.gsp,DEAD,no static references found,
+grails-app/views/common/react.gsp,LIVE,render(view:'/common/react') in grails-app/controllers/org/pih/warehouse/putaway/PutAwayController.groovy; render(view:'/common/react') in grails-app/controllers/org/pih/warehouse/user/DashboardController.groovy; render(view:'/common/react') in grails-app/controllers/org/pih/warehouse/reporting/ReportController.groovy,dashboard-auth
+grails-app/views/consumption/_filters.gsp,TEMPLATE,included by consumption/show.gsp (g:render template='filters'),
+grails-app/views/consumption/_product.gsp,TEMPLATE,render(template:'product') in grails-app/controllers/org/pih/warehouse/reporting/ConsumptionController.groovy,
+grails-app/views/consumption/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/reporting/ConsumptionController.groovy::list (implicit); megamenu href /consumption/list (runtime.groovy),reporting-1
+grails-app/views/consumption/pivot.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/reporting/ConsumptionController.groovy::pivot (implicit),reporting-1
+grails-app/views/consumption/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/reporting/ConsumptionController.groovy::show (implicit); render(view:'show') in grails-app/controllers/org/pih/warehouse/reporting/ConsumptionController.groovy; megamenu href /consumption/show (runtime.groovy),reporting-1
+grails-app/views/container/_summary.gsp,TEMPLATE,included by createShipmentWorkflow/createShipment/enterContainerDetails.gsp (g:render template='/container/summary'),
+grails-app/views/country/list.gsp,DEAD,no static references found,
+grails-app/views/createShipmentWorkflow/_addIncomingItem.gsp,TEMPLATE,included by createShipmentWorkflow/createShipment/enterContainerDetails.gsp (g:render template='addIncomingItem'),
+grails-app/views/createShipmentWorkflow/_addItem.gsp,TEMPLATE,included by createShipmentWorkflow/createShipment/enterContainerDetails.gsp (g:render template='addItem'),
+grails-app/views/createShipmentWorkflow/_addLocation.gsp,TEMPLATE,included by createShipmentWorkflow/createShipment/enterShipmentDetails.gsp (g:render template='addLocation'),
+grails-app/views/createShipmentWorkflow/_addPerson.gsp,TEMPLATE,included by createShipmentWorkflow/createShipment/enterTrackingDetails.gsp (g:render template='addPerson'),
+grails-app/views/createShipmentWorkflow/_addShipper.gsp,TEMPLATE,included by createShipmentWorkflow/createShipment/enterTrackingDetails.gsp (g:render template='addShipper'),
+grails-app/views/createShipmentWorkflow/_containerButtons.gsp,TEMPLATE,included by createShipmentWorkflow/createShipment/enterContainerDetails.gsp (g:render template='containerButtons'),
+grails-app/views/createShipmentWorkflow/_containerFields.gsp,TEMPLATE,included by createShipmentWorkflow/_editBox.gsp (g:render template='containerFields'); included by createShipmentWorkflow/_editContainer.gsp (g:render template='containerFields'),
+grails-app/views/createShipmentWorkflow/_containerMenuItems.gsp,TEMPLATE,included by createShipmentWorkflow/createShipment/enterContainerDetails.gsp (g:render template='containerMenuItems'),
+grails-app/views/createShipmentWorkflow/_editBox.gsp,TEMPLATE,included by createShipmentWorkflow/createShipment/enterContainerDetails.gsp (g:render template='editBox'),
+grails-app/views/createShipmentWorkflow/_editContainer.gsp,TEMPLATE,included by createShipmentWorkflow/createShipment/enterContainerDetails.gsp (g:render template='editContainer'),
+grails-app/views/createShipmentWorkflow/_editItem.gsp,TEMPLATE,included by createShipmentWorkflow/createShipment/enterContainerDetails.gsp (g:render template='editItem'),
+grails-app/views/createShipmentWorkflow/_flowHeader.gsp,TEMPLATE,included by createShipmentWorkflow/createShipment/pickShipmentItems.gsp (g:render template='flowHeader'); included by createShipmentWorkflow/createShipment/enterShipmentDetails.gsp (g:render template='flowHeader'); included by createShipmentWorkflow/createShipment/sendShipment.gsp (g:render template='flowHeader'),
+grails-app/views/createShipmentWorkflow/_itemFields.gsp,TEMPLATE,included by createShipmentWorkflow/_editItem.gsp (g:render template='itemFields'),
+grails-app/views/createShipmentWorkflow/_itemFoundFields.gsp,TEMPLATE,included by createShipmentWorkflow/_addItem.gsp (g:render template='itemFoundFields'),
+grails-app/views/createShipmentWorkflow/_itemMenuItems.gsp,TEMPLATE,included by createShipmentWorkflow/createShipment/enterContainerDetails.gsp (g:render template='itemMenuItems'),
+grails-app/views/createShipmentWorkflow/_itemTableRow.gsp,DEAD,no static references found,
+grails-app/views/createShipmentWorkflow/_moveContainer.gsp,TEMPLATE,included by createShipmentWorkflow/createShipment/enterContainerDetails.gsp (g:render template='moveContainer'),
+grails-app/views/createShipmentWorkflow/_moveDraggableItem.gsp,DEAD,no static references found,
+grails-app/views/createShipmentWorkflow/_moveItem.gsp,TEMPLATE,included by createShipmentWorkflow/createShipment/enterContainerDetails.gsp (g:render template='moveItem'),
+grails-app/views/createShipmentWorkflow/_shipmentButtons.gsp,TEMPLATE,included by createShipmentWorkflow/createShipment/enterContainerDetails.gsp (g:render template='shipmentButtons'),
+grails-app/views/createShipmentWorkflow/_shipmentMenuItems.gsp,TEMPLATE,included by createShipmentWorkflow/createShipment/enterContainerDetails.gsp (g:render template='shipmentMenuItems'),
+grails-app/views/createShipmentWorkflow/createShipment/enterContainerDetails.gsp,LIVE,webflow state 'enterContainerDetails' in grails-app/controllers/org/pih/warehouse/shipping/CreateShipmentWorkflowController.groovy::createShipmentFlow,shipment-workflow
+grails-app/views/createShipmentWorkflow/createShipment/enterShipmentDetails.gsp,LIVE,webflow state 'enterShipmentDetails' in grails-app/controllers/org/pih/warehouse/shipping/CreateShipmentWorkflowController.groovy::createShipmentFlow,shipment-workflow
+grails-app/views/createShipmentWorkflow/createShipment/enterTrackingDetails.gsp,LIVE,webflow state 'enterTrackingDetails' in grails-app/controllers/org/pih/warehouse/shipping/CreateShipmentWorkflowController.groovy::createShipmentFlow,shipment-workflow
+grails-app/views/createShipmentWorkflow/createShipment/pickShipmentItems.gsp,LIVE,webflow state 'pickShipmentItems' in grails-app/controllers/org/pih/warehouse/shipping/CreateShipmentWorkflowController.groovy::createShipmentFlow,shipment-workflow
+grails-app/views/createShipmentWorkflow/createShipment/sendShipment.gsp,LIVE,webflow state 'sendShipment' in grails-app/controllers/org/pih/warehouse/shipping/CreateShipmentWorkflowController.groovy::createShipmentFlow,shipment-workflow
+grails-app/views/cycleCount/_printCount.gsp,TEMPLATE,view path string '/cycleCount/printCount' in grails-app/controllers/org/pih/warehouse/api/CycleCountApiController.groovy,
+grails-app/views/cycleCount/_printRecount.gsp,TEMPLATE,view path string '/cycleCount/printRecount' in grails-app/controllers/org/pih/warehouse/api/CycleCountApiController.groovy,
+grails-app/views/dashboard/_activitySummary.gsp,DEAD,no static references found,
+grails-app/views/dashboard/_alertSummary.gsp,DEAD,no static references found,
+grails-app/views/dashboard/_binLocationSummary.gsp,DEAD,no static references found,
+grails-app/views/dashboard/_catalogsSummary.gsp,DEAD,no static references found,
+grails-app/views/dashboard/_expiringSummary.gsp,DEAD,no static references found,
+grails-app/views/dashboard/_genericProductSummary.gsp,DEAD,no static references found,
+grails-app/views/dashboard/_indicatorSummary.gsp,DEAD,no static references found,
+grails-app/views/dashboard/_loginLocations.gsp,TEMPLATE,render(template:'loginLocations') in grails-app/controllers/org/pih/warehouse/user/DashboardController.groovy; included by dashboard/chooseLocation.gsp (g:render template='loginLocations'),
+grails-app/views/dashboard/_newsSummary.gsp,DEAD,no static references found,
+grails-app/views/dashboard/_orderSummary.gsp,DEAD,no static references found,
+grails-app/views/dashboard/_productSummary.gsp,DEAD,no static references found,
+grails-app/views/dashboard/_receiptSummary.gsp,DEAD,no static references found,
+grails-app/views/dashboard/_requisitionItemSummary.gsp,DEAD,no static references found,
+grails-app/views/dashboard/_requisitionSummary.gsp,DEAD,no static references found,
+grails-app/views/dashboard/_shipmentSummary.gsp,DEAD,no static references found,
+grails-app/views/dashboard/_tagSummary.gsp,DEAD,no static references found,
+grails-app/views/dashboard/_valueSummary.gsp,DEAD,no static references found,
+grails-app/views/dashboard/chooseLocation.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/user/DashboardController.groovy::chooseLocation (implicit),dashboard-auth
+grails-app/views/dashboard/megamenu.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/user/DashboardController.groovy::megamenu (implicit); g:include from layouts/custom.gsp,dashboard-auth
+grails-app/views/dashboard/old.gsp,DEAD,no static references found,
+grails-app/views/dataExport/index.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/data/DataExportController.groovy::index (implicit); megamenu href /dataExport/index (runtime.groovy),admin-config-2
+grails-app/views/deliveryNote/_addressSection.gsp,TEMPLATE,included by deliveryNote/printOutboundReturn.gsp (g:render template='addressSection'); included by deliveryNote/print.gsp (g:render template='addressSection'),
+grails-app/views/deliveryNote/_notesSection.gsp,TEMPLATE,included by deliveryNote/printOutboundReturn.gsp (g:render template='notesSection'); included by deliveryNote/print.gsp (g:render template='notesSection'),
+grails-app/views/deliveryNote/_printHeader.gsp,TEMPLATE,included by deliveryNote/printOutboundReturn.gsp (g:render template='printHeader'); included by deliveryNote/print.gsp (g:render template='printHeader'),
+grails-app/views/deliveryNote/_printOutboundReturnTable.gsp,TEMPLATE,included by deliveryNote/printOutboundReturn.gsp (g:render template='printOutboundReturnTable'),
+grails-app/views/deliveryNote/_printPage.gsp,TEMPLATE,included by deliveryNote/print.gsp (g:render template='printPage'),
+grails-app/views/deliveryNote/_printToolbar.gsp,TEMPLATE,included by deliveryNote/printOutboundReturn.gsp (g:render template='printToolbar'); included by deliveryNote/print.gsp (g:render template='printToolbar'),
+grails-app/views/deliveryNote/_signaturesSection.gsp,TEMPLATE,included by deliveryNote/printOutboundReturn.gsp (g:render template='signaturesSection'); included by deliveryNote/print.gsp (g:render template='signaturesSection'),
+grails-app/views/deliveryNote/_styles.gsp,TEMPLATE,included by deliveryNote/printOutboundReturn.gsp (g:render template='styles'); included by deliveryNote/print.gsp (g:render template='styles'),
+grails-app/views/deliveryNote/print.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/requisition/DeliveryNoteController.groovy::print (implicit),print-documents-1
+grails-app/views/deliveryNote/printOutboundReturn.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/requisition/DeliveryNoteController.groovy::printOutboundReturn (implicit),print-documents-1
+grails-app/views/doc4j/download.gsp,DEAD,no static references found,
+grails-app/views/document/_preview.gsp,TEMPLATE,render(template:'preview') in grails-app/controllers/org/pih/warehouse/core/DocumentController.groovy,
+grails-app/views/document/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/DocumentController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/core/DocumentController.groovy,print-documents-1
+grails-app/views/document/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/DocumentController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/DocumentController.groovy,print-documents-1
+grails-app/views/document/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/DocumentController.groovy::list (implicit); megamenu href /document/list (runtime.groovy),print-documents-2
+grails-app/views/document/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/DocumentController.groovy::show (implicit),print-documents-2
+grails-app/views/document/upload.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/DocumentController.groovy::upload (implicit),print-documents-2
+grails-app/views/email/_applicationError.gsp,TEMPLATE,view path string '/email/applicationError' in grails-app/services/org/pih/warehouse/report/NotificationService.groovy,
+grails-app/views/email/_approvalsAlert.gsp,TEMPLATE,view path string '/email/approvalsAlert' in grails-app/services/org/pih/warehouse/report/NotificationService.groovy,
+grails-app/views/email/_approvalsStatusChanged.gsp,TEMPLATE,view path string '/email/approvalsStatusChanged' in grails-app/services/org/pih/warehouse/report/NotificationService.groovy,
+grails-app/views/email/_emailTemplate.gsp,DEAD,no static references found,
+grails-app/views/email/_errorReport.gsp,TEMPLATE,render(template:'/email/errorReport') in grails-app/controllers/org/pih/warehouse/core/ErrorsController.groovy; view path string '/email/errorReport' in grails-app/controllers/org/pih/warehouse/core/ErrorsController.groovy,
+grails-app/views/email/_expiryAlerts.gsp,TEMPLATE,view path string '/email/expiryAlerts' in grails-app/services/org/pih/warehouse/report/NotificationService.groovy,
+grails-app/views/email/_footer.gsp,DEAD,no static references found,
+grails-app/views/email/_fulfillmentAlert.gsp,TEMPLATE,view path string '/email/fulfillmentAlert' in grails-app/services/org/pih/warehouse/report/NotificationService.groovy,
+grails-app/views/email/_goodsDeliveryNote.gsp,TEMPLATE,view path string '/email/goodsDeliveryNote' in grails-app/services/org/pih/warehouse/report/NotificationService.groovy,
+grails-app/views/email/_header.gsp,TEMPLATE,included by email/_fulfillmentAlert.gsp (g:render template='/email/header'); included by email/_approvalsStatusChanged.gsp (g:render template='/email/header'); included by email/_approvalsAlert.gsp (g:render template='/email/header'),
+grails-app/views/email/_inventoryItemTable.gsp,TEMPLATE,included by email/_expiryAlerts.gsp (g:render template='/email/inventoryItemTable'),
+grails-app/views/email/_productCreated.gsp,TEMPLATE,render(template:'/email/productCreated') in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy; view path string '/email/productCreated' in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,
+grails-app/views/email/_productTable.gsp,TEMPLATE,included by email/_stockAlerts.gsp (g:render template='/email/productTable'),
+grails-app/views/email/_shipmentItemReceived.gsp,TEMPLATE,render(template:'/email/shipmentItemReceived') in grails-app/services/org/pih/warehouse/report/NotificationService.groovy; view path string '/email/shipmentItemReceived' in grails-app/services/org/pih/warehouse/report/NotificationService.groovy,
+grails-app/views/email/_shipmentItemShipped.gsp,TEMPLATE,render(template:'/email/shipmentItemShipped') in grails-app/services/org/pih/warehouse/report/NotificationService.groovy; view path string '/email/shipmentItemShipped' in grails-app/services/org/pih/warehouse/report/NotificationService.groovy,
+grails-app/views/email/_shipmentReceived.gsp,TEMPLATE,render(template:'/email/shipmentReceived') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy; view path string '/email/shipmentReceived' in grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy; view path string '/email/shipmentReceived' in grails-app/services/org/pih/warehouse/report/NotificationService.groovy,
+grails-app/views/email/_shipmentShipped.gsp,TEMPLATE,render(template:'/email/shipmentShipped') in grails-app/controllers/org/pih/warehouse/shipping/CreateShipmentWorkflowController.groovy; render(template:'/email/shipmentShipped') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy; view path string '/email/shipmentShipped' in grails-app/controllers/org/pih/warehouse/shipping/CreateShipmentWorkflowController.groovy,
+grails-app/views/email/_stockAlerts.gsp,TEMPLATE,view path string '/email/stockAlerts' in grails-app/services/org/pih/warehouse/report/NotificationService.groovy,
+grails-app/views/email/_userAccountActivated.gsp,TEMPLATE,render(template:'/email/userAccountActivated') in grails-app/controllers/org/pih/warehouse/user/UserController.groovy; view path string '/email/userAccountActivated' in grails-app/controllers/org/pih/warehouse/user/UserController.groovy,
+grails-app/views/email/_userAccountChanged.gsp,DEAD,no static references found,
+grails-app/views/email/_userAccountConfirmed.gsp,TEMPLATE,render(template:'/email/userAccountConfirmed') in grails-app/controllers/org/pih/warehouse/user/AuthController.groovy; view path string '/email/userAccountConfirmed' in grails-app/controllers/org/pih/warehouse/user/AuthController.groovy; view path string '/email/userAccountConfirmed' in grails-app/services/org/pih/warehouse/report/NotificationService.groovy,
+grails-app/views/email/_userAccountCreated.gsp,TEMPLATE,render(template:'/email/userAccountCreated') in grails-app/controllers/org/pih/warehouse/user/AuthController.groovy; view path string '/email/userAccountCreated' in grails-app/controllers/org/pih/warehouse/user/AuthController.groovy; view path string '/email/userAccountCreated' in grails-app/services/org/pih/warehouse/report/NotificationService.groovy,
+grails-app/views/email/_userAccountPending.gsp,DEAD,no static references found,
+grails-app/views/email/_userCanReceiveEmail.gsp,TEMPLATE,render(template:'/email/userCanReceiveEmail') in grails-app/controllers/org/pih/warehouse/user/UserController.groovy; view path string '/email/userCanReceiveEmail' in grails-app/controllers/org/pih/warehouse/user/UserController.groovy,
+grails-app/views/email/_userPhotoChanged.gsp,TEMPLATE,render(template:'/email/userPhotoChanged') in grails-app/controllers/org/pih/warehouse/user/UserController.groovy; view path string '/email/userPhotoChanged' in grails-app/controllers/org/pih/warehouse/user/UserController.groovy,
+grails-app/views/error.gsp,LIVE,render(view:'/error') in grails-app/controllers/org/pih/warehouse/core/ErrorsController.groovy,errors-misc
+grails-app/views/errors/accessDenied.gsp,LIVE,render(view:'/errors/accessDenied') in grails-app/controllers/org/pih/warehouse/core/ErrorsController.groovy; view path string '/errors/accessDenied' in grails-app/controllers/org/pih/warehouse/core/ErrorsController.groovy,errors-misc
+grails-app/views/errors/dataAccess.gsp,LIVE,render(view:'/errors/dataAccess') in grails-app/controllers/org/pih/warehouse/core/ErrorsController.groovy; view path string '/errors/dataAccess' in grails-app/controllers/org/pih/warehouse/core/ErrorsController.groovy,errors-misc
+grails-app/views/errors/methodNotAllowed.gsp,LIVE,render(view:'/errors/methodNotAllowed') in grails-app/controllers/org/pih/warehouse/core/ErrorsController.groovy; view path string '/errors/methodNotAllowed' in grails-app/controllers/org/pih/warehouse/core/ErrorsController.groovy,errors-misc
+grails-app/views/errors/notFound.gsp,LIVE,render(view:'/errors/notFound') in grails-app/controllers/org/pih/warehouse/core/ErrorsController.groovy; view path string '/errors/notFound' in grails-app/controllers/org/pih/warehouse/core/ErrorsController.groovy,errors-misc
+grails-app/views/eventType/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/EventTypeController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/core/EventTypeController.groovy,finance-config-1
+grails-app/views/eventType/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/EventTypeController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/EventTypeController.groovy,finance-config-1
+grails-app/views/eventType/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/EventTypeController.groovy::list (implicit); megamenu href /eventType/list (runtime.groovy),finance-config-2
+grails-app/views/eventType/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/EventTypeController.groovy::show (implicit),finance-config-2
+grails-app/views/exception.gsp,DEAD,no static references found,
+grails-app/views/glAccount/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/GlAccountController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/core/GlAccountController.groovy,finance-config-2
+grails-app/views/glAccount/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/GlAccountController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/GlAccountController.groovy,finance-config-2
+grails-app/views/glAccount/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/GlAccountController.groovy::list (implicit); megamenu href /glAccount/list (runtime.groovy),finance-config-2
+grails-app/views/glAccountType/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/GlAccountTypeController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/core/GlAccountTypeController.groovy,finance-config-3
+grails-app/views/glAccountType/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/GlAccountTypeController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/GlAccountTypeController.groovy,finance-config-3
+grails-app/views/glAccountType/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/GlAccountTypeController.groovy::list (implicit); megamenu href /glAccountType/list (runtime.groovy),finance-config-3
+grails-app/views/goodsReceiptNote/_body.gsp,TEMPLATE,included by goodsReceiptNote/print.gsp (g:render template='body'),
+grails-app/views/goodsReceiptNote/_header.gsp,TEMPLATE,included by goodsReceiptNote/print.gsp (g:render template='header'),
+grails-app/views/goodsReceiptNote/_signature.gsp,TEMPLATE,included by goodsReceiptNote/print.gsp (g:render template='signature'),
+grails-app/views/goodsReceiptNote/print.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/reporting/GoodsReceiptNoteController.groovy::print (implicit),print-documents-2
+grails-app/views/index.gsp,DEAD,no static references found,
+grails-app/views/inventory/_actions.gsp,TEMPLATE,included by inventory/browse.gsp (g:render template='./actions'),
+grails-app/views/inventory/_browseProduct.gsp,DEAD,no static references found,
+grails-app/views/inventory/_browseProductGroup.gsp,DEAD,no static references found,
+grails-app/views/inventory/_categoryActions.gsp,DEAD,no static references found,
+grails-app/views/inventory/_filters.gsp,TEMPLATE,included by inventory/browse.gsp (g:render template='filters'),
+grails-app/views/inventory/_incomingTransfer.gsp,TEMPLATE,included by inventory/createTransaction.gsp (g:render template='incomingTransfer'),
+grails-app/views/inventory/_inventoryAdjustment.gsp,TEMPLATE,included by inventory/createTransaction.gsp (g:render template='inventoryAdjustment'),
+grails-app/views/inventory/_inventoryConsumed.gsp,TEMPLATE,included by inventory/createTransaction.gsp (g:render template='inventoryConsumed'),
+grails-app/views/inventory/_inventoryDamaged.gsp,DEAD,no static references found,
+grails-app/views/inventory/_inventoryExpired.gsp,DEAD,no static references found,
+grails-app/views/inventory/_outgoingTransfer.gsp,TEMPLATE,included by inventory/createTransaction.gsp (g:render template='outgoingTransfer'),
+grails-app/views/inventory/_summary.gsp,TEMPLATE,included by inventory/browse.gsp (g:render template='summary'),
+grails-app/views/inventory/browse.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy::browse (implicit); megamenu href /inventory/browse (runtime.groovy); React SPA link in src/js/tests/utils/menu-utils.test.jsx,inventory-1
+grails-app/views/inventory/createTransaction.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy::createTransaction (implicit); render(view:'createTransaction') in grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy,inventory-1
+grails-app/views/inventory/editBinLocation.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy::editBinLocation (implicit),inventory-1
+grails-app/views/inventory/editTransaction.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy::editTransaction (implicit); render(view:'editTransaction') in grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy,inventory-1
+grails-app/views/inventory/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy::list (implicit); render(view:'list') in grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy,inventory-1
+grails-app/views/inventory/listDailyTransactions.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy::listDailyTransactions (implicit),inventory-2
+grails-app/views/inventory/listExpiredStock.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy::listExpiredStock (implicit); megamenu href /inventory/listExpiredStock (runtime.groovy),inventory-2
+grails-app/views/inventory/listExpiringStock.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy::listExpiringStock (implicit); megamenu href /inventory/listExpiringStock (runtime.groovy),inventory-2
+grails-app/views/inventory/listLowStock.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy::listLowStock (implicit),inventory-2
+grails-app/views/inventory/listReorderStock.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy::listReorderStock (implicit),inventory-2
+grails-app/views/inventory/listTransactions.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy::listTransactions (implicit); render(view:'listTransactions') in grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy,inventory-3
+grails-app/views/inventory/manage.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy::manage (implicit),inventory-3
+grails-app/views/inventory/showProducts.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy::showProducts (implicit),inventory-3
+grails-app/views/inventory/showTransaction.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy::showTransaction (implicit); render(view:'showTransaction') in grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy,inventory-3
+grails-app/views/inventory/upload.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy::upload (implicit),inventory-3
+grails-app/views/inventoryBrowser/_sidebar.gsp,DEAD,no static references found,
+grails-app/views/inventoryBrowser/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryBrowserController.groovy::list (implicit),inventory-4
+grails-app/views/inventoryItem/_actions.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy,
+grails-app/views/inventoryItem/_actionsCurrentStock.gsp,TEMPLATE,included by inventoryItem/_showCurrentStock.gsp (g:render template='actionsCurrentStock'),
+grails-app/views/inventoryItem/_addToShipment.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy,
+grails-app/views/inventoryItem/_adjustStock.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy,
+grails-app/views/inventoryItem/_editItemDialog.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy,
+grails-app/views/inventoryItem/_printStockHistory.gsp,TEMPLATE,render(template:'printStockHistory') in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy,
+grails-app/views/inventoryItem/_productDetails.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy,
+grails-app/views/inventoryItem/_returnStock.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy,
+grails-app/views/inventoryItem/_showCurrentStock.gsp,TEMPLATE,render(template:'showCurrentStock') in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy,
+grails-app/views/inventoryItem/_showCurrentStockAllLocations.gsp,TEMPLATE,render(template:'showCurrentStockAllLocations') in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy,
+grails-app/views/inventoryItem/_showDemand.gsp,TEMPLATE,render(template:'showDemand') in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy,
+grails-app/views/inventoryItem/_showDocuments.gsp,TEMPLATE,render(template:'showDocuments') in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy,
+grails-app/views/inventoryItem/_showGraph.gsp,TEMPLATE,included by inventoryItem/showGraph.gsp (g:render template='showGraph'),
+grails-app/views/inventoryItem/_showInventorySnapshot.gsp,TEMPLATE,render(template:'showInventorySnapshot') in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy,
+grails-app/views/inventoryItem/_showLotNumbers.gsp,TEMPLATE,included by inventoryItem/showLotNumbers.gsp (g:render template='showLotNumbers'),
+grails-app/views/inventoryItem/_showPendingInboundStock.gsp,TEMPLATE,render(template:'showPendingInboundStock') in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy,
+grails-app/views/inventoryItem/_showPendingOutboundStock.gsp,TEMPLATE,render(template:'showPendingOutboundStock') in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy,
+grails-app/views/inventoryItem/_showProductAssociations.gsp,TEMPLATE,render(template:'showProductAssociations') in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy,
+grails-app/views/inventoryItem/_showProductDemand.gsp,TEMPLATE,render(template:'showProductDemand') in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy,
+grails-app/views/inventoryItem/_showRecordInventory.gsp,TEMPLATE,included by inventoryItem/showRecordInventory.gsp (g:render template='showRecordInventory'),
+grails-app/views/inventoryItem/_showRecordInventory2.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy,
+grails-app/views/inventoryItem/_showStockCard.gsp,TEMPLATE,included by inventoryItem/showStockCard.gsp (g:render template='showStockCard'),
+grails-app/views/inventoryItem/_showStockCardMenuItems.gsp,TEMPLATE,included by inventoryItem/editInventoryLevel.gsp (g:render template='showStockCardMenuItems'),
+grails-app/views/inventoryItem/_showStockHistory.gsp,TEMPLATE,render(template:'showStockHistory') in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy,
+grails-app/views/inventoryItem/_showStockHistoryPrintable.gsp,TEMPLATE,included by inventoryItem/_printStockHistory.gsp (g:render template='showStockHistoryPrintable'),
+grails-app/views/inventoryItem/_showSuppliers.gsp,TEMPLATE,render(template:'showSuppliers') in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy,
+grails-app/views/inventoryItem/_showTransactionLog.gsp,TEMPLATE,included by inventoryItem/showTransactionLog.gsp (g:render template='showTransactionLog'),
+grails-app/views/inventoryItem/_transferStock.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy,
+grails-app/views/inventoryItem/editInventoryLevel.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy::editInventoryLevel (implicit),stock-card-1
+grails-app/views/inventoryItem/recordInventory.gsp,DEAD,no static references found,
+grails-app/views/inventoryItem/showGraph.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy::showGraph (implicit),stock-card-1
+grails-app/views/inventoryItem/showLotNumbers.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy::showLotNumbers (implicit),stock-card-1
+grails-app/views/inventoryItem/showRecordInventory.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy::showRecordInventory (implicit),stock-card-1
+grails-app/views/inventoryItem/showStockCard.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy::showStockCard (implicit),stock-card-1
+grails-app/views/inventoryItem/showTransactionLog.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy::showTransactionLog (implicit),stock-card-2
+grails-app/views/inventoryLevel/_form.gsp,TEMPLATE,render(template:'form') in grails-app/controllers/org/pih/warehouse/inventory/InventoryLevelController.groovy; included by inventoryLevel/edit.gsp (g:render template='/inventoryLevel/form'); included by inventoryLevel/create.gsp (g:render template='/inventoryLevel/form'),
+grails-app/views/inventoryLevel/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryLevelController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/inventory/InventoryLevelController.groovy,stock-card-2
+grails-app/views/inventoryLevel/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryLevelController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/inventory/InventoryLevelController.groovy,stock-card-2
+grails-app/views/inventoryLevel/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryLevelController.groovy::list (implicit),stock-card-2
+grails-app/views/inventoryLevel/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryLevelController.groovy::show (implicit),stock-card-2
+grails-app/views/inventorySnapshot/_sidebar.gsp,DEAD,no static references found,
+grails-app/views/inventorySnapshot/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventorySnapshotController.groovy::edit (implicit),inventory-4
+grails-app/views/inventorySnapshot/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventorySnapshotController.groovy::list (implicit),inventory-4
+grails-app/views/inventorySnapshot/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/InventorySnapshotController.groovy::show (implicit),inventory-4
+grails-app/views/invoice/_actions.gsp,TEMPLATE,included by invoice/_summary.gsp (g:render template='/invoice/actions'); included by invoice/list.gsp (g:render template='/invoice/actions'),
+grails-app/views/invoice/_documents.gsp,TEMPLATE,included by invoice/show.gsp (g:render template='/invoice/documents'),
+grails-app/views/invoice/_filters.gsp,TEMPLATE,included by invoice/list.gsp (g:render template='filters'),
+grails-app/views/invoice/_invoiceItems.gsp,TEMPLATE,included by invoice/show.gsp (g:render template='/invoice/invoiceItems'),
+grails-app/views/invoice/_summary.gsp,TEMPLATE,included by invoice/show.gsp (g:render template='summary'); included by invoice/addDocument.gsp (g:render template='summary'),
+grails-app/views/invoice/addDocument.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/invoice/InvoiceController.groovy::addDocument (implicit); render(view:'addDocument') in grails-app/controllers/org/pih/warehouse/invoice/InvoiceController.groovy,invoicing
+grails-app/views/invoice/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/invoice/InvoiceController.groovy::list (implicit); megamenu href /invoice/list (runtime.groovy),invoicing
+grails-app/views/invoice/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/invoice/InvoiceController.groovy::show (implicit); render(view:'show') in grails-app/controllers/org/pih/warehouse/invoice/InvoiceController.groovy,invoicing
+grails-app/views/jobs/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/jobs/JobsController.groovy::show (implicit),admin-config-2
+grails-app/views/json/_searchResults.gsp,DEAD,no static references found,
+grails-app/views/json/createPerson.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/JsonController.groovy::createPerson (implicit),reporting-1
+grails-app/views/layouts/analytics.gsp,TEMPLATE,layout used by inventorySnapshot/list.gsp; layout used by layouts/analytics.gsp; layout used by inventoryBrowser/list.gsp,
+grails-app/views/layouts/bootstrap.gsp,DEAD,no static references found,
+grails-app/views/layouts/custom.gsp,TEMPLATE,layout used by purchaseOrder/_showOrderItems.gsp; layout used by purchaseOrder/_enterOrderDetails.gsp; layout used by location/uploadLogo.gsp,
+grails-app/views/layouts/email.gsp,TEMPLATE,layout used by email/_productCreated.gsp; layout used by email/_userAccountConfirmed.gsp; layout used by email/_userAccountCreated.gsp,
+grails-app/views/layouts/main.gsp,TEMPLATE,layout used by product/show.gsp,
+grails-app/views/layouts/mobile.gsp,TEMPLATE,layout used by mobile/productDetails.gsp; layout used by mobile/index.gsp; layout used by mobile/chooseLocation.gsp,
+grails-app/views/layouts/print.gsp,TEMPLATE,layout used by replenishment/print.gsp; layout used by report/printPaginatedPackingListReport.gsp; layout used by goodsReceiptNote/print.gsp,
+grails-app/views/layouts/react.gsp,TEMPLATE,layout used by partialReceiving/create.gsp; layout used by common/react.gsp,
+grails-app/views/layouts/stockCard.gsp,TEMPLATE,layout used by inventoryItem/showGraph.gsp; layout used by inventoryItem/showStockCard.gsp; layout used by inventoryItem/showRecordInventory.gsp,
+grails-app/views/localization/_crowdin.gsp,TEMPLATE,included by layouts/custom.gsp (g:render template='/localization/crowdin'); included by layouts/main.gsp (g:render template='/localization/crowdin'); included by layouts/react.gsp (g:render template='/localization/crowdin'),
+grails-app/views/localization/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/LocalizationController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/core/LocalizationController.groovy,admin-config-2
+grails-app/views/localization/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/LocalizationController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/LocalizationController.groovy,admin-config-3
+grails-app/views/localization/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/LocalizationController.groovy::list (implicit); megamenu href /localization/list (runtime.groovy),admin-config-3
+grails-app/views/localization/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/LocalizationController.groovy::show (implicit),admin-config-3
+grails-app/views/location/_actions.gsp,TEMPLATE,included by location/_summary.gsp (g:render template='actions'); included by location/list.gsp (g:render template='actions'),
+grails-app/views/location/_form.gsp,DEAD,no static references found,
+grails-app/views/location/_summary.gsp,TEMPLATE,included by location/uploadLogo.gsp (g:render template='summary'); included by location/edit.gsp (g:render template='summary'),
+grails-app/views/location/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/LocationController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/LocationController.groovy,locations-orgs-1
+grails-app/views/location/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/LocationController.groovy::list (implicit); megamenu href /location/list (runtime.groovy),locations-orgs-1
+grails-app/views/location/showBinLocations.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/LocationController.groovy::showBinLocations (implicit),locations-orgs-1
+grails-app/views/location/showContents.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/LocationController.groovy::showContents (implicit),locations-orgs-1
+grails-app/views/location/showZoneLocations.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/LocationController.groovy::showZoneLocations (implicit),locations-orgs-1
+grails-app/views/location/uploadLogo.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/LocationController.groovy::uploadLogo (implicit); render(view:'uploadLogo') in grails-app/controllers/org/pih/warehouse/core/LocationController.groovy,locations-orgs-1
+grails-app/views/locationGroup/_summary.gsp,TEMPLATE,included by locationGroup/show.gsp (g:render template='summary'); included by locationGroup/edit.gsp (g:render template='summary'); included by locationGroup/create.gsp (g:render template='summary'),
+grails-app/views/locationGroup/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/LocationGroupController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/core/LocationGroupController.groovy,locations-orgs-2
+grails-app/views/locationGroup/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/LocationGroupController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/LocationGroupController.groovy,locations-orgs-2
+grails-app/views/locationGroup/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/LocationGroupController.groovy::list (implicit); megamenu href /locationGroup/list (runtime.groovy),locations-orgs-2
+grails-app/views/locationGroup/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/LocationGroupController.groovy::show (implicit),locations-orgs-2
+grails-app/views/locationRole/_form.gsp,TEMPLATE,render(template:'/locationRole/form') in grails-app/controllers/org/pih/warehouse/user/UserController.groovy; view path string '/locationRole/form' in grails-app/controllers/org/pih/warehouse/user/UserController.groovy,
+grails-app/views/locationRole/create.gsp,DEAD,no static references found,
+grails-app/views/locationRole/edit.gsp,DEAD,no static references found,
+grails-app/views/locationRole/list.gsp,DEAD,no static references found,
+grails-app/views/locationRole/show.gsp,DEAD,no static references found,
+grails-app/views/locationType/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/LocationTypeController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/core/LocationTypeController.groovy,locations-orgs-2
+grails-app/views/locationType/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/LocationTypeController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/LocationTypeController.groovy,locations-orgs-2
+grails-app/views/locationType/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/LocationTypeController.groovy::list (implicit); megamenu href /locationType/list (runtime.groovy),locations-orgs-3
+grails-app/views/locationType/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/LocationTypeController.groovy::show (implicit),locations-orgs-3
+grails-app/views/migration/_status.gsp,TEMPLATE,render(template:'status') in grails-app/controllers/org/pih/warehouse/data/MigrationController.groovy,
+grails-app/views/migration/dataMigration.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/data/MigrationController.groovy::dataMigration (implicit),admin-config-3
+grails-app/views/migration/dataQuality.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/data/MigrationController.groovy::dataQuality (implicit),admin-config-3
+grails-app/views/migration/dimensionTables.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/data/MigrationController.groovy::dimensionTables (implicit),admin-config-3
+grails-app/views/migration/factTables.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/data/MigrationController.groovy::factTables (implicit),admin-config-4
+grails-app/views/migration/index.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/data/MigrationController.groovy::index (implicit); megamenu href /migration/index (runtime.groovy),admin-config-4
+grails-app/views/migration/materializedViews.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/data/MigrationController.groovy::materializedViews (implicit),admin-config-4
+grails-app/views/migration/productAvailability.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/data/MigrationController.groovy::productAvailability (implicit),admin-config-4
+grails-app/views/mobile/chooseLocation.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/MobileController.groovy::chooseLocation (implicit); render(view:'/mobile/chooseLocation') in grails-app/controllers/org/pih/warehouse/MobileController.groovy; render(view:'/mobile/chooseLocation') in grails-app/controllers/org/pih/warehouse/user/DashboardController.groovy,mobile-1
+grails-app/views/mobile/error.gsp,LIVE,render(view:'/mobile/error') in grails-app/controllers/org/pih/warehouse/core/ErrorsController.groovy; view path string '/mobile/error' in grails-app/controllers/org/pih/warehouse/core/ErrorsController.groovy,mobile-1
+grails-app/views/mobile/index.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/MobileController.groovy::index (implicit),mobile-1
+grails-app/views/mobile/login.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/MobileController.groovy::login (implicit),mobile-1
+grails-app/views/mobile/menu.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/MobileController.groovy::menu (implicit); g:include from layouts/mobile.gsp,mobile-2
+grails-app/views/mobile/outboundList.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/MobileController.groovy::outboundList (implicit),mobile-2
+grails-app/views/mobile/productDetails.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/MobileController.groovy::productDetails (implicit),mobile-2
+grails-app/views/mobile/productList.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/MobileController.groovy::productList (implicit),mobile-2
+grails-app/views/order/_actions.gsp,TEMPLATE,included by order/_summary.gsp (g:render template='/order/actions'); included by order/list.gsp (g:render template='/order/actions'),
+grails-app/views/order/_filters.gsp,TEMPLATE,included by order/list.gsp (g:render template='filters'),
+grails-app/views/order/_itemDetails.gsp,TEMPLATE,render(template:'itemDetails') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy,
+grails-app/views/order/_itemStatus.gsp,TEMPLATE,render(template:'itemStatus') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy,
+grails-app/views/order/_orderAdjustments.gsp,TEMPLATE,render(template:'orderAdjustments') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy,
+grails-app/views/order/_orderComments.gsp,TEMPLATE,render(template:'orderComments') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy,
+grails-app/views/order/_orderDocuments.gsp,TEMPLATE,render(template:'orderDocuments') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy,
+grails-app/views/order/_orderInvoices.gsp,TEMPLATE,render(template:'orderInvoices') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy,
+grails-app/views/order/_orderItemForm.gsp,TEMPLATE,included by purchaseOrder/_showOrderItems.gsp (g:render template='/order/orderItemForm'),
+grails-app/views/order/_orderItemFormDialog.gsp,TEMPLATE,render(template:'orderItemFormDialog') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy,
+grails-app/views/order/_orderItemSummaryFilters.gsp,TEMPLATE,included by order/orderItemSummaryList.gsp (g:render template='orderItemSummaryFilters'),
+grails-app/views/order/_orderShipments.gsp,TEMPLATE,render(template:'orderShipments') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy,
+grails-app/views/order/_orderStatusFilters.gsp,TEMPLATE,included by order/orderSummaryList.gsp (g:render template='orderStatusFilters'),
+grails-app/views/order/_orderSummary.gsp,TEMPLATE,render(template:'orderSummary') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy,
+grails-app/views/order/_productSourceFormDialog.gsp,TEMPLATE,render(template:'productSourceFormDialog') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy,
+grails-app/views/order/_summary.gsp,TEMPLATE,included by purchaseOrder/_showOrderItems.gsp (g:render template='/order/summary'); included by purchaseOrder/_enterOrderDetails.gsp (g:render template='/order/summary'); included by order/addComment.gsp (g:render template='summary'),
+grails-app/views/order/addComment.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/order/OrderController.groovy::addComment (implicit); render(view:'addComment') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy,orders-1
+grails-app/views/order/addDocument.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/order/OrderController.groovy::addDocument (implicit); render(view:'addDocument') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy,orders-1
+grails-app/views/order/editAdjustment.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/order/OrderController.groovy::editAdjustment (implicit); render(view:'editAdjustment') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy,orders-1
+grails-app/views/order/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/order/OrderController.groovy::list (implicit); megamenu href /order/list (runtime.groovy); React SPA link in src/js/tests/utils/menu-utils.test.jsx,orders-1
+grails-app/views/order/listOrderItems.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/order/OrderController.groovy::listOrderItems (implicit),orders-1
+grails-app/views/order/orderItemSummaryList.gsp,LIVE,render(view:'orderItemSummaryList') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy,orders-1
+grails-app/views/order/orderSummaryList.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/order/OrderController.groovy::orderSummaryList (implicit); render(view:'orderSummaryList') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy,orders-2
+grails-app/views/order/print.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/order/OrderController.groovy::print (implicit),orders-2
+grails-app/views/order/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/order/OrderController.groovy::show (implicit); render(view:'show') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy,orders-2
+grails-app/views/orderAdjustmentType/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/order/OrderAdjustmentTypeController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/order/OrderAdjustmentTypeController.groovy,orders-2
+grails-app/views/orderAdjustmentType/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/order/OrderAdjustmentTypeController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/order/OrderAdjustmentTypeController.groovy,orders-2
+grails-app/views/orderAdjustmentType/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/order/OrderAdjustmentTypeController.groovy::list (implicit); megamenu href /orderAdjustmentType/list (runtime.groovy),orders-2
+grails-app/views/organization/_filters.gsp,TEMPLATE,included by organization/list.gsp (g:render template='filters'),
+grails-app/views/organization/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/OrganizationController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/core/OrganizationController.groovy,locations-orgs-3
+grails-app/views/organization/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/OrganizationController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/OrganizationController.groovy,locations-orgs-3
+grails-app/views/organization/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/OrganizationController.groovy::list (implicit); render(view:'list') in grails-app/controllers/org/pih/warehouse/core/OrganizationController.groovy; megamenu href /organization/list (runtime.groovy),locations-orgs-3
+grails-app/views/organization/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/OrganizationController.groovy::show (implicit),locations-orgs-3
+grails-app/views/partialReceiving/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/receiving/PartialReceivingController.groovy::create (implicit); render(view:'/partialReceiving/create') in grails-app/controllers/org/pih/warehouse/receiving/PartialReceivingController.groovy; view path string '/partialReceiving/create' in grails-app/controllers/org/pih/warehouse/receiving/PartialReceivingController.groovy,receiving
+grails-app/views/party/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/PartyController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/core/PartyController.groovy,locations-orgs-4
+grails-app/views/party/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/PartyController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/PartyController.groovy,locations-orgs-4
+grails-app/views/party/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/PartyController.groovy::list (implicit),locations-orgs-4
+grails-app/views/party/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/PartyController.groovy::show (implicit),locations-orgs-4
+grails-app/views/partyRole/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/PartyRoleController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/core/PartyRoleController.groovy,locations-orgs-4
+grails-app/views/partyRole/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/PartyRoleController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/PartyRoleController.groovy,locations-orgs-4
+grails-app/views/partyRole/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/PartyRoleController.groovy::list (implicit); megamenu href /partyRole/list (runtime.groovy),locations-orgs-5
+grails-app/views/partyRole/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/PartyRoleController.groovy::show (implicit),locations-orgs-5
+grails-app/views/partyType/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/PartyTypeController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/core/PartyTypeController.groovy,locations-orgs-5
+grails-app/views/partyType/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/PartyTypeController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/PartyTypeController.groovy,locations-orgs-5
+grails-app/views/partyType/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/PartyTypeController.groovy::list (implicit); megamenu href /partyType/list (runtime.groovy),locations-orgs-5
+grails-app/views/partyType/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/PartyTypeController.groovy::show (implicit),locations-orgs-5
+grails-app/views/paymentTerm/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/PaymentTermController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/core/PaymentTermController.groovy,finance-config-3
+grails-app/views/paymentTerm/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/PaymentTermController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/PaymentTermController.groovy,finance-config-3
+grails-app/views/paymentTerm/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/PaymentTermController.groovy::list (implicit); megamenu href /paymentTerm/list (runtime.groovy),finance-config-4
+grails-app/views/person/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/PersonController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/core/PersonController.groovy,users-security-1
+grails-app/views/person/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/PersonController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/PersonController.groovy,users-security-1
+grails-app/views/person/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/PersonController.groovy::list (implicit); megamenu href /person/list (runtime.groovy),users-security-1
+grails-app/views/person/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/PersonController.groovy::show (implicit),users-security-1
+grails-app/views/picklist/_page.gsp,TEMPLATE,included by picklist/_print.gsp (g:render template='/picklist/page'),
+grails-app/views/picklist/_print.gsp,TEMPLATE,render(template:'/picklist/print') in grails-app/controllers/org/pih/warehouse/picklist/PicklistController.groovy; view path string '/picklist/print' in grails-app/controllers/org/pih/warehouse/picklist/PicklistController.groovy,
+grails-app/views/picklist/_printPage.gsp,TEMPLATE,included by picklist/print.gsp (g:render template='printPage'),
+grails-app/views/picklist/_returnPage.gsp,TEMPLATE,included by picklist/_returnPrint.gsp (g:render template='/picklist/returnPage'),
+grails-app/views/picklist/_returnPrint.gsp,TEMPLATE,render(template:'/picklist/returnPrint') in grails-app/controllers/org/pih/warehouse/picklist/PicklistController.groovy; view path string '/picklist/returnPrint' in grails-app/controllers/org/pih/warehouse/picklist/PicklistController.groovy,
+grails-app/views/picklist/_returnPrintPage.gsp,TEMPLATE,included by picklist/returnPrint.gsp (g:render template='returnPrintPage'),
+grails-app/views/picklist/print.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/picklist/PicklistController.groovy::print (implicit); view path string '/picklist/print' in grails-app/controllers/org/pih/warehouse/picklist/PicklistController.groovy,picking
+grails-app/views/picklist/returnPrint.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/picklist/PicklistController.groovy::returnPrint (implicit); view path string '/picklist/returnPrint' in grails-app/controllers/org/pih/warehouse/picklist/PicklistController.groovy,picking
+grails-app/views/preferenceType/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/PreferenceTypeController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/core/PreferenceTypeController.groovy,finance-config-4
+grails-app/views/preferenceType/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/PreferenceTypeController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/PreferenceTypeController.groovy,finance-config-4
+grails-app/views/preferenceType/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/PreferenceTypeController.groovy::list (implicit); megamenu href /preferenceType/list (runtime.groovy),finance-config-4
+grails-app/views/product/_actions.gsp,TEMPLATE,included by product/_summary.gsp (g:render template='/product/actions'),
+grails-app/views/product/_actionsBatch.gsp,TEMPLATE,included by product/batchEdit.gsp (g:render template='actionsBatch'),
+grails-app/views/product/_attributes.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,
+grails-app/views/product/_categories.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,
+grails-app/views/product/_category.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,
+grails-app/views/product/_documents.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,
+grails-app/views/product/_inventoryLevels.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,
+grails-app/views/product/_manufacturers.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,
+grails-app/views/product/_mergeProductConfirmationDialog.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,
+grails-app/views/product/_mergeProducts.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,
+grails-app/views/product/_productAssociations.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,
+grails-app/views/product/_productCatalogs.gsp,TEMPLATE,render(template:'productCatalogs') in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,
+grails-app/views/product/_productComponents.gsp,TEMPLATE,render(template:'productComponents') in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,
+grails-app/views/product/_productDetails.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,
+grails-app/views/product/_productGroups.gsp,TEMPLATE,render(template:'productGroups') in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,
+grails-app/views/product/_productMergeLogsFilters.gsp,TEMPLATE,included by product/productMergeLogs.gsp (g:render template='productMergeLogsFilters'),
+grails-app/views/product/_productPackageDialog.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,
+grails-app/views/product/_productPackages.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,
+grails-app/views/product/_productSuppliers.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,
+grails-app/views/product/_productSynonyms.gsp,TEMPLATE,render(template:'productSynonyms') in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,
+grails-app/views/product/_productSynonymsEdit.gsp,TEMPLATE,render(template:'productSynonymsEdit') in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,
+grails-app/views/product/_status.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,
+grails-app/views/product/_summary.gsp,TEMPLATE,included by consumption/_product.gsp (g:render template='/product/summary'); included by product/edit.gsp (g:render template='summary'); included by layouts/stockCard.gsp (g:render template='/product/summary'),
+grails-app/views/product/_summaryDialog.gsp,TEMPLATE,included by inventoryLevel/_form.gsp (g:render template='/product/summaryDialog'),
+grails-app/views/product/_tags.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,
+grails-app/views/product/_uomClassDialog.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,
+grails-app/views/product/_uomDialog.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,
+grails-app/views/product/_uploadFile.gsp,UNCERTAIN,dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,
+grails-app/views/product/addDocument.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductController.groovy::addDocument (implicit); render(view:'addDocument') in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,product-catalog-2
+grails-app/views/product/batchEdit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductController.groovy::batchEdit (implicit); render(view:'batchEdit') in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy; megamenu href /product/batchEdit (runtime.groovy),product-catalog-2
+grails-app/views/product/batchEditProperties.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductController.groovy::batchEditProperties (implicit),product-catalog-2
+grails-app/views/product/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,product-catalog-2
+grails-app/views/product/importAsCsv.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductController.groovy::importAsCsv (implicit); render(view:'importAsCsv') in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy; megamenu href /product/importAsCsv (runtime.groovy),product-catalog-2
+grails-app/views/product/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductController.groovy::list (implicit); megamenu href /product/list (runtime.groovy),product-catalog-2
+grails-app/views/product/productMergeLogs.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductController.groovy::productMergeLogs (implicit); render(view:'productMergeLogs') in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy,product-catalog-3
+grails-app/views/product/search.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductController.groovy::search (implicit),product-catalog-3
+grails-app/views/product/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductController.groovy::show (implicit),product-catalog-3
+grails-app/views/product/upnDatabase.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductController.groovy::upnDatabase (implicit),product-catalog-3
+grails-app/views/productAssociation/_dialog.gsp,TEMPLATE,render(template:'dialog') in grails-app/controllers/org/pih/warehouse/product/ProductAssociationController.groovy,
+grails-app/views/productAssociation/_productAssociationDeleteDialog.gsp,TEMPLATE,included by productAssociation/edit.gsp (g:render template='/productAssociation/productAssociationDeleteDialog'); included by productAssociation/show.gsp (g:render template='/productAssociation/productAssociationDeleteDialog'),
+grails-app/views/productAssociation/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductAssociationController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/product/ProductAssociationController.groovy,product-catalog-3
+grails-app/views/productAssociation/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductAssociationController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/product/ProductAssociationController.groovy,product-catalog-3
+grails-app/views/productAssociation/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductAssociationController.groovy::list (implicit); megamenu href /productAssociation/list (runtime.groovy),product-catalog-4
+grails-app/views/productAssociation/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductAssociationController.groovy::show (implicit),product-catalog-4
+grails-app/views/productCatalog/_productCatalogItems.gsp,TEMPLATE,render(template:'productCatalogItems') in grails-app/controllers/org/pih/warehouse/product/ProductCatalogController.groovy; included by productCatalog/edit.gsp (g:render template='productCatalogItems'),
+grails-app/views/productCatalog/_summary.gsp,TEMPLATE,included by productCatalog/edit.gsp (g:render template='summary'),
+grails-app/views/productCatalog/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductCatalogController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/product/ProductCatalogController.groovy,product-catalog-4
+grails-app/views/productCatalog/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductCatalogController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/product/ProductCatalogController.groovy,product-catalog-4
+grails-app/views/productCatalog/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductCatalogController.groovy::list (implicit); megamenu href /productCatalog/list (runtime.groovy),product-catalog-4
+grails-app/views/productCatalog/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductCatalogController.groovy::show (implicit),product-catalog-4
+grails-app/views/productComponent/index.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductComponentController.groovy::index (implicit); megamenu href /productComponent/index (runtime.groovy),product-catalog-5
+grails-app/views/productGroup/_products.gsp,TEMPLATE,render(template:'products') in grails-app/controllers/org/pih/warehouse/product/ProductGroupController.groovy; included by productGroup/edit.gsp (g:render template='products'),
+grails-app/views/productGroup/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductGroupController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/product/ProductGroupController.groovy,product-catalog-5
+grails-app/views/productGroup/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductGroupController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/product/ProductGroupController.groovy,product-catalog-5
+grails-app/views/productGroup/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductGroupController.groovy::list (implicit); megamenu href /productGroup/list (runtime.groovy),product-catalog-5
+grails-app/views/productGroup/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductGroupController.groovy::show (implicit),product-catalog-5
+grails-app/views/productSupplier/_dialog.gsp,TEMPLATE,render(template:'dialog') in grails-app/controllers/org/pih/warehouse/product/ProductSupplierController.groovy,
+grails-app/views/productSupplier/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductSupplierController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/product/ProductSupplierController.groovy,product-catalog-5
+grails-app/views/productSupplier/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductSupplierController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/product/ProductSupplierController.groovy,product-catalog-6
+grails-app/views/productSupplier/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductSupplierController.groovy::list (implicit); megamenu href /productSupplier/list (runtime.groovy),product-catalog-6
+grails-app/views/productSupplier/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductSupplierController.groovy::show (implicit),product-catalog-6
+grails-app/views/productType/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductTypeController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/product/ProductTypeController.groovy,product-catalog-6
+grails-app/views/productType/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductTypeController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/product/ProductTypeController.groovy,product-catalog-6
+grails-app/views/productType/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductTypeController.groovy::list (implicit); megamenu href /productType/list (runtime.groovy),product-catalog-6
+grails-app/views/productType/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/product/ProductTypeController.groovy::show (implicit),product-catalog-7
+grails-app/views/purchaseOrder/_enterOrderDetails.gsp,TEMPLATE,render(template:'enterOrderDetails') in grails-app/controllers/org/pih/warehouse/order/PurchaseOrderController.groovy,
+grails-app/views/purchaseOrder/_showOrderItems.gsp,TEMPLATE,render(template:'showOrderItems') in grails-app/controllers/org/pih/warehouse/order/PurchaseOrderController.groovy,
+grails-app/views/purchaseOrder/handleError.gsp,DEAD,no static references found,
+grails-app/views/purchaseOrder/placeOrder.gsp,DEAD,no static references found,
+grails-app/views/putAway/_print.gsp,TEMPLATE,render(template:'/putAway/print') in grails-app/controllers/org/pih/warehouse/putaway/PutAwayController.groovy; view path string '/putAway/print' in grails-app/controllers/org/pih/warehouse/putaway/PutAwayController.groovy,
+grails-app/views/quartz/list.gsp,LIVE,quartz-monitor plugin QuartzController.list (build.gradle),admin-config-4
+grails-app/views/receiveOrderWorkflow/_progressBar.gsp,DEAD,no static references found,
+grails-app/views/receiveOrderWorkflow/receiveOrder/confirmOrderReceipt.gsp,LIVE,webflow state 'confirmOrderReceipt' in grails-app/controllers/org/pih/warehouse/order/ReceiveOrderWorkflowController.groovy::receiveOrderFlow,receiving
+grails-app/views/receiveOrderWorkflow/receiveOrder/enterShipmentDetails.gsp,LIVE,webflow state 'enterShipmentDetails' in grails-app/controllers/org/pih/warehouse/order/ReceiveOrderWorkflowController.groovy::receiveOrderFlow,receiving
+grails-app/views/receiveOrderWorkflow/receiveOrder/handleError.gsp,UNCERTAIN,webflow view dir of grails-app/controllers/org/pih/warehouse/order/ReceiveOrderWorkflowController.groovy::receiveOrderFlow,
+grails-app/views/receiveOrderWorkflow/receiveOrder/processOrderItems.gsp,LIVE,webflow state 'processOrderItems' in grails-app/controllers/org/pih/warehouse/order/ReceiveOrderWorkflowController.groovy::receiveOrderFlow,receiving
+grails-app/views/referenceNumberType/_local.gsp,DEAD,no static references found,
+grails-app/views/replenishment/_printPage.gsp,TEMPLATE,included by replenishment/print.gsp (g:render template='printPage'),
+grails-app/views/replenishment/print.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/ReplenishmentController.groovy::print (implicit),picking
+grails-app/views/report/_dataTableDialog.gsp,TEMPLATE,render(template:'dataTableDialog') in grails-app/controllers/org/pih/warehouse/reporting/ReportController.groovy,
+grails-app/views/report/_showTransactionReportMetadata.gsp,TEMPLATE,included by report/showTransactionReport.gsp (g:render template='showTransactionReportMetadata'),
+grails-app/views/report/printPaginatedPackingListReport.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/reporting/ReportController.groovy::printPaginatedPackingListReport (implicit),reporting-1
+grails-app/views/report/printPickListReport.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/reporting/ReportController.groovy::printPickListReport (implicit),reporting-2
+grails-app/views/report/printShippingReport.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/reporting/ReportController.groovy::printShippingReport (implicit),reporting-2
+grails-app/views/report/showBinLocationReport.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/reporting/ReportController.groovy::showBinLocationReport (implicit); megamenu href /report/showBinLocationReport (runtime.groovy),reporting-2
+grails-app/views/report/showCycleCountReport.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/reporting/ReportController.groovy::showCycleCountReport (implicit); render(view:'showCycleCountReport') in grails-app/controllers/org/pih/warehouse/reporting/ReportController.groovy; megamenu href /report/showCycleCountReport (runtime.groovy),reporting-2
+grails-app/views/report/showForecastReport.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/reporting/ReportController.groovy::showForecastReport (implicit); render(view:'showForecastReport') in grails-app/controllers/org/pih/warehouse/reporting/ReportController.groovy; megamenu href /report/showForecastReport (runtime.groovy),reporting-2
+grails-app/views/report/showInventoryByLocationReport.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/reporting/ReportController.groovy::showInventoryByLocationReport (implicit); render(view:'showInventoryByLocationReport') in grails-app/controllers/org/pih/warehouse/reporting/ReportController.groovy; megamenu href /report/showInventoryByLocationReport (runtime.groovy),reporting-3
+grails-app/views/report/showInventoryReport.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/reporting/ReportController.groovy::showInventoryReport (implicit),reporting-3
+grails-app/views/report/showOnOrderReport.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/reporting/ReportController.groovy::showOnOrderReport (implicit); megamenu href /report/showOnOrderReport (runtime.groovy),reporting-3
+grails-app/views/report/showPaginatedPackingListReport.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/reporting/ReportController.groovy::showPaginatedPackingListReport (implicit),reporting-3
+grails-app/views/report/showRequestDetailReport.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/reporting/ReportController.groovy::showRequestDetailReport (implicit); render(view:'showRequestDetailReport') in grails-app/controllers/org/pih/warehouse/reporting/ReportController.groovy; megamenu href /report/showRequestDetailReport (runtime.groovy),reporting-3
+grails-app/views/report/showTransactionReport.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/reporting/ReportController.groovy::showTransactionReport (implicit); megamenu href /report/showTransactionReport (runtime.groovy),reporting-4
+grails-app/views/requisition/_actions.gsp,TEMPLATE,included by requisition/_summary.gsp (g:render template='/requisition/actions'); included by requisition/list.gsp (g:render template='/requisition/actions'); included by requisition/_list.gsp (g:render template='/requisition/actions'),
+grails-app/views/requisition/_buttons.gsp,DEAD,no static references found,
+grails-app/views/requisition/_cancelQuantity.gsp,DEAD,no static references found,
+grails-app/views/requisition/_changePackageSize.gsp,DEAD,no static references found,
+grails-app/views/requisition/_changeQuantity.gsp,DEAD,no static references found,
+grails-app/views/requisition/_chooseSubstitute.gsp,DEAD,no static references found,
+grails-app/views/requisition/_editRequisitionItem.gsp,TEMPLATE,render(template:'editRequisitionItem') in grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy,
+grails-app/views/requisition/_flowHeader.gsp,DEAD,no static references found,
+grails-app/views/requisition/_header.gsp,TEMPLATE,included by requisition/edit.gsp (g:render template='header'); included by requisitionItem/change.gsp (g:render template='/requisition/header'); included by requisition/confirm.gsp (g:render template='header'),
+grails-app/views/requisition/_list.gsp,TEMPLATE,included by requisition/list.gsp (g:render template='list'),
+grails-app/views/requisition/_menu.gsp,DEAD,no static references found,
+grails-app/views/requisition/_modifyRequisitionItem.gsp,DEAD,no static references found,
+grails-app/views/requisition/_pickRequisitionItem.gsp,DEAD,no static references found,
+grails-app/views/requisition/_picklistItems.gsp,TEMPLATE,render(template:'picklistItems') in grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy,
+grails-app/views/requisition/_requisitionItems.gsp,DEAD,no static references found,
+grails-app/views/requisition/_requisitionItems2.gsp,TEMPLATE,render(template:'requisitionItems2') in grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy; included by requisition/review.gsp (g:render template='requisitionItems2'),
+grails-app/views/requisition/_reviewRequisitionItem.gsp,DEAD,no static references found,
+grails-app/views/requisition/_showRequisitionItem.gsp,TEMPLATE,included by stockMovement/_requisition.gsp (g:render template='/requisition/showRequisitionItem'); included by requisition/show.gsp (g:render template='showRequisitionItem'),
+grails-app/views/requisition/_summary.gsp,TEMPLATE,included by requisition/edit.gsp (g:render template='summary'); included by requisitionItem/change.gsp (g:render template='/requisition/summary'); included by requisition/createNonStock.gsp (g:render template='summary'),
+grails-app/views/requisition/_supplementProduct.gsp,DEAD,no static references found,
+grails-app/views/requisition/addComment.gsp,DEAD,no static references found,
+grails-app/views/requisition/addDocument.gsp,DEAD,no static references found,
+grails-app/views/requisition/chooseTemplate.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy::chooseTemplate (implicit); render(view:'chooseTemplate') in grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy; megamenu href /requisition/chooseTemplate (runtime.groovy),requisitions-1
+grails-app/views/requisition/confirm.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy::confirm (implicit),requisitions-1
+grails-app/views/requisition/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy::create (implicit); megamenu href /requisition/create (runtime.groovy),requisitions-1
+grails-app/views/requisition/createNonStock.gsp,LIVE,render(view:'createNonStock') in grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy,requisitions-1
+grails-app/views/requisition/createStock.gsp,LIVE,render(view:'createStock') in grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy,requisitions-1
+grails-app/views/requisition/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy::edit (implicit),requisitions-1
+grails-app/views/requisition/editHeader.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy::editHeader (implicit); render(view:'editHeader') in grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy,requisitions-2
+grails-app/views/requisition/fulfill.gsp,DEAD,no static references found,
+grails-app/views/requisition/fulfillItem.gsp,DEAD,no static references found,
+grails-app/views/requisition/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy::list (implicit); render(view:'list') in grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy; megamenu href /requisition/list (runtime.groovy),requisitions-2
+grails-app/views/requisition/pick.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy::pick (implicit),requisitions-2
+grails-app/views/requisition/printDraft.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy::printDraft (implicit),requisitions-2
+grails-app/views/requisition/process.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy::process (implicit),requisitions-2
+grails-app/views/requisition/review.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy::review (implicit),requisitions-2
+grails-app/views/requisition/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy::show (implicit),requisitions-3
+grails-app/views/requisition/showPicklist.gsp,DEAD,no static references found,
+grails-app/views/requisition/substitute.gsp,DEAD,no static references found,
+grails-app/views/requisition/transfer.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy::transfer (implicit); render(view:'transfer') in grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy,requisitions-3
+grails-app/views/requisitionItem/_actions.gsp,DEAD,no static references found,
+grails-app/views/requisitionItem/change.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionItemController.groovy::change (implicit),requisitions-3
+grails-app/views/requisitionItem/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionItemController.groovy::list (implicit); render(view:'list') in grails-app/controllers/org/pih/warehouse/requisition/RequisitionItemController.groovy,requisitions-3
+grails-app/views/requisitionTemplate/_actions.gsp,TEMPLATE,included by requisitionTemplate/_summary.gsp (g:render template='actions'); included by requisitionTemplate/_list.gsp (g:render template='/requisitionTemplate/actions'),
+grails-app/views/requisitionTemplate/_header.gsp,TEMPLATE,included by requisitionTemplate/sendMail.gsp (g:render template='header'); included by requisitionTemplate/editHeader.gsp (g:render template='header'); included by requisitionTemplate/show.gsp (g:render template='header'),
+grails-app/views/requisitionTemplate/_list.gsp,TEMPLATE,included by requisitionTemplate/list.gsp (g:render template='list'),
+grails-app/views/requisitionTemplate/_printPage.gsp,UNCERTAIN,dynamic render(view: <expr>) in grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy,
+grails-app/views/requisitionTemplate/_summary.gsp,TEMPLATE,included by requisitionTemplate/sendMail.gsp (g:render template='summary'); included by requisitionTemplate/editHeader.gsp (g:render template='summary'); included by requisitionTemplate/show.gsp (g:render template='summary'),
+grails-app/views/requisitionTemplate/batch.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy::batch (implicit); render(view:'batch') in grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy,stocklists-1
+grails-app/views/requisitionTemplate/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy; megamenu href /requisitionTemplate/create (runtime.groovy),stocklists-1
+grails-app/views/requisitionTemplate/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy,stocklists-1
+grails-app/views/requisitionTemplate/editHeader.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy::editHeader (implicit),stocklists-1
+grails-app/views/requisitionTemplate/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy::list (implicit); megamenu href /requisitionTemplate/list (runtime.groovy); React SPA link in src/js/tests/utils/menu-utils.test.jsx,stocklists-2
+grails-app/views/requisitionTemplate/print.gsp,UNCERTAIN,dynamic render(view: <expr>) in grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy,
+grails-app/views/requisitionTemplate/sendMail.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy::sendMail (implicit),stocklists-2
+grails-app/views/requisitionTemplate/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy::show (implicit),stocklists-2
+grails-app/views/returns/show.gsp,LIVE,render(view:'/returns/show') in grails-app/controllers/org/pih/warehouse/inventory/StockMovementController.groovy; view path string '/returns/show' in grails-app/controllers/org/pih/warehouse/inventory/StockMovementController.groovy,stock-transfers
+grails-app/views/role/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/RoleController.groovy::create (implicit),users-security-1
+grails-app/views/role/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/RoleController.groovy::edit (implicit),users-security-2
+grails-app/views/role/index.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/RoleController.groovy::index (implicit); megamenu href /role/index (runtime.groovy),users-security-2
+grails-app/views/role/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/RoleController.groovy::show (implicit),users-security-2
+grails-app/views/shipment/_actions.gsp,TEMPLATE,included by shipment/showDetails.gsp (g:render template='/shipment/actions'); included by shipment/_summary.gsp (g:render template='/shipment/actions'); included by shipment/deleteShipment.gsp (g:render template='/shipment/actions'),
+grails-app/views/shipment/_barcodeLabel.gsp,TEMPLATE,render(template:'barcodeLabel') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy,
+grails-app/views/shipment/_buttons.gsp,TEMPLATE,included by shipment/showDetails.gsp (g:render template='buttons'); included by shipment/deleteShipment.gsp (g:render template='buttons'); included by shipment/receiveShipment.gsp (g:render template='buttons'),
+grails-app/views/shipment/_container.gsp,TEMPLATE,included by report/printPaginatedPackingListReport.gsp (g:render template='/shipment/container'); included by report/printShippingReport.gsp (g:render template='/shipment/container'); included by shipment/showDetails.gsp (g:render template='container'),
+grails-app/views/shipment/_filters.gsp,TEMPLATE,included by shipment/list.gsp (g:render template='filters'),
+grails-app/views/shipment/_list.gsp,TEMPLATE,included by shipment/list.gsp (g:render template='list'),
+grails-app/views/shipment/_listShippingMenuItems.gsp,DEAD,no static references found,
+grails-app/views/shipment/_showPutawayLocations.gsp,TEMPLATE,render(template:'showPutawayLocations') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy,
+grails-app/views/shipment/_showTracking.gsp,TEMPLATE,render(template:'showTracking') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy,
+grails-app/views/shipment/_showTransactions.gsp,TEMPLATE,render(template:'showTransactions') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy,
+grails-app/views/shipment/_sidebar.gsp,DEAD,no static references found,
+grails-app/views/shipment/_summary.gsp,TEMPLATE,included by shipment/showDetails.gsp (g:render template='summary'); included by createShipmentWorkflow/createShipment/pickShipmentItems.gsp (g:render template='/shipment/summary'); included by shipment/editEvent.gsp (g:render template='summary'),
+grails-app/views/shipment/addComment.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy::addComment (implicit); render(view:'addComment') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy,shipments-1
+grails-app/views/shipment/addDocument.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy::addDocument (implicit); render(view:'addDocument') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy,shipments-1
+grails-app/views/shipment/addToShipment.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy::addToShipment (implicit); render(view:'addToShipment') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy,shipments-1
+grails-app/views/shipment/deleteShipment.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy::deleteShipment (implicit),shipments-1
+grails-app/views/shipment/editEvent.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy::editEvent (implicit); render(view:'editEvent') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy,shipments-1
+grails-app/views/shipment/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy::list (implicit); megamenu href /shipment/list (runtime.groovy),shipments-2
+grails-app/views/shipment/receiveShipment.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy::receiveShipment (implicit); render(view:'receiveShipment') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy,shipments-2
+grails-app/views/shipment/sendShipment.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy::sendShipment (implicit); render(view:'sendShipment') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy,shipments-2
+grails-app/views/shipment/showDetails.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy::showDetails (implicit),shipments-2
+grails-app/views/shipment/showPackingList.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy::showPackingList (implicit),shipments-2
+grails-app/views/shipmentItem/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/shipping/ShipmentItemController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentItemController.groovy,shipments-3
+grails-app/views/shipmentItem/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/shipping/ShipmentItemController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentItemController.groovy,shipments-3
+grails-app/views/shipmentItem/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/shipping/ShipmentItemController.groovy::list (implicit),shipments-3
+grails-app/views/shipmentItem/pick.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/shipping/ShipmentItemController.groovy::pick (implicit); render(view:'pick') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentItemController.groovy,shipments-3
+grails-app/views/shipmentItem/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/shipping/ShipmentItemController.groovy::show (implicit),shipments-3
+grails-app/views/shipmentItem/split.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/shipping/ShipmentItemController.groovy::split (implicit),shipments-4
+grails-app/views/shipmentWorkflow/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/shipping/ShipmentWorkflowController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentWorkflowController.groovy,shipments-4
+grails-app/views/shipmentWorkflow/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/shipping/ShipmentWorkflowController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentWorkflowController.groovy,shipments-4
+grails-app/views/shipmentWorkflow/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/shipping/ShipmentWorkflowController.groovy::list (implicit); megamenu href /shipmentWorkflow/list (runtime.groovy),shipments-4
+grails-app/views/shipmentWorkflow/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/shipping/ShipmentWorkflowController.groovy::show (implicit),shipments-4
+grails-app/views/stockMovement/_actions.gsp,TEMPLATE,included by stockMovement/_list.gsp (g:render template='/stockMovement/actions'),
+grails-app/views/stockMovement/_comments.gsp,TEMPLATE,render(template:'comments') in grails-app/controllers/org/pih/warehouse/inventory/StockMovementController.groovy,
+grails-app/views/stockMovement/_documents.gsp,TEMPLATE,render(template:'documents') in grails-app/controllers/org/pih/warehouse/inventory/StockMovementController.groovy,
+grails-app/views/stockMovement/_events.gsp,TEMPLATE,render(template:'events') in grails-app/controllers/org/pih/warehouse/inventory/StockMovementController.groovy,
+grails-app/views/stockMovement/_list.gsp,TEMPLATE,included by stockMovement/list.gsp (g:render template='list'),
+grails-app/views/stockMovement/_packingList.gsp,TEMPLATE,render(template:'packingList') in grails-app/controllers/org/pih/warehouse/inventory/StockMovementController.groovy,
+grails-app/views/stockMovement/_receipts.gsp,TEMPLATE,render(template:'receipts') in grails-app/controllers/org/pih/warehouse/inventory/StockMovementController.groovy,
+grails-app/views/stockMovement/_requisition.gsp,TEMPLATE,render(template:'requisition') in grails-app/controllers/org/pih/warehouse/inventory/StockMovementController.groovy,
+grails-app/views/stockMovement/_summary.gsp,TEMPLATE,included by stockMovement/addDocument.gsp (g:render template='summary'); included by returns/show.gsp (g:render template='/stockMovement/summary'); included by stockMovement/show.gsp (g:render template='summary'),
+grails-app/views/stockMovement/_synchronizeDialog.gsp,TEMPLATE,render(template:'synchronizeDialog') in grails-app/controllers/org/pih/warehouse/inventory/StockMovementController.groovy,
+grails-app/views/stockMovement/addComment.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/StockMovementController.groovy::addComment (implicit); render(view:'addComment') in grails-app/controllers/org/pih/warehouse/inventory/StockMovementController.groovy,stock-movements
+grails-app/views/stockMovement/addDocument.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/StockMovementController.groovy::addDocument (implicit); render(view:'addDocument') in grails-app/controllers/org/pih/warehouse/inventory/StockMovementController.groovy,stock-movements
+grails-app/views/stockMovement/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/StockMovementController.groovy::list (implicit); megamenu href /stockMovement/list (runtime.groovy),stock-movements
+grails-app/views/stockMovement/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/StockMovementController.groovy::show (implicit); render(view:'show') in grails-app/controllers/org/pih/warehouse/inventory/StockMovementController.groovy; React SPA link in src/js/components/stock-movement/outbound/StockMovementOutboundTable.jsx,stock-movements
+grails-app/views/stockTransfer/_filters.gsp,TEMPLATE,included by stockTransfer/list.gsp (g:render template='filters'),
+grails-app/views/stockTransfer/_orderSummary.gsp,TEMPLATE,included by stockTransfer/show.gsp (g:render template='orderSummary'),
+grails-app/views/stockTransfer/_printPage.gsp,TEMPLATE,included by stockTransfer/print.gsp (g:render template='printPage'),
+grails-app/views/stockTransfer/_summary.gsp,TEMPLATE,included by stockTransfer/show.gsp (g:render template='summary'),
+grails-app/views/stockTransfer/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/StockTransferController.groovy::list (implicit); megamenu href /stockTransfer/list (runtime.groovy),stock-transfers
+grails-app/views/stockTransfer/print.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/StockTransferController.groovy::print (implicit),stock-transfers
+grails-app/views/stockTransfer/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/StockTransferController.groovy::show (implicit),stock-transfers
+grails-app/views/stocklist/_itemList.gsp,TEMPLATE,included by stocklist/_print.gsp (g:render template='/stocklist/itemList'),
+grails-app/views/stocklist/_print.gsp,TEMPLATE,render(template:'/stocklist/print') in grails-app/controllers/org/pih/warehouse/stocklist/StocklistController.groovy; render(template:'/stocklist/print') in grails-app/services/org/pih/warehouse/inventory/StocklistService.groovy; view path string '/stocklist/print' in grails-app/controllers/org/pih/warehouse/stocklist/StocklistController.groovy,
+grails-app/views/stocklist/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/stocklist/StocklistController.groovy::show (implicit),stocklists-2
+grails-app/views/supplier/_documents.gsp,TEMPLATE,included by supplier/show.gsp (g:render template='/supplier/documents'),
+grails-app/views/supplier/_priceHistory.gsp,TEMPLATE,included by supplier/show.gsp (g:render template='/supplier/priceHistory'),
+grails-app/views/supplier/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/SupplierController.groovy::list (implicit); megamenu href /supplier/list (runtime.groovy),locations-orgs-6
+grails-app/views/supplier/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/SupplierController.groovy::show (implicit),locations-orgs-6
+grails-app/views/tag/_summary.gsp,TEMPLATE,included by tag/create.gsp (g:render template='summary'); included by tag/list.gsp (g:render template='summary'); included by tag/edit.gsp (g:render template='summary'),
+grails-app/views/tag/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/TagController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/core/TagController.groovy,product-catalog-7
+grails-app/views/tag/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/TagController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/TagController.groovy,product-catalog-7
+grails-app/views/tag/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/TagController.groovy::list (implicit); megamenu href /tag/list (runtime.groovy),product-catalog-7
+grails-app/views/tag/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/TagController.groovy::show (implicit),product-catalog-7
+grails-app/views/taglib/_autoSuggest.gsp,TEMPLATE,render(template:'/taglib/autoSuggest') in grails-app/taglib/org/pih/warehouse/AutoSuggestTagLib.groovy; view path string '/taglib/autoSuggest' in grails-app/taglib/org/pih/warehouse/AutoSuggestTagLib.groovy,
+grails-app/views/taglib/_autoSuggestSearchable.gsp,TEMPLATE,render(template:'/taglib/autoSuggestSearchable') in grails-app/taglib/org/pih/warehouse/AutoSuggestSearchableTagLib.groovy; view path string '/taglib/autoSuggestSearchable' in grails-app/taglib/org/pih/warehouse/AutoSuggestSearchableTagLib.groovy,
+grails-app/views/taglib/_autoSuggestString.gsp,TEMPLATE,render(template:'/taglib/autoSuggestString') in grails-app/taglib/org/pih/warehouse/AutoSuggestStringTagLib.groovy; view path string '/taglib/autoSuggestString' in grails-app/taglib/org/pih/warehouse/AutoSuggestStringTagLib.groovy,
+grails-app/views/taglib/_chooseSubstitute.gsp,TEMPLATE,render(template:'/taglib/chooseSubstitute') in grails-app/taglib/org/pih/warehouse/AutoSuggestTagLib.groovy; view path string '/taglib/chooseSubstitute' in grails-app/taglib/org/pih/warehouse/AutoSuggestTagLib.groovy,
+grails-app/views/taglib/_comboBox.gsp,TEMPLATE,render(template:'/taglib/comboBox') in grails-app/taglib/org/pih/warehouse/ComboBoxTagLib.groovy; view path string '/taglib/comboBox' in grails-app/taglib/org/pih/warehouse/ComboBoxTagLib.groovy,
+grails-app/views/taglib/_createLocation.gsp,DEAD,no static references found,
+grails-app/views/taglib/_decimalFormatField.gsp,TEMPLATE,render(template:'/taglib/decimalFormatField') in grails-app/taglib/org/pih/warehouse/DecimalNumberFieldTagLib.groovy; view path string '/taglib/decimalFormatField' in grails-app/taglib/org/pih/warehouse/DecimalNumberFieldTagLib.groovy,
+grails-app/views/taglib/_displayBarcode.gsp,TEMPLATE,render(template:'/taglib/displayBarcode') in grails-app/taglib/org/pih/warehouse/ImageTagLib.groovy; view path string '/taglib/displayBarcode' in grails-app/taglib/org/pih/warehouse/ImageTagLib.groovy,
+grails-app/views/taglib/_displayLogo.gsp,TEMPLATE,render(template:'/taglib/displayLogo') in grails-app/taglib/org/pih/warehouse/ImageTagLib.groovy; view path string '/taglib/displayLogo' in grails-app/taglib/org/pih/warehouse/ImageTagLib.groovy,
+grails-app/views/taglib/_expirationDate.gsp,TEMPLATE,render(template:'/taglib/expirationDate') in grails-app/taglib/org/pih/warehouse/DateTagLib.groovy; view path string '/taglib/expirationDate' in grails-app/taglib/org/pih/warehouse/DateTagLib.groovy,
+grails-app/views/taglib/_globalSearch.gsp,TEMPLATE,render(template:'/taglib/globalSearch') in grails-app/taglib/org/pih/warehouse/GlobalSearchTagLib.groovy; view path string '/taglib/globalSearch' in grails-app/taglib/org/pih/warehouse/GlobalSearchTagLib.groovy,
+grails-app/views/taglib/_globalSearchStatic.gsp,TEMPLATE,render(template:'/taglib/globalSearchStatic') in grails-app/taglib/org/pih/warehouse/GlobalSearchTagLib.groovy; view path string '/taglib/globalSearchStatic' in grails-app/taglib/org/pih/warehouse/GlobalSearchTagLib.groovy,
+grails-app/views/taglib/_productDisplayName.gsp,TEMPLATE,render(template:'/taglib/productDisplayName') in grails-app/taglib/org/pih/warehouse/FormatTagLib.groovy; view path string '/taglib/productDisplayName' in grails-app/taglib/org/pih/warehouse/FormatTagLib.groovy,
+grails-app/views/taglib/_productStatus.gsp,TEMPLATE,render(template:'/taglib/productStatus') in grails-app/taglib/org/pih/warehouse/InventoryTagLib.groovy; view path string '/taglib/productStatus' in grails-app/taglib/org/pih/warehouse/InventoryTagLib.groovy,
+grails-app/views/taglib/_searchProduct.gsp,TEMPLATE,render(template:'../taglib/searchProduct') in grails-app/taglib/org/pih/warehouse/SearchProductTagLib.groovy,
+grails-app/views/taglib/_selectCategories.gsp,DEAD,no static references found,
+grails-app/views/taglib/_selectContainer.gsp,TEMPLATE,render(template:'/taglib/selectContainer') in grails-app/taglib/org/pih/warehouse/SelectTagLib.groovy; view path string '/taglib/selectContainer' in grails-app/taglib/org/pih/warehouse/SelectTagLib.groovy,
+grails-app/views/taglib/_selectPerson.gsp,DEAD,no static references found,
+grails-app/views/taglib/_selectProducts.gsp,DEAD,no static references found,
+grails-app/views/taglib/_userPhoto.gsp,TEMPLATE,render(template:'/taglib/userPhoto') in grails-app/taglib/org/pih/warehouse/AuthTagLib.groovy; view path string '/taglib/userPhoto' in grails-app/taglib/org/pih/warehouse/AuthTagLib.groovy,
+grails-app/views/transaction/_actions.gsp,TEMPLATE,included by transaction/_summary.gsp (g:render template='/transaction/actions'),
+grails-app/views/transaction/_details.gsp,TEMPLATE,included by inventory/editTransaction.gsp (g:render template='/transaction/details'); included by inventory/showTransaction.gsp (g:render template='/transaction/details'); included by transactionEntry/edit.gsp (g:render template='/transaction/details'),
+grails-app/views/transaction/_entries.gsp,TEMPLATE,included by inventory/showTransaction.gsp (g:render template='/transaction/entries'),
+grails-app/views/transaction/_summary.gsp,TEMPLATE,included by inventory/editTransaction.gsp (g:render template='/transaction/summary'); included by inventory/showTransaction.gsp (g:render template='/transaction/summary'); included by transactionEntry/edit.gsp (g:render template='/transaction/summary'),
+grails-app/views/transactionEntry/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/TransactionEntryController.groovy::create (implicit),reporting-4
+grails-app/views/transactionEntry/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/TransactionEntryController.groovy::edit (implicit),reporting-4
+grails-app/views/transactionEntry/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/TransactionEntryController.groovy::list (implicit),reporting-4
+grails-app/views/transactionEntry/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/inventory/TransactionEntryController.groovy::show (implicit),reporting-4
+grails-app/views/unitOfMeasureConversion/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/UnitOfMeasureConversionController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/core/UnitOfMeasureConversionController.groovy,product-catalog-7
+grails-app/views/unitOfMeasureConversion/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/UnitOfMeasureConversionController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/UnitOfMeasureConversionController.groovy,product-catalog-8
+grails-app/views/unitOfMeasureConversion/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/core/UnitOfMeasureConversionController.groovy::list (implicit); megamenu href /unitOfMeasureConversion/list (runtime.groovy),product-catalog-8
+grails-app/views/unsupported.gsp,DEAD,no static references found,
+grails-app/views/user/_actions.gsp,TEMPLATE,included by user/_summary.gsp (g:render template='actions'),
+grails-app/views/user/_summary.gsp,TEMPLATE,included by user/changePhoto.gsp (g:render template='summary'); included by user/show.gsp (g:render template='summary'); included by user/list.gsp (g:render template='summary'),
+grails-app/views/user/changePhoto.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/user/UserController.groovy::changePhoto (implicit); render(view:'changePhoto') in grails-app/controllers/org/pih/warehouse/user/UserController.groovy,users-security-2
+grails-app/views/user/create.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/user/UserController.groovy::create (implicit); render(view:'create') in grails-app/controllers/org/pih/warehouse/user/UserController.groovy,users-security-2
+grails-app/views/user/cropPhoto.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/user/UserController.groovy::cropPhoto (implicit),users-security-3
+grails-app/views/user/edit.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/user/UserController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/user/UserController.groovy,users-security-3
+grails-app/views/user/list.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/user/UserController.groovy::list (implicit); megamenu href /user/list (runtime.groovy),users-security-3
+grails-app/views/user/show.gsp,LIVE,controller action grails-app/controllers/org/pih/warehouse/user/UserController.groovy::show (implicit),users-security-3
