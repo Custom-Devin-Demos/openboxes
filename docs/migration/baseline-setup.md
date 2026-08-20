@@ -124,4 +124,5 @@ every pull request (`test-pull-request.yml`) and on pushes to main branches
 - **dbdocs publishing** (`dbdocs.yml`) — requires `DBDOCS_TOKEN`.
 
 Test execution itself (frontend Jest tests, backend unit + integration tests against
-MySQL 8 and MariaDB 10.3) runs fully on this fork.
+MySQL 8 and MariaDB 10.3) runs fully on this fork. All workflows build with
+Temurin (Adoptium) Java 11.
