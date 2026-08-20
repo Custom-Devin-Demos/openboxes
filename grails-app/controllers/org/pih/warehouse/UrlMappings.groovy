@@ -960,6 +960,55 @@ class UrlMappings {
         }
 
         /**
+         * Orders API endpoints
+         */
+
+        "/api/orders"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "list"]
+        }
+
+        "/api/orders/statusOptions"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "statusOptions"]
+        }
+
+        "/api/orders/orderTypeOptions"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "orderTypeOptions"]
+        }
+
+        "/api/orders/pendingOrderItems"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "pendingOrderItems"]
+        }
+
+        "/api/orders/orderItemSummaries"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "orderItemSummaries"]
+        }
+
+        "/api/orders/$id/summary"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "summary"]
+        }
+
+        "/api/orders/$id/commentFormData"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "commentFormData"]
+        }
+
+        "/api/orders/$id/documentFormData"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "documentFormData"]
+        }
+
+        "/api/orders/$id/adjustmentFormData"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "adjustmentFormData"]
+        }
+
+        /**
          * Products Configuration API endpoints
          */
 

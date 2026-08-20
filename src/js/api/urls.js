@@ -6,6 +6,17 @@ const API = '/api';
 export const GENERIC_API = `${API}/generic`;
 const { CONTEXT_PATH } = window;
 
+// ORDER
+export const ORDER_API = `${API}/orders`;
+export const ORDER_PENDING_ORDER_ITEMS = `${ORDER_API}/pendingOrderItems`;
+export const ORDER_ITEM_SUMMARIES = `${ORDER_API}/orderItemSummaries`;
+export const ORDER_STATUS_OPTIONS = `${ORDER_API}/statusOptions`;
+export const ORDER_TYPE_OPTIONS = `${ORDER_API}/orderTypeOptions`;
+export const ORDER_SUMMARY = (id) => `${ORDER_API}/${id}/summary`;
+export const ORDER_COMMENT_FORM_DATA = (id) => `${ORDER_API}/${id}/commentFormData`;
+export const ORDER_DOCUMENT_FORM_DATA = (id) => `${ORDER_API}/${id}/documentFormData`;
+export const ORDER_ADJUSTMENT_FORM_DATA = (id) => `${ORDER_API}/${id}/adjustmentFormData`;
+
 // PURCHASE ORDER
 export const PURCHASE_ORDER_API = `${API}/purchaseOrders`;
 export const PURCHASE_ORDER_DELETE = (id) => `${PURCHASE_ORDER_API}/${id}`;
