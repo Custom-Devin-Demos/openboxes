@@ -880,6 +880,61 @@ class UrlMappings {
             action = [GET: "getReorderReport"]
         }
 
+        "/api/inventory/browse" {
+            controller = { "inventoryApi" }
+            action = [GET: "browse"]
+        }
+
+        "/api/inventory/listInventory" {
+            controller = { "inventoryApi" }
+            action = [GET: "listInventory"]
+        }
+
+        "/api/inventory/editBinLocation" {
+            controller = { "inventoryApi" }
+            action = [GET: "editBinLocation"]
+        }
+
+        "/api/inventory/adjustStock" {
+            controller = { "inventoryApi" }
+            action = [POST: "adjustStock"]
+        }
+
+        "/api/inventory/createTransaction" {
+            controller = { "inventoryApi" }
+            action = [GET: "getCreateTransaction"]
+        }
+
+        "/api/inventory/saveAdjustmentTransaction" {
+            controller = { "inventoryApi" }
+            action = [POST: "saveAdjustmentTransaction"]
+        }
+
+        "/api/inventory/saveDebitTransaction" {
+            controller = { "inventoryApi" }
+            action = [POST: "saveDebitTransaction"]
+        }
+
+        "/api/inventory/saveCreditTransaction" {
+            controller = { "inventoryApi" }
+            action = [POST: "saveCreditTransaction"]
+        }
+
+        "/api/inventory/transactions/$id" {
+            controller = { "inventoryApi" }
+            action = [GET: "getTransaction"]
+        }
+
+        "/api/inventory/saveTransaction" {
+            controller = { "inventoryApi" }
+            action = [POST: "saveTransaction"]
+        }
+
+        "/api/inventory/transactionEntries/$id" {
+            controller = { "inventoryApi" }
+            action = [DELETE: "deleteTransactionEntry"]
+        }
+
         /**
         * Purchase Orders API endpoints
         */
