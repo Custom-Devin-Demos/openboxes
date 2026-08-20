@@ -1,6 +1,7 @@
 package org.pih.warehouse.api
 
 import grails.converters.JSON
+import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 import org.pih.warehouse.PaginatedList
 import org.pih.warehouse.auth.AuthService
@@ -152,7 +153,7 @@ class InventoryApiController {
                             name          : product.name,
                             color         : product.color,
                             hasImage      : !product.images?.empty,
-                            imageId       : product.thumbnail?.id,
+                            imageId       : product.images ? product.thumbnail?.id : null,
                             productType   : product.productType ? [id: product.productType.id, name: product.productType.name] : null,
                             category      : product.category ? [id: product.category.id, name: product.category.name] : null,
                             tags          : product.tags?.collect { [id: it.id, tag: it.tag] } ?: [],
@@ -248,6 +249,7 @@ class InventoryApiController {
      * Saves a stock adjustment submitted from the React edit bin location screen.
      * Mirrors InventoryItemController.adjustStock behavior with a JSON response.
      */
+    @Transactional
     def adjustStock(AdjustStockCommand command) {
         InventoryItem inventoryItem = command.inventoryItem
         try {
@@ -357,6 +359,7 @@ class InventoryApiController {
      * Saves an inventory adjustment transaction submitted from the React create transaction screen.
      * Mirrors InventoryController.saveAdjustmentTransaction with a JSON response.
      */
+    @Transactional
     def saveAdjustmentTransaction(TransactionCommand command) {
         def transaction = command?.transactionInstance
         def warehouseInstance = Location.get(session?.warehouse?.id)
@@ -403,6 +406,7 @@ class InventoryApiController {
      * Saves a debit transaction (transfer out / consumption) submitted from the React create transaction screen.
      * Mirrors InventoryController.saveDebitTransaction with a JSON response.
      */
+    @Transactional
     def saveDebitTransaction(TransactionCommand command) {
         command.transactionInstance = new Transaction(params.transactionInstance)
 
@@ -451,6 +455,7 @@ class InventoryApiController {
      * Saves a credit transaction (transfer in) submitted from the React create transaction screen.
      * Mirrors InventoryController.saveCreditTransaction with a JSON response.
      */
+    @Transactional
     def saveCreditTransaction(TransactionCommand command) {
         def transactionInstance = command?.transactionInstance
 
@@ -560,6 +565,7 @@ class InventoryApiController {
      * Saves transaction header/details submitted from the React edit transaction screen.
      * Mirrors InventoryController.saveTransaction with a JSON response.
      */
+    @Transactional
     def saveTransaction() {
         def transactionInstance = Transaction.get(params.id)
         if (!transactionInstance) {
@@ -600,6 +606,7 @@ class InventoryApiController {
      * Deletes a transaction entry from the React edit transaction screen.
      * Mirrors TransactionEntryController.delete with a JSON response.
      */
+    @Transactional
     def deleteTransactionEntry() {
         def transactionEntryInstance = TransactionEntry.get(params.id)
         if (!transactionEntryInstance) {
