@@ -439,8 +439,12 @@ class LocationEdit extends Component {
       ? `${LOCATION(this.locationId)}?useDefaultActivities=${this.state.useDefaultActivities}`
       : `/api/locations?useDefaultActivities=${this.state.useDefaultActivities}`;
 
+    // Only send the address when it has any value, otherwise binding an
+    // empty address object fails server-side validation
+    const hasAddress = _.some(_.values(values.address), (value) => value);
     const payload = {
-      ...values,
+      ..._.omit(values, 'address'),
+      ...(hasAddress ? { address: values.address } : {}),
       supportedActivities: _.map(values.supportedActivities, (val) => val.value),
     };
 

@@ -1,6 +1,6 @@
 // @ts-check
 const { expect } = require('@playwright/test');
-const { pickField, pickOption, pickToday, setChosenSelect } = require('./ui');
+const { pickField, pickOption, pickToday } = require('./ui');
 
 const DEPOT_NAME = process.env.OB_E2E_DEPOT || 'E2E Depot';
 
@@ -9,20 +9,24 @@ const DEPOT_NAME = process.env.OB_E2E_DEPOT || 'E2E Depot';
  * requests have a destination/fulfilling location other than the main
  * warehouse. Idempotent: only creates the location on first run.
  *
- * Note: the legacy app has no location/create action; the "add location"
- * button on location/list points at location/edit with no id.
+ * The location list/edit screens are React (they fetch their data through
+ * /api/locations/search), so this waits for the list data and drives the
+ * React form fields rather than the legacy GSP inputs.
  */
 async function ensureDepot(page) {
+  const listResponse = page.waitForResponse((r) => r.url().includes('/api/locations/search'));
   await page.goto('location/list');
-  await page.waitForLoadState('domcontentloaded');
+  await listResponse.catch(() => {});
   if (await page.locator(`text=${DEPOT_NAME}`).count()) return;
 
   await page.goto('location/edit');
-  await page.locator('input[name="name"]:visible').first().fill(DEPOT_NAME);
-  await setChosenSelect(page, 'organization.id', 'Main Organization');
-  await setChosenSelect(page, 'locationType.id', 'Depot');
+  const nameInput = page
+    .locator('[data-testid="form-field"][aria-label="Name"] input:visible')
+    .first();
+  await nameInput.fill(DEPOT_NAME);
+  await pickField(page, 'Organization', 'Main Organization');
+  await pickField(page, 'Location Type', 'Depot');
   await page.locator('button:has-text("Save")').first().click();
-  await page.waitForLoadState('domcontentloaded');
   await expect(page).toHaveURL(/location\/edit\/\w+/);
 }
 
