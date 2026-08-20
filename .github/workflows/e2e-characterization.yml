@@ -1,0 +1,111 @@
+name: E2E Characterization (UI parity oracle)
+
+# Manual trigger only (workflow_dispatch): a cold boot of the legacy app in CI
+# runs the full Liquibase migration chain (~5-10 minutes) on top of the Gradle
+# build and frontend bundle, so the whole job takes ~30-45 minutes. That is too
+# slow to put on every PR while the suite is young; run it manually before and
+# after migration-heavy changes (Grails upgrades, GSP->React rewrites). See
+# docs/migration/characterization-ui.md for the full rationale and local runs.
+on:
+  workflow_dispatch:
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    services:
+      mariadb:
+        image: mariadb:10.3.39
+        env:
+          MYSQL_DATABASE: openboxes
+          MYSQL_USER: openboxes
+          MYSQL_PASSWORD: openboxes
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -uopenboxes -popenboxes"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 8 (app)
+        uses: actions/setup-java@v4
+        with:
+          java-version: 8
+          distribution: temurin
+          cache: gradle
+
+      - name: Set up Node 14 (app frontend bundle)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 14
+
+      - name: Configure app database connection
+        run: |
+          mkdir -p ~/.grails
+          cat > ~/.grails/openboxes-config.properties <<'EOF'
+          dataSource.username=openboxes
+          dataSource.password=openboxes
+          dataSource.url=jdbc:mysql://localhost:3306/openboxes?serverTimezone=UTC&useSSL=false
+          grails.mail.enabled=false
+          EOF
+
+      # First boot runs all Liquibase migrations and creates the base data
+      # (admin user, Main Warehouse). The seed script needs the schema, and the
+      # product-availability cache only picks up seeded stock on boot, so:
+      # boot -> seed -> restart -> test.
+      - name: Boot app (runs Liquibase migrations)
+        run: |
+          ./gradlew bootRun --no-daemon > bootrun-1.log 2>&1 &
+          echo $! > bootrun.pid
+          timeout 2400 bash -c 'until curl -sf http://localhost:8080/openboxes/auth/login > /dev/null; do sleep 10; done'
+
+      - name: Seed demo data and restart app
+        run: |
+          mysql -h127.0.0.1 -uopenboxes -popenboxes openboxes < docker/seed-demo-data.sql
+          kill "$(cat bootrun.pid)" || true
+          sleep 15
+          ./gradlew bootRun --no-daemon > bootrun-2.log 2>&1 &
+          timeout 1200 bash -c 'until curl -sf http://localhost:8080/openboxes/auth/login > /dev/null; do sleep 10; done'
+
+      - name: Set up Node 20 (Playwright)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Playwright
+        working-directory: e2e
+        run: |
+          npm install
+          npx playwright install --with-deps chromium
+
+      - name: Run characterization suite
+        working-directory: e2e
+        run: npm run e2e
+        env:
+          BASE_URL: http://localhost:8080/openboxes
+
+      - name: Upload Playwright report + baseline screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-characterization-artifacts
+          path: |
+            e2e/playwright-report/
+            e2e/screenshots/
+            e2e/test-results/
+          retention-days: 30
+
+      - name: Upload app boot logs (debugging)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-boot-logs
+          path: bootrun-*.log
+          retention-days: 7
