@@ -50,7 +50,11 @@ const BudgetCodeList = () => {
       accessor: 'active',
       width: 80,
       Cell: (row) => (
-        <TableCell {...row} value={row.original.active ? 'True' : 'False'} />
+        <TableCell {...row}>
+          {row.original.active
+            ? <Translate id="react.default.yes.label" defaultMessage="Yes" />
+            : <Translate id="react.default.no.label" defaultMessage="No" />}
+        </TableCell>
       ),
     },
     {
