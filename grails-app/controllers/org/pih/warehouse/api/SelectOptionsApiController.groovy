@@ -15,6 +15,7 @@ import org.pih.warehouse.core.PaymentTerm
 import org.pih.warehouse.core.PreferenceType
 import org.pih.warehouse.core.RatingTypeCode
 import org.pih.warehouse.core.Tag
+import org.pih.warehouse.core.UnitOfMeasureClass
 import org.pih.warehouse.core.User
 import org.pih.warehouse.core.UserService
 import org.pih.warehouse.data.ProductSupplierService
@@ -68,6 +69,14 @@ class SelectOptionsApiController {
                     [id: it.id, label: it.getHierarchyAsString(" > ")]
                 }
         render([data: categories] as JSON)
+    }
+
+    def unitOfMeasureClassOptions() {
+        List<UnitOfMeasureClass> uomClasses = genericApiService.getList(UnitOfMeasureClass.class.simpleName, [:])
+                .collect {
+                    [id: it.id, label: "${it.name} (default=${it?.baseUom?.name})"]
+                }
+        render([data: uomClasses] as JSON)
     }
 
     def tagOptions() {

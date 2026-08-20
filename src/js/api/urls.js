@@ -134,6 +134,19 @@ export const RATING_TYPE_OPTIONS = `${API}/ratingTypeCodeOptions`;
 
 // ATTRIBUTES
 export const ATTRIBUTES = `${API}/attributes`;
+export const ATTRIBUTES_SEARCH = `${ATTRIBUTES}/search`;
+export const ATTRIBUTE_BY_ID = (id) => `${ATTRIBUTES}/${id}`;
+
+// CATEGORIES
+export const CATEGORIES = `${API}/categories`;
+export const CATEGORIES_TREE = `${CATEGORIES}/tree`;
+export const CATEGORIES_MOVE = `${CATEGORIES}/move`;
+export const CATEGORIES_SAVE = `${CATEGORIES}/saveCategory`;
+export const CATEGORIES_UPDATE_ASSIGNING_PARENT_TO_PRODUCT = `${CATEGORIES}/updateAssigningParentToProduct`;
+export const CATEGORY_DETAILS = (id) => `${CATEGORIES}/${id}/details`;
+export const CATEGORY_DELETE = (id) => `${CATEGORIES}/${id}/deleteCategory`;
+export const CATEGORY_OPTIONS = `${API}/categoryOptions`;
+export const UNIT_OF_MEASURE_CLASS_OPTIONS = `${API}/unitOfMeasureClassOptions`;
 
 // LOCATIONS
 export const LOCATION_API = `${API}/locations`;

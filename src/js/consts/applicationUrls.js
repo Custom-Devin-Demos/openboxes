@@ -198,7 +198,17 @@ const REPLENISHMENT_URL = {
 
 const CATEGORY_URL = {
   base: `${CONTEXT_PATH}/category`,
-  tree: () => `${CATEGORY_URL.base}/tree`,
+  tree: (id) => (id ? `${CATEGORY_URL.base}/tree?id=${id}` : `${CATEGORY_URL.base}/tree`),
+  create: () => `${CATEGORY_URL.base}/create`,
+  edit: (id) => `${CATEGORY_URL.base}/edit/${id}`,
+};
+
+const ATTRIBUTE_URL = {
+  base: `${CONTEXT_PATH}/attribute`,
+  list: () => `${ATTRIBUTE_URL.base}/list`,
+  create: () => `${ATTRIBUTE_URL.base}/create`,
+  edit: (id) => `${ATTRIBUTE_URL.base}/edit/${id}`,
+  show: (id) => `${ATTRIBUTE_URL.base}/show/${id}`,
 };
 
 const PRODUCT_SUPPLIER_URL = {
@@ -240,6 +250,7 @@ const ADMIN_URL = {
 
 export {
   ADMIN_URL,
+  ATTRIBUTE_URL,
   BUDGET_CODE_URL,
   CATEGORY_URL,
   CYCLE_COUNT,
