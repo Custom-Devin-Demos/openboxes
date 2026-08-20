@@ -708,7 +708,7 @@ class StockMovementService {
                 ]
             }
 
-            def details = requisitionDetails.pop()
+            def details = requisitionDetails.removeLast()
 
             results << [
                     'destination.name'          : destination.name,
@@ -3282,7 +3282,7 @@ class StockMovementService {
         ShipmentItem shipmentItem = ShipmentItem.get(packPageItem?.shipmentItemId)
 
         if (packPageItem?.splitLineItems && shipmentItem) {
-            PackPageItem item = packPageItem.splitLineItems.pop()
+            PackPageItem item = packPageItem.splitLineItems.removeLast()
             shipmentItem.quantity = item?.quantityShipped
             shipmentItem.recipient = item?.recipient
             shipmentItem.container = createOrUpdateContainer(shipmentItem.shipment, item?.palletName, item?.boxName)

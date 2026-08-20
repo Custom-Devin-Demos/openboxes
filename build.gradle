@@ -137,6 +137,16 @@ bootRun {
      * classpath, so re-add the migrations directory here.
      */
     classpath += files('grails-app/migrations')
+    /*
+     * git.properties (from the gradle-git-properties plugin) lands in
+     * build/resources/main, which sourceResources removes from the dev
+     * classpath. Spring Boot only creates the GitProperties bean when the
+     * file is on the classpath, and /api/getAppContext depends on that bean.
+     * Copy just that file (adding all of build/resources/main would put a
+     * second copy of the Liquibase changelogs on the classpath).
+     */
+    dependsOn 'copyGitPropertiesForBootRun'
+    classpath += files("${buildDir}/bootRunGitProperties")
     jvmArgs = [
         '-Dspring.output.ansi.enabled=never',
         '-Xdebug',
@@ -146,6 +156,18 @@ bootRun {
 
     // if using a Gradle daemon, don't use its working directory
     systemProperty 'user.dir', project.projectDir.absolutePath
+}
+
+task copyGitPropertiesForBootRun(type: Copy) {
+    dependsOn 'generateGitProperties'
+    from "${buildDir}/resources/main/git.properties"
+    into "${buildDir}/bootRunGitProperties"
+}
+
+// Groovy 2.5 needs more than the forked compiler's default heap for this codebase
+tasks.withType(GroovyCompile).configureEach {
+    groovyOptions.fork = true
+    groovyOptions.forkOptions.memoryMaximumSize = '2g'
 }
 
 configurations {
@@ -773,6 +795,13 @@ dependencies {
     implementation 'org.slf4j:jul-to-slf4j'  // java.util.logging -> slf4j
     implementation 'org.slf4j:log4j-over-slf4j'  // log4j1 -> slf4j; cf. log4j-to-slf4j
     implementation 'org.slf4j:slf4j-api'  // slf4j itself
+
+    /*
+     * Enable `import org.json.JSONArray` in tests; under Grails 3 this came
+     * in transitively, but Grails 4's test dependency graph no longer
+     * provides it.
+     */
+    testCompile 'org.json:json:20231013'
 
     /*
      * Enable `import spock.lang.*`.

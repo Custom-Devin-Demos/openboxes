@@ -590,7 +590,7 @@ openboxes:
 
     # Allow users to customize logo image url as well as label
     logo:
-        url: "${server.contextPath}/assets/openboxes_logo_40x40.jpg"
+        url: "${server.servlet.context-path}/assets/openboxes_logo_40x40.jpg"
         label: ""
     report:
         logo:
