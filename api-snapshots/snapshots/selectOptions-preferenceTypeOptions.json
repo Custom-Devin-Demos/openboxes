@@ -1,0 +1,44 @@
+{
+  "name": "selectOptions-preferenceTypeOptions",
+  "controller": "SelectOptionsApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/preferenceTypeOptions"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [
+      {
+        "id": "APPROVED",
+        "label": "Approved",
+        "value": "APPROVED"
+      },
+      {
+        "id": "CONTRACT",
+        "label": "Contract",
+        "value": "CONTRACT"
+      },
+      {
+        "id": "DO NOT ORDER",
+        "label": "Do Not Order",
+        "value": "DO NOT ORDER"
+      },
+      {
+        "id": "NOT QUALIFIED",
+        "label": "Not Qualified",
+        "value": "NOT QUALIFIED"
+      },
+      {
+        "id": "PREFERRED",
+        "label": "Preferred",
+        "value": "PREFERRED"
+      },
+      {
+        "id": "QUALIFIED",
+        "label": "Qualified",
+        "value": "QUALIFIED"
+      }
+    ]
+  }
+}

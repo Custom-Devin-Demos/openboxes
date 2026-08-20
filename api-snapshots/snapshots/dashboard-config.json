@@ -1,0 +1,491 @@
+{
+  "name": "dashboard-config",
+  "controller": "DashboardApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/dashboard/personal/config"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "dashboard": null,
+    "dashboardWidgets": {
+      "inProgressPutaways": {
+        "enabled": true,
+        "title": "react.dashboard.inProgressPutaways.title.label",
+        "info": "react.dashboard.inProgressPutaways.info.label",
+        "subtitle": "react.dashboard.subtitle.putaways.label",
+        "numberType": "number",
+        "type": "number",
+        "endpoint": "/api/dashboard/inProgressPutaways"
+      },
+      "inventoryByLotAndBin": {
+        "enabled": true,
+        "title": "react.dashboard.inventoryByLotAndBin.title.label",
+        "info": "react.dashboard.inventoryByLotAndBin.info.label",
+        "subtitle": "react.dashboard.subtitle.inStock.label",
+        "numberType": "number",
+        "type": "number",
+        "endpoint": "/api/dashboard/inventoryByLotAndBin"
+      },
+      "inProgressShipments": {
+        "enabled": true,
+        "title": "react.dashboard.inProgressShipments.title.label",
+        "info": "react.dashboard.inProgressShipments.info.label",
+        "subtitle": "react.dashboard.subtitle.shipments.label",
+        "numberType": "number",
+        "type": "number",
+        "endpoint": "/api/dashboard/inProgressShipments"
+      },
+      "receivingBin": {
+        "enabled": true,
+        "title": "react.dashboard.receivingBin.title.label",
+        "info": "react.dashboard.receivingBin.info.label",
+        "subtitle": "react.dashboard.subtitle.products.label",
+        "numberType": "number",
+        "type": "number",
+        "endpoint": "/api/dashboard/receivingBin"
+      },
+      "itemsInventoried": {
+        "enabled": true,
+        "title": "react.dashboard.itemsInventoried.title.label",
+        "info": "react.dashboard.itemsInventoried.info.label",
+        "subtitle": "react.dashboard.subtitle.items.label",
+        "numberType": "number",
+        "type": "number",
+        "endpoint": "/api/dashboard/itemsInventoried"
+      },
+      "defaultBin": {
+        "enabled": true,
+        "title": "react.dashboard.defaultBin.title.label",
+        "info": "react.dashboard.defaultBin.info.label",
+        "subtitle": "react.dashboard.subtitle.products.label",
+        "numberType": "number",
+        "type": "number",
+        "endpoint": "/api/dashboard/defaultBin"
+      },
+      "negativeInventory": {
+        "enabled": true,
+        "title": "react.dashboard.productWithNegativeInventory.title.label",
+        "info": "react.dashboard.productWithNegativeInventory.info.label",
+        "subtitle": "react.dashboard.subtitle.products.label",
+        "numberType": "number",
+        "type": "number",
+        "endpoint": "/api/dashboard/productWithNegativeInventory"
+      },
+      "expiredStock": {
+        "enabled": true,
+        "title": "react.dashboard.expiredProductsInStock.title.label",
+        "info": "react.dashboard.expiredProductsInStock.info.label",
+        "subtitle": "react.dashboard.subtitle.products.label",
+        "numberType": "number",
+        "type": "number",
+        "endpoint": "/api/dashboard/expiredProductsInStock"
+      },
+      "openStockRequests": {
+        "enabled": true,
+        "title": "react.dashboard.openStockRequests.title.label",
+        "info": "react.dashboard.openStockRequests.info.label",
+        "subtitle": "react.dashboard.requests.subtitle.label",
+        "numberType": "number",
+        "type": "number",
+        "endpoint": "/api/dashboard/openStockRequests"
+      },
+      "requestsPendingApproval": {
+        "enabled": true,
+        "title": "react.dashboard.requestsPendingApproval.title.label",
+        "info": "react.dashboard.requestsPendingApproval.info.label",
+        "subtitle": "react.dashboard.requests.subtitle.label",
+        "numberType": "number",
+        "type": "number",
+        "endpoint": "/api/dashboard/requestsPendingApproval"
+      },
+      "inventoryValue": {
+        "enabled": true,
+        "title": "react.dashboard.inventoryValue.title.label",
+        "info": "",
+        "subtitle": "react.dashboard.subtitle.inStock.label",
+        "numberType": "dollars",
+        "type": "number",
+        "endpoint": "/api/dashboard/inventoryValue"
+      },
+      "fillRateSnapshot": {
+        "enabled": true,
+        "title": "react.dashboard.fillRateSnapshot.title.label",
+        "info": "react.dashboard.fillRateSnapshot.info.label",
+        "graphType": "sparkline",
+        "type": "number",
+        "endpoint": "/api/dashboard/fillRateSnapshot"
+      },
+      "requisitionCountByYear": {
+        "enabled": true,
+        "title": "react.dashboard.requisitionCountByYear.title.label",
+        "info": "react.dashboard.requisitionCountByYear.info.label",
+        "graphType": "bar",
+        "type": "graph",
+        "endpoint": "/api/dashboard/requisitionsByYear",
+        "yearTypeFilter": {
+          "parameter": "yearType",
+          "defaultValue": "fiscalYear",
+          "options": [
+            {
+              "label": "react.dashboard.fiscalYear.label",
+              "value": "fiscalYear"
+            },
+            {
+              "label": "react.dashboard.calendarYear.label",
+              "value": "calendarYear"
+            }
+          ]
+        }
+      },
+      "inventorySummary": {
+        "enabled": true,
+        "title": "react.dashboard.inventorySummaryData.title.label",
+        "info": "react.dashboard.inventorySummaryData.info.label",
+        "graphType": "horizontalBar",
+        "type": "graph",
+        "endpoint": "/api/dashboard/inventorySummary",
+        "datalabel": true,
+        "colors": {
+          "labels": {
+            "success": [
+              "In stock"
+            ],
+            "warning": [
+              "Above maximum",
+              "Below reorder",
+              "Below minimum"
+            ],
+            "error": [
+              "No longer in stock"
+            ]
+          }
+        }
+      },
+      "expirationSummary": {
+        "enabled": true,
+        "title": "react.dashboard.expirationSummaryData.title.label",
+        "info": "react.dashboard.expirationSummaryData.info.label",
+        "graphType": "line",
+        "type": "graph",
+        "endpoint": "/api/dashboard/expirationSummary",
+        "timeFilter": true,
+        "colors": {
+          "datasets": {
+            "state6": [
+              "Expiration(s)"
+            ]
+          },
+          "labels": {
+            "state5": [
+              {
+                "code": "react.dashboard.timeline.today.label",
+                "message": "today"
+              },
+              {
+                "code": "react.dashboard.timeline.within30Days.label",
+                "message": "within 30 days"
+              },
+              {
+                "code": "react.dashboard.timeline.within90Days.label",
+                "message": "within 90 days"
+              },
+              {
+                "code": "react.dashboard.timeline.within180Days.label",
+                "message": "within 180 days"
+              },
+              {
+                "code": "react.dashboard.timeline.within360Days.label",
+                "message": "within 360 days"
+              }
+            ]
+          }
+        }
+      },
+      "incomingStock": {
+        "enabled": true,
+        "title": "react.dashboard.incomingStock.title.label",
+        "info": "react.dashboard.incomingStock.info.label",
+        "graphType": "numbers",
+        "type": "graph",
+        "endpoint": "/api/dashboard/incomingStock",
+        "colors": {
+          "datasets": {
+            "state6": [
+              "first"
+            ],
+            "state7": [
+              "second"
+            ],
+            "state8": [
+              "third"
+            ]
+          }
+        }
+      },
+      "outgoingStock": {
+        "enabled": true,
+        "title": "react.dashboard.outgoingStock.title.label",
+        "info": "react.dashboard.outgoingStock.info.label",
+        "graphType": "numbers",
+        "type": "graph",
+        "endpoint": "/api/dashboard/outgoingStock",
+        "colors": {
+          "datasets": {
+            "success": [
+              "first"
+            ],
+            "warning": [
+              "second"
+            ],
+            "error": [
+              "third"
+            ]
+          }
+        }
+      },
+      "receivedStockMovements": {
+        "enabled": true,
+        "title": "react.dashboard.receivedStockData.title.label",
+        "info": "react.dashboard.receivedStockData.info.label",
+        "graphType": "bar",
+        "type": "graph",
+        "endpoint": "/api/dashboard/receivedStockMovements",
+        "timeFilter": true,
+        "stacked": true,
+        "datalabel": true
+      },
+      "discrepancy": {
+        "enabled": true,
+        "title": "react.dashboard.discrepancy.title.label",
+        "info": "react.dashboard.discrepancy.info.label",
+        "graphType": "table",
+        "type": "graph",
+        "endpoint": "/api/dashboard/discrepancy",
+        "timeFilter": true
+      },
+      "delayedShipments": {
+        "enabled": true,
+        "title": "react.dashboard.delayedShipments.title.label",
+        "info": "react.dashboard.delayedShipments.info.label",
+        "graphType": "numberTable",
+        "type": "graph",
+        "endpoint": "/api/dashboard/delayedShipments",
+        "colors": {
+          "datasets": {
+            "state5": [
+              "first"
+            ],
+            "state4": [
+              "second"
+            ],
+            "state3": [
+              "third"
+            ]
+          }
+        }
+      },
+      "sentStockMovements": {
+        "enabled": true,
+        "title": "react.dashboard.sentStockMovements.title.label",
+        "info": "react.dashboard.sentStockMovements.info.label",
+        "graphType": "bar",
+        "type": "graph",
+        "endpoint": "/api/dashboard/sentStockMovements",
+        "timeFilter": true,
+        "stacked": true,
+        "datalabel": true
+      },
+      "lossCausedByExpiry": {
+        "enabled": false,
+        "title": "react.dashboard.lossCausedByExpiry.title.label",
+        "info": "",
+        "graphType": "bar",
+        "type": "graph",
+        "endpoint": "/api/dashboard/lossCausedByExpiry",
+        "timeFilter": true,
+        "stacked": true,
+        "colors": {
+          "datasets": {
+            "success": [
+              "Inventory value not expired last day of month"
+            ],
+            "warning": [
+              "Inventory value expired last day of month"
+            ],
+            "error": [
+              "Inventory value removed due to expiry"
+            ]
+          }
+        }
+      },
+      "productsInventoried": {
+        "enabled": false,
+        "title": "react.dashboard.productsInventoried.title.label",
+        "info": "",
+        "graphType": "numbersCustomColors",
+        "type": "graph",
+        "endpoint": "/api/dashboard/productsInventoried",
+        "colors": {
+          "datasets": {
+            "state6": [
+              "first"
+            ],
+            "state7": [
+              "second"
+            ],
+            "state8": [
+              "third"
+            ]
+          }
+        }
+      },
+      "percentageAdHoc": {
+        "enabled": true,
+        "title": "react.dashboard.percentageAdHoc.title.label",
+        "info": "react.dashboard.percentageAdHoc.info.label",
+        "graphType": "doughnut",
+        "type": "graph",
+        "endpoint": "/api/dashboard/percentageAdHoc",
+        "legend": true,
+        "datalabel": true,
+        "colors": {
+          "labels": {
+            "state5": [
+              "STOCK"
+            ],
+            "state4": [
+              "ADHOC"
+            ]
+          }
+        }
+      },
+      "fillRate": {
+        "enabled": true,
+        "title": "react.dashboard.fillRate.title.label",
+        "info": "react.dashboard.fillRate.info.label",
+        "graphType": "bar",
+        "type": "graph",
+        "legend": true,
+        "endpoint": "/api/dashboard/fillRate",
+        "timeFilter": true,
+        "locationFilter": true,
+        "timeLimit": 12,
+        "doubleAxeY": true,
+        "datalabel": false,
+        "size": "big",
+        "colors": {
+          "datasets": {
+            "state3": [
+              "Request lines submitted"
+            ],
+            "state6": [
+              "Lines cancelled stock out"
+            ],
+            "state2": [
+              "Average Fill Rate"
+            ],
+            "state8": [
+              "Average of target Fill Rate"
+            ]
+          }
+        }
+      },
+      "stockOutLastMonth": {
+        "enabled": true,
+        "title": "react.dashboard.stockOutLastMonth.title.label",
+        "info": "react.dashboard.stockOutLastMonth.info.label",
+        "graphType": "doughnut",
+        "type": "graph",
+        "endpoint": "/api/dashboard/stockOutLastMonth",
+        "legend": true,
+        "datalabel": true,
+        "colors": {
+          "labels": {
+            "success": [
+              "Never"
+            ],
+            "warning": [
+              "Stocked out <1 week"
+            ],
+            "state2": [
+              "Stocked out 1-2 weeks"
+            ],
+            "state1": [
+              "Stocked out 2-3 weeks"
+            ],
+            "error": [
+              "Stocked out 3-4 weeks"
+            ]
+          }
+        }
+      },
+      "numberOfOpenPurchaseOrders": {
+        "enabled": true,
+        "title": "react.dashboard.numberOfOpenPurchaseOrders.title.label",
+        "info": "react.dashboard.numberOfOpenPurchaseOrders.info.label",
+        "subtitle": "react.dashboard.subtitle.purchaseOrders.label",
+        "numberType": "number",
+        "type": "number",
+        "endpoint": "/api/dashboard/openPurchaseOrdersCount"
+      },
+      "backdatedOutboundShipments": {
+        "enabled": true,
+        "title": "react.dashboard.backdatedOutboundShipments.title.label",
+        "info": "react.dashboard.backdatedOutboundShipments.info.label",
+        "graphType": "bar",
+        "type": "graph",
+        "endpoint": "/api/dashboard/backdatedOutboundShipments",
+        "timeFilter": true,
+        "timeLimit": 6,
+        "datalabel": true
+      },
+      "backdatedInboundShipments": {
+        "enabled": true,
+        "title": "react.dashboard.backdatedInboundShipments.title.label",
+        "info": "react.dashboard.backdatedInboundShipments.info.label",
+        "graphType": "bar",
+        "type": "graph",
+        "endpoint": "/api/dashboard/backdatedInboundShipments",
+        "timeFilter": true,
+        "timeLimit": 6,
+        "datalabel": true
+      },
+      "itemsWithBackdatedShipments": {
+        "enabled": true,
+        "title": "react.dashboard.itemsWithBackdatedShipments.title.label",
+        "info": "react.dashboard.itemsWithBackdatedShipments.info.label",
+        "graphType": "numberTable",
+        "type": "graph",
+        "endpoint": "/api/dashboard/itemsWithBackdatedShipments",
+        "colors": {
+          "datasets": {
+            "state3": [
+              "first"
+            ],
+            "state5": [
+              "second"
+            ],
+            "state1": [
+              "third"
+            ],
+            "state9": [
+              "fourth"
+            ]
+          }
+        },
+        "columnsSize": {
+          "name": "auto"
+        },
+        "truncationLength": {
+          "value": 100,
+          "number": 5
+        },
+        "disableTruncation": {
+          "name": true
+        }
+      }
+    }
+  }
+}

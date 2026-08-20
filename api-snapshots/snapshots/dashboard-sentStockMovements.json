@@ -1,0 +1,40 @@
+{
+  "name": "dashboard-sentStockMovements",
+  "controller": "DashboardApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/dashboard/sentStockMovements?locationId={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": {
+      "labels": [
+        "Mar 2026",
+        "Apr 2026",
+        "May 2026",
+        "Jun 2026",
+        "Jul 2026",
+        "Aug 2026"
+      ],
+      "datasets": [
+        {
+          "label": null,
+          "data": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "links": null,
+          "type": null,
+          "yAxisID": null
+        }
+      ],
+      "colorNumber": null
+    },
+    "link": null
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "stocklists-list",
+  "controller": "StocklistApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/stocklists"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [],
+    "totalCount": 0
+  }
+}

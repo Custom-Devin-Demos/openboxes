@@ -1,0 +1,28 @@
+{
+  "name": "scenario-locationGroup-create-read-delete",
+  "controller": "LocationGroupApiController",
+  "steps": {
+    "create": {
+      "status": 200,
+      "body": {
+        "data": {
+          "id": "<uuid>"
+        }
+      }
+    },
+    "read": {
+      "status": 200,
+      "body": {
+        "data": {
+          "id": "<uuid>",
+          "name": "API Snapshot Scratch Location Group",
+          "address": null
+        }
+      }
+    },
+    "delete": {
+      "status": 204,
+      "body": null
+    }
+  }
+}

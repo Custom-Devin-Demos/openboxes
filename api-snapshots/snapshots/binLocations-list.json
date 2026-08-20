@@ -1,0 +1,13 @@
+{
+  "name": "binLocations-list",
+  "controller": "BinLocationApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/binLocations?location.id={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": []
+  }
+}

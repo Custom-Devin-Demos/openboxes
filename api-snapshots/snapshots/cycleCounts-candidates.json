@@ -1,0 +1,225 @@
+{
+  "name": "cycleCounts-candidates",
+  "controller": "CycleCountApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/facilities/{facilityId}/cycle-counts/candidates"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [
+      {
+        "product": {
+          "id": "seed-product-01",
+          "name": "Acetaminophen 325mg tablet",
+          "productCode": "DM0001"
+        },
+        "dateLastCount": "<date>",
+        "dateNextCount": "<date>",
+        "daysUntilNextCount": 365,
+        "category": {
+          "id": "seed-category-medicines",
+          "name": "Medicines"
+        },
+        "internalLocations": "DEFAULT",
+        "tags": [],
+        "productCatalogs": [],
+        "abcClass": null,
+        "quantityOnHand": 500,
+        "quantityAllocated": 0,
+        "cycleCountRequest": null,
+        "status": "null",
+        "inventoryItemCount": 1,
+        "negativeItemCount": 0,
+        "hasStockOnHandOrNegativeStock": true,
+        "sortOrder": 2
+      },
+      {
+        "product": {
+          "id": "seed-product-02",
+          "name": "Amoxicillin 500mg capsule",
+          "productCode": "DM0002"
+        },
+        "dateLastCount": "<date>",
+        "dateNextCount": "<date>",
+        "daysUntilNextCount": 365,
+        "category": {
+          "id": "seed-category-medicines",
+          "name": "Medicines"
+        },
+        "internalLocations": "DEFAULT",
+        "tags": [],
+        "productCatalogs": [],
+        "abcClass": null,
+        "quantityOnHand": 300,
+        "quantityAllocated": 0,
+        "cycleCountRequest": null,
+        "status": "null",
+        "inventoryItemCount": 1,
+        "negativeItemCount": 0,
+        "hasStockOnHandOrNegativeStock": true,
+        "sortOrder": 2
+      },
+      {
+        "product": {
+          "id": "seed-product-03",
+          "name": "Ibuprofen 200mg tablet",
+          "productCode": "DM0003"
+        },
+        "dateLastCount": "<date>",
+        "dateNextCount": "<date>",
+        "daysUntilNextCount": 365,
+        "category": {
+          "id": "seed-category-medicines",
+          "name": "Medicines"
+        },
+        "internalLocations": "DEFAULT",
+        "tags": [],
+        "productCatalogs": [],
+        "abcClass": null,
+        "quantityOnHand": 400,
+        "quantityAllocated": 0,
+        "cycleCountRequest": null,
+        "status": "null",
+        "inventoryItemCount": 1,
+        "negativeItemCount": 0,
+        "hasStockOnHandOrNegativeStock": true,
+        "sortOrder": 2
+      },
+      {
+        "product": {
+          "id": "seed-product-04",
+          "name": "Oral rehydration salts sachet",
+          "productCode": "DM0004"
+        },
+        "dateLastCount": "<date>",
+        "dateNextCount": "<date>",
+        "daysUntilNextCount": 365,
+        "category": {
+          "id": "seed-category-medicines",
+          "name": "Medicines"
+        },
+        "internalLocations": "DEFAULT",
+        "tags": [],
+        "productCatalogs": [],
+        "abcClass": null,
+        "quantityOnHand": 250,
+        "quantityAllocated": 0,
+        "cycleCountRequest": null,
+        "status": "null",
+        "inventoryItemCount": 1,
+        "negativeItemCount": 0,
+        "hasStockOnHandOrNegativeStock": true,
+        "sortOrder": 2
+      },
+      {
+        "product": {
+          "id": "seed-product-05",
+          "name": "Examination gloves, nitrile, medium",
+          "productCode": "DS0001"
+        },
+        "dateLastCount": "<date>",
+        "dateNextCount": "<date>",
+        "daysUntilNextCount": 365,
+        "category": {
+          "id": "seed-category-supplies",
+          "name": "Medical Supplies"
+        },
+        "internalLocations": "DEFAULT",
+        "tags": [],
+        "productCatalogs": [],
+        "abcClass": null,
+        "quantityOnHand": 100,
+        "quantityAllocated": 0,
+        "cycleCountRequest": null,
+        "status": "null",
+        "inventoryItemCount": 1,
+        "negativeItemCount": 0,
+        "hasStockOnHandOrNegativeStock": true,
+        "sortOrder": 2
+      },
+      {
+        "product": {
+          "id": "seed-product-06",
+          "name": "Syringe 5ml with needle",
+          "productCode": "DS0002"
+        },
+        "dateLastCount": "<date>",
+        "dateNextCount": "<date>",
+        "daysUntilNextCount": 365,
+        "category": {
+          "id": "seed-category-supplies",
+          "name": "Medical Supplies"
+        },
+        "internalLocations": "DEFAULT",
+        "tags": [],
+        "productCatalogs": [],
+        "abcClass": null,
+        "quantityOnHand": 1000,
+        "quantityAllocated": 0,
+        "cycleCountRequest": null,
+        "status": "null",
+        "inventoryItemCount": 1,
+        "negativeItemCount": 0,
+        "hasStockOnHandOrNegativeStock": true,
+        "sortOrder": 2
+      },
+      {
+        "product": {
+          "id": "seed-product-07",
+          "name": "Gauze roll 10cm x 4m",
+          "productCode": "DS0003"
+        },
+        "dateLastCount": "<date>",
+        "dateNextCount": "<date>",
+        "daysUntilNextCount": 365,
+        "category": {
+          "id": "seed-category-supplies",
+          "name": "Medical Supplies"
+        },
+        "internalLocations": "DEFAULT",
+        "tags": [],
+        "productCatalogs": [],
+        "abcClass": null,
+        "quantityOnHand": 600,
+        "quantityAllocated": 0,
+        "cycleCountRequest": null,
+        "status": "null",
+        "inventoryItemCount": 1,
+        "negativeItemCount": 0,
+        "hasStockOnHandOrNegativeStock": true,
+        "sortOrder": 2
+      },
+      {
+        "product": {
+          "id": "seed-product-08",
+          "name": "Surgical face mask",
+          "productCode": "DS0004"
+        },
+        "dateLastCount": "<date>",
+        "dateNextCount": "<date>",
+        "daysUntilNextCount": 365,
+        "category": {
+          "id": "seed-category-supplies",
+          "name": "Medical Supplies"
+        },
+        "internalLocations": "DEFAULT",
+        "tags": [],
+        "productCatalogs": [],
+        "abcClass": null,
+        "quantityOnHand": 200,
+        "quantityAllocated": 0,
+        "cycleCountRequest": null,
+        "status": "null",
+        "inventoryItemCount": 1,
+        "negativeItemCount": 0,
+        "hasStockOnHandOrNegativeStock": true,
+        "sortOrder": 2
+      }
+    ],
+    "status": 200,
+    "count": 8,
+    "totalCount": 8
+  }
+}

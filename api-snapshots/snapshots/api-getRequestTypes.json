@@ -1,0 +1,22 @@
+{
+  "name": "api-getRequestTypes",
+  "controller": "ApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/getRequestTypes"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [
+      {
+        "id": "STOCK",
+        "name": "Stock"
+      },
+      {
+        "id": "ADHOC",
+        "name": "Adhoc"
+      }
+    ]
+  }
+}

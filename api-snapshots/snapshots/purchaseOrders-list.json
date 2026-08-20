@@ -1,0 +1,15 @@
+{
+  "name": "purchaseOrders-list",
+  "controller": "PurchaseOrderApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/purchaseOrders"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [],
+    "totalPrice": 0,
+    "totalCount": 0
+  }
+}

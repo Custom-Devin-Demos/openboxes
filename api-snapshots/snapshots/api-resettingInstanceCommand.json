@@ -1,0 +1,13 @@
+{
+  "name": "api-resettingInstanceCommand",
+  "controller": "ApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/resettingInstance/command"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": "wget https://raw.githubusercontent.com/openboxes/openboxes/develop/reset-database.sh | sh"
+  }
+}

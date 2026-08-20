@@ -1,0 +1,44 @@
+{
+  "name": "dashboard-inventorySummary",
+  "controller": "DashboardApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/dashboard/inventorySummary?locationId={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": {
+      "labels": [
+        "In stock",
+        "Above maximum",
+        "Below reorder",
+        "Below minimum",
+        "No longer in stock"
+      ],
+      "datasets": [
+        {
+          "label": "Inventory Summary",
+          "data": [
+            8,
+            0,
+            0,
+            0,
+            0
+          ],
+          "links": [
+            "/openboxes/inventory/listInStock",
+            "/openboxes/inventory/listOverStock",
+            "/openboxes/inventory/listReorderStock",
+            "/openboxes/inventory/listLowStock",
+            "/openboxes/inventory/listQuantityOnHandZero"
+          ],
+          "type": null,
+          "yAxisID": null
+        }
+      ],
+      "colorNumber": null
+    },
+    "link": null
+  }
+}

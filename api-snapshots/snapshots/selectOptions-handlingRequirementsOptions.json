@@ -1,0 +1,34 @@
+{
+  "name": "selectOptions-handlingRequirementsOptions",
+  "controller": "SelectOptionsApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/handlingRequirementsOptions"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [
+      {
+        "id": "COLD_CHAIN",
+        "value": "COLD_CHAIN",
+        "label": "Cold chain"
+      },
+      {
+        "id": "CONTROLLED_SUBSTANCE",
+        "value": "CONTROLLED_SUBSTANCE",
+        "label": "Controlled substance"
+      },
+      {
+        "id": "HAZARDOUS_MATERIAL",
+        "value": "HAZARDOUS_MATERIAL",
+        "label": "Hazardous material"
+      },
+      {
+        "id": "RECONDITIONED",
+        "value": "RECONDITIONED",
+        "label": "Reconditioned"
+      }
+    ]
+  }
+}

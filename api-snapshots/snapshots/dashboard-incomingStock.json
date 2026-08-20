@@ -1,0 +1,40 @@
+{
+  "name": "dashboard-incomingStock",
+  "controller": "DashboardApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/dashboard/incomingStock?locationId={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": {
+      "first": {
+        "value": 0,
+        "subtitle": "Pending",
+        "link": "/openboxes/stockMovement/list?direction=INBOUND&receiptStatusCode=PENDING",
+        "color": null,
+        "value2": null,
+        "order": null
+      },
+      "second": {
+        "value": 0,
+        "subtitle": "Shipped",
+        "link": "/openboxes/stockMovement/list?direction=INBOUND&receiptStatusCode=SHIPPED",
+        "color": null,
+        "value2": null,
+        "order": null
+      },
+      "third": {
+        "value": 0,
+        "subtitle": "Partially Received",
+        "link": "/openboxes/stockMovement/list?direction=INBOUND&receiptStatusCode=PARTIALLY_RECEIVED",
+        "color": null,
+        "value2": null,
+        "order": null
+      },
+      "fourth": null
+    },
+    "link": "/openboxes/stockMovement/list?direction=INBOUND"
+  }
+}

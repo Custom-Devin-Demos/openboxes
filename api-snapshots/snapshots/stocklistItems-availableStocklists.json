@@ -1,0 +1,13 @@
+{
+  "name": "stocklistItems-availableStocklists",
+  "controller": "StocklistItemApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/stocklistItems/availableStocklists?product.id={productId}&location.id={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": []
+  }
+}

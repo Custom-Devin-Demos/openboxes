@@ -1,0 +1,14 @@
+{
+  "name": "invoices-list",
+  "controller": "InvoiceApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/invoices"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [],
+    "totalCount": 0
+  }
+}

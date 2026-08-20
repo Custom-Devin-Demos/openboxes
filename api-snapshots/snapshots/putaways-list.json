@@ -1,0 +1,13 @@
+{
+  "name": "putaways-list",
+  "controller": "PutawayApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/putaways?location.id={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": []
+  }
+}

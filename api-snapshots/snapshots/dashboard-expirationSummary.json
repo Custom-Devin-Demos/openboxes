@@ -1,0 +1,71 @@
+{
+  "name": "dashboard-expirationSummary",
+  "controller": "DashboardApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/dashboard/expirationSummary?locationId={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": {
+      "labels": [
+        {
+          "code": "react.dashboard.timeline.today.label",
+          "message": "today"
+        },
+        {
+          "code": "react.dashboard.timeline.within30Days.label",
+          "message": "within 30 days"
+        },
+        {
+          "code": "react.dashboard.timeline.within60Days.label",
+          "message": "within 60 days"
+        },
+        {
+          "code": "react.dashboard.timeline.within90Days.label",
+          "message": "within 90 days"
+        },
+        {
+          "code": "react.dashboard.timeline.within120Days.label",
+          "message": "within 120 days"
+        },
+        {
+          "code": "react.dashboard.timeline.within150Days.label",
+          "message": "within 150 days"
+        },
+        {
+          "code": "react.dashboard.timeline.within180Days.label",
+          "message": "within 180 days"
+        }
+      ],
+      "datasets": [
+        {
+          "label": "Expiration(s)",
+          "data": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "links": [
+            "/openboxes/inventory/listExpiredStock?status=expired",
+            "/openboxes/inventory/listExpiringStock?status=within30Days",
+            "",
+            "/openboxes/inventory/listExpiringStock?status=within90Days",
+            "",
+            "",
+            "/openboxes/inventory/listExpiringStock?status=within180Days"
+          ],
+          "type": null,
+          "yAxisID": null
+        }
+      ],
+      "colorNumber": null
+    },
+    "link": "/openboxes/inventory/listExpiringStock"
+  }
+}

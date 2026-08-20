@@ -1,0 +1,13 @@
+{
+  "name": "internalLocations-receiving",
+  "controller": "InternalLocationApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/internalLocations/receiving?location.id={facilityId}"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": []
+  }
+}

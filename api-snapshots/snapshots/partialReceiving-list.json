@@ -1,0 +1,13 @@
+{
+  "name": "partialReceiving-list",
+  "controller": "PartialReceivingApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/partialReceiving"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": []
+  }
+}

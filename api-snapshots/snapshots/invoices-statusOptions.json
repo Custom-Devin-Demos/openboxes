@@ -1,0 +1,44 @@
+{
+  "name": "invoices-statusOptions",
+  "controller": "InvoiceApiController",
+  "request": {
+    "method": "GET",
+    "path": "/api/invoiceStatuses"
+  },
+  "status": 200,
+  "contentType": "application/json",
+  "body": {
+    "data": [
+      {
+        "id": "PENDING",
+        "value": "PENDING",
+        "label": "Pending",
+        "variant": "WARNING"
+      },
+      {
+        "id": "INVOICED",
+        "value": "INVOICED",
+        "label": "Invoiced",
+        "variant": "PRIMARY"
+      },
+      {
+        "id": "SUBMITTED",
+        "value": "SUBMITTED",
+        "label": "Submitted for Approval",
+        "variant": "PRIMARY"
+      },
+      {
+        "id": "POSTED",
+        "value": "POSTED",
+        "label": "Posted",
+        "variant": "SUCCESS"
+      },
+      {
+        "id": "PAID",
+        "value": "PAID",
+        "label": "Paid",
+        "variant": "PRIMARY"
+      }
+    ]
+  }
+}
