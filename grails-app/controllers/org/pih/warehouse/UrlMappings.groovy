@@ -73,6 +73,31 @@ class UrlMappings {
             action = [GET: "read", PUT: "update", DELETE: "delete"]
         }
 
+        "/api/budgetCodes"(parseRequest: true) {
+            controller = { "budgetCodeApi" }
+            action = [GET: "list", POST: "create"]
+        }
+
+        "/api/budgetCodes/$id"(parseRequest: true) {
+            controller = { "budgetCodeApi" }
+            action = [GET: "read", PUT: "update", DELETE: "delete"]
+        }
+
+        "/api/eventTypes/eventCodeOptions"(parseRequest: true) {
+            controller = { "eventTypeApi" }
+            action = [GET: "eventCodeOptions"]
+        }
+
+        "/api/eventTypes"(parseRequest: true) {
+            controller = { "eventTypeApi" }
+            action = [POST: "create"]
+        }
+
+        "/api/eventTypes/$id"(parseRequest: true) {
+            controller = { "eventTypeApi" }
+            action = [GET: "read", PUT: "update", DELETE: "delete"]
+        }
+
         // Product Group options for filters on  product list page
         "/api/productGroupOptions"(parseRequest: true) {
             controller = { "selectOptionsApi" }
