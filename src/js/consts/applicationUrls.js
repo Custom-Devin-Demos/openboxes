@@ -68,6 +68,7 @@ const PUTAWAY_URL = {
   base: `${CONTEXT_PATH}/putAway`,
   create: () => `${PUTAWAY_URL.base}/create`,
   edit: (id) => `${PUTAWAY_URL.create()}/${id}`,
+  generatePdf: (id) => `${PUTAWAY_URL.base}/generatePdf/${id}`,
 };
 
 const STOCK_TRANSFER_URL = {
@@ -87,12 +88,23 @@ const STOCK_TRANSFER_URL = {
 const ORDER_URL = {
   base: `${CONTEXT_PATH}/order`,
   list: () => `${ORDER_URL.base}/list`,
+  listPutaway: () => `${ORDER_URL.base}/list?orderType=PUTAWAY_ORDER`,
   create: () => `${ORDER_URL.base}/create`,
   show: (id) => `${ORDER_URL.base}/show/${id}`,
   print: (id) => `${ORDER_URL.base}/print/${id}`,
   addComment: (id) => `${ORDER_URL.base}/addComment/${id}`,
   addDocument: (id) => `${ORDER_URL.base}/addDocument/${id}`,
   placeOrder: (id) => `${ORDER_URL.base}/placeOrder/${id}`,
+  remove: (id) => `${ORDER_URL.base}/remove/${id}`,
+  rollbackOrderStatus: (id) => `${ORDER_URL.base}/rollbackOrderStatus/${id}`,
+  saveComment: () => `${ORDER_URL.base}/saveComment`,
+  saveAdjustment: () => `${ORDER_URL.base}/saveAdjustment`,
+};
+
+const DOCUMENT_URL = {
+  base: `${CONTEXT_PATH}/document`,
+  uploadDocument: () => `${DOCUMENT_URL.base}/uploadDocument`,
+  saveDocument: () => `${DOCUMENT_URL.base}/saveDocument`,
 };
 
 const PURCHASE_ORDER_URL = {
@@ -204,6 +216,7 @@ export {
   CATEGORY_URL,
   CYCLE_COUNT,
   DASHBOARD_URL,
+  DOCUMENT_URL,
   EVENT_TYPE_URL,
   INVENTORY_ITEM_URL,
   INVENTORY_URL,

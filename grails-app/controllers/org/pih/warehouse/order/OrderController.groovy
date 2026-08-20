@@ -52,6 +52,12 @@ class OrderController {
 
     def list(OrderCommand command) {
 
+        // Screen migrated to React; CSV export requests are still handled below
+        if (!params.format && !params.downloadOrders) {
+            render(view: "/common/react", params: params)
+            return
+        }
+
         Location currentLocation = Location.get(session.warehouse.id)
         Boolean isCentralPurchasingEnabled = currentLocation.supports(ActivityCode.ENABLE_CENTRAL_PURCHASING)
 
@@ -215,8 +221,7 @@ class OrderController {
     }
 
     def listOrderItems() {
-        def orderItems = OrderItem.getAll().findAll { !it.isCompletelyFulfilled() }
-        return [orderItems: orderItems]
+        render(view: "/common/react")
     }
 
     def create() {
@@ -335,7 +340,7 @@ class OrderController {
             flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'order.label', default: 'Order'), params.id])}"
             redirect(action: "list")
         } else {
-            render(view: "editAdjustment", model: [orderInstance: orderInstance, orderAdjustment: new OrderAdjustment()])
+            render(view: "/common/react", params: params)
         }
     }
 
@@ -354,7 +359,7 @@ class OrderController {
                 flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'comment.label', default: 'Comment'), commentInstance.id])}"
                 redirect(action: "show", id: orderInstance?.id)
             }
-            render(view: "editAdjustment", model: [orderInstance: orderInstance, orderAdjustment: orderAdjustment, isAccountingRequired: isAccountingRequired])
+            render(view: "/common/react", params: params)
         }
     }
 
@@ -429,7 +434,7 @@ class OrderController {
             flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'order.label', default: 'Order'), params.id])}"
             redirect(action: "list")
         } else {
-            return [orderInstance: orderInstance, commentInstance: new Comment()]
+            render(view: "/common/react", params: params)
         }
     }
 
@@ -444,7 +449,7 @@ class OrderController {
                 flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'comment.label', default: 'Comment'), commentInstance.id])}"
                 redirect(action: "show", id: orderInstance?.id)
             }
-            render(view: "addComment", model: [orderInstance: orderInstance, commentInstance: commentInstance])
+            render(view: "/common/react", params: params)
         }
     }
 
@@ -511,7 +516,7 @@ class OrderController {
             flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'order.label', default: 'Order'), params.id])}"
             redirect(action: "list")
         } else {
-            return [orderInstance: orderInstance, documentTypes: documentTypes]
+            render(view: "/common/react", params: params)
         }
     }
 
@@ -528,11 +533,7 @@ class OrderController {
                 flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'document.label', default: 'Document'), documentInstance.id])}"
                 redirect(action: "show", id: orderInstance?.id)
             }
-            render(view: "addDocument", model: [
-                    orderInstance: orderInstance,
-                    documentInstance: documentInstance,
-                    documentTypes: documentTypes
-            ])
+            render(view: "/common/react", params: params)
         }
     }
 
@@ -1176,17 +1177,11 @@ class OrderController {
 
     // For testing order item derived status feature. orderItemSummary action gets the data from extended SQL view
     def orderItemSummary() {
-        params.max = params.max?:10
-        params.offset = params.offset?:0
-        def orderItemSummaryList = orderService.getOrderItemSummaryList(params)
-        render(view: "orderItemSummaryList", model: [orderItemSummaryList: orderItemSummaryList ?: [], actionName: "orderItemSummary"], params: params)
+        render(view: "/common/react", params: params)
     }
 
     // For testing order item derived status feature. orderItemDetails action gets the data from simplified SQL view
     def orderItemDetails() {
-        params.max = params.max?:10
-        params.offset = params.offset?:0
-        def orderItemDetailsList = orderService.getOrderItemDetailsList(params)
-        render(view: "orderItemSummaryList", model: [orderItemSummaryList: orderItemDetailsList ?: []], actionName: "orderItemDetails", params: params)
+        render(view: "/common/react", params: params)
     }
 }

@@ -143,6 +143,36 @@ const AsyncPurchaseOrderList = Loadable({
   loading: Loading,
 });
 
+const AsyncOrderList = Loadable({
+  loader: () => import('components/order/OrderList'),
+  loading: Loading,
+});
+
+const AsyncPendingOrderItemsList = Loadable({
+  loader: () => import('components/order/PendingOrderItemsList'),
+  loading: Loading,
+});
+
+const AsyncOrderItemSummaryList = Loadable({
+  loader: () => import('components/order/OrderItemSummaryList'),
+  loading: Loading,
+});
+
+const AsyncOrderAddCommentPage = Loadable({
+  loader: () => import('components/order/OrderAddCommentPage'),
+  loading: Loading,
+});
+
+const AsyncOrderAddDocumentPage = Loadable({
+  loader: () => import('components/order/OrderAddDocumentPage'),
+  loading: Loading,
+});
+
+const AsyncOrderEditAdjustmentPage = Loadable({
+  loader: () => import('components/order/OrderEditAdjustmentPage'),
+  loading: Loading,
+});
+
 const AsyncStockList = Loadable({
   loader: () => import('components/stock-list/StockList'),
   loading: Loading,
@@ -391,6 +421,16 @@ const Router = () => {
               <AsyncResetInstancePage />
             </Route>
             <MainLayoutRoute path="**/purchaseOrder/list" component={AsyncPurchaseOrderList} />
+            <MainLayoutRoute path="**/order/list" component={AsyncOrderList} />
+            <MainLayoutRoute path="**/order/listOrderItems" component={AsyncPendingOrderItemsList} />
+            <MainLayoutRoute path="**/order/orderItemSummary" component={AsyncOrderItemSummaryList} />
+            <MainLayoutRoute path="**/order/orderItemDetails" component={AsyncOrderItemSummaryList} />
+            <MainLayoutRoute path="**/order/addComment/:id" component={AsyncOrderAddCommentPage} />
+            <MainLayoutRoute path="**/order/editComment/:id" component={AsyncOrderAddCommentPage} />
+            <MainLayoutRoute path="**/order/addDocument/:id" component={AsyncOrderAddDocumentPage} />
+            <MainLayoutRoute path="**/order/editDocument/:id" component={AsyncOrderAddDocumentPage} />
+            <MainLayoutRoute path="**/order/addAdjustment/:id" component={AsyncOrderEditAdjustmentPage} />
+            <MainLayoutRoute path="**/order/editAdjustment/:id?" component={AsyncOrderEditAdjustmentPage} />
             <MainLayoutRoute path="**/requisitionTemplate/list" component={AsyncStockList} />
             <MainLayoutRoute path="**/requisition/chooseTemplate" component={AsyncRequisitionChooseTemplate} />
             <MainLayoutRoute path="**/requisition/createStockFromTemplate/:templateId" component={AsyncRequisitionCreateStock} />
