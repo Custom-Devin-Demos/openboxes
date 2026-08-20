@@ -342,7 +342,9 @@ configurations {
             force 'commons-io:commons-io:2.12.0'  // security patch
             force 'commons-validator:commons-validator:1.7'  // security patch
             force 'jline:jline:2.14.6'  // use consistent version
+            force 'com.squareup.okio:okio:1.17.2'  // use consistent version
             force 'org.apache.ant:ant:1.9.15'  // use consistent version
+            force 'org.apache.ant:ant-junit:1.9.15'  // use consistent version
             force 'org.apache.commons:commons-lang3:3.12.0'  // security patch
             force 'org.javassist:javassist:3.24.0-GA'  // use consistent version
             force 'org.apache.xmlgraphics:xmlgraphics-commons:2.8'  // use consistent version

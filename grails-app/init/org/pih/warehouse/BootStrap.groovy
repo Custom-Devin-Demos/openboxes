@@ -11,6 +11,7 @@ package org.pih.warehouse
 
 import grails.converters.JSON
 import grails.util.Holders
+import org.grails.web.converters.marshaller.ProxyUnwrappingMarshaller
 
 import org.pih.warehouse.core.http.ResponseBodyFormattable
 import org.pih.warehouse.core.mapper.MapperComponentResolver
@@ -151,6 +152,16 @@ class BootStrap {
     }
 
     void registerJsonMarshallers() {
+
+        /*
+         * Under Grails 4 the converters no longer unwrap Hibernate proxies
+         * before dispatching to object marshallers, so lazy associations
+         * (e.g. a Person proxy backed by a User row) reach the typed closure
+         * marshallers below as raw proxies and fail with ClassCastException.
+         * Register the framework's unwrapping marshaller with the highest
+         * priority so proxies are unwrapped and re-dispatched first.
+         */
+        JSON.registerObjectMarshaller(new ProxyUnwrappingMarshaller<JSON>(), Integer.MAX_VALUE)
 
         /*
          * Automatically register all of our ResponseMapper components with Grails' JSON marshaller.
