@@ -10,7 +10,9 @@ jobs:
   slack-notify:
     runs-on: ubuntu-latest
 
-    if: github.event.workflow_run.conclusion == 'failure' || github.event.workflow_run.conclusion == 'timed_out'
+    # Only run in the upstream repository: forks do not have the SLACK_BUILD_STATUS_WEBHOOK secret,
+    # so this job would always fail there.
+    if: github.repository == 'openboxes/openboxes' && (github.event.workflow_run.conclusion == 'failure' || github.event.workflow_run.conclusion == 'timed_out')
 
     steps:
       - name: Send Slack Message
