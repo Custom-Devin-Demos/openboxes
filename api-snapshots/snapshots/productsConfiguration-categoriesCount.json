@@ -8,6 +8,6 @@
   "status": 200,
   "contentType": "application/json",
   "body": {
-    "data": 4
+    "data": 3
   }
 }

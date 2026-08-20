@@ -127,6 +127,16 @@ assets {
     skipNonDigests = false
 }
 
+/*
+ * The Spring Loaded reloading agent only supports Java 8 bytecode and
+ * crashes the JVM on startup under Java 11, so disable it here.
+ */
+grails {
+    agent {
+        enabled = false
+    }
+}
+
 bootRun {
     addResources = true
     jvmArgs = [
@@ -313,6 +323,20 @@ configurations {
             force 'org.checkerframework:checker-qual:3.12.0'  // use consistent version
             force 'org.dom4j:dom4j:2.1.4'  // security patch
             force 'org.objenesis:objenesis:2.1'  // openjdk support
+        }
+    }
+}
+
+/*
+ * The JaCoCo tool configurations must resolve the ASM release that JaCoCo was
+ * built against; the application-wide ASM pin above is too old for its report
+ * analyzer and makes it throw IllegalArgumentException on every class file.
+ */
+configurations.matching { it.name.startsWith('jacoco') }.configureEach {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        if (details.requested.group == 'org.ow2.asm') {
+            details.because 'JaCoCo requires the ASM version it was built against'
+            details.useVersion(details.requested.version)
         }
     }
 }
@@ -872,8 +896,9 @@ task writePom {
 // Running "./gradlew jacocoTestReport" will execute all unit and integration tests, then generate a code
 // coverage report under the "/build/reports/jacoco" folder.
 jacoco {
-    // Jacoco 0.7.7 requires ASM Version 5.1+ https://www.eclemma.org/jacoco/trunk/doc/changes.html
-    toolVersion = '0.7.6.201602180812'
+    // Jacoco 0.8.7 is the first line with full Java 11 bytecode support; older
+    // agents crash the JVM on startup under JDK 11.
+    toolVersion = '0.8.7'
 }
 // Note that the paths here are by package name (as they are in "build/classes/groovy/main"). As such, we cannot
 // filter by Grails folders such as "**/controller/**" (but we could filter by "**/*Controller.class").

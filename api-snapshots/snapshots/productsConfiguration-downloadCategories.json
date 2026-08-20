@@ -7,5 +7,5 @@
   },
   "status": 200,
   "contentType": "text/csv",
-  "text": "Category name,Parent Category Name\nMedicines,Categories\nMedical Supplies,Categories\nCategories,\nAPI Snapshot Scratch Category,Categories\n"
+  "text": "Category name,Parent Category Name\nMedicines,Categories\nMedical Supplies,Categories\nCategories,\n"
 }
