@@ -327,6 +327,20 @@ configurations {
     }
 }
 
+/*
+ * The JaCoCo tool configurations must resolve the ASM release that JaCoCo was
+ * built against; the application-wide ASM pin above is too old for its report
+ * analyzer and makes it throw IllegalArgumentException on every class file.
+ */
+configurations.matching { it.name.startsWith('jacoco') }.configureEach {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        if (details.requested.group == 'org.ow2.asm') {
+            details.because 'JaCoCo requires the ASM version it was built against'
+            details.useVersion(details.requested.version)
+        }
+    }
+}
+
 configurations.integrationTestImplementation {
     extendsFrom(configurations.implementation)
 }
