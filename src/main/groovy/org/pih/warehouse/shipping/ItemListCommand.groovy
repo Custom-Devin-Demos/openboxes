@@ -15,7 +15,7 @@ import org.apache.commons.collections.list.LazyList
 
 class ItemListCommand implements Serializable, Validateable {
 
-    def items =
+    List<ItemCommand> items =
             LazyList.decorate(new ArrayList(), FactoryUtils.instantiateFactory(ItemCommand.class))
 
     static constraints = {
