@@ -131,6 +131,31 @@ const INVENTORY_URL = {
   editTransaction: (id) => `${INVENTORY_URL.base}/editTransaction/${id}`,
 };
 
+const SHIPMENT_URL = {
+  base: `${CONTEXT_PATH}/shipment`,
+  showDetails: (id) => `${SHIPMENT_URL.base}/showDetails/${id}`,
+  addComment: (id) => `${SHIPMENT_URL.base}/addComment/${id}`,
+  saveComment: () => `${SHIPMENT_URL.base}/saveComment`,
+  addDocument: (id) => `${SHIPMENT_URL.base}/addDocument/${id}`,
+  deleteShipment: (id) => `${SHIPMENT_URL.base}/deleteShipment/${id}`,
+  editEvent: (id, params = {}) => stringifyUrl({
+    url: `${SHIPMENT_URL.base}/editEvent/${id}`,
+    query: { ...params },
+  }),
+  saveEvent: () => `${SHIPMENT_URL.base}/saveEvent`,
+  deleteEvent: (id, params = {}) => stringifyUrl({
+    url: `${SHIPMENT_URL.base}/deleteEvent/${id}`,
+    query: { ...params },
+  }),
+  addToShipmentPost: () => `${SHIPMENT_URL.base}/addToShipmentPost`,
+};
+
+const DOCUMENT_URL = {
+  base: `${CONTEXT_PATH}/document`,
+  uploadDocument: () => `${DOCUMENT_URL.base}/uploadDocument`,
+  saveDocument: () => `${DOCUMENT_URL.base}/saveDocument`,
+};
+
 const REQUISITION_TEMPLATE_URL = {
   base: `${CONTEXT_PATH}/requisitionTemplate`,
   create: () => `${REQUISITION_TEMPLATE_URL.base}/create`,
@@ -232,6 +257,7 @@ export {
   REPLENISHMENT_URL,
   REQUISITION_TEMPLATE_URL,
   REQUISITION_URL,
+  SHIPMENT_URL,
   STOCK_MOVEMENT_URL,
   STOCK_TRANSFER_URL,
   STOCKLIST_URL,
