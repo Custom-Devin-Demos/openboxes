@@ -1348,6 +1348,21 @@ class UrlMappings {
             action = [GET: "inventoryLevelDetails", POST: "updateInventoryLevel"]
         }
 
+        "/api/stockCard/transferStock" {
+            controller = "stockCardApi"
+            action = [POST: "transferStock"]
+        }
+
+        "/api/stockCard/updateInventoryItem" {
+            controller = "stockCardApi"
+            action = [POST: "updateInventoryItem"]
+        }
+
+        "/api/stockCard/addToShipment" {
+            controller = "stockCardApi"
+            action = [POST: "addToShipment"]
+        }
+
         /**
          * Inventory API endpoints
          */

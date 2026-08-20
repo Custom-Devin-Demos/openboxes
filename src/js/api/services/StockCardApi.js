@@ -1,5 +1,6 @@
 import {
   STOCK_CARD_ACTION_CONTEXT,
+  STOCK_CARD_ADD_TO_SHIPMENT,
   STOCK_CARD_ALL_LOCATIONS,
   STOCK_CARD_ASSOCIATIONS,
   STOCK_CARD_BIN_LOCATIONS,
@@ -15,6 +16,8 @@ import {
   STOCK_CARD_SNAPSHOT,
   STOCK_CARD_STOCK_HISTORY,
   STOCK_CARD_SUPPLIERS,
+  STOCK_CARD_TRANSFER_STOCK,
+  STOCK_CARD_UPDATE_INVENTORY_ITEM,
 } from 'api/urls';
 import apiClient from 'utils/apiClient';
 
@@ -36,4 +39,8 @@ export default {
   getRecordInventory: (config) => apiClient.get(STOCK_CARD_RECORD_INVENTORY, config),
   getInventoryLevel: (config) => apiClient.get(STOCK_CARD_INVENTORY_LEVEL, config),
   updateInventoryLevel: (data, config) => apiClient.post(STOCK_CARD_INVENTORY_LEVEL, data, config),
+  transferStock: (data, config) => apiClient.post(STOCK_CARD_TRANSFER_STOCK, data, config),
+  updateInventoryItem: (data, config) =>
+    apiClient.post(STOCK_CARD_UPDATE_INVENTORY_ITEM, data, config),
+  addToShipment: (data, config) => apiClient.post(STOCK_CARD_ADD_TO_SHIPMENT, data, config),
 };

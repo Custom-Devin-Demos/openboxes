@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 
 import StockCardApi from 'api/services/StockCardApi';
 import notification from 'components/Layout/notifications/notification';
-import { submitLegacyForm } from 'components/stock-card/legacyForm';
 import StockCardModal from 'components/stock-card/modals/StockCardModal';
 import NotificationType from 'consts/notificationTypes';
 import Translate from 'utils/Translate';
@@ -19,6 +18,7 @@ const ReturnStockModal = ({
   const [source, setSource] = useState('');
   const [sourceBin, setSourceBin] = useState('');
   const [quantity, setQuantity] = useState(entry.quantityAvailable);
+  const [errors, setErrors] = useState([]);
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -38,25 +38,26 @@ const ReturnStockModal = ({
   const handleSubmit = async (event) => {
     event.preventDefault();
     setSubmitting(true);
+    setErrors([]);
+    const body = new URLSearchParams();
+    body.append('id', entry.inventoryItem?.id || '');
+    body.append('product.id', details?.product?.id || '');
+    body.append('inventoryItem.id', entry.inventoryItem?.id || '');
+    body.append('location.id', currentLocation?.id || '');
+    body.append('binLocation.id', entry.binLocation?.id || '');
+    body.append('transferOut', 'false');
+    body.append('otherLocation.id', source);
+    body.append('otherBinLocation.id', sourceBin);
+    body.append('quantity', quantity);
     try {
-      const { success } = await submitLegacyForm('transferStock', {
-        id: entry.inventoryItem?.id,
-        'product.id': details?.product?.id,
-        'inventoryItem.id': entry.inventoryItem?.id,
-        'location.id': currentLocation?.id,
-        'binLocation.id': entry.binLocation?.id,
-        transferOut: 'false',
-        'otherLocation.id': source,
-        'otherBinLocation.id': sourceBin,
-        quantity,
+      const response = await StockCardApi.transferStock(body);
+      notification(NotificationType.SUCCESS)({
+        message: response.data?.message || 'Stock returned successfully',
       });
-      if (success) {
-        notification(NotificationType.SUCCESS)({ message: 'Stock returned successfully' });
-        onSuccess();
-        onClose();
-      } else {
-        notification(NotificationType.ERROR)({ message: 'Unable to return stock' });
-      }
+      onSuccess();
+      onClose();
+    } catch (err) {
+      setErrors(err?.response?.data?.errors || ['Unable to return stock']);
     } finally {
       setSubmitting(false);
     }
@@ -68,6 +69,13 @@ const ReturnStockModal = ({
       onClose={onClose}
     >
       <form onSubmit={handleSubmit}>
+        {errors.length > 0 && (
+          <div className="alert alert-danger">
+            <ul className="m-0">
+              {errors.map((error) => <li key={error}>{error}</li>)}
+            </ul>
+          </div>
+        )}
         <div className="form-group">
           <label htmlFor="ReturnStockModal-source" aria-label="Source"><Translate id="react.stockCard.source.label" defaultMessage="Source" /></label>
           <select

@@ -4,8 +4,8 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
+import StockCardApi from 'api/services/StockCardApi';
 import notification from 'components/Layout/notifications/notification';
-import { submitLegacyForm } from 'components/stock-card/legacyForm';
 import StockCardModal from 'components/stock-card/modals/StockCardModal';
 import NotificationType from 'consts/notificationTypes';
 import Translate from 'utils/Translate';
@@ -21,6 +21,7 @@ const EditItemModal = ({
       : '',
   );
   const [comments, setComments] = useState('');
+  const [errors, setErrors] = useState([]);
   const [submitting, setSubmitting] = useState(false);
 
   const lotAndExpiryControl = details?.product?.lotAndExpiryControl;
@@ -34,22 +35,23 @@ const EditItemModal = ({
       return;
     }
     setSubmitting(true);
+    setErrors([]);
+    const body = new URLSearchParams();
+    body.append('id', entry.inventoryItem?.id || '');
+    body.append('product.id', details?.product?.id || '');
+    body.append('inventoryItem.id', entry.inventoryItem?.id || '');
+    body.append('lotNumber', lotNumber);
+    body.append('expirationDate', expirationDate ? moment(expirationDate).format('MM/DD/YYYY') : '');
+    body.append('comments', comments);
     try {
-      const { success } = await submitLegacyForm('update', {
-        id: entry.inventoryItem?.id,
-        'product.id': details?.product?.id,
-        'inventoryItem.id': entry.inventoryItem?.id,
-        lotNumber,
-        expirationDate: expirationDate ? moment(expirationDate).format('MM/DD/YYYY') : '',
-        comments,
+      const response = await StockCardApi.updateInventoryItem(body);
+      notification(NotificationType.SUCCESS)({
+        message: response.data?.message || 'Inventory item updated',
       });
-      if (success) {
-        notification(NotificationType.SUCCESS)({ message: 'Inventory item updated' });
-        onSuccess();
-        onClose();
-      } else {
-        notification(NotificationType.ERROR)({ message: 'Unable to update inventory item' });
-      }
+      onSuccess();
+      onClose();
+    } catch (err) {
+      setErrors(err?.response?.data?.errors || ['Unable to update inventory item']);
     } finally {
       setSubmitting(false);
     }
@@ -61,6 +63,13 @@ const EditItemModal = ({
       onClose={onClose}
     >
       <form onSubmit={handleSubmit}>
+        {errors.length > 0 && (
+          <div className="alert alert-danger">
+            <ul className="m-0">
+              {errors.map((error) => <li key={error}>{error}</li>)}
+            </ul>
+          </div>
+        )}
         <div className="form-group">
           <label htmlFor="EditItemModal-product" aria-label="Product"><Translate id="react.stockCard.product.label" defaultMessage="Product" /></label>
           <div>{details?.product?.displayName || details?.product?.name}</div>

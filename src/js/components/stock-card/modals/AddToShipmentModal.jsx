@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 
 import StockCardApi from 'api/services/StockCardApi';
 import notification from 'components/Layout/notifications/notification';
-import { submitLegacyForm } from 'components/stock-card/legacyForm';
 import StockCardModal from 'components/stock-card/modals/StockCardModal';
 import { formatDate } from 'components/stock-card/utils';
 import NotificationType from 'consts/notificationTypes';
@@ -18,6 +17,7 @@ const AddToShipmentModal = ({
   const [shipments, setShipments] = useState([]);
   const [shipmentContainer, setShipmentContainer] = useState('');
   const [quantity, setQuantity] = useState(entry.quantityAvailable);
+  const [errors, setErrors] = useState([]);
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -28,22 +28,23 @@ const AddToShipmentModal = ({
   const handleSubmit = async (event) => {
     event.preventDefault();
     setSubmitting(true);
+    setErrors([]);
+    const body = new URLSearchParams();
+    body.append('product.id', details?.product?.id || '');
+    body.append('location.id', currentLocation?.id || '');
+    body.append('binLocation.id', entry.binLocation?.id || '');
+    body.append('inventoryItem.id', entry.inventoryItem?.id || '');
+    body.append('shipmentContainer', shipmentContainer);
+    body.append('quantity', quantity);
     try {
-      const { success } = await submitLegacyForm('addToShipment', {
-        'product.id': details?.product?.id,
-        'location.id': currentLocation?.id,
-        'binLocation.id': entry.binLocation?.id,
-        'inventoryItem.id': entry.inventoryItem?.id,
-        shipmentContainer,
-        quantity,
+      const response = await StockCardApi.addToShipment(body);
+      notification(NotificationType.SUCCESS)({
+        message: response.data?.message || 'Item added to shipment',
       });
-      if (success) {
-        notification(NotificationType.SUCCESS)({ message: 'Item added to shipment' });
-        onSuccess();
-        onClose();
-      } else {
-        notification(NotificationType.ERROR)({ message: 'Unable to add item to shipment' });
-      }
+      onSuccess();
+      onClose();
+    } catch (err) {
+      setErrors(err?.response?.data?.errors || ['Unable to add item to shipment']);
     } finally {
       setSubmitting(false);
     }
@@ -55,6 +56,13 @@ const AddToShipmentModal = ({
       onClose={onClose}
     >
       <form onSubmit={handleSubmit}>
+        {errors.length > 0 && (
+          <div className="alert alert-danger">
+            <ul className="m-0">
+              {errors.map((error) => <li key={error}>{error}</li>)}
+            </ul>
+          </div>
+        )}
         <div className="form-group">
           <label htmlFor="AddToShipmentModal-lotSerialNo" aria-label="Lot/Serial No."><Translate id="react.stockCard.lotSerialNo.label" defaultMessage="Lot/Serial No." /></label>
           <div>{entry.inventoryItem?.lotNumber || ''}</div>

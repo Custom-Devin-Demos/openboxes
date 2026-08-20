@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
+import { INVENTORY_ADJUST_STOCK } from 'api/urls';
 import notification from 'components/Layout/notifications/notification';
-import { submitLegacyForm } from 'components/stock-card/legacyForm';
 import StockCardModal from 'components/stock-card/modals/StockCardModal';
 import NotificationType from 'consts/notificationTypes';
 import apiClient from 'utils/apiClient';
@@ -18,6 +18,7 @@ const AdjustStockModal = ({
   const [newQuantity, setNewQuantity] = useState(entry.quantityOnHand);
   const [reasonCode, setReasonCode] = useState('');
   const [comment, setComment] = useState('');
+  const [errors, setErrors] = useState([]);
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -28,24 +29,23 @@ const AdjustStockModal = ({
   const handleSubmit = async (event) => {
     event.preventDefault();
     setSubmitting(true);
+    setErrors([]);
+    const body = new URLSearchParams();
+    body.append('product.id', details?.product?.id || '');
+    body.append('location.id', currentLocation?.id || '');
+    body.append('binLocation.id', entry.binLocation?.id || '');
+    body.append('inventoryItem.id', entry.inventoryItem?.id || '');
+    body.append('currentQuantity', entry.quantityOnHand ?? '');
+    body.append('newQuantity', newQuantity);
+    body.append('reasonCode', reasonCode);
+    body.append('comment', comment);
     try {
-      const { success } = await submitLegacyForm('adjustStock', {
-        'product.id': details?.product?.id,
-        'location.id': currentLocation?.id,
-        'binLocation.id': entry.binLocation?.id,
-        'inventoryItem.id': entry.inventoryItem?.id,
-        oldQuantity: entry.quantityOnHand,
-        newQuantity,
-        reasonCode,
-        comment,
-      });
-      if (success) {
-        notification(NotificationType.SUCCESS)({ message: 'Stock adjusted successfully' });
-        onSuccess();
-        onClose();
-      } else {
-        notification(NotificationType.ERROR)({ message: 'Unable to adjust stock' });
-      }
+      const response = await apiClient.post(INVENTORY_ADJUST_STOCK, body);
+      notification(NotificationType.SUCCESS)({ message: response.data?.message || 'Stock adjusted successfully' });
+      onSuccess();
+      onClose();
+    } catch (err) {
+      setErrors(err?.response?.data?.errors || ['Unable to adjust stock']);
     } finally {
       setSubmitting(false);
     }
@@ -57,6 +57,13 @@ const AdjustStockModal = ({
       onClose={onClose}
     >
       <form onSubmit={handleSubmit}>
+        {errors.length > 0 && (
+          <div className="alert alert-danger">
+            <ul className="m-0">
+              {errors.map((error) => <li key={error}>{error}</li>)}
+            </ul>
+          </div>
+        )}
         <div className="form-group">
           <label htmlFor="AdjustStockModal-lotSerialNo" aria-label="Lot/Serial No."><Translate id="react.stockCard.lotSerialNo.label" defaultMessage="Lot/Serial No." /></label>
           <div>{entry.inventoryItem?.lotNumber || ''}</div>
@@ -91,7 +98,7 @@ const AdjustStockModal = ({
           >
             <option value="" aria-label="None" />
             {reasonCodes.map((code) => (
-              <option key={code.id} value={code.id}>{code.label}</option>
+              <option key={code.id} value={code.id}>{code.name}</option>
             ))}
           </select>
         </div>

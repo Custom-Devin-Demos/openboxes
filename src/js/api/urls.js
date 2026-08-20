@@ -252,6 +252,9 @@ export const STOCK_CARD_ACTION_CONTEXT = `${STOCK_CARD_API}/actionContext`;
 export const STOCK_CARD_BIN_LOCATIONS = `${STOCK_CARD_API}/binLocations`;
 export const STOCK_CARD_RECORD_INVENTORY = `${STOCK_CARD_API}/recordInventory`;
 export const STOCK_CARD_INVENTORY_LEVEL = `${STOCK_CARD_API}/inventoryLevel`;
+export const STOCK_CARD_TRANSFER_STOCK = `${STOCK_CARD_API}/transferStock`;
+export const STOCK_CARD_UPDATE_INVENTORY_ITEM = `${STOCK_CARD_API}/updateInventoryItem`;
+export const STOCK_CARD_ADD_TO_SHIPMENT = `${STOCK_CARD_API}/addToShipment`;
 
 // INVENTORY
 export const INVENTORY_API = (id) => `${API}/facilities/${id}/inventories`;

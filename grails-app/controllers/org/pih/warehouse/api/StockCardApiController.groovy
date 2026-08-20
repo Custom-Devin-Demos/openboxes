@@ -3,10 +3,12 @@ package org.pih.warehouse.api
 import grails.converters.JSON
 import grails.core.GrailsApplication
 import grails.gorm.transactions.Transactional
+import grails.validation.ValidationException
 import groovy.time.TimeCategory
 import org.pih.warehouse.DateUtil
 import org.pih.warehouse.core.ActivityCode
 import org.pih.warehouse.core.Location
+import org.pih.warehouse.core.Person
 import org.pih.warehouse.core.User
 import org.pih.warehouse.core.ValidationCode
 import org.pih.warehouse.inventory.Inventory
@@ -21,11 +23,17 @@ import org.pih.warehouse.inventory.StockHistoryAssembler
 import org.pih.warehouse.inventory.StockHistoryPageModel
 import org.pih.warehouse.inventory.StockHistoryResult
 import org.pih.warehouse.inventory.StockHistoryRowDto
+import org.pih.warehouse.inventory.Transaction
+import org.pih.warehouse.inventory.TransferStockCommand
 import org.pih.warehouse.order.OrderItem
 import org.pih.warehouse.order.OrderItemStatusCode
 import org.pih.warehouse.product.Product
 import org.pih.warehouse.product.ProductException
 import org.pih.warehouse.requisition.RequisitionItem
+import org.pih.warehouse.shipping.Container
+import org.pih.warehouse.shipping.Shipment
+import org.pih.warehouse.shipping.ShipmentItem
+import org.pih.warehouse.shipping.ShipmentItemException
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -39,6 +47,7 @@ class StockCardApiController {
     def orderService
     def forecastingService
     def userService
+    def inventoryItemDataService
     def productAvailabilityService
     def localizationService
     def messageSource
@@ -722,6 +731,161 @@ class StockCardApiController {
         ] as JSON)
     }
 
+    /**
+     * Mirrors InventoryItemController.transferStock (used for both transfer out and return in)
+     * with a JSON response instead of flash/redirect.
+     */
+    @Transactional
+    def transferStock(TransferStockCommand command) {
+        InventoryItem inventoryItem = command.inventoryItem
+        if (!inventoryItem) {
+            response.status = 400
+            render([success: false, errors: [getMessage("default.not.found.message", "Not found",
+                    [getMessage("inventoryItem.label", "Inventory item"), params['inventoryItem.id']] as Object[])]] as JSON)
+            return
+        }
+        try {
+            Transaction transaction = inventoryService.transferStock(command)
+            if (transaction.hasErrors()) {
+                response.status = 400
+                render([success: false, errors: resolveErrors(transaction.errors)] as JSON)
+                return
+            }
+        } catch (Exception e) {
+            log.error("Error transferring stock " + e.message, e)
+            response.status = 400
+            render([success: false, errors: [e.message]] as JSON)
+            return
+        }
+        String message = getMessage("default.updated.message", "Updated",
+                [getMessage("inventoryItem.label", "Inventory item"), inventoryItem.id] as Object[])
+        render([success: true, message: message] as JSON)
+    }
+
+    /**
+     * Mirrors InventoryItemController.update (edit inventory item dialog)
+     * with a JSON response instead of flash/redirect.
+     */
+    @Transactional
+    def updateInventoryItem() {
+        InventoryItem itemInstance = InventoryItem.get(params.id)
+        Date minExpirationDate = grailsApplication.config.getProperty("openboxes.expirationDate.minValue", Date.class, null)
+        if (!itemInstance) {
+            response.status = 400
+            render([success: false, errors: [getMessage("default.not.found.message", "Not found",
+                    [getMessage("inventoryItem.label", "Inventory item"), params.id] as Object[])]] as JSON)
+            return
+        }
+        if (itemInstance.product && itemInstance.product.lotAndExpiryControl && (!params.expirationDate || !params.lotNumber)) {
+            response.status = 400
+            render([success: false, errors: [getMessage("inventoryItem.lotAndExpiryControl.message",
+                    "Both lot number and expiry date are required for this product")]] as JSON)
+            return
+        }
+        itemInstance.properties = params
+        itemInstance.lotNumber = params?.lotNumber
+        if (!itemInstance.product.lotAndExpiryControl && !itemInstance.lotNumber) {
+            response.status = 400
+            render([success: false, errors: [getMessage("inventoryItem.blankLot.message",
+                    "Lot number cannot be blank")]] as JSON)
+            return
+        }
+        if (itemInstance.expirationDate && minExpirationDate && itemInstance.expirationDate < minExpirationDate) {
+            response.status = 400
+            render([success: false,
+                    errors : ["This date is invalid. Please enter a date after ${minExpirationDate.getYear() + 1900}.".toString()]] as JSON)
+            return
+        }
+        if (!itemInstance.hasErrors() && inventoryItemDataService.save(itemInstance)) {
+            render([success: true, message: getMessage("default.updated.message", "Updated",
+                    [getMessage("inventoryItem.label", "Inventory item"), itemInstance.id] as Object[])] as JSON)
+            return
+        }
+        response.status = 400
+        List errors = resolveErrors(itemInstance.errors)
+        render([success: false, errors: errors ?: [getMessage("default.not.updated.message", "Not updated",
+                [getMessage("inventoryItem.label", "Inventory item"), itemInstance.id] as Object[])]] as JSON)
+    }
+
+    /**
+     * Mirrors InventoryItemController.addToShipment with a JSON response instead of flash/redirect.
+     */
+    @Transactional
+    def addToShipment() {
+        Product productInstance = Product.get(params?.product?.id)
+        Person personInstance = Person.get(params?.recipient?.id)
+        Location binLocation = Location.get(params?.binLocation?.id)
+        InventoryItem inventoryItem = InventoryItem.get(params?.inventoryItem?.id)
+
+        def shipmentContainer = params.shipmentContainer?.split(":")
+        Shipment shipmentInstance = shipmentContainer ? Shipment.get(shipmentContainer[0]) : null
+        Container containerInstance = shipmentContainer && shipmentContainer.size() > 1 ?
+                Container.get(shipmentContainer[1]) : null
+
+        if (!shipmentInstance || !inventoryItem) {
+            response.status = 400
+            render([success: false, errors: [getMessage("inventoryItem.errorValidatingItem.message",
+                    "Error adding item to shipment")]] as JSON)
+            return
+        }
+
+        ShipmentItem shipmentItem = new ShipmentItem(
+                product: productInstance,
+                binLocation: binLocation,
+                lotNumber: inventoryItem.lotNumber ?: '',
+                expirationDate: inventoryItem?.expirationDate,
+                inventoryItem: inventoryItem,
+                quantity: params.quantity,
+                recipient: personInstance,
+                shipment: shipmentInstance,
+                container: containerInstance)
+
+        try {
+            shipmentService.validateShipmentItem(shipmentItem)
+
+            if (shipmentItem.hasErrors() || !shipmentItem.validate()) {
+                response.status = 400
+                render([success: false, errors: resolveErrors(shipmentItem.errors)] as JSON)
+                return
+            }
+
+            if (!shipmentInstance.addToShipmentItems(shipmentItem).save()) {
+                response.status = 400
+                render([success: false, errors: [getMessage("inventoryItem.unableToAddItemToShipment.message",
+                        "Unable to add new item to shipment. Please try again.")]] as JSON)
+                return
+            }
+        } catch (ShipmentItemException e) {
+            response.status = 400
+            render([success: false, errors: resolveErrors(e.shipmentItem.errors)] as JSON)
+            return
+        } catch (ValidationException e) {
+            response.status = 400
+            render([success: false, errors: resolveErrors(e.errors)] as JSON)
+            return
+        }
+
+        String productDescription = "${productInstance?.productCode} ${productInstance?.name}" +
+                (inventoryItem?.lotNumber ? " #${inventoryItem.lotNumber}" : "")
+        render([success: true, message: getMessage("inventoryItem.addedItemToShipment.message", "Added item to shipment",
+                [productDescription, shipmentInstance?.name] as Object[])] as JSON)
+    }
+
+    private String getMessage(String code, String defaultMessage, Object[] args = null) {
+        messageSource.getMessage(code, args, defaultMessage, localizationService.getCurrentLocale())
+    }
+
+    private List resolveErrors(errors) {
+        Locale locale = localizationService.getCurrentLocale()
+        errors?.allErrors?.collect { error ->
+            try {
+                messageSource.getMessage(error, locale)
+            } catch (Exception ignored) {
+                error.defaultMessage ?: error.code
+            }
+        } ?: []
+    }
+
     private static Map toInventoryLevelMap(InventoryLevel inventoryLevel) {
         if (!inventoryLevel) {
             return null
@@ -733,7 +897,8 @@ class StockCardApiController {
                 reorderQuantity        : inventoryLevel.reorderQuantity,
                 maxQuantity            : inventoryLevel.maxQuantity,
                 forecastQuantity       : inventoryLevel.forecastQuantity,
-                monthlyForecastQuantity: inventoryLevel.monthlyForecastQuantity,
+                monthlyForecastQuantity: inventoryLevel.forecastQuantity != null ?
+                        inventoryLevel.monthlyForecastQuantity : null,
                 preferredBinLocation   : inventoryLevel.preferredBinLocation?.name,
                 abcClass               : inventoryLevel.abcClass,
         ]
