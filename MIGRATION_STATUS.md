@@ -47,7 +47,7 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | 2-product-catalog-1 | product-catalog-1 batch | IN_PROGRESS | [36acf165](https://app.devin.ai/sessions/36acf1659c1744f48fc9bcc3f36cf308) | | |
 | 2-locations-orgs-1 | locations-orgs-1 batch | MERGED | [7be46dc0](https://app.devin.ai/sessions/7be46dc091cf49ffa359a3fdde470736) | [#6](https://github.com/Custom-Devin-Demos/openboxes/pull/6) | Snapshots 122/122, Playwright 9/10 (flow-3 flake), CI green |
 | 2-requisitions-1 | requisitions-1 batch | MERGED | [86b36670](https://app.devin.ai/sessions/86b3667030ff470baf5f9cefba57bfa4) | [#8](https://github.com/Custom-Devin-Demos/openboxes/pull/8) | Snapshots 122/122, Playwright 10/10 post-rebase, CI green |
-| 2-shipments-1 | shipments-1 batch | IN_PROGRESS | [88fb63b4](https://app.devin.ai/sessions/88fb63b4ceb549dd91fb4c04fe251333) | | |
+| 2-shipments-1 | shipments-1 batch | MERGED | [88fb63b4](https://app.devin.ai/sessions/88fb63b4ceb549dd91fb4c04fe251333) | [#13](https://github.com/Custom-Devin-Demos/openboxes/pull/13) | Snapshots 122/122, Playwright 10/10, CI green |
 | 2-orders-1 | orders-1 batch | MERGED | [aa39b608](https://app.devin.ai/sessions/aa39b60838c740ca8afa03ca9fad7a76) | [#14](https://github.com/Custom-Devin-Demos/openboxes/pull/14) | Snapshots 121/122, Playwright 8/10 (failures pre-existing on develop), CI green |
 | 2-admin-config-1 | admin-config-1 batch | MERGED | [2bec6bb2](https://app.devin.ai/sessions/2bec6bb2245a4cb68c7e48ad754fb467) | [#10](https://github.com/Custom-Devin-Demos/openboxes/pull/10) | UI 10/10, snapshots 117/122 (5 pre-existing dirty baselines), CI green. Fixed Hibernate5 evictQueries bug |
 | 2-finance-config-1 | finance-config-1 batch | MERGED | [b4493527](https://app.devin.ai/sessions/b449352701744466b15efb5dd64533c4) | [#9](https://github.com/Custom-Devin-Demos/openboxes/pull/9) | Playwright 10/10, snapshots 122/122, CI green |
@@ -86,3 +86,4 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 - 2026-08-20: P1.1 Java 11 merged (PR #7). Spawning P1.2 Grails 3->4 next.
 - 2026-08-20: requisitions-1 merged (PR #8), orders-1 merged (PR #14).
 - 2026-08-20: locations-orgs-1 merged (PR #6). product-catalog-1 (#11) and shipments-1 (#13) rebasing after conflicts; stock-card-1 still in progress.
+- 2026-08-20: shipments-1 merged (PR #13). Pre-existing defect noted: deleteShipment 500s on FK constraints for shipments with events (legacy parity).
