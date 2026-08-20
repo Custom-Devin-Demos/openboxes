@@ -175,7 +175,16 @@ const CYCLE_COUNT = {
   resolveStep: () => `${CYCLE_COUNT.base}/resolve`,
 };
 
+const ADMIN_URL = {
+  base: `${CONTEXT_PATH}/admin`,
+  showSettings: () => `${ADMIN_URL.base}/showSettings`,
+  showUpgrade: () => `${ADMIN_URL.base}/showUpgrade`,
+  showDatabaseStatus: () => `${ADMIN_URL.base}/showDatabaseStatus`,
+  showDatabaseProcessList: () => `${ADMIN_URL.base}/showDatabaseProcessList`,
+};
+
 export {
+  ADMIN_URL,
   BUDGET_CODE_URL,
   CATEGORY_URL,
   CYCLE_COUNT,

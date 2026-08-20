@@ -1025,6 +1025,58 @@ class UrlMappings {
             action = [GET: "listOfDemoData"]
         }
 
+        // Admin
+
+        "/api/admin/controllers" {
+            controller = { "adminApi" }
+            action = [GET: "controllers"]
+        }
+
+        "/api/admin/controllerActions" {
+            controller = { "adminApi" }
+            action = [GET: "controllerActions"]
+        }
+
+        "/api/admin/plugins" {
+            controller = { "adminApi" }
+            action = [GET: "plugins"]
+        }
+
+        "/api/admin/cache" {
+            controller = { "adminApi" }
+            action = [GET: "cache"]
+        }
+
+        "/api/admin/cache/evictDomainCache" {
+            controller = { "adminApi" }
+            action = [POST: "evictDomainCache"]
+        }
+
+        "/api/admin/cache/evictQueryCache" {
+            controller = { "adminApi" }
+            action = [POST: "evictQueryCache"]
+        }
+
+        "/api/admin/settings" {
+            controller = { "adminApi" }
+            action = [GET: "settings"]
+        }
+
+        "/api/admin/triggerStockAlerts" {
+            controller = { "adminApi" }
+            action = [POST: "triggerStockAlerts"]
+        }
+
+        "/api/admin/sendMail" {
+            controller = { "adminApi" }
+            action = [POST: "sendMail"]
+        }
+
+        "/api/admin/mailForm" {
+            controller = { "adminApi" }
+            action = [GET: "mailForm"]
+        }
+
         "/api/fulfillments" {
             controller = { "fulfillmentApi" }
             action = [POST: "save"]

@@ -252,3 +252,16 @@ export const INVENTORY_SAVE_CREDIT_TRANSACTION = `${INVENTORY_SCREEN_API}/saveCr
 export const INVENTORY_TRANSACTION_BY_ID = (id) => `${INVENTORY_SCREEN_API}/transactions/${id}`;
 export const INVENTORY_SAVE_TRANSACTION = `${INVENTORY_SCREEN_API}/saveTransaction`;
 export const INVENTORY_TRANSACTION_ENTRY_DELETE = (id) => `${INVENTORY_SCREEN_API}/transactionEntries/${id}`;
+
+// ADMIN
+export const ADMIN_API = `${API}/admin`;
+export const ADMIN_CONTROLLERS = `${ADMIN_API}/controllers`;
+export const ADMIN_CONTROLLER_ACTIONS = `${ADMIN_API}/controllerActions`;
+export const ADMIN_PLUGINS = `${ADMIN_API}/plugins`;
+export const ADMIN_CACHE = `${ADMIN_API}/cache`;
+export const ADMIN_EVICT_DOMAIN_CACHE = `${ADMIN_CACHE}/evictDomainCache`;
+export const ADMIN_EVICT_QUERY_CACHE = `${ADMIN_CACHE}/evictQueryCache`;
+export const ADMIN_SETTINGS = `${ADMIN_API}/settings`;
+export const ADMIN_TRIGGER_STOCK_ALERTS = `${ADMIN_API}/triggerStockAlerts`;
+export const ADMIN_SEND_MAIL = `${ADMIN_API}/sendMail`;
+export const ADMIN_MAIL_FORM = `${ADMIN_API}/mailForm`;

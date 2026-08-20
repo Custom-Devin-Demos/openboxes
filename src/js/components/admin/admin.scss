@@ -1,0 +1,58 @@
+.admin-page {
+  margin: 10px;
+  padding: 10px;
+  background: #fff;
+  overflow: auto;
+
+  h2 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+  }
+
+  table {
+    border-collapse: collapse;
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 4px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    td.center {
+      text-align: center;
+    }
+
+    td.name {
+      font-weight: bold;
+      white-space: nowrap;
+    }
+  }
+
+  .admin-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    margin-bottom: 10px;
+
+    li {
+      margin-right: 5px;
+    }
+
+    .button.active {
+      font-weight: bold;
+      text-decoration: underline;
+    }
+  }
+
+  ul {
+    list-style: disc;
+    padding-left: 20px;
+  }
+
+  pre {
+    white-space: pre-wrap;
+  }
+}
