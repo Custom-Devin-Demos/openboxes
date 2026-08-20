@@ -9,13 +9,16 @@
 **/ 
 package org.pih.warehouse.core
 
-import grails.test.mixin.Mock
-import grails.test.mixin.TestFor
+import grails.testing.gorm.DataTest
+import grails.testing.web.controllers.ControllerUnitTest
 import spock.lang.Specification
 
-@TestFor(EventTypeController)
-@Mock(EventType)
-class EventTypeControllerTests extends Specification {
+class EventTypeControllerTests extends Specification implements ControllerUnitTest<EventTypeController>, DataTest {
+
+    void setupSpec() {
+        mockDomains(EventType)
+    }
+
     def stubMessager = new Expando()
 
     void "test saving valid EventType"() {

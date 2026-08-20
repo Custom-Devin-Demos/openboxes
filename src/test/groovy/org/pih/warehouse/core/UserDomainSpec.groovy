@@ -1,11 +1,10 @@
 package org.pih.warehouse.core
 
-import grails.test.mixin.Mock
+import grails.testing.gorm.DomainUnitTest
 import spock.lang.Ignore
 import spock.lang.Specification
 
-@Mock(User)
-class UserDomainSpec extends Specification {
+class UserDomainSpec extends Specification implements DomainUnitTest<User> {
 
     void "test validation on user with all required and valid data"() {
         when:
