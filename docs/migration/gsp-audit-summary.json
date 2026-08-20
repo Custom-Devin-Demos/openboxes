@@ -1,0 +1,1447 @@
+{
+  "total": 618,
+  "counts": {
+    "LIVE": 286,
+    "DEAD": 77,
+    "TEMPLATE": 226,
+    "UNCERTAIN": 29
+  },
+  "live_by_dir": {
+    "admin": [
+      "admin/cache.gsp",
+      "admin/controllerActions.gsp",
+      "admin/index.gsp",
+      "admin/plugins.gsp",
+      "admin/sendMail.gsp",
+      "admin/showSettings.gsp",
+      "admin/showUpgrade.gsp",
+      "admin/status.gsp"
+    ],
+    "attribute": [
+      "attribute/edit.gsp",
+      "attribute/list.gsp",
+      "attribute/show.gsp"
+    ],
+    "auth": [
+      "auth/login.gsp",
+      "auth/signup.gsp"
+    ],
+    "batch": [
+      "batch/importData.gsp"
+    ],
+    "budgetCode": [
+      "budgetCode/create.gsp",
+      "budgetCode/edit.gsp",
+      "budgetCode/list.gsp"
+    ],
+    "category": [
+      "category/create.gsp",
+      "category/edit.gsp",
+      "category/tree.gsp"
+    ],
+    "common": [
+      "common/react.gsp"
+    ],
+    "consumption": [
+      "consumption/list.gsp",
+      "consumption/pivot.gsp",
+      "consumption/show.gsp"
+    ],
+    "createShipmentWorkflow": [
+      "createShipmentWorkflow/createShipment/enterContainerDetails.gsp",
+      "createShipmentWorkflow/createShipment/enterShipmentDetails.gsp",
+      "createShipmentWorkflow/createShipment/enterTrackingDetails.gsp",
+      "createShipmentWorkflow/createShipment/pickShipmentItems.gsp",
+      "createShipmentWorkflow/createShipment/sendShipment.gsp"
+    ],
+    "dashboard": [
+      "dashboard/chooseLocation.gsp",
+      "dashboard/megamenu.gsp"
+    ],
+    "dataExport": [
+      "dataExport/index.gsp"
+    ],
+    "deliveryNote": [
+      "deliveryNote/print.gsp",
+      "deliveryNote/printOutboundReturn.gsp"
+    ],
+    "document": [
+      "document/create.gsp",
+      "document/edit.gsp",
+      "document/list.gsp",
+      "document/show.gsp",
+      "document/upload.gsp"
+    ],
+    "error.gsp": [
+      "error.gsp"
+    ],
+    "errors": [
+      "errors/accessDenied.gsp",
+      "errors/dataAccess.gsp",
+      "errors/methodNotAllowed.gsp",
+      "errors/notFound.gsp"
+    ],
+    "eventType": [
+      "eventType/create.gsp",
+      "eventType/edit.gsp",
+      "eventType/list.gsp",
+      "eventType/show.gsp"
+    ],
+    "glAccount": [
+      "glAccount/create.gsp",
+      "glAccount/edit.gsp",
+      "glAccount/list.gsp"
+    ],
+    "glAccountType": [
+      "glAccountType/create.gsp",
+      "glAccountType/edit.gsp",
+      "glAccountType/list.gsp"
+    ],
+    "goodsReceiptNote": [
+      "goodsReceiptNote/print.gsp"
+    ],
+    "inventory": [
+      "inventory/browse.gsp",
+      "inventory/createTransaction.gsp",
+      "inventory/editBinLocation.gsp",
+      "inventory/editTransaction.gsp",
+      "inventory/list.gsp",
+      "inventory/listDailyTransactions.gsp",
+      "inventory/listExpiredStock.gsp",
+      "inventory/listExpiringStock.gsp",
+      "inventory/listLowStock.gsp",
+      "inventory/listReorderStock.gsp",
+      "inventory/listTransactions.gsp",
+      "inventory/manage.gsp",
+      "inventory/showProducts.gsp",
+      "inventory/showTransaction.gsp",
+      "inventory/upload.gsp"
+    ],
+    "inventoryBrowser": [
+      "inventoryBrowser/list.gsp"
+    ],
+    "inventoryItem": [
+      "inventoryItem/editInventoryLevel.gsp",
+      "inventoryItem/showGraph.gsp",
+      "inventoryItem/showLotNumbers.gsp",
+      "inventoryItem/showRecordInventory.gsp",
+      "inventoryItem/showStockCard.gsp",
+      "inventoryItem/showTransactionLog.gsp"
+    ],
+    "inventoryLevel": [
+      "inventoryLevel/create.gsp",
+      "inventoryLevel/edit.gsp",
+      "inventoryLevel/list.gsp",
+      "inventoryLevel/show.gsp"
+    ],
+    "inventorySnapshot": [
+      "inventorySnapshot/edit.gsp",
+      "inventorySnapshot/list.gsp",
+      "inventorySnapshot/show.gsp"
+    ],
+    "invoice": [
+      "invoice/addDocument.gsp",
+      "invoice/list.gsp",
+      "invoice/show.gsp"
+    ],
+    "jobs": [
+      "jobs/show.gsp"
+    ],
+    "json": [
+      "json/createPerson.gsp"
+    ],
+    "localization": [
+      "localization/create.gsp",
+      "localization/edit.gsp",
+      "localization/list.gsp",
+      "localization/show.gsp"
+    ],
+    "location": [
+      "location/edit.gsp",
+      "location/list.gsp",
+      "location/showBinLocations.gsp",
+      "location/showContents.gsp",
+      "location/showZoneLocations.gsp",
+      "location/uploadLogo.gsp"
+    ],
+    "locationGroup": [
+      "locationGroup/create.gsp",
+      "locationGroup/edit.gsp",
+      "locationGroup/list.gsp",
+      "locationGroup/show.gsp"
+    ],
+    "locationType": [
+      "locationType/create.gsp",
+      "locationType/edit.gsp",
+      "locationType/list.gsp",
+      "locationType/show.gsp"
+    ],
+    "migration": [
+      "migration/dataMigration.gsp",
+      "migration/dataQuality.gsp",
+      "migration/dimensionTables.gsp",
+      "migration/factTables.gsp",
+      "migration/index.gsp",
+      "migration/materializedViews.gsp",
+      "migration/productAvailability.gsp"
+    ],
+    "mobile": [
+      "mobile/chooseLocation.gsp",
+      "mobile/error.gsp",
+      "mobile/index.gsp",
+      "mobile/login.gsp",
+      "mobile/menu.gsp",
+      "mobile/outboundList.gsp",
+      "mobile/productDetails.gsp",
+      "mobile/productList.gsp"
+    ],
+    "order": [
+      "order/addComment.gsp",
+      "order/addDocument.gsp",
+      "order/editAdjustment.gsp",
+      "order/list.gsp",
+      "order/listOrderItems.gsp",
+      "order/orderItemSummaryList.gsp",
+      "order/orderSummaryList.gsp",
+      "order/print.gsp",
+      "order/show.gsp"
+    ],
+    "orderAdjustmentType": [
+      "orderAdjustmentType/create.gsp",
+      "orderAdjustmentType/edit.gsp",
+      "orderAdjustmentType/list.gsp"
+    ],
+    "organization": [
+      "organization/create.gsp",
+      "organization/edit.gsp",
+      "organization/list.gsp",
+      "organization/show.gsp"
+    ],
+    "partialReceiving": [
+      "partialReceiving/create.gsp"
+    ],
+    "party": [
+      "party/create.gsp",
+      "party/edit.gsp",
+      "party/list.gsp",
+      "party/show.gsp"
+    ],
+    "partyRole": [
+      "partyRole/create.gsp",
+      "partyRole/edit.gsp",
+      "partyRole/list.gsp",
+      "partyRole/show.gsp"
+    ],
+    "partyType": [
+      "partyType/create.gsp",
+      "partyType/edit.gsp",
+      "partyType/list.gsp",
+      "partyType/show.gsp"
+    ],
+    "paymentTerm": [
+      "paymentTerm/create.gsp",
+      "paymentTerm/edit.gsp",
+      "paymentTerm/list.gsp"
+    ],
+    "person": [
+      "person/create.gsp",
+      "person/edit.gsp",
+      "person/list.gsp",
+      "person/show.gsp"
+    ],
+    "picklist": [
+      "picklist/print.gsp",
+      "picklist/returnPrint.gsp"
+    ],
+    "preferenceType": [
+      "preferenceType/create.gsp",
+      "preferenceType/edit.gsp",
+      "preferenceType/list.gsp"
+    ],
+    "product": [
+      "product/addDocument.gsp",
+      "product/batchEdit.gsp",
+      "product/batchEditProperties.gsp",
+      "product/edit.gsp",
+      "product/importAsCsv.gsp",
+      "product/list.gsp",
+      "product/productMergeLogs.gsp",
+      "product/search.gsp",
+      "product/show.gsp",
+      "product/upnDatabase.gsp"
+    ],
+    "productAssociation": [
+      "productAssociation/create.gsp",
+      "productAssociation/edit.gsp",
+      "productAssociation/list.gsp",
+      "productAssociation/show.gsp"
+    ],
+    "productCatalog": [
+      "productCatalog/create.gsp",
+      "productCatalog/edit.gsp",
+      "productCatalog/list.gsp",
+      "productCatalog/show.gsp"
+    ],
+    "productComponent": [
+      "productComponent/index.gsp"
+    ],
+    "productGroup": [
+      "productGroup/create.gsp",
+      "productGroup/edit.gsp",
+      "productGroup/list.gsp",
+      "productGroup/show.gsp"
+    ],
+    "productSupplier": [
+      "productSupplier/create.gsp",
+      "productSupplier/edit.gsp",
+      "productSupplier/list.gsp",
+      "productSupplier/show.gsp"
+    ],
+    "productType": [
+      "productType/create.gsp",
+      "productType/edit.gsp",
+      "productType/list.gsp",
+      "productType/show.gsp"
+    ],
+    "quartz": [
+      "quartz/list.gsp"
+    ],
+    "receiveOrderWorkflow": [
+      "receiveOrderWorkflow/receiveOrder/confirmOrderReceipt.gsp",
+      "receiveOrderWorkflow/receiveOrder/enterShipmentDetails.gsp",
+      "receiveOrderWorkflow/receiveOrder/processOrderItems.gsp"
+    ],
+    "replenishment": [
+      "replenishment/print.gsp"
+    ],
+    "report": [
+      "report/printPaginatedPackingListReport.gsp",
+      "report/printPickListReport.gsp",
+      "report/printShippingReport.gsp",
+      "report/showBinLocationReport.gsp",
+      "report/showCycleCountReport.gsp",
+      "report/showForecastReport.gsp",
+      "report/showInventoryByLocationReport.gsp",
+      "report/showInventoryReport.gsp",
+      "report/showOnOrderReport.gsp",
+      "report/showPaginatedPackingListReport.gsp",
+      "report/showRequestDetailReport.gsp",
+      "report/showTransactionReport.gsp"
+    ],
+    "requisition": [
+      "requisition/chooseTemplate.gsp",
+      "requisition/confirm.gsp",
+      "requisition/create.gsp",
+      "requisition/createNonStock.gsp",
+      "requisition/createStock.gsp",
+      "requisition/edit.gsp",
+      "requisition/editHeader.gsp",
+      "requisition/list.gsp",
+      "requisition/pick.gsp",
+      "requisition/printDraft.gsp",
+      "requisition/process.gsp",
+      "requisition/review.gsp",
+      "requisition/show.gsp",
+      "requisition/transfer.gsp"
+    ],
+    "requisitionItem": [
+      "requisitionItem/change.gsp",
+      "requisitionItem/list.gsp"
+    ],
+    "requisitionTemplate": [
+      "requisitionTemplate/batch.gsp",
+      "requisitionTemplate/create.gsp",
+      "requisitionTemplate/edit.gsp",
+      "requisitionTemplate/editHeader.gsp",
+      "requisitionTemplate/list.gsp",
+      "requisitionTemplate/sendMail.gsp",
+      "requisitionTemplate/show.gsp"
+    ],
+    "returns": [
+      "returns/show.gsp"
+    ],
+    "role": [
+      "role/create.gsp",
+      "role/edit.gsp",
+      "role/index.gsp",
+      "role/show.gsp"
+    ],
+    "shipment": [
+      "shipment/addComment.gsp",
+      "shipment/addDocument.gsp",
+      "shipment/addToShipment.gsp",
+      "shipment/deleteShipment.gsp",
+      "shipment/editEvent.gsp",
+      "shipment/list.gsp",
+      "shipment/receiveShipment.gsp",
+      "shipment/sendShipment.gsp",
+      "shipment/showDetails.gsp",
+      "shipment/showPackingList.gsp"
+    ],
+    "shipmentItem": [
+      "shipmentItem/create.gsp",
+      "shipmentItem/edit.gsp",
+      "shipmentItem/list.gsp",
+      "shipmentItem/pick.gsp",
+      "shipmentItem/show.gsp",
+      "shipmentItem/split.gsp"
+    ],
+    "shipmentWorkflow": [
+      "shipmentWorkflow/create.gsp",
+      "shipmentWorkflow/edit.gsp",
+      "shipmentWorkflow/list.gsp",
+      "shipmentWorkflow/show.gsp"
+    ],
+    "stockMovement": [
+      "stockMovement/addComment.gsp",
+      "stockMovement/addDocument.gsp",
+      "stockMovement/list.gsp",
+      "stockMovement/show.gsp"
+    ],
+    "stockTransfer": [
+      "stockTransfer/list.gsp",
+      "stockTransfer/print.gsp",
+      "stockTransfer/show.gsp"
+    ],
+    "stocklist": [
+      "stocklist/show.gsp"
+    ],
+    "supplier": [
+      "supplier/list.gsp",
+      "supplier/show.gsp"
+    ],
+    "tag": [
+      "tag/create.gsp",
+      "tag/edit.gsp",
+      "tag/list.gsp",
+      "tag/show.gsp"
+    ],
+    "transactionEntry": [
+      "transactionEntry/create.gsp",
+      "transactionEntry/edit.gsp",
+      "transactionEntry/list.gsp",
+      "transactionEntry/show.gsp"
+    ],
+    "unitOfMeasureConversion": [
+      "unitOfMeasureConversion/create.gsp",
+      "unitOfMeasureConversion/edit.gsp",
+      "unitOfMeasureConversion/list.gsp"
+    ],
+    "user": [
+      "user/changePhoto.gsp",
+      "user/create.gsp",
+      "user/cropPhoto.gsp",
+      "user/edit.gsp",
+      "user/list.gsp",
+      "user/show.gsp"
+    ]
+  },
+  "batches": {
+    "admin-config-1": {
+      "screens": [
+        "admin/cache.gsp",
+        "admin/controllerActions.gsp",
+        "admin/index.gsp",
+        "admin/plugins.gsp",
+        "admin/sendMail.gsp",
+        "admin/showSettings.gsp"
+      ],
+      "view_dirs": [
+        "admin"
+      ],
+      "kinds": {
+        "other": 4,
+        "table": 1,
+        "detail": 1
+      }
+    },
+    "admin-config-2": {
+      "screens": [
+        "admin/showUpgrade.gsp",
+        "admin/status.gsp",
+        "batch/importData.gsp",
+        "dataExport/index.gsp",
+        "jobs/show.gsp",
+        "localization/create.gsp"
+      ],
+      "view_dirs": [
+        "admin",
+        "batch",
+        "dataExport",
+        "jobs",
+        "localization"
+      ],
+      "kinds": {
+        "detail": 2,
+        "other": 1,
+        "form": 2,
+        "table": 1
+      }
+    },
+    "admin-config-3": {
+      "screens": [
+        "localization/edit.gsp",
+        "localization/list.gsp",
+        "localization/show.gsp",
+        "migration/dataMigration.gsp",
+        "migration/dataQuality.gsp",
+        "migration/dimensionTables.gsp"
+      ],
+      "view_dirs": [
+        "localization",
+        "migration"
+      ],
+      "kinds": {
+        "form": 1,
+        "table": 1,
+        "detail": 1,
+        "other": 3
+      }
+    },
+    "admin-config-4": {
+      "screens": [
+        "migration/factTables.gsp",
+        "migration/index.gsp",
+        "migration/materializedViews.gsp",
+        "migration/productAvailability.gsp",
+        "quartz/list.gsp"
+      ],
+      "view_dirs": [
+        "migration",
+        "quartz"
+      ],
+      "kinds": {
+        "other": 3,
+        "table": 2
+      }
+    },
+    "dashboard-auth": {
+      "screens": [
+        "auth/login.gsp",
+        "auth/signup.gsp",
+        "common/react.gsp",
+        "dashboard/chooseLocation.gsp",
+        "dashboard/megamenu.gsp"
+      ],
+      "view_dirs": [
+        "auth",
+        "common",
+        "dashboard"
+      ],
+      "kinds": {
+        "other": 5
+      }
+    },
+    "errors-misc": {
+      "screens": [
+        "error.gsp",
+        "errors/accessDenied.gsp",
+        "errors/dataAccess.gsp",
+        "errors/methodNotAllowed.gsp",
+        "errors/notFound.gsp"
+      ],
+      "view_dirs": [
+        "error.gsp",
+        "errors"
+      ],
+      "kinds": {
+        "other": 5
+      }
+    },
+    "finance-config-1": {
+      "screens": [
+        "budgetCode/create.gsp",
+        "budgetCode/edit.gsp",
+        "budgetCode/list.gsp",
+        "eventType/create.gsp",
+        "eventType/edit.gsp"
+      ],
+      "view_dirs": [
+        "budgetCode",
+        "eventType"
+      ],
+      "kinds": {
+        "form": 4,
+        "table": 1
+      }
+    },
+    "finance-config-2": {
+      "screens": [
+        "eventType/list.gsp",
+        "eventType/show.gsp",
+        "glAccount/create.gsp",
+        "glAccount/edit.gsp",
+        "glAccount/list.gsp"
+      ],
+      "view_dirs": [
+        "eventType",
+        "glAccount"
+      ],
+      "kinds": {
+        "table": 2,
+        "detail": 1,
+        "form": 2
+      }
+    },
+    "finance-config-3": {
+      "screens": [
+        "glAccountType/create.gsp",
+        "glAccountType/edit.gsp",
+        "glAccountType/list.gsp",
+        "paymentTerm/create.gsp",
+        "paymentTerm/edit.gsp"
+      ],
+      "view_dirs": [
+        "glAccountType",
+        "paymentTerm"
+      ],
+      "kinds": {
+        "form": 4,
+        "table": 1
+      }
+    },
+    "finance-config-4": {
+      "screens": [
+        "paymentTerm/list.gsp",
+        "preferenceType/create.gsp",
+        "preferenceType/edit.gsp",
+        "preferenceType/list.gsp"
+      ],
+      "view_dirs": [
+        "paymentTerm",
+        "preferenceType"
+      ],
+      "kinds": {
+        "table": 2,
+        "form": 2
+      }
+    },
+    "inventory-1": {
+      "screens": [
+        "inventory/browse.gsp",
+        "inventory/createTransaction.gsp",
+        "inventory/editBinLocation.gsp",
+        "inventory/editTransaction.gsp",
+        "inventory/list.gsp"
+      ],
+      "view_dirs": [
+        "inventory"
+      ],
+      "kinds": {
+        "table": 2,
+        "form": 3
+      }
+    },
+    "inventory-2": {
+      "screens": [
+        "inventory/listDailyTransactions.gsp",
+        "inventory/listExpiredStock.gsp",
+        "inventory/listExpiringStock.gsp",
+        "inventory/listLowStock.gsp",
+        "inventory/listReorderStock.gsp"
+      ],
+      "view_dirs": [
+        "inventory"
+      ],
+      "kinds": {
+        "table": 5
+      }
+    },
+    "inventory-3": {
+      "screens": [
+        "inventory/listTransactions.gsp",
+        "inventory/manage.gsp",
+        "inventory/showProducts.gsp",
+        "inventory/showTransaction.gsp",
+        "inventory/upload.gsp"
+      ],
+      "view_dirs": [
+        "inventory"
+      ],
+      "kinds": {
+        "table": 1,
+        "other": 1,
+        "detail": 2,
+        "form": 1
+      }
+    },
+    "inventory-4": {
+      "screens": [
+        "inventoryBrowser/list.gsp",
+        "inventorySnapshot/edit.gsp",
+        "inventorySnapshot/list.gsp",
+        "inventorySnapshot/show.gsp"
+      ],
+      "view_dirs": [
+        "inventoryBrowser",
+        "inventorySnapshot"
+      ],
+      "kinds": {
+        "table": 2,
+        "form": 1,
+        "detail": 1
+      }
+    },
+    "invoicing": {
+      "screens": [
+        "invoice/addDocument.gsp",
+        "invoice/list.gsp",
+        "invoice/show.gsp"
+      ],
+      "view_dirs": [
+        "invoice"
+      ],
+      "kinds": {
+        "form": 1,
+        "table": 1,
+        "detail": 1
+      }
+    },
+    "locations-orgs-1": {
+      "screens": [
+        "location/edit.gsp",
+        "location/list.gsp",
+        "location/showBinLocations.gsp",
+        "location/showContents.gsp",
+        "location/showZoneLocations.gsp",
+        "location/uploadLogo.gsp"
+      ],
+      "view_dirs": [
+        "location"
+      ],
+      "kinds": {
+        "form": 2,
+        "table": 1,
+        "detail": 3
+      }
+    },
+    "locations-orgs-2": {
+      "screens": [
+        "locationGroup/create.gsp",
+        "locationGroup/edit.gsp",
+        "locationGroup/list.gsp",
+        "locationGroup/show.gsp",
+        "locationType/create.gsp",
+        "locationType/edit.gsp"
+      ],
+      "view_dirs": [
+        "locationGroup",
+        "locationType"
+      ],
+      "kinds": {
+        "form": 4,
+        "table": 1,
+        "detail": 1
+      }
+    },
+    "locations-orgs-3": {
+      "screens": [
+        "locationType/list.gsp",
+        "locationType/show.gsp",
+        "organization/create.gsp",
+        "organization/edit.gsp",
+        "organization/list.gsp",
+        "organization/show.gsp"
+      ],
+      "view_dirs": [
+        "locationType",
+        "organization"
+      ],
+      "kinds": {
+        "table": 2,
+        "detail": 2,
+        "form": 2
+      }
+    },
+    "locations-orgs-4": {
+      "screens": [
+        "party/create.gsp",
+        "party/edit.gsp",
+        "party/list.gsp",
+        "party/show.gsp",
+        "partyRole/create.gsp",
+        "partyRole/edit.gsp"
+      ],
+      "view_dirs": [
+        "party",
+        "partyRole"
+      ],
+      "kinds": {
+        "form": 4,
+        "table": 1,
+        "detail": 1
+      }
+    },
+    "locations-orgs-5": {
+      "screens": [
+        "partyRole/list.gsp",
+        "partyRole/show.gsp",
+        "partyType/create.gsp",
+        "partyType/edit.gsp",
+        "partyType/list.gsp",
+        "partyType/show.gsp"
+      ],
+      "view_dirs": [
+        "partyRole",
+        "partyType"
+      ],
+      "kinds": {
+        "table": 2,
+        "detail": 2,
+        "form": 2
+      }
+    },
+    "locations-orgs-6": {
+      "screens": [
+        "supplier/list.gsp",
+        "supplier/show.gsp"
+      ],
+      "view_dirs": [
+        "supplier"
+      ],
+      "kinds": {
+        "table": 1,
+        "detail": 1
+      }
+    },
+    "mobile-1": {
+      "screens": [
+        "mobile/chooseLocation.gsp",
+        "mobile/error.gsp",
+        "mobile/index.gsp",
+        "mobile/login.gsp"
+      ],
+      "view_dirs": [
+        "mobile"
+      ],
+      "kinds": {
+        "other": 3,
+        "table": 1
+      }
+    },
+    "mobile-2": {
+      "screens": [
+        "mobile/menu.gsp",
+        "mobile/outboundList.gsp",
+        "mobile/productDetails.gsp",
+        "mobile/productList.gsp"
+      ],
+      "view_dirs": [
+        "mobile"
+      ],
+      "kinds": {
+        "other": 2,
+        "table": 2
+      }
+    },
+    "orders-1": {
+      "screens": [
+        "order/addComment.gsp",
+        "order/addDocument.gsp",
+        "order/editAdjustment.gsp",
+        "order/list.gsp",
+        "order/listOrderItems.gsp",
+        "order/orderItemSummaryList.gsp"
+      ],
+      "view_dirs": [
+        "order"
+      ],
+      "kinds": {
+        "form": 3,
+        "table": 3
+      }
+    },
+    "orders-2": {
+      "screens": [
+        "order/orderSummaryList.gsp",
+        "order/print.gsp",
+        "order/show.gsp",
+        "orderAdjustmentType/create.gsp",
+        "orderAdjustmentType/edit.gsp",
+        "orderAdjustmentType/list.gsp"
+      ],
+      "view_dirs": [
+        "order",
+        "orderAdjustmentType"
+      ],
+      "kinds": {
+        "table": 2,
+        "print": 1,
+        "detail": 1,
+        "form": 2
+      }
+    },
+    "picking": {
+      "screens": [
+        "picklist/print.gsp",
+        "picklist/returnPrint.gsp",
+        "replenishment/print.gsp"
+      ],
+      "view_dirs": [
+        "picklist",
+        "replenishment"
+      ],
+      "kinds": {
+        "print": 3
+      }
+    },
+    "print-documents-1": {
+      "screens": [
+        "deliveryNote/print.gsp",
+        "deliveryNote/printOutboundReturn.gsp",
+        "document/create.gsp",
+        "document/edit.gsp"
+      ],
+      "view_dirs": [
+        "deliveryNote",
+        "document"
+      ],
+      "kinds": {
+        "print": 2,
+        "form": 2
+      }
+    },
+    "print-documents-2": {
+      "screens": [
+        "document/list.gsp",
+        "document/show.gsp",
+        "document/upload.gsp",
+        "goodsReceiptNote/print.gsp"
+      ],
+      "view_dirs": [
+        "document",
+        "goodsReceiptNote"
+      ],
+      "kinds": {
+        "table": 1,
+        "detail": 1,
+        "form": 1,
+        "print": 1
+      }
+    },
+    "product-catalog-1": {
+      "screens": [
+        "attribute/edit.gsp",
+        "attribute/list.gsp",
+        "attribute/show.gsp",
+        "category/create.gsp",
+        "category/edit.gsp",
+        "category/tree.gsp"
+      ],
+      "view_dirs": [
+        "attribute",
+        "category"
+      ],
+      "kinds": {
+        "form": 3,
+        "table": 1,
+        "detail": 1,
+        "other": 1
+      }
+    },
+    "product-catalog-2": {
+      "screens": [
+        "product/addDocument.gsp",
+        "product/batchEdit.gsp",
+        "product/batchEditProperties.gsp",
+        "product/edit.gsp",
+        "product/importAsCsv.gsp",
+        "product/list.gsp"
+      ],
+      "view_dirs": [
+        "product"
+      ],
+      "kinds": {
+        "form": 5,
+        "table": 1
+      }
+    },
+    "product-catalog-3": {
+      "screens": [
+        "product/productMergeLogs.gsp",
+        "product/search.gsp",
+        "product/show.gsp",
+        "product/upnDatabase.gsp",
+        "productAssociation/create.gsp",
+        "productAssociation/edit.gsp"
+      ],
+      "view_dirs": [
+        "product",
+        "productAssociation"
+      ],
+      "kinds": {
+        "other": 3,
+        "detail": 1,
+        "form": 2
+      }
+    },
+    "product-catalog-4": {
+      "screens": [
+        "productAssociation/list.gsp",
+        "productAssociation/show.gsp",
+        "productCatalog/create.gsp",
+        "productCatalog/edit.gsp",
+        "productCatalog/list.gsp",
+        "productCatalog/show.gsp"
+      ],
+      "view_dirs": [
+        "productAssociation",
+        "productCatalog"
+      ],
+      "kinds": {
+        "table": 2,
+        "detail": 2,
+        "form": 2
+      }
+    },
+    "product-catalog-5": {
+      "screens": [
+        "productComponent/index.gsp",
+        "productGroup/create.gsp",
+        "productGroup/edit.gsp",
+        "productGroup/list.gsp",
+        "productGroup/show.gsp",
+        "productSupplier/create.gsp"
+      ],
+      "view_dirs": [
+        "productComponent",
+        "productGroup",
+        "productSupplier"
+      ],
+      "kinds": {
+        "table": 2,
+        "form": 3,
+        "detail": 1
+      }
+    },
+    "product-catalog-6": {
+      "screens": [
+        "productSupplier/edit.gsp",
+        "productSupplier/list.gsp",
+        "productSupplier/show.gsp",
+        "productType/create.gsp",
+        "productType/edit.gsp",
+        "productType/list.gsp"
+      ],
+      "view_dirs": [
+        "productSupplier",
+        "productType"
+      ],
+      "kinds": {
+        "form": 3,
+        "table": 2,
+        "detail": 1
+      }
+    },
+    "product-catalog-7": {
+      "screens": [
+        "productType/show.gsp",
+        "tag/create.gsp",
+        "tag/edit.gsp",
+        "tag/list.gsp",
+        "tag/show.gsp",
+        "unitOfMeasureConversion/create.gsp"
+      ],
+      "view_dirs": [
+        "productType",
+        "tag",
+        "unitOfMeasureConversion"
+      ],
+      "kinds": {
+        "detail": 2,
+        "form": 3,
+        "table": 1
+      }
+    },
+    "product-catalog-8": {
+      "screens": [
+        "unitOfMeasureConversion/edit.gsp",
+        "unitOfMeasureConversion/list.gsp"
+      ],
+      "view_dirs": [
+        "unitOfMeasureConversion"
+      ],
+      "kinds": {
+        "form": 1,
+        "table": 1
+      }
+    },
+    "receiving": {
+      "screens": [
+        "partialReceiving/create.gsp",
+        "receiveOrderWorkflow/receiveOrder/confirmOrderReceipt.gsp",
+        "receiveOrderWorkflow/receiveOrder/enterShipmentDetails.gsp",
+        "receiveOrderWorkflow/receiveOrder/processOrderItems.gsp"
+      ],
+      "view_dirs": [
+        "partialReceiving",
+        "receiveOrderWorkflow"
+      ],
+      "kinds": {
+        "form": 1,
+        "other": 3
+      }
+    },
+    "reporting-1": {
+      "screens": [
+        "consumption/list.gsp",
+        "consumption/pivot.gsp",
+        "consumption/show.gsp",
+        "json/createPerson.gsp",
+        "report/printPaginatedPackingListReport.gsp"
+      ],
+      "view_dirs": [
+        "consumption",
+        "json",
+        "report"
+      ],
+      "kinds": {
+        "table": 1,
+        "other": 1,
+        "detail": 1,
+        "form": 1,
+        "print": 1
+      }
+    },
+    "reporting-2": {
+      "screens": [
+        "report/printPickListReport.gsp",
+        "report/printShippingReport.gsp",
+        "report/showBinLocationReport.gsp",
+        "report/showCycleCountReport.gsp",
+        "report/showForecastReport.gsp"
+      ],
+      "view_dirs": [
+        "report"
+      ],
+      "kinds": {
+        "print": 2,
+        "detail": 3
+      }
+    },
+    "reporting-3": {
+      "screens": [
+        "report/showInventoryByLocationReport.gsp",
+        "report/showInventoryReport.gsp",
+        "report/showOnOrderReport.gsp",
+        "report/showPaginatedPackingListReport.gsp",
+        "report/showRequestDetailReport.gsp"
+      ],
+      "view_dirs": [
+        "report"
+      ],
+      "kinds": {
+        "detail": 4,
+        "table": 1
+      }
+    },
+    "reporting-4": {
+      "screens": [
+        "report/showTransactionReport.gsp",
+        "transactionEntry/create.gsp",
+        "transactionEntry/edit.gsp",
+        "transactionEntry/list.gsp",
+        "transactionEntry/show.gsp"
+      ],
+      "view_dirs": [
+        "report",
+        "transactionEntry"
+      ],
+      "kinds": {
+        "detail": 2,
+        "form": 2,
+        "table": 1
+      }
+    },
+    "requisitions-1": {
+      "screens": [
+        "requisition/chooseTemplate.gsp",
+        "requisition/confirm.gsp",
+        "requisition/create.gsp",
+        "requisition/createNonStock.gsp",
+        "requisition/createStock.gsp",
+        "requisition/edit.gsp"
+      ],
+      "view_dirs": [
+        "requisition"
+      ],
+      "kinds": {
+        "other": 2,
+        "form": 4
+      }
+    },
+    "requisitions-2": {
+      "screens": [
+        "requisition/editHeader.gsp",
+        "requisition/list.gsp",
+        "requisition/pick.gsp",
+        "requisition/printDraft.gsp",
+        "requisition/process.gsp",
+        "requisition/review.gsp"
+      ],
+      "view_dirs": [
+        "requisition"
+      ],
+      "kinds": {
+        "form": 1,
+        "table": 1,
+        "other": 3,
+        "print": 1
+      }
+    },
+    "requisitions-3": {
+      "screens": [
+        "requisition/show.gsp",
+        "requisition/transfer.gsp",
+        "requisitionItem/change.gsp",
+        "requisitionItem/list.gsp"
+      ],
+      "view_dirs": [
+        "requisition",
+        "requisitionItem"
+      ],
+      "kinds": {
+        "detail": 1,
+        "other": 2,
+        "table": 1
+      }
+    },
+    "shipment-workflow": {
+      "screens": [
+        "createShipmentWorkflow/createShipment/enterContainerDetails.gsp",
+        "createShipmentWorkflow/createShipment/enterShipmentDetails.gsp",
+        "createShipmentWorkflow/createShipment/enterTrackingDetails.gsp",
+        "createShipmentWorkflow/createShipment/pickShipmentItems.gsp",
+        "createShipmentWorkflow/createShipment/sendShipment.gsp"
+      ],
+      "view_dirs": [
+        "createShipmentWorkflow"
+      ],
+      "kinds": {
+        "other": 5
+      }
+    },
+    "shipments-1": {
+      "screens": [
+        "shipment/addComment.gsp",
+        "shipment/addDocument.gsp",
+        "shipment/addToShipment.gsp",
+        "shipment/deleteShipment.gsp",
+        "shipment/editEvent.gsp"
+      ],
+      "view_dirs": [
+        "shipment"
+      ],
+      "kinds": {
+        "form": 4,
+        "other": 1
+      }
+    },
+    "shipments-2": {
+      "screens": [
+        "shipment/list.gsp",
+        "shipment/receiveShipment.gsp",
+        "shipment/sendShipment.gsp",
+        "shipment/showDetails.gsp",
+        "shipment/showPackingList.gsp"
+      ],
+      "view_dirs": [
+        "shipment"
+      ],
+      "kinds": {
+        "table": 2,
+        "other": 2,
+        "detail": 1
+      }
+    },
+    "shipments-3": {
+      "screens": [
+        "shipmentItem/create.gsp",
+        "shipmentItem/edit.gsp",
+        "shipmentItem/list.gsp",
+        "shipmentItem/pick.gsp",
+        "shipmentItem/show.gsp"
+      ],
+      "view_dirs": [
+        "shipmentItem"
+      ],
+      "kinds": {
+        "form": 2,
+        "table": 1,
+        "other": 1,
+        "detail": 1
+      }
+    },
+    "shipments-4": {
+      "screens": [
+        "shipmentItem/split.gsp",
+        "shipmentWorkflow/create.gsp",
+        "shipmentWorkflow/edit.gsp",
+        "shipmentWorkflow/list.gsp",
+        "shipmentWorkflow/show.gsp"
+      ],
+      "view_dirs": [
+        "shipmentItem",
+        "shipmentWorkflow"
+      ],
+      "kinds": {
+        "other": 1,
+        "form": 2,
+        "table": 1,
+        "detail": 1
+      }
+    },
+    "stock-card-1": {
+      "screens": [
+        "inventoryItem/editInventoryLevel.gsp",
+        "inventoryItem/showGraph.gsp",
+        "inventoryItem/showLotNumbers.gsp",
+        "inventoryItem/showRecordInventory.gsp",
+        "inventoryItem/showStockCard.gsp"
+      ],
+      "view_dirs": [
+        "inventoryItem"
+      ],
+      "kinds": {
+        "form": 1,
+        "detail": 4
+      }
+    },
+    "stock-card-2": {
+      "screens": [
+        "inventoryItem/showTransactionLog.gsp",
+        "inventoryLevel/create.gsp",
+        "inventoryLevel/edit.gsp",
+        "inventoryLevel/list.gsp",
+        "inventoryLevel/show.gsp"
+      ],
+      "view_dirs": [
+        "inventoryItem",
+        "inventoryLevel"
+      ],
+      "kinds": {
+        "detail": 2,
+        "form": 2,
+        "table": 1
+      }
+    },
+    "stock-movements": {
+      "screens": [
+        "stockMovement/addComment.gsp",
+        "stockMovement/addDocument.gsp",
+        "stockMovement/list.gsp",
+        "stockMovement/show.gsp"
+      ],
+      "view_dirs": [
+        "stockMovement"
+      ],
+      "kinds": {
+        "form": 2,
+        "table": 1,
+        "detail": 1
+      }
+    },
+    "stock-transfers": {
+      "screens": [
+        "returns/show.gsp",
+        "stockTransfer/list.gsp",
+        "stockTransfer/print.gsp",
+        "stockTransfer/show.gsp"
+      ],
+      "view_dirs": [
+        "returns",
+        "stockTransfer"
+      ],
+      "kinds": {
+        "detail": 2,
+        "table": 1,
+        "print": 1
+      }
+    },
+    "stocklists-1": {
+      "screens": [
+        "requisitionTemplate/batch.gsp",
+        "requisitionTemplate/create.gsp",
+        "requisitionTemplate/edit.gsp",
+        "requisitionTemplate/editHeader.gsp"
+      ],
+      "view_dirs": [
+        "requisitionTemplate"
+      ],
+      "kinds": {
+        "form": 4
+      }
+    },
+    "stocklists-2": {
+      "screens": [
+        "requisitionTemplate/list.gsp",
+        "requisitionTemplate/sendMail.gsp",
+        "requisitionTemplate/show.gsp",
+        "stocklist/show.gsp"
+      ],
+      "view_dirs": [
+        "requisitionTemplate",
+        "stocklist"
+      ],
+      "kinds": {
+        "table": 1,
+        "other": 1,
+        "detail": 2
+      }
+    },
+    "users-security-1": {
+      "screens": [
+        "person/create.gsp",
+        "person/edit.gsp",
+        "person/list.gsp",
+        "person/show.gsp",
+        "role/create.gsp"
+      ],
+      "view_dirs": [
+        "person",
+        "role"
+      ],
+      "kinds": {
+        "form": 3,
+        "table": 1,
+        "detail": 1
+      }
+    },
+    "users-security-2": {
+      "screens": [
+        "role/edit.gsp",
+        "role/index.gsp",
+        "role/show.gsp",
+        "user/changePhoto.gsp",
+        "user/create.gsp"
+      ],
+      "view_dirs": [
+        "role",
+        "user"
+      ],
+      "kinds": {
+        "form": 2,
+        "table": 1,
+        "detail": 1,
+        "other": 1
+      }
+    },
+    "users-security-3": {
+      "screens": [
+        "user/cropPhoto.gsp",
+        "user/edit.gsp",
+        "user/list.gsp",
+        "user/show.gsp"
+      ],
+      "view_dirs": [
+        "user"
+      ],
+      "kinds": {
+        "other": 1,
+        "form": 1,
+        "table": 1,
+        "detail": 1
+      }
+    }
+  }
+}
