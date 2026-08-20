@@ -80,7 +80,7 @@ class OrderApiController {
                 origin                : "${order.origin?.name}" + (originOrgCode ? " (${originOrgCode})" : ""),
                 destination           : "${order.destination?.name}" + (destinationOrgCode ? " (${destinationOrgCode})" : ""),
                 orderedBy             : order.orderedBy?.name,
-                dateOrdered           : order.dateOrdered?.format(Constants.DEFAULT_DATE_FORMAT),
+                dateOrdered           : order.dateOrdered,
                 orderItemsCount       : order.orderItems?.findAll { OrderItem orderItem -> orderItem.orderItemStatusCode != OrderItemStatusCode.CANCELED }?.size() ?: 0,
                 orderedOrderItemsCount: order.orderedOrderItems?.size() ?: 0,
                 shippedItemsCount     : order.shippedOrderItems?.size() ?: 0,
