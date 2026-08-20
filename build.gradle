@@ -70,7 +70,7 @@ plugins {
     id 'com.gorylenko.gradle-git-properties' version '2.2.4'
 
     // enable `npmInstall` and `npm_run_*` targets, and the `node` block below
-    id 'com.github.node-gradle.node' version '1.5.3'
+    id 'com.github.node-gradle.node' version '2.2.4'
 
     // resolve a Windows-specific build issue
     id 'com.virgo47.ClasspathJar' version '1.0.0'
@@ -127,18 +127,16 @@ assets {
     skipNonDigests = false
 }
 
-/*
- * The Spring Loaded reloading agent only supports Java 8 bytecode and
- * crashes the JVM on startup under Java 11, so disable it here.
- */
-grails {
-    agent {
-        enabled = false
-    }
-}
-
 bootRun {
-    addResources = true
+    sourceResources sourceSets.main
+    /*
+     * The Grails 4 gradle plugin rebuilds the bootRun classpath from a fixed
+     * list of directories (conf, i18n, views, src/main/resources), so the
+     * migration srcDirs registered under `sourceSets` below never make it
+     * onto the development classpath. Liquibase resolves changelogs from the
+     * classpath, so re-add the migrations directory here.
+     */
+    classpath += files('grails-app/migrations')
     jvmArgs = [
         '-Dspring.output.ansi.enabled=never',
         '-Xdebug',
@@ -252,6 +250,11 @@ configurations {
                     }
                 }
 
+                if (details.requested.group == 'io.micronaut') {
+                    details.because 'align micronaut modules with the Grails 4.1 BOM'
+                    details.useVersion(micronautVersion)
+                }
+
                 if (details.requested.group.startsWith('org.apache.tomcat')) {
                     details.because 'enforce consistent Tomcat versioning'
                     details.useVersion(tomcatVersion)
@@ -317,7 +320,9 @@ configurations {
             force 'commons-io:commons-io:2.12.0'  // security patch
             force 'commons-validator:commons-validator:1.7'  // security patch
             force 'jline:jline:2.14.6'  // use consistent version
+            force 'org.apache.ant:ant:1.9.15'  // use consistent version
             force 'org.apache.commons:commons-lang3:3.12.0'  // security patch
+            force 'org.javassist:javassist:3.24.0-GA'  // use consistent version
             force 'org.apache.xmlgraphics:xmlgraphics-commons:2.8'  // use consistent version
             force 'org.apache.xmlbeans:xmlbeans:3.1.0'  // security patch, build fixes
             force 'org.checkerframework:checker-qual:3.12.0'  // use consistent version
@@ -423,12 +428,12 @@ sourceSets {
 
 springBoot {
     buildInfo()
-    mainClass = 'org.pih.warehouse.Application'
-    executable = true
+    mainClassName = 'org.pih.warehouse.Application'
 }
 
-war {
-    archiveName = 'openboxes.war'
+bootWar {
+    archiveFileName = 'openboxes.war'
+    launchScript()
     zip64 = true
 }
 
@@ -565,6 +570,10 @@ dependencies {
     // enable `import groovy.sql.Sql`
     implementation 'org.codehaus.groovy:groovy-sql'
 
+    // Groovy 2.5 moved Date/Calendar extension methods (e.g. `new Date() - 1`)
+    // into the optional groovy-dateutil module
+    implementation 'org.codehaus.groovy:groovy-dateutil'
+
     compile 'org.docx4j:docx4j-JAXB-ReferenceImpl'
 
     // enable grails console web ui
@@ -641,8 +650,7 @@ dependencies {
     compile 'org.grails.plugins:browser-detection:3.4.0'
 
     // enable `import grails.plugin.cache.Cacheable`
-    implementation 'org.grails.plugins:cache:4.0.3'
-    compile 'org.grails.plugins:cache-ehcache:3.0.0'
+    implementation 'org.grails.plugins:cache:5.0.1'
 
     // enable `grails test-app -coverage`
     testImplementation('org.grails.plugins:code-coverage:2.0.3-3') {
@@ -655,6 +663,8 @@ dependencies {
 
     // FIXME use commons-csv instead
     implementation 'org.grails.plugins:csv:1.0.1'
+    // the csv plugin no longer exposes opencsv transitively under Grails 4
+    implementation 'net.sf.opencsv:opencsv:2.3'
 
     // enable liquibase migrations
     compile("org.grails.plugins:database-migration:${databaseMigrationVersion}") {
@@ -665,13 +675,15 @@ dependencies {
     implementation 'org.grails.plugins:excel-import:3.0.2'
 
     // load config via files listed in application.yml::grails.config.locations
-    implementation 'org.grails.plugins:external-config:1.4.0'
+    implementation 'org.grails.plugins:external-config:2.0.0'
 
     // enable `import geb.*`
     testCompile 'org.grails.plugins:geb'
 
     // enable prettytime.display(), which we use only three times
     implementation 'org.grails.plugins:grails-pretty-time:4.0.0'
+    // the pretty-time plugin no longer exposes prettytime transitively under Grails 4
+    implementation 'org.ocpsoft.prettytime:prettytime:4.0.4.Final'
 
     // enable `import org.grails.plugins.web.taglib.*`
     compile 'org.grails.plugins:gsp'
@@ -767,10 +779,10 @@ dependencies {
      *
      * N.B., these libraries needlessly duplicate Grails' imports.
      */
-    testCompile('org.spockframework:spock-core:1.3-groovy-2.4') {
+    testCompile('org.spockframework:spock-core:1.3-groovy-2.5') {
         exclude group: 'org.codehaus.groovy', module: 'groovy-all'
     }
-    testCompile('org.spockframework:spock-spring:1.3-groovy-2.4') {
+    testCompile('org.spockframework:spock-spring:1.3-groovy-2.5') {
         exclude group: 'org.codehaus.groovy', module: 'groovy-all'
     }
 
