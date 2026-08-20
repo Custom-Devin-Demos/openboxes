@@ -59,17 +59,12 @@ const EditRequisitionPage = ({ match }) => {
     apiClient.post(REQUISITION_URL.saveRequisitionItems(), stripNulls({
       id: requisition.id,
       name: requisition.name,
-      type: requisition.type,
-      'origin.id': requisition.originId,
-      'destination.id': requisition.destinationId,
-      dateRequested: requisition.dateRequested,
-      'requestedBy.id': requisition.requestedById,
       description: requisition.description,
       requisitionItems: items.map((item, index) => stripNulls({
         id: item.id,
-        'product.id': item.productId,
+        product: item.productId ? { id: item.productId } : null,
         quantity: item.quantity,
-        'productPackage.id': item.productPackageId,
+        productPackage: item.productPackageId ? { id: item.productPackageId } : null,
         orderIndex: index,
       })),
     })).then((response) => {

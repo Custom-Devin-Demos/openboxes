@@ -126,7 +126,8 @@ class RequisitionApiController {
             requisition.status = RequisitionStatus.EDITING
             requisition.save(flush: true)
         }
-        render([data: requisition.toJson() + getHeaderData(requisition)] as JSON)
+        render([data: requisition.toJson() + getHeaderData(requisition)
+                + [requisitionItems: getRequisitionItemsData(requisition)]] as JSON)
     }
 
     def confirm() {
@@ -182,7 +183,8 @@ class RequisitionApiController {
                 ]
             }
         }
-        render([data: requisition.toJson() + getHeaderData(requisition) + [rows: rows]] as JSON)
+        render([data: requisition.toJson() + getHeaderData(requisition)
+                + [requisitionItems: getRequisitionItemsData(requisition), rows: rows]] as JSON)
     }
 
     def updateDetails() {
@@ -202,6 +204,16 @@ class RequisitionApiController {
         }
         requisition.save(flush: true)
         render([success: true] as JSON)
+    }
+
+    private List getRequisitionItemsData(Requisition requisition) {
+        requisition.requisitionItems?.sort()?.collect { RequisitionItem requisitionItem ->
+            requisitionItem.toJson() + [
+                    requisitionItemType: requisitionItem.requisitionItemType?.name(),
+                    status             : requisitionItem.status?.toString(),
+                    recipient          : requisitionItem.recipient?.name,
+            ]
+        } ?: []
     }
 
     private Map getHeaderData(Requisition requisition) {
