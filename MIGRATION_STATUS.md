@@ -31,7 +31,7 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 
 | # | Task | Status | Session | PR | Notes |
 |---|------|--------|---------|----|-------|
-| 1.1 | Java 8→11 + dependency cleanup | PENDING | | | Blocked by Phase 0 |
+| 1.1 | Java 8→11 + dependency cleanup | IN_PROGRESS | [c54a01cd](https://app.devin.ai/sessions/c54a01cdcc264e168324562d8958adeb) | | |
 | 1.2 | Grails 3→4 | PENDING | | | Blocked by 1.1 |
 | 1.3 | Grails 4→5 | PENDING | | | Blocked by 1.2 |
 | 1.4 | Grails 5→6 / Java 21 / javax→jakarta | PENDING | | | Blocked by 1.3 |
@@ -42,7 +42,17 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | # | Task | Status | Session | PR | Notes |
 |---|------|--------|---------|----|-------|
 | 2.0 | Module batching plan (from 0.2 live-screen inventory) | PENDING | | | Coordinator task |
-| 2.x | Module batches (3–6 related live screens each, incl. missing API endpoints) | PENDING | | | Populated after 0.2 |
+| 2.0 batching | 58 batches defined in docs/migration/live-screen-inventory.md | DONE | (coordinator) | [#1](https://github.com/Custom-Devin-Demos/openboxes/pull/1) | |
+| 2-inventory-1 | inventory-1 batch | IN_PROGRESS | [cce1d959](https://app.devin.ai/sessions/cce1d9599054469987104c9096928947) | | |
+| 2-product-catalog-1 | product-catalog-1 batch | IN_PROGRESS | [36acf165](https://app.devin.ai/sessions/36acf1659c1744f48fc9bcc3f36cf308) | | |
+| 2-locations-orgs-1 | locations-orgs-1 batch | IN_PROGRESS | [7be46dc0](https://app.devin.ai/sessions/7be46dc091cf49ffa359a3fdde470736) | | |
+| 2-requisitions-1 | requisitions-1 batch | IN_PROGRESS | [86b36670](https://app.devin.ai/sessions/86b3667030ff470baf5f9cefba57bfa4) | | |
+| 2-shipments-1 | shipments-1 batch | IN_PROGRESS | [88fb63b4](https://app.devin.ai/sessions/88fb63b4ceb549dd91fb4c04fe251333) | | |
+| 2-orders-1 | orders-1 batch | IN_PROGRESS | [aa39b608](https://app.devin.ai/sessions/aa39b60838c740ca8afa03ca9fad7a76) | | |
+| 2-admin-config-1 | admin-config-1 batch | IN_PROGRESS | [2bec6bb2](https://app.devin.ai/sessions/2bec6bb2245a4cb68c7e48ad754fb467) | | |
+| 2-finance-config-1 | finance-config-1 batch | IN_PROGRESS | [b4493527](https://app.devin.ai/sessions/b449352701744466b15efb5dd64533c4) | | |
+| 2-stock-card-1 | stock-card-1 batch | IN_PROGRESS | [7ba30033](https://app.devin.ai/sessions/7ba3003323244216bdb4bed9ab92ce27) | | |
+| 2-(remaining) | 48 remaining batches (see live-screen-inventory.md) | PENDING | | | Spawn in subsequent waves |
 | 2.R | React 16.8→18 + Redux/router modernization of existing SPA | PENDING | | | |
 
 ## Phase 3 — API formalization (parallel with Phase 2)
@@ -69,3 +79,4 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 - 2026-08-20: 0.1 (PR #2) and 0.2 (PR #1) merged. Wave 2 spawned: 0.3 (Playwright flows), 0.4 (API snapshots).
 - 2026-08-20: 0.4 merged (PR #3). 0.3 still in progress.
 - 2026-08-20: 0.3 merged (PR #4). PHASE 0 COMPLETE. Parity gate active: e2e suite + api-snapshots must stay green on every later PR.
+- 2026-08-20: Wave 3 spawned (10 children): P1.1 Java 11 + 9 Phase 2 module batches (first batch of each major module).
