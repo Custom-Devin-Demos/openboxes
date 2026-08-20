@@ -241,6 +241,8 @@ const AttributeForm = () => {
                 title={{ id: 'react.attribute.entityTypeCode.label', defaultMessage: 'Entity Type' }}
                 options={entityTypeOptions}
                 {...field}
+                value={entityTypeOptions.find((option) =>
+                  option.id === field.value?.id) ?? field.value}
               />
             )}
           />
