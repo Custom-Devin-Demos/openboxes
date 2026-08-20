@@ -16,9 +16,12 @@ import grails.gorm.transactions.Transactional
 import org.pih.warehouse.core.ActivityCode
 import org.pih.warehouse.core.Location
 import org.pih.warehouse.core.LocationDataService
+import org.pih.warehouse.core.LocationGroup
 import org.pih.warehouse.core.LocationIdentifierService
 import org.pih.warehouse.core.LocationRole
 import org.pih.warehouse.core.LocationType
+import org.pih.warehouse.core.LocationTypeCode
+import org.pih.warehouse.core.Organization
 import org.pih.warehouse.core.RoleType
 import org.pih.warehouse.core.User
 import org.pih.warehouse.importer.CSVUtils
@@ -99,6 +102,95 @@ class LocationApiController extends BaseDomainApiController {
         render ([data:locations] as JSON)
     }
 
+
+    def search() {
+        LocationType defaultLocationType = LocationType.findByLocationTypeCode(LocationTypeCode.DEPOT)
+        LocationType locationType = params.containsKey("locationType.id")
+                ? LocationType.get(params["locationType.id"]) ?: null
+                : defaultLocationType
+        LocationGroup locationGroup = LocationGroup.get(params["locationGroup.id"])
+        Organization organization = Organization.get(params["organization.id"])
+
+        def max = Math.min(params.max ? params.int('max') : 10, 100)
+        def offset = params.offset ? params.int("offset") : 0
+
+        def locations = locationService.getLocations(organization, locationType, locationGroup,
+                params.q, max, offset, params.sort ?: "name", params.order ?: "asc")
+
+        List<ActivityCode> activityCodes = ActivityCode.list()
+        def data = locations.collect { Location location ->
+            [
+                    id                 : location.id,
+                    name               : location.name,
+                    locationNumber     : location.locationNumber,
+                    locationType       : location.locationType ? [id: location.locationType.id, name: location.locationType.name] : null,
+                    locationGroup      : location.locationGroup ? [id: location.locationGroup.id, name: location.locationGroup.name] : null,
+                    organization       : location.organization ? [id: location.organization.id, name: location.organization.name] : null,
+                    status             : location.status?.name(),
+                    active             : location.active,
+                    fgColor            : location.fgColor,
+                    bgColor            : location.bgColor,
+                    supportedActivities: activityCodes.findAll { location.supports(it) }*.name(),
+            ]
+        }
+        render([data: data, totalCount: locations.totalCount] as JSON)
+    }
+
+    def details() {
+        Location location = Location.get(params.id)
+        if (!location) {
+            response.status = 404
+            render([errorCode: 404, errorMessage: "Location not found"] as JSON)
+            return
+        }
+        render([data: [
+                id                  : location.id,
+                version             : location.version,
+                fgColor             : location.fgColor,
+                bgColor             : location.bgColor,
+                hasLogo             : location.logo ? true : false,
+                usesDefaultActivities: !location.supportedActivities,
+                locationTypeCode    : location.locationType?.locationTypeCode?.name(),
+                isInternalLocation  : location.locationType?.locationTypeCode in [LocationTypeCode.INTERNAL, LocationTypeCode.BIN_LOCATION],
+                isZoneLocation      : location.isZoneLocation(),
+        ]] as JSON)
+    }
+
+    def contents() {
+        Location binLocation = Location.get(params.id)
+        if (!binLocation) {
+            response.status = 404
+            render([errorCode: 404, errorMessage: "Location not found"] as JSON)
+            return
+        }
+        List contents = inventoryService.getQuantityByBinLocation(binLocation.parentLocation, binLocation)
+        def data = contents.collect { entry ->
+            [
+                    product      : [
+                            id         : entry?.product?.id,
+                            productCode: entry?.product?.productCode,
+                            name       : entry?.product?.name,
+                    ],
+                    inventoryItem: [
+                            id            : entry?.inventoryItem?.id,
+                            lotNumber     : entry?.inventoryItem?.lotNumber,
+                            expirationDate: entry?.inventoryItem?.expirationDate?.format("MMM yyyy"),
+                    ],
+                    quantity     : entry?.quantity,
+            ]
+        }
+        render([data: data, location: [id: binLocation.id, name: binLocation.name]] as JSON)
+    }
+
+    def deleteLogo() {
+        Location location = Location.get(params.id)
+        if (!location) {
+            throw new IllegalArgumentException("No Location found for location ID ${params.id}")
+        }
+        location.logo = []
+        locationGormService.save(location)
+        render(status: 204)
+    }
 
     def productSummary() {
         Location currentLocation = Location.load(session.warehouse.id)
