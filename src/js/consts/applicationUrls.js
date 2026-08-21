@@ -195,6 +195,19 @@ const INVENTORY_LEVEL_URL = {
   edit: (id) => `${INVENTORY_LEVEL_URL.base}/edit/${id}`,
 };
 
+const INVENTORY_BROWSER_URL = {
+  base: `${CONTEXT_PATH}/inventoryBrowser`,
+  list: () => `${INVENTORY_BROWSER_URL.base}/list`,
+};
+
+const INVENTORY_SNAPSHOT_URL = {
+  base: `${CONTEXT_PATH}/inventorySnapshot`,
+  list: () => `${INVENTORY_SNAPSHOT_URL.base}/list`,
+  show: (id) => `${INVENTORY_SNAPSHOT_URL.base}/show/${id}`,
+  edit: (id) => `${INVENTORY_SNAPSHOT_URL.base}/edit/${id}`,
+  download: () => `${INVENTORY_SNAPSHOT_URL.base}/download`,
+};
+
 const INVENTORY_URL = {
   base: `${CONTEXT_PATH}/inventory`,
   showTransaction: (id) => `${INVENTORY_URL.base}/showTransaction/${id}`,
@@ -602,8 +615,10 @@ export {
   EVENT_TYPE_URL,
   GL_ACCOUNT_TYPE_URL,
   GL_ACCOUNT_URL,
+  INVENTORY_BROWSER_URL,
   INVENTORY_ITEM_URL,
   INVENTORY_LEVEL_URL,
+  INVENTORY_SNAPSHOT_URL,
   INVENTORY_URL,
   INVOICE_URL,
   JOBS_URL,
