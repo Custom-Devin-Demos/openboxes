@@ -211,7 +211,7 @@ const ProductEditPage = () => {
       CHECKBOX_FIELDS.forEach((checkbox) => {
         body.append(checkbox.name, form[checkbox.name] ? 'true' : 'false');
       });
-      TEXT_FIELDS.forEach((field) => {
+      TEXT_FIELDS.filter((field) => field.name !== 'unitOfMeasure').forEach((field) => {
         body.append(field.name, form[field.name]);
       });
       Object.entries(attributeValues).forEach(([attributeId, value]) => {
@@ -358,7 +358,9 @@ const ProductEditPage = () => {
                 >
                   <option value="" aria-label="Empty" />
                   {categories.map((category) => (
-                    <option key={category.id} value={category.id}>{category.name}</option>
+                    <option key={category.id} value={category.id}>
+                      {category.label || category.name}
+                    </option>
                   ))}
                 </select>
               </div>

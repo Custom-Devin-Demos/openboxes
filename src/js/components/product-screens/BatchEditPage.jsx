@@ -170,7 +170,9 @@ const BatchEditPage = () => {
                       Choose category
                     </option>
                     {categories.map((category) => (
-                      <option key={category.id} value={category.id}>{category.name}</option>
+                      <option key={category.id} value={category.id}>
+                        {category.label || category.name}
+                      </option>
                     ))}
                   </select>
                   <div className="form-check">
@@ -319,7 +321,7 @@ const BatchEditPage = () => {
                                 <option value="" aria-label="Empty" />
                                 {categories.map((category) => (
                                   <option key={category.id} value={category.id}>
-                                    {category.name}
+                                    {category.label || category.name}
                                   </option>
                                 ))}
                               </select>
