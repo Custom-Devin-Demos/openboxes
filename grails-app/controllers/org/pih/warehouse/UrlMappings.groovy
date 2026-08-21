@@ -401,6 +401,51 @@ class UrlMappings {
             action = [GET: "localeOptions"]
         }
 
+        "/api/users/list"(parseRequest: true) {
+            controller = { "userApi" }
+            action = [GET: "list"]
+        }
+
+        "/api/users/loginLocationOptions"(parseRequest: true) {
+            controller = { "userApi" }
+            action = [GET: "loginLocationOptions"]
+        }
+
+        "/api/users/timezoneOptions"(parseRequest: true) {
+            controller = { "userApi" }
+            action = [GET: "timezoneOptions"]
+        }
+
+        "/api/users/roleOptions"(parseRequest: true) {
+            controller = { "userApi" }
+            action = [GET: "roleOptions"]
+        }
+
+        "/api/users/$id/changePassword"(parseRequest: true) {
+            controller = { "userApi" }
+            action = [POST: "changePassword"]
+        }
+
+        "/api/users/$id/toggleActivation"(parseRequest: true) {
+            controller = { "userApi" }
+            action = [POST: "toggleActivation"]
+        }
+
+        "/api/users/$id/sendTestEmail"(parseRequest: true) {
+            controller = { "userApi" }
+            action = [POST: "sendTestEmail"]
+        }
+
+        "/api/users/$id/locationRoles"(parseRequest: true) {
+            controller = { "userApi" }
+            action = [POST: "saveLocationRole"]
+        }
+
+        "/api/users/$id/locationRoles/$locationRoleId"(parseRequest: true) {
+            controller = { "userApi" }
+            action = [DELETE: "deleteLocationRole"]
+        }
+
         "/api/users/create"(parseRequest: true) {
             controller = { "userApi" }
             action = [POST: "create"]
@@ -413,7 +458,7 @@ class UrlMappings {
 
         "/api/users/$id"(parseRequest: true) {
             controller = { "userApi" }
-            action = [GET: "read"]
+            action = [GET: "read", PUT: "update", DELETE: "delete"]
         }
 
         // Product Group options for filters on  product list page
