@@ -7,7 +7,7 @@ description: How to verify GSP→React screen-migration batches in OpenBoxes (be
 
 ## App boot
 - DB: `docker start openboxes-db` (mariadb:10, openboxes/openboxes, root pw `root`).
-- App: `JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 ./gradlew bootRun` (Java 11 required since the Grails 5.3.6 / Gradle 7.6.4 upgrade; install with `sudo apt-get install -y openjdk-11-jdk-headless` if missing) (~4–8 min; poll `http://localhost:8080/openboxes/auth/login` for HTTP 200). Login admin:password.
+- App: `JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64 ./gradlew bootRun` (Java 21 required since the Grails 6.2.3 upgrade; older branches pre-Grails-6 need Java 11 at `/usr/lib/jvm/java-11-openjdk-amd64`) (~4–8 min; poll `http://localhost:8080/openboxes/auth/login` for HTTP 200). Login admin:password.
 - Seed demo data AFTER boot: `docker exec -i openboxes-db mysql -uopenboxes -popenboxes openboxes < docker/seed-demo-data.sql`.
 - Wait for the literal `Grails application running` line in the boot log before seeding — HTTP 200 on /auth/login is NOT a reliable migrations-complete signal; seeding mid-migration breaks later FK changesets (e.g. `user_role.role_id → role.id`). The Liquibase changelog table is uppercase `DATABASECHANGELOG` post-upgrade.
 - The seed can silently insert 0 rows if run immediately after boot: verify `select count(*) from product` = 8 and re-run the script once if 0 (it is insert-only and idempotent against duplicates).
@@ -30,6 +30,11 @@ description: How to verify GSP→React screen-migration batches in OpenBoxes (be
 - `cd api-snapshots && npm run snapshots:verify` (Node >= 18; no name filter exists — `snapshots:update` rewrites all, but only genuinely-changed files end up modified in git).
 - When a batch adds `react.*` i18n keys, only `localizations-list` should fail. Re-record with `npm run snapshots:update`, then prove additivity by diffing key sets of `body.messages` (old via `git show HEAD:…`) — expect N added, 0 removed, 0 changed. The raw git diff looks huge because message ordering is nondeterministic.
 - After running the UI suite, `git checkout -- e2e/screenshots` to drop screenshot churn.
+
+## Shipment workflow / shipment item test data
+- `ShipmentWorkflow.shipmentType` has `unique: true` (one workflow per shipment type) and all 5 seeded types are taken, so creating a workflow via UI fails with a "Bad request: unique" toast. Insert a temp type first: `insert into shipment_type (id,version,date_created,last_updated,name,sort_order) values ('qa-temp-type',0,now(),now(),'QA Temp Type',6);` — the create form's options endpoint reads the DB live (just reload the page). Delete the row when done.
+- The split screen (`/shipmentItem/split/<id>`) preselects the item's current bin radio (from `binLocationSelected`), so the "no bin selected" validation error is unreachable via UI for seeded items; test the zero/invalid-quantity error instead.
+- Shipment item ids for split tests: `select id,quantity from shipment_item where quantity>=2;` (E2E suites create them). Verify the split in DB by selecting all items with the same `shipment_id`.
 
 ## Requisition test data (for requisition/transfer screens)
 - Demo seed contains NO requisitions; create them via SQL. `requisition_item.substitutable` is NOT NULL with no default — include `substitutable=0` or inserts fail. Copy column values from a UI-suite-created requisition item as a template.

@@ -159,6 +159,85 @@ class ShipmentItemApiController {
         render([data: toJson(shipmentItem)] as JSON)
     }
 
+    def split() {
+        ShipmentItem shipmentItem = ShipmentItem.get(params.id)
+        if (!shipmentItem) {
+            throw new ObjectNotFoundException(params.id, ShipmentItem.class.toString())
+        }
+        Location location = Location.load(session.warehouse.id)
+        List binLocations = inventoryService.getProductQuantityByBinLocation(location, shipmentItem.product)
+        List binLocationSelected = binLocations.findAll {
+            it?.binLocation == shipmentItem?.binLocation && it.inventoryItem == shipmentItem?.inventoryItem
+        }
+        render([data: [
+            shipmentItem       : toJson(shipmentItem),
+            binLocations       : binLocations.collect { toBinLocationJson(it) },
+            binLocationSelected: binLocationSelected.collect { toBinLocationJson(it) },
+        ]] as JSON)
+    }
+
+    @Transactional
+    def updateSplit() {
+        ShipmentItem shipmentItem = ShipmentItem.get(params.id)
+        if (!shipmentItem) {
+            throw new ObjectNotFoundException(params.id, ShipmentItem.class.toString())
+        }
+        def jsonObject = request.JSON
+        if (!jsonObject.selection) {
+            response.status = HttpStatus.BAD_REQUEST.value()
+            render([errorCode: HttpStatus.BAD_REQUEST.value(),
+                    errorMessage: warehouse.message(code: 'shipping.mustPickBinLocation.message',
+                            default: 'Please choose a bin location from the list')] as JSON)
+            return
+        }
+
+        Integer currentQuantity = shipmentItem.quantity
+        Integer splitQuantity
+        try {
+            splitQuantity = Integer.parseInt(jsonObject.splitQuantity.toString())
+        } catch (NumberFormatException e) {
+            shipmentItem.errors.reject("shipmentItem.invalidQuantity.message", "Quantity is invalid")
+            throw new ValidationException("Unable to update pick list item", shipmentItem.errors)
+        }
+        Integer newQuantity = currentQuantity - splitQuantity
+
+        // Make sure there's no funny business (i.e. entering a split quantity greater than the original quantity)
+        if (newQuantity <= 0 || newQuantity > currentQuantity) {
+            shipmentItem.errors.reject("shipmentItem.invalidQuantity.message", "Quantity is invalid")
+            throw new ValidationException("Unable to update pick list item", shipmentItem.errors)
+        }
+
+        String[] selection = jsonObject.selection.toString().split(":")
+        String binLocationId = selection.length > 0 ? selection[0] : null
+        String inventoryItemId = selection.length > 1 ? selection[1] : null
+
+        Location binLocation = (binLocationId && !binLocationId.equals("null")) ? Location.load(binLocationId) : null
+        InventoryItem inventoryItem = (inventoryItemId && !inventoryItemId.equals("null")) ? InventoryItem.load(inventoryItemId) : null
+
+        if (!inventoryItem) {
+            shipmentItem.errors.reject("shipmentItem.inventoryItem.required.message", "Inventory item is a required field")
+            throw new ValidationException("Unable to update pick list item", shipmentItem.errors)
+        }
+
+        // Update the old shipment item with the new quantity
+        shipmentItem.quantity = newQuantity
+
+        // Create a new shipment item and update with selected bin location and split quantity
+        ShipmentItem splitItem = shipmentItem.cloneShipmentItem()
+        splitItem.inventoryItem = inventoryItem
+        splitItem.binLocation = binLocation
+        splitItem.quantity = splitQuantity
+        shipmentItem.shipment.addToShipmentItems(splitItem)
+
+        if (!shipmentItem.shipment.save(flush: true)) {
+            throw new ValidationException("Unable to split shipment item", shipmentItem.errors)
+        }
+        render([data: [
+            shipmentItem: toJson(shipmentItem),
+            splitItem   : toJson(splitItem),
+        ]] as JSON)
+    }
+
     private void bindShipmentItemData(ShipmentItem shipmentItem, def jsonObject) {
         shipmentItem.container = jsonObject.container ? Container.get(jsonObject.container) : null
         shipmentItem.product = jsonObject.product ? Product.get(jsonObject.product) : null

@@ -24,14 +24,11 @@ class ShipmentWorkflowController {
     }
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [shipmentWorkflowInstanceList: ShipmentWorkflow.list(params), shipmentWorkflowInstanceTotal: ShipmentWorkflow.count()]
+        render(view: "/common/react")
     }
 
     def create() {
-        def shipmentWorkflowInstance = new ShipmentWorkflow()
-        shipmentWorkflowInstance.properties = params
-        return [shipmentWorkflowInstance: shipmentWorkflowInstance, documentTemplates: documentTemplates]
+        render(view: "/common/react")
     }
 
     def save() {
@@ -45,23 +42,11 @@ class ShipmentWorkflowController {
     }
 
     def show() {
-        def shipmentWorkflowInstance = ShipmentWorkflow.get(params.id)
-        if (!shipmentWorkflowInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'shipmentWorkflow.label', default: 'ShipmentWorkflow'), params.id])}"
-            redirect(action: "list")
-        } else {
-            [shipmentWorkflowInstance: shipmentWorkflowInstance]
-        }
+        render(view: "/common/react")
     }
 
     def edit() {
-        def shipmentWorkflowInstance = ShipmentWorkflow.get(params.id)
-        if (!shipmentWorkflowInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'shipmentWorkflow.label', default: 'ShipmentWorkflow'), params.id])}"
-            redirect(action: "list")
-        } else {
-            return [shipmentWorkflowInstance: shipmentWorkflowInstance, documentTemplates: documentTemplates]
-        }
+        render(view: "/common/react")
     }
 
     def update() {

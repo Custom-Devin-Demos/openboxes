@@ -279,6 +279,15 @@ const SHIPMENT_ITEM_URL = {
   edit: (id) => `${SHIPMENT_ITEM_URL.base}/edit/${id}`,
   show: (id) => `${SHIPMENT_ITEM_URL.base}/show/${id}`,
   pick: (id) => `${SHIPMENT_ITEM_URL.base}/pick/${id}`,
+  split: (id) => `${SHIPMENT_ITEM_URL.base}/split/${id}`,
+};
+
+const SHIPMENT_WORKFLOW_URL = {
+  base: `${CONTEXT_PATH}/shipmentWorkflow`,
+  list: () => `${SHIPMENT_WORKFLOW_URL.base}/list`,
+  create: () => `${SHIPMENT_WORKFLOW_URL.base}/create`,
+  edit: (id) => `${SHIPMENT_WORKFLOW_URL.base}/edit/${id}`,
+  show: (id) => `${SHIPMENT_WORKFLOW_URL.base}/show/${id}`,
 };
 
 const REQUISITION_TEMPLATE_URL = {
@@ -679,6 +688,7 @@ export {
   ROLE_URL,
   SHIPMENT_ITEM_URL,
   SHIPMENT_URL,
+  SHIPMENT_WORKFLOW_URL,
   STOCK_MOVEMENT_URL,
   STOCK_TRANSFER_URL,
   STOCKLIST_URL,
