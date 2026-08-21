@@ -55,7 +55,7 @@ class UserApiController {
                     email        : anonymize ? StringUtil.mask(user.email) : user.email,
                     locale       : user.locale?.displayName,
                     roles        : user.roles ? user.roles.collect { it.toString() }.sort().join(", ") : "",
-                    lastLoginDate: user.lastLoginDate?.time,
+                    lastLoginDate: user.lastLoginDate,
             ]
         }, totalCount: users.totalCount] as JSON)
     }
@@ -340,9 +340,9 @@ class UserApiController {
                     ]
                 } : [],
                 locationRolesDescription: user.locationRolesDescription(),
-                lastLoginDate           : user.lastLoginDate?.time,
-                dateCreated             : user.dateCreated?.time,
-                lastUpdated             : user.lastUpdated?.time,
+                lastLoginDate           : user.lastLoginDate,
+                dateCreated             : user.dateCreated,
+                lastUpdated             : user.lastUpdated,
         ]
     }
 }
