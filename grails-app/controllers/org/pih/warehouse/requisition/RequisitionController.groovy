@@ -260,10 +260,7 @@ class RequisitionController {
     }
 
     def transfer() {
-        def requisition = Requisition.get(params.id)
-        def picklist = Picklist.findByRequisition(requisition)
-
-        [requisition: requisition, picklist: picklist]
+        render(view: "/common/react")
     }
 
     def complete() {
@@ -348,7 +345,7 @@ class RequisitionController {
                 return
             }
 
-            return [requisition: requisition]
+            render(view: "/common/react")
         }
     }
 

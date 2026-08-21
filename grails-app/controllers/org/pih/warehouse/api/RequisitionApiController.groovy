@@ -684,6 +684,260 @@ class RequisitionApiController {
         ]] as JSON)
     }
 
+    def show() {
+        Requisition requisition = Requisition.get(params.id)
+        if (!requisition) {
+            response.status = 404
+            render([errorMessage: "Requisition not found"] as JSON)
+            return
+        }
+        render([data: requisition.toJson() + getHeaderData(requisition) + [
+                requisitionItemCount: requisition.requisitionItems?.size() ?: 0,
+                showItems           : getShowItemsData(requisition),
+        ]] as JSON)
+    }
+
+    def transfer() {
+        Requisition requisition = Requisition.get(params.id)
+        if (!requisition) {
+            response.status = 404
+            render([errorMessage: "Requisition not found"] as JSON)
+            return
+        }
+        Picklist picklist = Picklist.findByRequisition(requisition)
+        def rows = picklist?.picklistItems?.collect { PicklistItem picklistItem ->
+            [
+                    productCode    : picklistItem?.inventoryItem?.product?.productCode,
+                    productName    : picklistItem?.inventoryItem?.product?.name,
+                    binLocationName: picklistItem?.binLocation?.name,
+                    lotNumber      : picklistItem?.inventoryItem?.lotNumber,
+                    quantity       : picklistItem?.quantity,
+                    unitOfMeasure  : picklistItem?.inventoryItem?.product?.unitOfMeasure ?: "EA",
+            ]
+        } ?: []
+        User sessionUser = User.get(session.user.id)
+        render([data: requisition.toJson() + getHeaderData(requisition) + [
+                isCompleted           : requisition.status == RequisitionStatus.ISSUED || requisition.status == RequisitionStatus.CANCELED,
+                issuedByDefaultId     : personId(requisition.issuedBy) ?: sessionUser?.id,
+                issuedByDefaultName   : requisition.issuedBy?.name ?: sessionUser?.name,
+                deliveredByDefaultId  : personId(requisition.deliveredBy),
+                deliveredByDefaultName: requisition.deliveredBy?.name,
+                picklistItems         : rows,
+        ]] as JSON)
+    }
+
+    def complete() {
+        Requisition requisition = Requisition.get(params.id)
+        if (!requisition) {
+            response.status = 404
+            render([errorMessage: "Requisition not found"] as JSON)
+            return
+        }
+        def jsonRequest = request.JSON
+        try {
+            User issuedBy = jsonRequest.issuedById ? User.get(jsonRequest.issuedById) : null
+            Person deliveredBy = jsonRequest.deliveredById ? Person.get(jsonRequest.deliveredById) : null
+            String comments = jsonRequest.comments ?: null
+            requisitionService.issueRequisition(requisition, issuedBy, deliveredBy, comments)
+        } catch (ValidationException e) {
+            render([success: false, errors: e.errors.allErrors.collect { g.message(error: it) }] as JSON)
+            return
+        }
+        render([success: true, message: "Successfully issued requisition " + requisition?.requestNumber] as JSON)
+    }
+
+    def requisitionItemChange() {
+        RequisitionItem requisitionItem = RequisitionItem.get(params.itemId)
+        if (!requisitionItem) {
+            response.status = 404
+            render([errorMessage: "Requisition item not found"] as JSON)
+            return
+        }
+        Location location = Location.get(session.warehouse.id)
+        def quantityOnHand = inventoryService.getQuantityOnHand(location, requisitionItem.product) ?: 0
+        Requisition requisition = requisitionItem.requisition
+        render([data: [
+                requisition: requisition.toJson() + getHeaderData(requisition),
+                item       : [
+                        id                 : requisitionItem.id,
+                        version            : requisitionItem.version,
+                        productId          : requisitionItem.product?.id,
+                        productCode        : requisitionItem.product?.productCode,
+                        productName        : requisitionItem.product?.name,
+                        unitOfMeasure      : requisitionItem.product?.unitOfMeasure ?: warehouse.message(code: 'default.each.label', default: 'each'),
+                        productPackageLabel: requisitionItem.productPackage ?
+                                "${requisitionItem.productPackage?.uom?.code}/${requisitionItem.productPackage?.quantity}".toString() : "EA/1",
+                        productPackageId   : requisitionItem.productPackage?.id,
+                        quantity           : requisitionItem.quantity,
+                        quantityCanceled   : requisitionItem.quantityCanceled ?: 0,
+                        cancelReasonCode   : requisitionItem.cancelReasonCode,
+                        quantityOnHand     : quantityOnHand,
+                        changes            : requisitionItem.requisitionItems?.collect { RequisitionItem childItem ->
+                            [
+                                    productCode  : childItem?.product?.productCode,
+                                    productName  : childItem?.product?.name,
+                                    unitOfMeasure: childItem?.product?.unitOfMeasure,
+                                    quantity     : childItem?.quantity,
+                            ]
+                        } ?: [],
+                        productPackages    : requisitionItem.product?.packages ?
+                                requisitionItem.product.packages.sort().collect { ProductPackage productPackage ->
+                                    [id: productPackage.id, label: "${productPackage?.uom?.code}/${productPackage.quantity} -- ${productPackage?.uom?.name}".toString()]
+                                } : [],
+                ],
+        ]] as JSON)
+    }
+
+    def changeItemQuantity() {
+        RequisitionItem requisitionItem = RequisitionItem.get(params.itemId)
+        if (!requisitionItem) {
+            response.status = 404
+            render([errorMessage: "Requisition item not found"] as JSON)
+            return
+        }
+        def jsonRequest = request.JSON
+        ProductPackage productPackage = jsonRequest.productPackageId ? ProductPackage.get(jsonRequest.productPackageId) : null
+        try {
+            requisitionItem.changeQuantity(jsonRequest.quantity as Integer, productPackage,
+                    jsonRequest.reasonCode ?: null, jsonRequest.comments ?: null)
+        } catch (ValidationException e) {
+            render([success: false, errors: e.errors.allErrors.collect { g.message(error: it) }] as JSON)
+            return
+        }
+        if (requisitionItem.hasErrors()) {
+            render([success: false, errors: requisitionItem.errors.allErrors.collect { g.message(error: it) }] as JSON)
+            return
+        }
+        requisitionItem.markDirty('quantityCanceled')
+        requisitionItem.markDirty('cancelReasonCode')
+        requisitionItem.markDirty('cancelComments')
+        requisitionItem.save(flush: true)
+        render([success: true, requisitionId: requisitionItem.requisition?.id] as JSON)
+    }
+
+    def canceledRequisitionItems() {
+        Date dateRequestedFrom = params.dateRequestedFrom ? Date.parse(DATE_FORMAT, params.dateRequestedFrom) : null
+        Date dateRequestedTo = params.dateRequestedTo ? Date.parse(DATE_FORMAT, params.dateRequestedTo) : null
+        Integer max = Math.min(params.max ? params.int('max') : 10, 100)
+        Integer offset = params.offset ? params.int('offset') : 0
+        Location location = Location.get(session.warehouse.id)
+        def requisitionItems = requisitionService.getCanceledRequisitionItems(location,
+                params.list("cancelReasonCode"), dateRequestedFrom, dateRequestedTo, max, offset)
+        def rows = requisitionItems.collect { RequisitionItem requisitionItem ->
+            [
+                    id                : requisitionItem.id,
+                    requisitionId     : requisitionItem.requisition?.id,
+                    requestNumber     : requisitionItem.requisition?.requestNumber,
+                    requisitionName   : requisitionItem.requisition?.name,
+                    dateRequested     : requisitionItem.requisition?.dateRequested?.format(DATE_FORMAT),
+                    productId         : requisitionItem.product?.id,
+                    productCode       : requisitionItem.product?.productCode,
+                    productName       : requisitionItem.product?.name,
+                    genericProductName: requisitionItem.product?.genericProduct?.name ?: "",
+                    cancelReasonCode  : requisitionItem.cancelReasonCode,
+                    cancelComments    : requisitionItem.cancelComments,
+                    quantityApproved  : requisitionItem.quantityApproved,
+                    quantityCanceled  : requisitionItem.quantityCanceled,
+                    quantity          : requisitionItem.quantity,
+            ]
+        }
+        render([data: [
+                totalCount : requisitionItems.totalCount,
+                items      : rows,
+                reasonCodes: ReasonCode.list().collect { ReasonCode reasonCode ->
+                    [id: reasonCode.name(), label: warehouse.message(code: "enum.ReasonCode." + reasonCode, default: reasonCode.name())]
+                },
+        ]] as JSON)
+    }
+
+    private List getShowItemsData(Requisition requisition) {
+        requisition.originalRequisitionItems?.sort()?.collect { RequisitionItem requisitionItem ->
+            Boolean isSubstituted = requisitionItem.isSubstituted()
+            Boolean isCanceled = requisitionItem.isCanceled()
+            Boolean isChanged = requisitionItem.isChanged()
+            String icon
+            if (isSubstituted) {
+                icon = "substituted"
+            } else if (requisitionItem.isSubstitution()) {
+                icon = "substitution"
+            } else if (isChanged) {
+                icon = "changed"
+            } else if (requisitionItem.isPending()) {
+                icon = "pending"
+            } else if (isCanceled) {
+                icon = "canceled"
+            } else if (requisitionItem.isApproved() || requisitionItem.isCompleted()) {
+                icon = "approved"
+            } else {
+                icon = null
+            }
+            String statusTagClass = (isCanceled || requisitionItem.isCanceledDuringPick() || requisitionItem.isRejected()) ? "tag-danger" :
+                    (isSubstituted || requisitionItem.isReduced()) ? "tag-warning" : "tag-alert"
+            String statusLabel
+            if (isCanceled || requisitionItem.isCanceledDuringPick()) {
+                statusLabel = warehouse.message(code: "enum.RequisitionItemStatus.CANCELED", default: "Canceled")
+            } else if (requisitionItem.isReduced() && !isSubstituted) {
+                statusLabel = warehouse.message(code: "enum.RequisitionItemStatus.REDUCED", default: "Reduced")
+            } else if (requisitionItem.isIncreased() && !isSubstituted) {
+                statusLabel = warehouse.message(code: "enum.RequisitionItemStatus.INCREASED", default: "Increased")
+            } else if (requisitionItem.status?.toString() == "APPROVED" && requisition.status == RequisitionStatus.ISSUED) {
+                statusLabel = warehouse.message(code: "enum.RequisitionStatus." + requisition.status, default: requisition.status.toString())
+            } else {
+                statusLabel = requisitionItem.displayStatus ?
+                        warehouse.message(code: "enum.RequisitionItemStatus." + requisitionItem.displayStatus, default: requisitionItem.displayStatus.toString()) : null
+            }
+            def substitutionItems = requisitionItem.substitutionItems?.collect { RequisitionItem substitutionItem ->
+                [
+                        productId  : substitutionItem?.product?.id,
+                        productCode: substitutionItem?.product?.productCode,
+                        productName: substitutionItem?.product?.name,
+                        quantity   : substitutionItem?.quantity ?: 0,
+                ]
+            } ?: []
+            def quantityApproved
+            if (isSubstituted) {
+                quantityApproved = requisitionItem.substitutionItems?.sum { it.quantityApproved } ?: 0
+            } else if (isChanged) {
+                quantityApproved = requisitionItem.modificationItem?.quantityApproved ?: 0
+            } else {
+                quantityApproved = requisitionItem.quantityApproved ?: 0
+            }
+            def quantityPicked = isChanged && !isSubstituted && !isCanceled ?
+                    (requisitionItem.modificationItem?.calculateQuantityPicked() ?: 0) :
+                    (requisitionItem.calculateQuantityPicked() ?: 0)
+            def quantityRemaining
+            if (isSubstituted) {
+                quantityRemaining = requisitionItem.substitutionItem?.calculateQuantityRemaining() ?: 0
+            } else if (isCanceled) {
+                quantityRemaining = requisitionItem.calculateQuantityRemaining() ?: 0
+            } else if (isChanged) {
+                quantityRemaining = requisitionItem.modificationItem?.calculateQuantityRemaining() ?: 0
+            } else {
+                quantityRemaining = requisitionItem.calculateQuantityRemaining() ?: 0
+            }
+            Boolean substitutionQuantitiesMatch = isSubstituted ?
+                    requisitionItem.quantity == requisitionItem.substitutionItems?.sum { it.quantity } : true
+            [
+                    id                         : requisitionItem.id,
+                    icon                       : icon,
+                    statusLabel                : statusLabel,
+                    statusTagClass             : statusTagClass,
+                    isCanceled                 : isCanceled,
+                    isSubstituted              : isSubstituted,
+                    productId                  : requisitionItem.product?.id,
+                    productCode                : requisitionItem.product?.productCode,
+                    productName                : requisitionItem.product?.name,
+                    unitOfMeasure              : requisitionItem.product?.unitOfMeasure ?: "EA",
+                    quantity                   : requisitionItem.quantity ?: 0,
+                    substitutionQuantitiesMatch: substitutionQuantitiesMatch,
+                    substitutionItems          : substitutionItems,
+                    quantityApproved           : quantityApproved,
+                    quantityPicked             : quantityPicked,
+                    quantityRemaining          : quantityRemaining,
+            ]
+        } ?: []
+    }
+
     private Map getQuantityOnHandMap(Location location, Requisition requisition) {
         def quantityOnHandMap = [:]
         def products = requisition.requisitionItems?.collect { it.product } ?: []

@@ -852,6 +852,26 @@ const AsyncRequisitionProcess = Loadable({
   loading: Loading,
 });
 
+const AsyncRequisitionShow = Loadable({
+  loader: () => import('components/requisition/ShowRequisitionPage'),
+  loading: Loading,
+});
+
+const AsyncRequisitionTransfer = Loadable({
+  loader: () => import('components/requisition/TransferRequisitionPage'),
+  loading: Loading,
+});
+
+const AsyncRequisitionItemChange = Loadable({
+  loader: () => import('components/requisition/ChangeRequisitionItemPage'),
+  loading: Loading,
+});
+
+const AsyncRequisitionItemList = Loadable({
+  loader: () => import('components/requisition/RequisitionItemListPage'),
+  loading: Loading,
+});
+
 const AsyncAttributeList = Loadable({
   loader: () => import('components/attribute/AttributeList'),
   loading: Loading,
@@ -1172,6 +1192,10 @@ const Router = () => {
             <MainLayoutRoute path="**/requisition/pick/:requisitionId" component={AsyncRequisitionPick} />
             <MainLayoutRoute path="**/requisition/printDraft/:requisitionId" component={AsyncRequisitionPrintDraft} />
             <MainLayoutRoute path="**/requisition/process/:requisitionId" component={AsyncRequisitionProcess} />
+            <MainLayoutRoute path="**/requisition/show/:requisitionId" component={AsyncRequisitionShow} />
+            <MainLayoutRoute path="**/requisition/transfer/:requisitionId" component={AsyncRequisitionTransfer} />
+            <MainLayoutRoute path="**/requisitionItem/change/:itemId" component={AsyncRequisitionItemChange} />
+            <MainLayoutRoute path="**/requisitionItem/list" component={AsyncRequisitionItemList} />
             <MainLayoutRoute path="**/product/list" component={AsyncProductsList} />
             <MainLayoutRoute path="**/product/create" component={AsyncProductEditPage} />
             <MainLayoutRoute path="**/product/edit/:id" component={AsyncProductEditPage} />
