@@ -751,6 +751,16 @@ class UrlMappings {
             action = [GET: "getPrepaymentItems"]
         }
 
+        "/api/invoices/$id/details"(parseRequest: true) {
+            controller = "invoiceApi"
+            action = [GET: "showDetails"]
+        }
+
+        "/api/invoices/$id/documentFormData"(parseRequest: true) {
+            controller = "invoiceApi"
+            action = [GET: "documentFormData"]
+        }
+
         "/api/invoiceStatuses"(parseRequest: true) {
             controller = { "invoiceApi" }
             action = [GET: "statusOptions"]

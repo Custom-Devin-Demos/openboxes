@@ -77,10 +77,15 @@ const STOCK_MOVEMENT_URL = {
 
 const INVOICE_URL = {
   base: `${CONTEXT_PATH}/invoice`,
+  list: () => `${INVOICE_URL.base}/list`,
   create: () => `${INVOICE_URL.base}/create`,
   edit: (id) => `${INVOICE_URL.create()}/${id}`,
   show: (id) => `${INVOICE_URL.base}/show/${id}`,
   addDocument: (id) => `${INVOICE_URL.base}/addDocument/${id}`,
+  editDocument: (documentId, invoiceId) => `${INVOICE_URL.base}/editDocument/${documentId}?invoice.id=${invoiceId}`,
+  deleteDocument: (documentId, invoiceId) => `${INVOICE_URL.base}/deleteDocument/${documentId}?invoice.id=${invoiceId}`,
+  rollback: (id) => `${INVOICE_URL.base}/rollback/${id}`,
+  eraseInvoice: (id) => `${INVOICE_URL.base}/eraseInvoice/${id}`,
 };
 
 const PUTAWAY_URL = {
@@ -125,6 +130,7 @@ const DOCUMENT_URL = {
   uploadDocument: () => `${DOCUMENT_URL.base}/uploadDocument`,
   download: (id) => `${DOCUMENT_URL.base}/download/${id}`,
   saveDocument: () => `${DOCUMENT_URL.base}/saveDocument`,
+  download: (id) => `${DOCUMENT_URL.base}/download/${id}`,
 };
 
 const PURCHASE_ORDER_URL = {
