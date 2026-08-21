@@ -94,7 +94,7 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 
 | Batch | Scope | Status | Session | PR | Evidence |
 |---|---|---|---|---|---|
-| 2-finance-config-2 | finance-config-2 batch | REBASING | [232ad85c](https://app.devin.ai/sessions/232ad85cf6d544f6bb868eb7f1b2a681) | [#16](https://github.com/Custom-Devin-Demos/openboxes/pull/16) | Verified green; conflicts after wave-2 merges; rebase requested |
+| 2-finance-config-2 | finance-config-2 batch | MERGED | [232ad85c](https://app.devin.ai/sessions/232ad85cf6d544f6bb868eb7f1b2a681) | [#16](https://github.com/Custom-Devin-Demos/openboxes/pull/16) | 5 eventType/glAccount screens; post-rebase snapshots 122/122, Playwright 10/10, CI 4/4 |
 | 2-finance-config-3 | finance-config-3 batch | REBASING | [99e5aab4](https://app.devin.ai/sessions/99e5aab429d946a0ac15a681fb92b18e) | [#25](https://github.com/Custom-Devin-Demos/openboxes/pull/25) | Verified green; conflicts after wave-2 merges; rebase requested |
 | 2-inventory-2 | inventory-2 batch | REBASING | [5a57cc18](https://app.devin.ai/sessions/5a57cc18fc5949c9a4b5609b1ba11c20) | [#24](https://github.com/Custom-Devin-Demos/openboxes/pull/24) | 5 inventory report screens; verified green pre-normalization; rebase/re-verify requested |
 | 2-locations-orgs-2 | locations-orgs-2 batch | MERGED | [48532479](https://app.devin.ai/sessions/48532479e78c4e79a20e038236265cfe) | [#20](https://github.com/Custom-Devin-Demos/openboxes/pull/20) | 6 locationGroup/locationType screens; post-rebase snapshots 122/122, Playwright 10/10, CI 4/4 |
@@ -115,3 +115,4 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 - 2026-08-21: PRs #16 (finance-config-2) and #23 (users-security-1) conflict after wave-2 merges; rebases requested.
 - 2026-08-20: PR #23 (users-security-1) merged after rebase; #25 re-conflicted, final rebase requested; #16 re-recording localizations-list; #24 rebase/re-verify requested.
 - 2026-08-20: PR #26 (product-catalog-4) merged; #16/#25 doing final rebases; #24 re-verifying.
+- 2026-08-20: PR #16 (finance-config-2) merged after final rebase through #23/#26.
