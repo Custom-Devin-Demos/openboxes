@@ -200,7 +200,7 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 
 | # | Task | Status | Session | PR | Notes |
 |---|---|---|---|---|---|
-| 2-dashboard-auth | dashboard-auth batch | IN_PROGRESS | [0a087765](https://app.devin.ai/sessions/0a087765e4e342e59ae0f9b5ea176a48) | — | login/signup/chooseLocation/megamenu + react host (special care) |
+| 2-dashboard-auth | dashboard-auth batch | MERGED | [0a087765](https://app.devin.ai/sessions/0a087765e4e342e59ae0f9b5ea176a48) | [#68](https://github.com/Custom-Devin-Demos/openboxes/pull/68) | auth/login+signup+chooseLocation migrated; common/react.gsp preserved as SPA host; megamenu via /api/getMenuConfig with permission filtering; anonymous /api/loginContext + /api/signupContext; all 3 login flows re-verified; post-rebase snapshots 122/122, Playwright 10/10, CI 4/4 |
 | 2-errors-misc | errors-misc batch | IN_PROGRESS | [5f96b368](https://app.devin.ai/sessions/5f96b368c1574241ba1c350ec02c945b) | — | 5 error pages (status codes preserved) |
 | 2-mobile-1 | mobile-1 batch | IN_PROGRESS | [8663f28c](https://app.devin.ai/sessions/8663f28c912844519d84bbe7e1de14ed) | — | mobile login/chooseLocation/index/error |
 | 2-mobile-2 | mobile-2 batch | MERGED | [a6fbe255](https://app.devin.ai/sessions/a6fbe255040e452a9a067fad7be0200f) | [#61](https://github.com/Custom-Devin-Demos/openboxes/pull/61) | 4 mobile screens (menu/productList/productDetails/outboundList); /api/mobile/productSummaries[/id] + /api/mobile/outboundItems; additive menuBar action keeps header for mobile-1; post-rebase (incl. #59) snapshots 122/122, Playwright 10/10, CI 4/4; localization union verified (12 added/0 removed/0 changed) |
