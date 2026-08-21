@@ -659,3 +659,9 @@ export const DOCUMENT_DELETE = (id) => `${DOCUMENT_API}/${id}`;
 // GOODS RECEIPT NOTE
 export const GOODS_RECEIPT_NOTE_API = `${API}/goodsReceiptNotes`;
 export const GOODS_RECEIPT_NOTE_PRINT_DATA = (id) => `${GOODS_RECEIPT_NOTE_API}/${id}/printData`;
+
+// RECEIVE ORDER
+export const RECEIVE_ORDER_BY_ID = (id) => `${API}/receiveOrder/${id}`;
+export const RECEIVE_ORDER_VALIDATE_SHIPMENT_DETAILS = (id) => `${API}/receiveOrder/${id}/validateShipmentDetails`;
+export const RECEIVE_ORDER_VALIDATE_ORDER_ITEMS = (id) => `${API}/receiveOrder/${id}/validateOrderItems`;
+export const RECEIVE_ORDER_SUBMIT = (id) => `${API}/receiveOrder/${id}/submit`;

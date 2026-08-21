@@ -1188,6 +1188,28 @@ class UrlMappings {
             action = [POST: "exportCsv"]
         }
 
+        // Receive Order API
+
+        "/api/receiveOrder/$id"(parseRequest: true) {
+            controller = "receiveOrderApi"
+            action = [GET: "read"]
+        }
+
+        "/api/receiveOrder/$id/validateShipmentDetails"(parseRequest: true) {
+            controller = "receiveOrderApi"
+            action = [POST: "validateShipmentDetails"]
+        }
+
+        "/api/receiveOrder/$id/validateOrderItems"(parseRequest: true) {
+            controller = "receiveOrderApi"
+            action = [POST: "validateOrderItems"]
+        }
+
+        "/api/receiveOrder/$id/submit"(parseRequest: true) {
+            controller = "receiveOrderApi"
+            action = [POST: "submit"]
+        }
+
         // Internal Locations API
 
         "/api/internalLocations/receiving"(parseRequest: true) {

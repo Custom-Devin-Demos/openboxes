@@ -657,6 +657,11 @@ const QUARTZ_URL = {
   editCronTrigger: (triggerName, triggerGroup) => `${QUARTZ_URL.base}/editCronTrigger?triggerName=${encodeURIComponent(triggerName)}&triggerGroup=${encodeURIComponent(triggerGroup)}`,
 };
 
+const RECEIVE_ORDER_WORKFLOW_URL = {
+  base: `${CONTEXT_PATH}/receiveOrderWorkflow`,
+  receiveOrder: (id) => `${RECEIVE_ORDER_WORKFLOW_URL.base}/receiveOrder?id=${id}`,
+};
+
 export {
   ADMIN_URL,
   ATTRIBUTE_URL,
@@ -704,6 +709,7 @@ export {
   PUTAWAY_URL,
   QUARTZ_URL,
   RECEIPT_URL,
+  RECEIVE_ORDER_WORKFLOW_URL,
   REPLENISHMENT_URL,
   REPORT_URL,
   REQUISITION_ITEM_URL,
