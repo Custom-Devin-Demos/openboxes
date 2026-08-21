@@ -326,6 +326,31 @@ class UrlMappings {
             action = [GET: "details"]
         }
 
+        "/api/productComponents"(parseRequest: true) {
+            controller = { "productComponentApi" }
+            action = [GET: "list"]
+        }
+
+        "/api/productGroups"(parseRequest: true) {
+            controller = { "productGroupApi" }
+            action = [GET: "list", POST: "create"]
+        }
+
+        "/api/productGroups/$id"(parseRequest: true) {
+            controller = { "productGroupApi" }
+            action = [GET: "details", PUT: "update", DELETE: "delete"]
+        }
+
+        "/api/productGroups/$id/products"(parseRequest: true) {
+            controller = { "productGroupApi" }
+            action = [POST: "addProduct"]
+        }
+
+        "/api/productGroups/$id/products/$productId"(parseRequest: true) {
+            controller = { "productGroupApi" }
+            action = [DELETE: "removeProduct"]
+        }
+
         "/api/locationTypes/$id"(parseRequest: true) {
             controller = { "locationTypeApi" }
             action = [GET: "read", PUT: "update", DELETE: "delete"]

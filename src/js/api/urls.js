@@ -127,6 +127,11 @@ export const GL_ACCOUNTS_OPTION = `${API}/glAccountOptions`;
 
 // PRODUCT GROUP
 export const PRODUCT_GROUP_OPTION = `${API}/productGroupOptions`;
+export const PRODUCT_GROUP_API = `${API}/productGroups`;
+export const PRODUCT_GROUP_BY_ID = (id) => `${PRODUCT_GROUP_API}/${id}`;
+export const PRODUCT_GROUP_PRODUCTS = (id) => `${PRODUCT_GROUP_API}/${id}/products`;
+export const PRODUCT_GROUP_PRODUCT = (id, productId) => `${PRODUCT_GROUP_API}/${id}/products/${productId}`;
+export const PRODUCT_COMPONENT_API = `${API}/productComponents`;
 
 // SHIPMENT TYPES
 export const SHIPMENT_TYPES = `${GENERIC_API}/shipmentType`;

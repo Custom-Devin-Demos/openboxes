@@ -24,26 +24,11 @@ class ProductGroupController {
     }
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-
-        def productGroupTotal
-        def productGroups = []
-
-        if (params.q) {
-            productGroups = ProductGroup.findAllByNameLike("%" + params.q + "%", params)
-            productGroupTotal = ProductGroup.countByNameLike("%" + params.q + "%")
-        } else {
-            productGroups = ProductGroup.list(params)
-            productGroupTotal = ProductGroup.count()
-        }
-
-        [productGroupInstanceList: productGroups, productGroupInstanceTotal: productGroupTotal]
+        render(view: "/common/react")
     }
 
     def create() {
-        def productGroupInstance = new ProductGroup()
-        productGroupInstance.properties = params
-        return [productGroupInstance: productGroupInstance]
+        render(view: "/common/react")
     }
 
     // @CacheFlush("selectProductFamilyCache")
@@ -68,27 +53,11 @@ class ProductGroupController {
     }
 
     def show() {
-        ProductGroup productGroupInstance = productGroupDataService.get(params.id)
-        if (!productGroupInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'productGroup.label', default: 'ProductGroup'), params.id])}"
-            redirect(action: "list")
-        } else {
-            [productGroupInstance: productGroupInstance]
-        }
+        render(view: "/common/react")
     }
 
     def edit() {
-        log.info "Edit product group: " + params
-
-        ProductGroup productGroupInstance = productGroupDataService.get(params.id)
-        if (!productGroupInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'productGroup.label', default: 'ProductGroup'), params.id])}"
-            redirect(action: "list")
-        } else {
-            productGroupInstance.properties = params
-            log.info "category: " + productGroupInstance?.category?.name
-            return [productGroupInstance: productGroupInstance]
-        }
+        render(view: "/common/react")
     }
 
     def addProducts() {

@@ -772,6 +772,26 @@ const AsyncAttributeShow = Loadable({
   loading: Loading,
 });
 
+const AsyncProductGroupList = Loadable({
+  loader: () => import('components/productGroup/ProductGroupList'),
+  loading: Loading,
+});
+
+const AsyncProductGroupForm = Loadable({
+  loader: () => import('components/productGroup/ProductGroupForm'),
+  loading: Loading,
+});
+
+const AsyncProductGroupShow = Loadable({
+  loader: () => import('components/productGroup/ProductGroupShow'),
+  loading: Loading,
+});
+
+const AsyncProductComponentList = Loadable({
+  loader: () => import('components/productComponent/ProductComponentList'),
+  loading: Loading,
+});
+
 const AsyncProductAssociationList = Loadable({
   loader: () => import('components/productAssociation/ProductAssociationList'),
   loading: Loading,
@@ -1087,6 +1107,12 @@ const Router = () => {
             <MainLayoutRoute path="**/attribute/create" component={AsyncAttributeForm} />
             <MainLayoutRoute path="**/attribute/edit/:id?" component={AsyncAttributeForm} />
             <MainLayoutRoute path="**/attribute/show/:id" component={AsyncAttributeShow} />
+            <MainLayoutRoute path="**/productGroup/list" component={AsyncProductGroupList} />
+            <MainLayoutRoute path="**/productGroup/create" component={AsyncProductGroupForm} />
+            <MainLayoutRoute path="**/productGroup/edit/:productGroupId" component={AsyncProductGroupForm} />
+            <MainLayoutRoute path="**/productGroup/show/:id" component={AsyncProductGroupShow} />
+            <MainLayoutRoute path="**/productComponent/index" component={AsyncProductComponentList} />
+            <MainLayoutRoute path="**/productComponent" exact component={AsyncProductComponentList} />
             <MainLayoutRoute path="**/productAssociation/list" component={AsyncProductAssociationList} />
             <MainLayoutRoute path="**/productAssociation/show/:id" component={AsyncProductAssociationShow} />
             <MainLayoutRoute path="**/productAssociation/create" component={AsyncProductAssociationForm} />
