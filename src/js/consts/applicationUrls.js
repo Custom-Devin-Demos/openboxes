@@ -491,6 +491,16 @@ const ORGANIZATION_URL = {
   download: () => `${ORGANIZATION_URL.base}/download`,
 };
 
+const MOBILE_URL = {
+  base: `${CONTEXT_PATH}/mobile`,
+  index: () => `${MOBILE_URL.base}/index`,
+  menu: () => `${MOBILE_URL.base}/menu`,
+  productList: () => `${MOBILE_URL.base}/productList`,
+  productDetails: (id) => `${MOBILE_URL.base}/productDetails/${id}`,
+  outboundList: () => `${MOBILE_URL.base}/outboundList`,
+  stockMovementDetails: (id) => `${MOBILE_URL.base}/stockMovementDetails/${id}`,
+};
+
 const PARTY_TYPE_URL = {
   base: `${CONTEXT_PATH}/partyType`,
   list: () => `${PARTY_TYPE_URL.base}/list`,
@@ -688,6 +698,7 @@ export {
   LOCATION_TYPE_URL,
   LOCATION_URL,
   MIGRATION_URL,
+  MOBILE_URL,
   ORDER_ADJUSTMENT_TYPE_URL,
   ORDER_URL,
   ORGANIZATION_URL,
