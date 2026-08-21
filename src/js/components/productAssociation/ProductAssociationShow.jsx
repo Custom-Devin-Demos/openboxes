@@ -11,6 +11,7 @@ import NotificationType from 'consts/notificationTypes';
 import useSpinner from 'hooks/useSpinner';
 import useTranslation from 'hooks/useTranslation';
 import confirmationModal from 'utils/confirmationModalUtils';
+import { formatISODate } from 'utils/dateUtils';
 import translate from 'utils/Translate';
 import HeaderButtonsWrapper from 'wrappers/HeaderButtonsWrapper';
 import HeaderWrapper from 'wrappers/HeaderWrapper';
@@ -160,12 +161,14 @@ const ProductAssociationShow = () => {
     {
       key: 'dateCreated',
       label: translate({ id: 'react.productAssociation.column.dateCreated.label', defaultMessage: 'Date Created' }),
-      value: productAssociation.dateCreated,
+      value: productAssociation.dateCreated
+        ? formatISODate(productAssociation.dateCreated, 'MMM dd, yyyy hh:mm a') : null,
     },
     {
       key: 'lastUpdated',
       label: translate({ id: 'react.productAssociation.lastUpdated.label', defaultMessage: 'Last Updated' }),
-      value: productAssociation.lastUpdated,
+      value: productAssociation.lastUpdated
+        ? formatISODate(productAssociation.lastUpdated, 'MMM dd, yyyy hh:mm a') : null,
     },
   ] : [];
 

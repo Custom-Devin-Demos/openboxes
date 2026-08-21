@@ -18,12 +18,14 @@ import PageWrapper from 'wrappers/PageWrapper';
 const ProductCatalogList = () => {
   useTranslation('productCatalog', 'default');
 
+  const filterParams = useMemo(() => ({ q: '' }), []);
+
   const {
     tableRef,
     tableData,
     onFetchHandler,
     loading,
-  } = useProductCatalogListTableData({});
+  } = useProductCatalogListTableData(filterParams);
 
   const isUserSuperuser = useUserHasPermissions({
     minRequiredRole: RoleType.ROLE_SUPERUSER,

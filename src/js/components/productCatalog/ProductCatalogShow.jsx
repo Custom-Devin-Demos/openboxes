@@ -13,6 +13,7 @@ import useSpinner from 'hooks/useSpinner';
 import useTranslation from 'hooks/useTranslation';
 import useUserHasPermissions from 'hooks/useUserHasPermissions';
 import confirmationModal from 'utils/confirmationModalUtils';
+import { formatISODate } from 'utils/dateUtils';
 import translate from 'utils/Translate';
 import HeaderButtonsWrapper from 'wrappers/HeaderButtonsWrapper';
 import HeaderWrapper from 'wrappers/HeaderWrapper';
@@ -120,12 +121,14 @@ const ProductCatalogShow = () => {
     {
       key: 'dateCreated',
       label: translate({ id: 'react.productCatalog.column.dateCreated.label', defaultMessage: 'Date Created' }),
-      value: productCatalog.dateCreated,
+      value: productCatalog.dateCreated
+        ? formatISODate(productCatalog.dateCreated, 'MMM dd, yyyy hh:mm a') : null,
     },
     {
       key: 'lastUpdated',
       label: translate({ id: 'react.productCatalog.lastUpdated.label', defaultMessage: 'Last Updated' }),
-      value: productCatalog.lastUpdated,
+      value: productCatalog.lastUpdated
+        ? formatISODate(productCatalog.lastUpdated, 'MMM dd, yyyy hh:mm a') : null,
     },
   ] : [];
 
