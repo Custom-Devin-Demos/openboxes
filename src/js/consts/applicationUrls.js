@@ -566,6 +566,9 @@ const RECEIPT_URL = {
 
 const TRANSACTION_ENTRY_URL = {
   base: `${CONTEXT_PATH}/transactionEntry`,
+  list: () => `${TRANSACTION_ENTRY_URL.base}/list`,
+  create: () => `${TRANSACTION_ENTRY_URL.base}/create`,
+  show: (id) => `${TRANSACTION_ENTRY_URL.base}/show/${id}`,
   edit: (id) => `${TRANSACTION_ENTRY_URL.base}/edit/${id}`,
 };
 
@@ -646,6 +649,7 @@ const REPORT_URL = {
   showOnOrderReport: () => `${REPORT_URL.base}/showOnOrderReport`,
   showPaginatedPackingListReport: () => `${REPORT_URL.base}/showPaginatedPackingListReport`,
   showRequestDetailReport: () => `${REPORT_URL.base}/showRequestDetailReport`,
+  showTransactionReport: () => `${REPORT_URL.base}/showTransactionReport`,
   showShippingReport: () => `${REPORT_URL.base}/showShippingReport`,
   downloadShippingReport: () => `${REPORT_URL.base}/downloadShippingReport`,
   exportInventoryReport: () => `${REPORT_URL.base}/exportInventoryReport`,

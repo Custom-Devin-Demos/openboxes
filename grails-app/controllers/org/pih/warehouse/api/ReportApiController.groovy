@@ -13,6 +13,7 @@ import grails.converters.JSON
 import groovy.transform.CompileStatic
 import org.grails.datastore.gorm.GormEntity
 import grails.gorm.transactions.Transactional
+import grails.plugins.quartz.GrailsJobClassConstants
 import org.apache.commons.lang.StringEscapeUtils
 import org.hibernate.proxy.HibernateProxy
 import org.pih.warehouse.core.Constants
@@ -21,11 +22,16 @@ import org.pih.warehouse.inventory.InventoryItem
 import org.pih.warehouse.product.Category
 import org.pih.warehouse.product.Product
 import org.pih.warehouse.report.MultiLocationInventoryReportCommand
+import org.pih.warehouse.reporting.LocationDimension
+import org.pih.warehouse.reporting.TransactionFact
+import org.quartz.JobKey
+import org.quartz.impl.StdScheduler
 
 class ReportApiController {
 
     def inventoryService
     def productAvailabilityService
+    StdScheduler quartzScheduler
 
     @CompileStatic
     private static Serializable identifierOf(Object entity) {
@@ -36,6 +42,22 @@ class ReportApiController {
             return ((HibernateProxy) entity).getHibernateLazyInitializer().getIdentifier()
         }
         return ((GormEntity) entity).ident()
+    }
+
+    @Transactional(readOnly = true)
+    def transactionReportMetadata() {
+        def triggers = quartzScheduler.getTriggersOfJob(new JobKey("org.pih.warehouse.jobs.RefreshTransactionFactJob", GrailsJobClassConstants.DEFAULT_GROUP))
+        def previousFireTime = triggers*.previousFireTime.max()
+        def nextFireTime = triggers*.nextFireTime.max()
+        LocationDimension locationKey = session.warehouse ? LocationDimension.findByLocationId(session.warehouse.id as String) : null
+        render([data: [
+                transactionCount  : locationKey ? TransactionFact.countByLocationKey(locationKey) : 0,
+                productCount      : TransactionFact.countDistinctProducts(locationKey?.locationId).get(),
+                minTransactionDate: TransactionFact.minTransactionDate(locationKey?.locationId).get()?.format(Constants.DEFAULT_DATE_TIME_FORMAT),
+                maxTransactionDate: TransactionFact.maxTransactionDate(locationKey?.locationId).get()?.format(Constants.DEFAULT_DATE_TIME_FORMAT),
+                previousFireTime  : previousFireTime?.format(Constants.DEFAULT_DATE_TIME_FORMAT),
+                nextFireTime      : nextFireTime?.format(Constants.DEFAULT_DATE_TIME_FORMAT),
+        ]] as JSON)
     }
 
     @Transactional(readOnly = true)

@@ -288,26 +288,7 @@ class ReportController {
     }
 
     def showTransactionReport() {
-        InventoryReportCommand command = new InventoryReportCommand()
-        command.location = Location.get(session.warehouse.id)
-        command.rootCategory = productService.getRootCategory()
-
-        def triggers = quartzScheduler.getTriggersOfJob(new JobKey("org.pih.warehouse.jobs.RefreshTransactionFactJob", GrailsJobClassConstants.DEFAULT_GROUP))
-        def previousFireTime = triggers*.previousFireTime.max()
-        def nextFireTime = triggers*.nextFireTime.max()
-        def locationKey = LocationDimension.findByLocationId(command?.location?.id)
-        def model = [
-                command           : command,
-                locationKey       : locationKey,
-                transactionCount  : locationKey ? TransactionFact.countByLocationKey(locationKey) : 0,
-                productCount      : TransactionFact.countDistinctProducts(locationKey?.locationId).get(),
-                minTransactionDate: TransactionFact.minTransactionDate(locationKey?.locationId).get(),
-                maxTransactionDate: TransactionFact.maxTransactionDate(locationKey?.locationId).get(),
-                previousFireTime  : previousFireTime,
-                nextFireTime      : nextFireTime,
-        ]
-
-        return model
+        render(view: "/common/react", params: params)
     }
 
     def showTransactionReportDialog() {
