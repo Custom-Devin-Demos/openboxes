@@ -34,3 +34,7 @@ description: How to verify GSP→React screen-migration batches in OpenBoxes (be
 - Transfer/issue only succeeds when the requisition's destination is a locally-managed location (Depot type, no manager). The UI suite creates "E2E Depot" which qualifies; its outbound requisition (PICKED, with picklist) is ideal for issuing via `/requisition/transfer/:id`.
 - To exercise the double-issue validation error, SQL-flip the issued requisition back to `status='PICKED'`, reload transfer page, click Finish → red banner "Cannot create multiple outbound transaction"; restore `ISSUED` afterwards.
 - DEFAULT-type redirect regression: `requisition.type` is usually NULL on seeded reqs (renders React); SQL-set `type='DEFAULT'` temporarily to verify redirect to stockMovement show, then restore NULL.
+
+## CI (GitHub Actions) notes
+- The backend integration tests can fail flakily in setup (`ApiSpec.createMainProduct` gets 500: FK violation on `product.category_id`) — a data race between specs, unrelated to the PR under test if the diff touches no backend domain logic. Retry the run before investigating further.
+- `gh run rerun` fails with "Resource not accessible by integration"; closing/reopening the PR and empty commits do NOT retrigger `Test Pull Request` — only a push with a real file change does.
