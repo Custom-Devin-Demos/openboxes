@@ -1262,6 +1262,16 @@ const AsyncMobileOutboundList = Loadable({
   loading: Loading,
 });
 
+const AsyncUnitOfMeasureConversionList = Loadable({
+  loader: () => import('components/unitOfMeasureConversion/UnitOfMeasureConversionList'),
+  loading: Loading,
+});
+
+const AsyncUnitOfMeasureConversionEdit = Loadable({
+  loader: () => import('components/unitOfMeasureConversion/UnitOfMeasureConversionEdit'),
+  loading: Loading,
+});
+
 const AsyncPersonList = Loadable({
   loader: () => import('components/person/PersonList'),
   loading: Loading,
@@ -1633,6 +1643,8 @@ const Router = () => {
             <MainLayoutRoute path="**/mobile/productList" component={AsyncMobileProductList} />
             <MainLayoutRoute path="**/mobile/productDetails/:id" component={AsyncMobileProductDetails} />
             <MainLayoutRoute path="**/mobile/outboundList" component={AsyncMobileOutboundList} />
+            <MainLayoutRoute path="**/unitOfMeasureConversion/list" component={AsyncUnitOfMeasureConversionList} />
+            <MainLayoutRoute path="**/unitOfMeasureConversion/edit/:id?" component={AsyncUnitOfMeasureConversionEdit} />
             <MainLayoutRoute path="**/person/list" component={AsyncPersonList} />
             <MainLayoutRoute path="**/person/create" component={AsyncPersonForm} />
             <MainLayoutRoute path="**/person/edit/:id?" component={AsyncPersonForm} />

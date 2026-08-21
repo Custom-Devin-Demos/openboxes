@@ -392,7 +392,12 @@ class UrlMappings {
 
         "/api/unitOfMeasureConversions"(parseRequest: true) {
             controller = { "unitOfMeasureConversionApi" }
-            action = [POST: "create"]
+            action = [GET: "list", POST: "create"]
+        }
+
+        "/api/unitOfMeasureConversions/$id"(parseRequest: true) {
+            controller = { "unitOfMeasureConversionApi" }
+            action = [GET: "read", PUT: "update", DELETE: "delete"]
         }
 
         "/api/mobile/productSummaries"(parseRequest: true) {

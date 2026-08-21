@@ -5,15 +5,10 @@ const { chromium } = require('@playwright/test');
 
 const BASE = 'http://localhost:8080/openboxes';
 const outDir = process.argv[2] || '/tmp/shots/before';
-const productTypeId = process.env.PRODUCT_TYPE_ID || 'DEFAULT';
-const tagId = process.env.TAG_ID || 'seed-tag-01';
+const uomConversionId = process.env.UOM_CONVERSION_ID || 'seed-uom-conversion-01';
 const urls = [
-  ['productType-show', `/productType/show/${productTypeId}`],
-  ['tag-list', '/tag/list'],
-  ['tag-create', '/tag/create'],
-  ['tag-edit', `/tag/edit/${tagId}`],
-  ['tag-show', `/tag/show/${tagId}`],
-  ['unitOfMeasureConversion-create', '/unitOfMeasureConversion/create'],
+  ['unitOfMeasureConversion-list', '/unitOfMeasureConversion/list'],
+  ['unitOfMeasureConversion-edit', `/unitOfMeasureConversion/edit/${uomConversionId}`],
 ];
 
 (async () => {

@@ -407,6 +407,7 @@ export const TAG_REMOVE_PRODUCTS = (id) => `${TAG_API}/${id}/removeProducts`;
 // UNIT OF MEASURE CONVERSION
 export const UNIT_OF_MEASURE_CONVERSION_API = `${API}/unitOfMeasureConversions`;
 export const UNIT_OF_MEASURE_CONVERSION_UOM_OPTIONS = `${UNIT_OF_MEASURE_CONVERSION_API}/unitOfMeasureOptions`;
+export const UNIT_OF_MEASURE_CONVERSION_BY_ID = (id) => `${UNIT_OF_MEASURE_CONVERSION_API}/${id}`;
 
 // GL ACCOUNT
 export const GL_ACCOUNT_API = `${API}/glAccounts`;
