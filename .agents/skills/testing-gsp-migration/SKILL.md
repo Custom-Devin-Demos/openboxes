@@ -38,3 +38,4 @@ description: How to verify GSP→React screen-migration batches in OpenBoxes (be
 ## CI (GitHub Actions) notes
 - The backend integration tests can fail flakily in setup (`ApiSpec.createMainProduct` gets 500: FK violation on `product.category_id`) — a data race between specs, unrelated to the PR under test if the diff touches no backend domain logic. Retry the run before investigating further.
 - `gh run rerun` fails with "Resource not accessible by integration"; closing/reopening the PR and empty commits do NOT retrigger `Test Pull Request` — only a push with a real file change does.
+- Temp image-row workaround for the thumbnail 500 must use the post-Grails-5 `document` schema: columns are `content_type`/`file_contents` (the old `size`/`contents` columns are gone).
