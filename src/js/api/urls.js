@@ -612,3 +612,7 @@ export const DOCUMENT_DETAILS = (id) => `${DOCUMENT_API}/${id}/details`;
 export const DOCUMENT_UPDATE = (id) => `${DOCUMENT_API}/${id}/update`;
 export const DOCUMENT_UPLOAD = (id) => `${DOCUMENT_API}/${id}/upload`;
 export const DOCUMENT_DELETE = (id) => `${DOCUMENT_API}/${id}`;
+
+// GOODS RECEIPT NOTE
+export const GOODS_RECEIPT_NOTE_API = `${API}/goodsReceiptNotes`;
+export const GOODS_RECEIPT_NOTE_PRINT_DATA = (id) => `${GOODS_RECEIPT_NOTE_API}/${id}/printData`;

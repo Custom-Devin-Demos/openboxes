@@ -11,7 +11,10 @@ package org.pih.warehouse.api
 
 import grails.converters.JSON
 import grails.gorm.transactions.Transactional
+import grails.gorm.PagedResultList
 import org.pih.warehouse.core.Document
+import org.pih.warehouse.core.DocumentFilterCommand
+import org.pih.warehouse.core.DocumentService
 import org.pih.warehouse.core.DocumentType
 import util.FileUtil
 
@@ -19,6 +22,8 @@ import java.text.SimpleDateFormat
 
 @Transactional
 class DocumentApiController {
+
+    DocumentService documentService
 
     private List errorMessages(Document documentInstance) {
         return documentInstance.errors.allErrors.collect { g.message(error: it) }
@@ -42,7 +47,14 @@ class DocumentApiController {
                 size          : documentInstance.size,
                 lastUpdated   : documentInstance.lastUpdated ?
                         new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss a z").format(documentInstance.lastUpdated) : null,
+                dateCreated   : documentInstance.dateCreated ?
+                        new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss a z").format(documentInstance.dateCreated) : null,
         ]
+    }
+
+    def list(DocumentFilterCommand command) {
+        PagedResultList<Document> documentInstanceList = documentService.getDocuments(command)
+        render([data: documentInstanceList.collect { documentJson(it) }, totalCount: documentInstanceList.totalCount] as JSON)
     }
 
     def documentTypeOptions() {
@@ -78,6 +90,12 @@ class DocumentApiController {
             documentInstance.fileContents = file.bytes
             documentInstance.extension = FileUtil.getExtension(file.originalFilename)
             documentInstance.contentType = file.contentType
+        }
+        if (params.name) {
+            documentInstance.name = params.name
+        }
+        if (params.documentNumber) {
+            documentInstance.documentNumber = params.documentNumber
         }
 
         if (documentInstance.save(flush: true)) {

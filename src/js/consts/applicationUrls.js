@@ -156,6 +156,8 @@ const DOCUMENT_URL = {
   create: () => `${DOCUMENT_URL.base}/create`,
   edit: (id) => `${DOCUMENT_URL.base}/edit/${id}`,
   preview: (id) => `${DOCUMENT_URL.base}/preview/${id}`,
+  show: (id) => `${DOCUMENT_URL.base}/show/${id}`,
+  upload: (id) => (id ? `${DOCUMENT_URL.base}/upload/${id}` : `${DOCUMENT_URL.base}/upload`),
 };
 
 const PURCHASE_ORDER_URL = {
