@@ -260,7 +260,22 @@ class UrlMappings {
 
         "/api/eventTypes"(parseRequest: true) {
             controller = { "eventTypeApi" }
-            action = [POST: "create"]
+            action = [GET: "list", POST: "create"]
+        }
+
+        "/api/glAccounts/glAccountTypeOptions"(parseRequest: true) {
+            controller = { "glAccountApi" }
+            action = [GET: "glAccountTypeOptions"]
+        }
+
+        "/api/glAccounts"(parseRequest: true) {
+            controller = { "glAccountApi" }
+            action = [GET: "list", POST: "create"]
+        }
+
+        "/api/glAccounts/$id"(parseRequest: true) {
+            controller = { "glAccountApi" }
+            action = [GET: "read", PUT: "update", DELETE: "delete"]
         }
 
         "/api/eventTypes/$id"(parseRequest: true) {

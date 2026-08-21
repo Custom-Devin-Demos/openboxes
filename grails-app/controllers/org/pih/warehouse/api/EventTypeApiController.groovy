@@ -19,6 +19,11 @@ import org.springframework.http.HttpStatus
 
 class EventTypeApiController {
 
+    def list() {
+        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        render([data: EventType.list(params).collect { toJson(it) }, totalCount: EventType.count()] as JSON)
+    }
+
     def read() {
         EventType eventType = EventType.get(params.id)
         if (!eventType) {
@@ -82,6 +87,9 @@ class EventTypeApiController {
             description: eventType.description,
             sortOrder  : eventType.sortOrder,
             eventCode  : eventType.eventCode?.name(),
+            optionValue: eventType.optionValue,
+            dateCreated: eventType.dateCreated,
+            lastUpdated: eventType.lastUpdated,
             version    : eventType.version,
         ]
     }
