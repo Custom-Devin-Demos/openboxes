@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom';
 import {
   CONTEXT_PATH, DASHBOARD_URL, INVENTORY_ITEM_URL, INVENTORY_URL,
 } from 'consts/applicationUrls';
+import useTranslate from 'hooks/useTranslate';
 import useTranslation from 'hooks/useTranslation';
 import apiClient from 'utils/apiClient';
 import Translate from 'utils/Translate';
@@ -34,6 +35,7 @@ const ExpirationStockList = ({
   noResultsDefaultMessage,
 }) => {
   useTranslation('inventory', 'product', 'default');
+  const translate = useTranslate();
 
   const query = queryString.parse(location.search);
   const [data, setData] = useState(null);
@@ -82,7 +84,10 @@ const ExpirationStockList = ({
   const onAction = (action) => {
     if (!selectedItems.length) {
       // eslint-disable-next-line no-alert
-      alert('Please select at least one inventory item');
+      alert(translate(
+        'react.inventory.selectAtLeastOneProduct.label',
+        'Please select at least one product before choosing an action.',
+      ));
       return;
     }
     const search = selectedItems.map((id) => `inventoryItem.id=${encodeURIComponent(id)}`).join('&');
