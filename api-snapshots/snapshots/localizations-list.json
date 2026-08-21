@@ -5937,7 +5937,15 @@
       "react.mobile.qoh.label": "QoH",
       "react.mobile.stockMovement.status.label": "Status",
       "react.mobile.outOfStock.label": "Out of Stock",
-      "react.mobile.button.view.label": "View"
+      "react.mobile.button.view.label": "View",
+      "react.unitOfMeasureConversion.editUnitOfMeasureConversion.label": "Edit UnitOfMeasureConversion",
+      "react.unitOfMeasureConversion.addUnitOfMeasureConversion.label": "Add Uom Conversion",
+      "react.unitOfMeasureConversion.column.lastUpdated.label": "Last Updated",
+      "react.unitOfMeasureConversion.column.active.label": "Active",
+      "react.unitOfMeasureConversion.error.unitOfMeasureConversionList.label": "Unable to fetch unit of measure conversions",
+      "react.unitOfMeasureConversion.column.id.label": "Id",
+      "react.unitOfMeasureConversion.header.label": "Uom Conversions List",
+      "react.unitOfMeasureConversion.column.dateCreated.label": "Date Created"
     },
     "supportedLocales": [
       "ar",
