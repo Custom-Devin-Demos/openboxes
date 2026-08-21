@@ -112,11 +112,7 @@ class UserController {
      * Create a user
      */
     def create() {
-        log.info "create a new user based on request parameters"
-        def userInstance = new User()
-        userInstance.properties = params
-
-        return [userInstance: userInstance]
+        render(view: "/common/react", params: params)
     }
 
     /**
@@ -186,14 +182,7 @@ class UserController {
      * Allow user to change their avatar/photo.
      */
     def changePhoto() {
-        log.info "change photo for given user"
-        def userInstance = User.get(params.id)
-        if (!userInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'user.label'), params.id])}"
-            redirect(action: "list")
-        } else {
-            [userInstance: userInstance]
-        }
+        render(view: "/common/react", params: params)
     }
 
     def cropPhoto() {

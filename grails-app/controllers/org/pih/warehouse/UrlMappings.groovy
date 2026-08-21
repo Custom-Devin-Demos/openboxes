@@ -383,7 +383,32 @@ class UrlMappings {
 
         "/api/roles"(parseRequest: true) {
             controller = { "roleApi" }
+            action = [GET: "list", POST: "create"]
+        }
+
+        "/api/roles/$id"(parseRequest: true) {
+            controller = { "roleApi" }
+            action = [GET: "read", PUT: "update", DELETE: "delete"]
+        }
+
+        "/api/users/localeOptions"(parseRequest: true) {
+            controller = { "userApi" }
+            action = [GET: "localeOptions"]
+        }
+
+        "/api/users/create"(parseRequest: true) {
+            controller = { "userApi" }
             action = [POST: "create"]
+        }
+
+        "/api/users/$id/photo" {
+            controller = { "userApi" }
+            action = [POST: "uploadPhoto"]
+        }
+
+        "/api/users/$id"(parseRequest: true) {
+            controller = { "userApi" }
+            action = [GET: "read"]
         }
 
         // Product Group options for filters on  product list page

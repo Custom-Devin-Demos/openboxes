@@ -174,7 +174,15 @@ export const PERSON_BY_ID = (id) => `${PERSONS}/${id}`;
 
 // ROLES
 export const ROLES = `${API}/roles`;
+export const ROLE_BY_ID = (id) => `${ROLES}/${id}`;
 export const ROLE_TYPE_OPTIONS = `${API}/roleTypeOptions`;
+
+// USERS
+export const USERS_API = `${API}/users`;
+export const USER_BY_ID = (id) => `${USERS_API}/${id}`;
+export const USER_CREATE = `${USERS_API}/create`;
+export const USER_PHOTO = (id) => `${USERS_API}/${id}/photo`;
+export const USER_LOCALE_OPTIONS = `${USERS_API}/localeOptions`;
 
 // PRODUCT ASSOCIATIONS
 export const PRODUCT_ASSOCIATIONS = `${API}/productAssociations`;
