@@ -14,17 +14,17 @@ import Translate from 'utils/Translate';
 const ShipmentTable = ({
   shipments, statusCode, isSuperuser, selectedIds, onToggle, onBulkAction,
 }) => (
-  <div className="box">
+  <div className="card p-3 mb-3">
     <h2><Translate id="react.shipment.shipments.label" defaultMessage="Shipments" /></h2>
-    <table className="dataTable">
+    <table className="table table-sm table-striped">
       <thead>
         <tr>
           <th />
           <th />
           <th><Translate id="react.default.status.label" defaultMessage="Status" /></th>
-          <th className="center"><Translate id="react.shipment.shipmentNumber.label" defaultMessage="Shipment number" /></th>
+          <th className="text-center"><Translate id="react.shipment.shipmentNumber.label" defaultMessage="Shipment number" /></th>
           <th><Translate id="react.shipment.shipment.label" defaultMessage="Shipment" /></th>
-          <th className="center"><Translate id="react.shipment.items.label" defaultMessage="Items" /></th>
+          <th className="text-center"><Translate id="react.shipment.items.label" defaultMessage="Items" /></th>
           <th><Translate id="react.shipment.origin.label" defaultMessage="Origin" /></th>
           <th><Translate id="react.shipment.destination.label" defaultMessage="Destination" /></th>
           <th><Translate id="react.shipment.shipped.label" defaultMessage="Shipped" /></th>
@@ -45,7 +45,7 @@ const ShipmentTable = ({
                 onChange={() => onToggle(shipment.id)}
               />
             </td>
-            <td className="center middle">
+            <td className="align-middle text-center">
               {shipment.shipmentType && (
                 <img
                   src={`${CONTEXT_PATH}/static/images/icons/shipmentType/ShipmentType${shipment.shipmentType.defaultName}.png`}
@@ -54,21 +54,21 @@ const ShipmentTable = ({
                 />
               )}
             </td>
-            <td className="middle">{shipment.statusName}</td>
-            <td className="middle center">
+            <td className="align-middle">{shipment.statusName}</td>
+            <td className="align-middle text-center">
               <a href={SHIPMENT_URL.showDetailsOverride(shipment.id)}>
                 {shipment.shipmentNumber}
               </a>
             </td>
-            <td className="middle left shipment-name">
+            <td className="align-middle">
               <a href={SHIPMENT_URL.showDetailsOverride(shipment.id)}>
                 {shipment.name}
               </a>
             </td>
-            <td className="middle center">{shipment.shipmentItemCount}</td>
-            <td className="middle">{shipment.origin}</td>
-            <td className="middle">{shipment.destination}</td>
-            <td className="middle">
+            <td className="align-middle text-center">{shipment.shipmentItemCount}</td>
+            <td className="align-middle">{shipment.origin}</td>
+            <td className="align-middle">{shipment.destination}</td>
+            <td className="align-middle">
               {shipment.actualShippingDate
                 ? (
                   <div title={shipment.actualShippingDate.title}>
@@ -83,7 +83,7 @@ const ShipmentTable = ({
                   </div>
                 )}
             </td>
-            <td className="middle">
+            <td className="align-middle">
               {shipment.actualDeliveryDate
                 ? (
                   <div title={shipment.actualDeliveryDate.title}>
@@ -98,7 +98,7 @@ const ShipmentTable = ({
                   </div>
                 )}
             </td>
-            <td className="middle center">
+            <td className="align-middle text-center">
               <div title={shipment.lastUpdated?.title}>{shipment.lastUpdated?.pretty}</div>
             </td>
           </tr>
@@ -108,34 +108,34 @@ const ShipmentTable = ({
         <tfoot>
           <tr>
             <td />
-            <td colSpan="11" className="left">
-              <div className="bulk-actions">
+            <td colSpan="11" className="text-left">
+              <div className="d-flex flex-wrap mt-2">
                 {statusCode === 'SHIPPED' && (
                   <>
-                    <div className="button-group">
-                      <button type="button" className="button icon approve" onClick={() => onBulkAction('bulkReceiveShipments')}>
+                    <div className="d-inline-block mr-2">
+                      <button type="button" className="btn btn-primary btn-sm mr-1" onClick={() => onBulkAction('bulkReceiveShipments')}>
                         <Translate id="react.shipment.bulkReceive.label" defaultMessage="Bulk Receive" />
                       </button>
-                      <button type="button" className="button icon tag" onClick={() => onBulkAction('bulkMarkAsReceived')}>
+                      <button type="button" className="btn btn-primary btn-sm mr-1" onClick={() => onBulkAction('bulkMarkAsReceived')}>
                         <Translate id="react.shipment.bulkMarkAsReceived.label" defaultMessage="Bulk Mark as Received" />
                       </button>
                     </div>
-                    <div className="button-group">
-                      <button type="button" className="button icon loop" onClick={() => onBulkAction('bulkRollbackShipments')}>
+                    <div className="d-inline-block mr-2">
+                      <button type="button" className="btn btn-primary btn-sm mr-1" onClick={() => onBulkAction('bulkRollbackShipments')}>
                         <Translate id="react.shipment.bulkRollback.label" defaultMessage="Bulk Rollback" />
                       </button>
                     </div>
                   </>
                 )}
                 {statusCode === 'RECEIVED' && (
-                  <div className="button-group">
-                    <button type="button" className="button icon loop" onClick={() => onBulkAction('bulkRollbackShipments')}>
+                  <div className="d-inline-block mr-2">
+                    <button type="button" className="btn btn-primary btn-sm mr-1" onClick={() => onBulkAction('bulkRollbackShipments')}>
                       <Translate id="react.shipment.bulkRollback.label" defaultMessage="Bulk Rollback" />
                     </button>
                   </div>
                 )}
-                <div className="button-group">
-                  <button type="button" className="button icon remove" onClick={() => onBulkAction('bulkDeleteShipments')}>
+                <div className="d-inline-block mr-2">
+                  <button type="button" className="btn btn-danger btn-sm mr-1" onClick={() => onBulkAction('bulkDeleteShipments')}>
                     <Translate id="react.default.button.delete.label" defaultMessage="Delete" />
                   </button>
                 </div>
@@ -230,9 +230,9 @@ const ShipmentList = ({ location }) => {
     ? selectedTab : statusCodes[0];
 
   return (
-    <div className="body">
+    <div className="p-3">
       {data && data.maxReached && (
-        <div className="message" role="status" aria-label="message">
+        <div className="alert alert-info" role="status" aria-label="message">
           <ul>
             <li>
               <Translate
@@ -244,11 +244,11 @@ const ShipmentList = ({ location }) => {
           </ul>
         </div>
       )}
-      <div className="yui-gf">
-        <div className="yui-u first">
+      <div className="d-flex">
+        <div className="mr-3" style={{ width: '280px', flexShrink: 0 }}>
           <div>
             <form method="GET" onSubmit={onSearch}>
-              <div className="box">
+              <div className="card p-3 mb-3">
                 <h2><Translate id="react.default.filters.label" defaultMessage="Filters" /></h2>
                 <table>
                   <tbody>
@@ -264,12 +264,12 @@ const ShipmentList = ({ location }) => {
                             value={filters.terms}
                             onChange={(e) => setFilters({ ...filters, terms: e.target.value })}
                             style={{ width: '100%' }}
-                            className="text medium"
+                            className="form-control form-control-sm"
                           />
                         </div>
                       </td>
                     </tr>
-                    <tr className="prop">
+                    <tr>
                       <td>
                         <div>
                           <div>
@@ -277,6 +277,7 @@ const ShipmentList = ({ location }) => {
                           </div>
                           <div>
                             <select
+                              className="form-control form-control-sm"
                               name="status"
                               value={filters.status}
                               onChange={(e) => setFilters({ ...filters, status: e.target.value })}
@@ -290,13 +291,14 @@ const ShipmentList = ({ location }) => {
                         </div>
                       </td>
                     </tr>
-                    <tr className="prop">
+                    <tr>
                       <td>
                         <div>
                           <label><Translate id="react.shipment.directionType.label" defaultMessage="Direction Type" /></label>
                         </div>
                         <div>
                           <select
+                            className="form-control form-control-sm"
                             name="type"
                             value={filters.type}
                             onChange={(e) => setFilters({ ...filters, type: e.target.value })}
@@ -307,7 +309,7 @@ const ShipmentList = ({ location }) => {
                         </div>
                       </td>
                     </tr>
-                    <tr className="prop">
+                    <tr>
                       <td>
                         <div>
                           <div>
@@ -315,6 +317,7 @@ const ShipmentList = ({ location }) => {
                           </div>
                           <div>
                             <select
+                              className="form-control form-control-sm"
                               name="shipmentType"
                               value={filters.shipmentType}
                               onChange={(e) => setFilters({
@@ -332,13 +335,14 @@ const ShipmentList = ({ location }) => {
                         </div>
                       </td>
                     </tr>
-                    <tr className="prop">
+                    <tr>
                       <td>
                         {data?.incoming ? (
                           <>
                             <label><Translate id="react.shipment.origin.label" defaultMessage="Origin" /></label>
                             <div>
                               <select
+                                className="form-control form-control-sm"
                                 name="origin"
                                 value={filters.origin}
                                 onChange={(e) => setFilters({ ...filters, origin: e.target.value })}
@@ -355,6 +359,7 @@ const ShipmentList = ({ location }) => {
                             <label><Translate id="react.shipment.destination.label" defaultMessage="Destination" /></label>
                             <div>
                               <select
+                                className="form-control form-control-sm"
                                 name="destination"
                                 value={filters.destination}
                                 onChange={(e) => setFilters({
@@ -371,10 +376,11 @@ const ShipmentList = ({ location }) => {
                         )}
                       </td>
                     </tr>
-                    <tr className="prop">
-                      <td className="left">
+                    <tr>
+                      <td className="text-left">
                         <label><Translate id="react.default.limit.label" defaultMessage="Limit" /></label>
                         <select
+                          className="form-control form-control-sm"
                           name="max"
                           value={filters.max}
                           onChange={(e) => setFilters({ ...filters, max: e.target.value })}
@@ -386,14 +392,14 @@ const ShipmentList = ({ location }) => {
                         </select>
                       </td>
                     </tr>
-                    <tr className="prop">
+                    <tr>
                       <td colSpan="2">
-                        <div className="center">
-                          <button type="submit" className="button icon search" name="search" value="true">
+                        <div className="text-center">
+                          <button type="submit" className="btn btn-primary btn-sm mr-1" name="search" value="true">
                             <Translate id="react.default.button.search.label" defaultMessage="Search" />
                           </button>
                           {' '}
-                          <a href={SHIPMENT_URL.list()} className="button icon reload">
+                          <a href={SHIPMENT_URL.list()} className="btn btn-secondary btn-sm ml-1">
                             <Translate id="react.default.button.reset.label" defaultMessage="Reset" />
                           </a>
                         </div>
@@ -405,13 +411,14 @@ const ShipmentList = ({ location }) => {
             </form>
           </div>
         </div>
-        <div className="yui-u">
+        <div className="flex-grow-1">
           {data && sortedShipments.length > 0 && (
-            <div className="tabs">
-              <ul>
+            <div>
+              <ul className="nav nav-tabs">
                 {statusCodes.map((statusCode) => (
-                  <li key={statusCode} className={statusCode === activeTab ? 'ui-tabs-selected ui-state-active' : ''}>
+                  <li key={statusCode} className="nav-item">
                     <a
+                      className={statusCode === activeTab ? 'nav-link active' : 'nav-link'}
                       href={`#${statusCode}`}
                       onClick={(e) => {
                         e.preventDefault();
@@ -420,7 +427,7 @@ const ShipmentList = ({ location }) => {
                     >
                       {shipmentsByStatus[statusCode][0].statusName}
                       {' '}
-                      <span className="fade">
+                      <span className="text-muted">
                         (
                         {shipmentsByStatus[statusCode].length}
                         )
@@ -444,9 +451,9 @@ const ShipmentList = ({ location }) => {
             </div>
           )}
           {data && sortedShipments.length === 0 && (
-            <div className="box">
+            <div className="card p-3 mb-3">
               <h2><Translate id="react.shipment.shipments.label" defaultMessage="Shipments" /></h2>
-              <div className="center empty">
+              <div className="text-center text-muted p-3">
                 <Translate
                   id="react.shipment.noShipmentsMatchingConditions.message"
                   defaultMessage="There are no shipments matching the given conditions"

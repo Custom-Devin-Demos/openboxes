@@ -67,19 +67,19 @@ const SendShipment = ({ match }) => {
   }
 
   return (
-    <div className="body">
+    <div className="p-3">
       <ShipmentSummary summary={data.summary} />
       {errors.length > 0 && (
-        <div className="errors" role="alert" aria-label="error-message">
+        <div className="alert alert-danger" role="alert" aria-label="error-message">
           <ul>
             {errors.map((error) => <li key={error}>{error}</li>)}
           </ul>
         </div>
       )}
-      <div className="yui-ga">
-        <div className="yui-u first">
+      <div className="d-flex">
+        <div className="mr-3" style={{ width: '280px', flexShrink: 0 }}>
           <form onSubmit={onSubmit}>
-            <div className="box">
+            <div className="card p-3 mb-3">
               <h2>
                 <img src={`${CONTEXT_PATH}/static/images/icons/silk/lorry.png`} alt="" style={{ verticalAlign: 'middle' }} />
                 {' '}
@@ -87,29 +87,29 @@ const SendShipment = ({ match }) => {
               </h2>
               <table>
                 <tbody>
-                  <tr className="prop">
-                    <td className="name">
+                  <tr>
+                    <td className="font-weight-bold text-right pr-3 align-top">
                       <label>
                         <Translate id="react.shipment.actualShippingDate.label" defaultMessage="Actual shipping date" />
                       </label>
                     </td>
-                    <td className="value">
+                    <td>
                       <input
                         type="datetime-local"
                         name="actualShippingDate"
-                        className="text"
+                        className="form-control form-control-sm"
                         value={actualShippingDate}
                         onChange={(e) => setActualShippingDate(e.target.value)}
                       />
                     </td>
                   </tr>
-                  <tr className="prop">
-                    <td className="name">
+                  <tr>
+                    <td className="font-weight-bold text-right pr-3 align-top">
                       <label>
                         <Translate id="react.shipment.comment.label" defaultMessage="Comment" />
                       </label>
                     </td>
-                    <td className="value">
+                    <td>
                       <textarea
                         name="comment"
                         cols="60"
@@ -119,13 +119,13 @@ const SendShipment = ({ match }) => {
                       />
                     </td>
                   </tr>
-                  <tr className="prop">
-                    <td className="name">
+                  <tr>
+                    <td className="font-weight-bold text-right pr-3 align-top">
                       <label>
                         <Translate id="react.shipment.workflowStatus.label" defaultMessage="Status" />
                       </label>
                     </td>
-                    <td className="value">
+                    <td>
                       <span className={data.statusCode === 'CREATED' ? '' : 'fade'}>
                         {data.statusCreated}
                       </span>
@@ -141,37 +141,37 @@ const SendShipment = ({ match }) => {
                       </span>
                     </td>
                   </tr>
-                  <tr className="prop">
-                    <td className="name">
+                  <tr>
+                    <td className="font-weight-bold text-right pr-3 align-top">
                       <label>
                         <Translate id="react.shipment.origin.label" defaultMessage="Origin" />
                       </label>
                     </td>
-                    <td className="value">{data.originName}</td>
+                    <td>{data.originName}</td>
                   </tr>
-                  <tr className="prop">
-                    <td className="name">
+                  <tr>
+                    <td className="font-weight-bold text-right pr-3 align-top">
                       <label>
                         <Translate id="react.shipment.destination.label" defaultMessage="Destination" />
                       </label>
                     </td>
-                    <td className="value">{data.destinationName}</td>
+                    <td>{data.destinationName}</td>
                   </tr>
                   {data.originIsWarehouse && (
-                    <tr className="prop">
-                      <td className="name">
+                    <tr>
+                      <td className="font-weight-bold text-right pr-3 align-top">
                         <label>
                           <Translate id="react.shipment.itemsToDebit.label" defaultMessage="Items to debit" />
                         </label>
                       </td>
-                      <td className="value">
-                        <table className="dataTable">
+                      <td>
+                        <table className="table table-sm table-striped">
                           <thead>
                             <tr>
                               <th><Translate id="react.shipment.container.label" defaultMessage="Container" /></th>
                               <th><Translate id="react.product.label" defaultMessage="Product" /></th>
                               <th><Translate id="react.shipment.lotNumber.label" defaultMessage="Lot number" /></th>
-                              <th className="center"><Translate id="react.default.quantity.label" defaultMessage="Quantity" /></th>
+                              <th className="text-center"><Translate id="react.default.quantity.label" defaultMessage="Quantity" /></th>
                             </tr>
                           </thead>
                           <tbody>
@@ -180,7 +180,7 @@ const SendShipment = ({ match }) => {
                                 <td>{item.containerName}</td>
                                 <td>{item.product.name}</td>
                                 <td>{item.lotNumber}</td>
-                                <td className="center">{item.quantity}</td>
+                                <td className="text-center">{item.quantity}</td>
                               </tr>
                             ))}
                           </tbody>
@@ -189,13 +189,13 @@ const SendShipment = ({ match }) => {
                     </tr>
                   )}
                   {data.recipients.length > 0 && (
-                    <tr className="prop">
-                      <td className="name">
+                    <tr>
+                      <td className="font-weight-bold text-right pr-3 align-top">
                         <label>
                           <Translate id="react.shipment.emailRecipients.label" defaultMessage="Email recipients" />
                         </label>
                       </td>
-                      <td className="value">
+                      <td>
                         {data.recipients.map((recipient) => (
                           <div key={recipient.id}>
                             <label>
@@ -210,24 +210,24 @@ const SendShipment = ({ match }) => {
                               {recipient.name}
                               {' '}
                               {recipient.email && (
-                                <span className="fade">
+                                <span className="text-muted">
                                   &lt;
                                   {recipient.email}
                                   &gt;
                                 </span>
                               )}
                               {' '}
-                              <span className="fade">{recipient.role}</span>
+                              <span className="text-muted">{recipient.role}</span>
                             </label>
                           </div>
                         ))}
                       </td>
                     </tr>
                   )}
-                  <tr className="prop">
-                    <td className="name" />
-                    <td className="value left">
-                      <button type="submit" className="button icon approve" disabled={submitting}>
+                  <tr>
+                    <td className="font-weight-bold text-right pr-3 align-top" />
+                    <td className="text-left">
+                      <button type="submit" className="btn btn-primary btn-sm mr-1" disabled={submitting}>
                         <Translate id="react.shipment.sendShipment.label" defaultMessage="Send shipment" />
                       </button>
                       {' '}

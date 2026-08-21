@@ -127,28 +127,28 @@ const ReceiveShipment = ({ match }) => {
   }
 
   return (
-    <div className="body">
+    <div className="p-3">
       <ShipmentSummary summary={data.summary} />
       {data.warningMessage && (
-        <div className="message" role="status" aria-label="message">{data.warningMessage}</div>
+        <div className="alert alert-info" role="status" aria-label="message">{data.warningMessage}</div>
       )}
       {message && (
-        <div className="message" role="status" aria-label="message">{message}</div>
+        <div className="alert alert-info" role="status" aria-label="message">{message}</div>
       )}
       {errors.length > 0 && (
-        <div className="errors" role="alert" aria-label="error-message">
+        <div className="alert alert-danger" role="alert" aria-label="error-message">
           <ul>
             {errors.map((error) => <li key={error}>{error}</li>)}
           </ul>
         </div>
       )}
-      <div className="box">
+      <div className="card p-3 mb-3">
         <h2>
           <img src={`${CONTEXT_PATH}/static/images/icons/handtruck.png`} alt="" style={{ verticalAlign: 'middle' }} />
           {' '}
           <Translate id="react.shipment.receiveShipment.label" defaultMessage="Receive shipment" />
         </h2>
-        <div className="message">
+        <div className="alert alert-info">
           <Translate
             id="react.shipment.receipt.saveAndContinue.message"
             defaultMessage="Please be aware that changes to receipt will not be persisted until you click one of the Save buttons at the bottom of the page."
@@ -156,22 +156,22 @@ const ReceiveShipment = ({ match }) => {
         </div>
         <table>
           <tbody>
-            <tr className="prop">
-              <td className="name">
+            <tr>
+              <td className="font-weight-bold text-right pr-3 align-top">
                 <label>
                   <Translate id="react.shipment.actualDeliveryDate.label" defaultMessage="Actual delivery date" />
                 </label>
               </td>
-              <td className="value">
+              <td>
                 <input
                   type="datetime-local"
                   name="actualDeliveryDate"
-                  className="text"
+                  className="form-control form-control-sm"
                   value={actualDeliveryDate}
                   onChange={(e) => setActualDeliveryDate(e.target.value)}
                 />
                 {data.actualShippingDate && (
-                  <span className="fade">
+                  <span className="text-muted">
                     {' '}
                     <Translate id="react.shipment.shippedOn.label" defaultMessage="Shipped on" />
                     {' '}
@@ -180,27 +180,27 @@ const ReceiveShipment = ({ match }) => {
                 )}
               </td>
             </tr>
-            <tr className="prop">
-              <td className="name">
+            <tr>
+              <td className="font-weight-bold text-right pr-3 align-top">
                 <label>
                   <Translate id="react.shipment.recipient.label" defaultMessage="Recipient" />
                 </label>
               </td>
-              <td className="value">
+              <td>
                 {data.recipient?.name}
               </td>
             </tr>
           </tbody>
         </table>
-        <table className="dataTable">
+        <table className="table table-sm table-striped">
           <thead>
             <tr>
               <th><Translate id="react.product.productCode.label" defaultMessage="Code" /></th>
               <th><Translate id="react.product.label" defaultMessage="Product" /></th>
               <th><Translate id="react.shipment.lotNumber.label" defaultMessage="Lot number" /></th>
               <th><Translate id="react.shipment.expirationDate.label" defaultMessage="Expiration date" /></th>
-              <th className="center"><Translate id="react.shipment.shipped.label" defaultMessage="Shipped" /></th>
-              <th className="center"><Translate id="react.shipment.received.label" defaultMessage="Received" /></th>
+              <th className="text-center"><Translate id="react.shipment.shipped.label" defaultMessage="Shipped" /></th>
+              <th className="text-center"><Translate id="react.shipment.received.label" defaultMessage="Received" /></th>
               <th><Translate id="react.shipment.binLocation.label" defaultMessage="Bin location" /></th>
               <th><Translate id="react.shipment.comment.label" defaultMessage="Comment" /></th>
               <th />
@@ -220,13 +220,13 @@ const ReceiveShipment = ({ match }) => {
                     </td>
                     <td>{receiptItem.lotNumber}</td>
                     <td>{receiptItem.expirationDate}</td>
-                    <td className="center">{receiptItem.isFirstForShipmentItem ? receiptItem.quantityShipped : ''}</td>
-                    <td className="center">
+                    <td className="text-center">{receiptItem.isFirstForShipmentItem ? receiptItem.quantityShipped : ''}</td>
+                    <td className="text-center">
                       <input
                         type="text"
                         name="quantityReceived"
                         size="4"
-                        className="text"
+                        className="form-control form-control-sm"
                         value={itemState.quantityReceived}
                         onChange={(e) => updateItem(receiptItem.id, 'quantityReceived', e.target.value)}
                       />
@@ -235,6 +235,7 @@ const ReceiveShipment = ({ match }) => {
                       {data.hasBinLocationSupport ? (
                         <>
                           <select
+                            className="form-control form-control-sm"
                             name="binLocation.id"
                             value={itemState.binLocationId}
                             onChange={(e) => updateItem(receiptItem.id, 'binLocationId', e.target.value)}
@@ -249,7 +250,7 @@ const ReceiveShipment = ({ match }) => {
                               {' '}
                               <button
                                 type="button"
-                                className="button"
+                                className="btn btn-outline-primary btn-sm mr-1"
                                 onClick={() => copyBinLocationToAll(itemState.binLocationId)}
                               >
                                 <Translate id="react.shipment.copyBinLocationToAll.label" defaultMessage="Copy to all" />
@@ -263,7 +264,7 @@ const ReceiveShipment = ({ match }) => {
                       {' '}
                       <button
                         type="button"
-                        className="button"
+                        className="btn btn-outline-primary btn-sm mr-1"
                         onClick={() => onShowPutawayLocations(receiptItem.id)}
                       >
                         <Translate id="react.shipment.showPutawayLocations.label" defaultMessage="Show putaway locations" />
@@ -273,18 +274,18 @@ const ReceiveShipment = ({ match }) => {
                       <input
                         type="text"
                         name="comment"
-                        className="text"
+                        className="form-control form-control-sm"
                         value={itemState.comment}
                         onChange={(e) => updateItem(receiptItem.id, 'comment', e.target.value)}
                       />
                     </td>
                     <td>
                       {receiptItem.isFirstForShipmentItem ? (
-                        <button type="button" className="button" onClick={() => onSplit(receiptItem.id)}>
+                        <button type="button" className="btn btn-outline-primary btn-sm mr-1" onClick={() => onSplit(receiptItem.id)}>
                           <Translate id="react.shipment.splitLine.label" defaultMessage="Split line" />
                         </button>
                       ) : (
-                        <button type="button" className="button" onClick={() => onDeleteItem(receiptItem.id)}>
+                        <button type="button" className="btn btn-outline-primary btn-sm mr-1" onClick={() => onDeleteItem(receiptItem.id)}>
                           <Translate id="react.default.button.delete.label" defaultMessage="Delete" />
                         </button>
                       )}
@@ -317,7 +318,7 @@ const ReceiveShipment = ({ match }) => {
                             ))}
                             {putawayLocations[receiptItem.id].binLocations.length === 0 && (
                               <tr>
-                                <td colSpan="4" className="empty fade center">
+                                <td colSpan="4" className="text-center text-muted p-3">
                                   <Translate id="react.default.empty.label" defaultMessage="Empty" />
                                 </td>
                               </tr>
@@ -332,10 +333,10 @@ const ReceiveShipment = ({ match }) => {
             })}
           </tbody>
         </table>
-        <div className="buttons left">
+        <div className="d-flex flex-wrap my-2">
           <button
             type="button"
-            className="button icon approve"
+            className="btn btn-primary btn-sm mr-1"
             disabled={submitting}
             onClick={() => onSave('saveAndContinue')}
           >
@@ -344,7 +345,7 @@ const ReceiveShipment = ({ match }) => {
           {' '}
           <button
             type="button"
-            className="button icon approve"
+            className="btn btn-primary btn-sm mr-1"
             disabled={submitting}
             onClick={() => onSave('saveAndExit')}
           >
@@ -353,7 +354,7 @@ const ReceiveShipment = ({ match }) => {
           {' '}
           <button
             type="button"
-            className="button icon approve"
+            className="btn btn-primary btn-sm mr-1"
             disabled={submitting}
             onClick={() => onSave('receiveShipment')}
           >
@@ -361,7 +362,7 @@ const ReceiveShipment = ({ match }) => {
           </button>
           {' '}
           {data.receiptId && (
-            <button type="button" className="button icon remove" onClick={onDeleteReceipt}>
+            <button type="button" className="btn btn-danger btn-sm mr-1" onClick={onDeleteReceipt}>
               <Translate id="react.shipment.deleteReceiptStartOver.label" defaultMessage="Delete receipt and start over" />
             </button>
           )}

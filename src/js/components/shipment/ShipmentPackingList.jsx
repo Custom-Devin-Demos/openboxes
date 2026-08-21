@@ -24,32 +24,42 @@ const ShipmentPackingList = ({ match }) => {
 
   const colSpan = data.wasReceived ? 7 : 6;
 
+  const containerGroups = data.shipmentItems.reduce((acc, item) => {
+    const key = item.container?.id || 'unpacked';
+    const existing = acc.find((group) => group.key === key);
+    if (existing) {
+      existing.items.push(item);
+      return acc;
+    }
+    return [...acc, { key, container: item.container, items: [item] }];
+  }, []);
+
   return (
-    <div className="body">
+    <div className="p-3">
       <ShipmentSummary summary={data.summary} />
-      <div className="box">
+      <div className="card p-3 mb-3">
         <h2><Translate id="react.shipment.packingList.label" defaultMessage="Packing list" /></h2>
-        <table className="dataTable">
+        <table className="table table-sm table-striped">
           <thead>
             <tr>
               <th><Translate id="react.shipment.packingUnit.label" defaultMessage="Packing unit" /></th>
               <th><Translate id="react.product.label" defaultMessage="Product" /></th>
               <th><Translate id="react.shipment.lotSerialNo.label" defaultMessage="Lot/Serial No." /></th>
               <th><Translate id="react.shipment.expirationDate.label" defaultMessage="Expiration date" /></th>
-              <th className="center"><Translate id="react.shipment.shipped.label" defaultMessage="Shipped" /></th>
+              <th className="text-center"><Translate id="react.shipment.shipped.label" defaultMessage="Shipped" /></th>
               {data.wasReceived && (
-                <th className="center"><Translate id="react.shipment.received.label" defaultMessage="Received" /></th>
+                <th className="text-center"><Translate id="react.shipment.received.label" defaultMessage="Received" /></th>
               )}
               <th><Translate id="react.shipment.recipient.label" defaultMessage="Recipient" /></th>
             </tr>
           </thead>
           <tbody>
-            {data.containers.map((container) => (
-              <React.Fragment key={container.id || 'unpacked'}>
-                <tr className="container-row">
+            {containerGroups.map(({ key, container, items }) => (
+              <React.Fragment key={key}>
+                <tr className="table-secondary">
                   <td colSpan={colSpan}>
                     <b>
-                      {container.id ? (
+                      {container ? (
                         <>
                           {container.containerTypeName}
                           {' '}
@@ -59,21 +69,29 @@ const ShipmentPackingList = ({ match }) => {
                         <Translate id="react.shipment.unpacked.label" defaultMessage="Unpacked" />
                       )}
                     </b>
-                    {container.dimensions && (
-                      <span className="fade">
+                    {container && (container.length || container.width || container.height) && (
+                      <span className="text-muted">
                         {' '}
-                        {container.dimensions}
+                        {container.length}
+                        {' x '}
+                        {container.width}
+                        {' x '}
+                        {container.height}
+                        {' '}
+                        {container.volumeUnits}
                       </span>
                     )}
-                    {container.weight && (
-                      <span className="fade">
+                    {container?.weight && (
+                      <span className="text-muted">
                         {' '}
                         {container.weight}
+                        {' '}
+                        {container.weightUnits}
                       </span>
                     )}
                   </td>
                 </tr>
-                {container.shipmentItems.map((item) => (
+                {items.map((item) => (
                   <tr key={item.id}>
                     <td />
                     <td>
@@ -83,26 +101,26 @@ const ShipmentPackingList = ({ match }) => {
                     </td>
                     <td>{item.lotNumber}</td>
                     <td>{item.expirationDate}</td>
-                    <td className="center">
+                    <td className="text-center">
                       {item.quantity}
                       {' '}
                       {item.unitOfMeasure}
                     </td>
                     {data.wasReceived && (
-                      <td className="center">
+                      <td className="text-center">
                         {item.quantityReceived}
                         {' '}
                         {item.unitOfMeasure}
                       </td>
                     )}
-                    <td>{item.recipient?.name}</td>
+                    <td>{item.recipientName}</td>
                   </tr>
                 ))}
               </React.Fragment>
             ))}
-            {data.containers.length === 0 && (
+            {data.shipmentItems.length === 0 && (
               <tr>
-                <td colSpan={colSpan} className="empty center">
+                <td colSpan={colSpan} className="text-center text-muted p-3">
                   <Translate id="react.default.empty.label" defaultMessage="Empty" />
                 </td>
               </tr>

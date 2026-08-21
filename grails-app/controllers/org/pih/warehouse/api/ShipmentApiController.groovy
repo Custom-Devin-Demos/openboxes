@@ -10,6 +10,7 @@
 package org.pih.warehouse.api
 
 import grails.converters.JSON
+import grails.gorm.transactions.Transactional
 import grails.util.Holders
 import grails.validation.ValidationException
 import groovy.time.TimeDuration
@@ -36,6 +37,7 @@ import org.pih.warehouse.shipping.ShipmentStatusCode
 import org.pih.warehouse.shipping.ShipmentType
 import org.pih.warehouse.LocalizationUtil
 
+@Transactional
 class ShipmentApiController {
 
     ShipmentService shipmentService
@@ -422,6 +424,7 @@ class ShipmentApiController {
                                     new SimpleDateFormat("d MMM yyyy").format(shipmentItem.expirationDate) : null,
                             quantity           : shipmentItem.quantity,
                             quantityReceived   : shipmentItem.quantityReceived(),
+                            unitOfMeasure      : shipmentItem.product?.unitOfMeasure ?: 'EA',
                             recipientName      : shipmentItem.recipient?.name,
                     ]
                 },
