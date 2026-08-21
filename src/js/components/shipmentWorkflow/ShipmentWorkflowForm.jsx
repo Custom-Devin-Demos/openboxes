@@ -51,6 +51,8 @@ const ShipmentWorkflowForm = ({ match }) => {
     documentTemplates: [],
   });
   const [shipmentWorkflow, setShipmentWorkflow] = useState(null);
+  const [optionsLoaded, setOptionsLoaded] = useState(false);
+  const [valuesLoaded, setValuesLoaded] = useState(false);
 
   useEffect(() => {
     shipmentWorkflowApi.getShipmentWorkflowOptions()
@@ -62,6 +64,7 @@ const ShipmentWorkflowForm = ({ match }) => {
           containerTypes: (data.containerTypes || []).map(toOption),
           documentTemplates: (data.documentTemplates || []).map(toOption),
         });
+        setOptionsLoaded(true);
       });
   }, []);
 
@@ -88,8 +91,11 @@ const ShipmentWorkflowForm = ({ match }) => {
           findOptions(options.documentTemplates, shipmentWorkflow.documentTemplates),
         version: shipmentWorkflow.version,
       });
+      setValuesLoaded(true);
     }
   }, [shipmentWorkflow, options]);
+
+  const isLoaded = optionsLoaded && (!isEdit || (valuesLoaded && shipmentWorkflow));
 
   const setValue = (field) => (value) => setValues((prev) => ({ ...prev, [field]: value }));
 
@@ -164,6 +170,7 @@ const ShipmentWorkflowForm = ({ match }) => {
             ? <Translate id="react.shipmentWorkflow.editShipmentWorkflow.label" defaultMessage="Edit Shipment Workflow" />
             : <Translate id="react.shipmentWorkflow.createShipmentWorkflow.label" defaultMessage="Create Shipment Workflow" />}
         </h1>
+        {isLoaded && (
         <form onSubmit={onSubmit} className="w-50">
           <div className="mb-3">
             <TextInput
@@ -252,6 +259,7 @@ const ShipmentWorkflowForm = ({ match }) => {
             </a>
           </div>
         </form>
+        )}
       </div>
     </PageWrapper>
   );
