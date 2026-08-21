@@ -287,7 +287,7 @@ class OrderItem implements Serializable, Comparable<OrderItem> {
     /**
      * Checks if everything is in posted regular invoices
      * */
-    Boolean isCompletelyInvoiced() {
+    boolean isCompletelyInvoiced() {
         // TODO: if this is still used, ensure that we want to compare standard uom below to non standard
         return postedQuantityInvoicedInStandardUom >= quantity
     }
@@ -296,7 +296,7 @@ class OrderItem implements Serializable, Comparable<OrderItem> {
      * Used in final invoices for prepaid invoices.
      * Checks if everything is in regular invoices (including non posted invoices)
      * */
-    Boolean isFullyInvoiced() {
+    boolean isFullyInvoiced() {
         if (canceled) {
             return hasRegularInvoice
         }
@@ -339,7 +339,7 @@ class OrderItem implements Serializable, Comparable<OrderItem> {
      *  - is not canceled and is not yet fully invoiced and has quantity available to invoice
      *      (even on not yet posted invoices, >> and does not have to have prepaymnent invoice item <<),
      * */
-    Boolean isInvoiceable() {
+    boolean isInvoiceable() {
         if (canceled) {
             return hasPrepaymentInvoice && !fullyInvoiced
         }
@@ -468,7 +468,7 @@ class OrderItem implements Serializable, Comparable<OrderItem> {
         return OrderItemSummary.get(id)?.derivedStatus
     }
 
-    Boolean isCanceled() {
+    boolean isCanceled() {
         return orderItemStatusCode == OrderItemStatusCode.CANCELED
     }
 

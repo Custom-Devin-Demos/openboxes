@@ -255,7 +255,7 @@ class Order implements Serializable, Historizable {
     /**
      * @return a boolean indicating whether the order has been placed
      */
-    Boolean isPlaced() {
+    boolean isPlaced() {
         return (status == OrderStatus.PLACED)
     }
 
