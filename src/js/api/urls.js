@@ -253,6 +253,12 @@ export const PUTAWAY_GENERATE_PDF = (id) => `/putAway/generatePdf/${id}`;
 // SUPPORT LINKS
 export const SUPPORT_LINKS = `${CONTEXT_PATH}${API}/supportLinks`;
 
+// SHIPMENT ITEMS
+export const SHIPMENT_ITEM_API = `${API}/shipmentItems`;
+export const SHIPMENT_ITEM_BY_ID = (id) => `${SHIPMENT_ITEM_API}/${id}`;
+export const SHIPMENT_ITEM_OPTIONS = `${SHIPMENT_ITEM_API}/options`;
+export const SHIPMENT_ITEM_PICK = (id) => `${SHIPMENT_ITEM_API}/${id}/pick`;
+
 // COMBINED SHIPMENT ITEMS
 export const COMBINED_SHIPMENT_ITEMS_API = `${API}/combinedShipmentItems`;
 export const COMBINED_SHIPMENT_ITEMS_IMPORT_TEMPLATE = (id) => `${COMBINED_SHIPMENT_ITEMS_API}/importTemplate/${id}`;

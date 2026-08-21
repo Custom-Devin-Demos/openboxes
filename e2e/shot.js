@@ -5,11 +5,13 @@ const { chromium } = require('@playwright/test');
 
 const BASE = 'http://localhost:8080/openboxes';
 const outDir = process.argv[2] || '/tmp/shots/before';
+const shipmentItemId = process.env.SHIPMENT_ITEM_ID;
 const urls = [
-  ['paymentTerm-list', '/paymentTerm/list'],
-  ['preferenceType-list', '/preferenceType/list'],
-  ['preferenceType-create', '/preferenceType/create'],
-  ['preferenceType-edit', '/preferenceType/edit/APPROVED'],
+  ['shipmentItem-list', '/shipmentItem/list'],
+  ['shipmentItem-create', '/shipmentItem/create'],
+  ['shipmentItem-edit', `/shipmentItem/edit/${shipmentItemId}`],
+  ['shipmentItem-show', `/shipmentItem/show/${shipmentItemId}`],
+  ['shipmentItem-pick', `/shipmentItem/pick/${shipmentItemId}`],
 ];
 
 (async () => {

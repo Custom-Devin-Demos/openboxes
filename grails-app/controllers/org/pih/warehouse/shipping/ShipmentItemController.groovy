@@ -26,14 +26,11 @@ class ShipmentItemController {
     }
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [shipmentItemInstanceList: ShipmentItem.list(params), shipmentItemInstanceTotal: ShipmentItem.count()]
+        render(view: "/common/react")
     }
 
     def create() {
-        def shipmentItemInstance = new ShipmentItem()
-        shipmentItemInstance.properties = params
-        return [shipmentItemInstance: shipmentItemInstance]
+        render(view: "/common/react")
     }
 
     def save() {
@@ -47,23 +44,11 @@ class ShipmentItemController {
     }
 
     def show() {
-        def shipmentItemInstance = ShipmentItem.get(params.id)
-        if (!shipmentItemInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'shipmentItem.label', default: 'ShipmentItem'), params.id])}"
-            redirect(action: "list")
-        } else {
-            [shipmentItemInstance: shipmentItemInstance]
-        }
+        render(view: "/common/react")
     }
 
     def edit() {
-        def shipmentItemInstance = ShipmentItem.get(params.id)
-        if (!shipmentItemInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'shipmentItem.label', default: 'ShipmentItem'), params.id])}"
-            redirect(action: "list")
-        } else {
-            [shipmentItemInstance: shipmentItemInstance]
-        }
+        render(view: "/common/react")
     }
 
     def update() {
@@ -110,18 +95,7 @@ class ShipmentItemController {
     }
 
     def pick() {
-        def shipmentItem = ShipmentItem.get(params.id)
-        if (!shipmentItem) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'shipmentItem.label', default: 'ShipmentItem'), params.id])}"
-        } else {
-            Location location = Location.load(session.warehouse.id)
-            List binLocations = inventoryService.getProductQuantityByBinLocation(location, shipmentItem.product)
-            List binLocationSelected = binLocations.findAll {
-                it?.binLocation == shipmentItem?.binLocation && it.inventoryItem == shipmentItem?.inventoryItem
-            }
-            [shipmentItem: shipmentItem, binLocations: binLocations, binLocationSelected: binLocationSelected]
-        }
-
+        render(view: "/common/react")
     }
 
     def split() {
