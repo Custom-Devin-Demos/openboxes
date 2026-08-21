@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Controller, useForm } from 'react-hook-form';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import roleApi from 'api/services/RoleApi';
 import Button from 'components/form-elements/Button';
@@ -22,11 +22,15 @@ const RoleForm = () => {
   useTranslation('role', 'default');
   const history = useHistory();
   const spinner = useSpinner();
+  const { roleId } = useParams();
+  const isEdit = Boolean(roleId);
   const [roleTypeOptions, setRoleTypeOptions] = useState([]);
+  const [version, setVersion] = useState(null);
 
   const {
     control,
     handleSubmit,
+    reset,
   } = useForm({
     defaultValues: {
       name: '',
@@ -45,6 +49,28 @@ const RoleForm = () => {
       });
   }, []);
 
+  useEffect(() => {
+    if (isEdit) {
+      spinner.show();
+      roleApi.getRole(roleId)
+        .then((response) => {
+          const role = response.data?.data;
+          setVersion(role.version);
+          reset({
+            name: role.name ?? '',
+            roleType: role.roleType ? {
+              id: role.roleType,
+              value: role.roleType,
+              label: role.roleType,
+            } : null,
+            description: role.description ?? '',
+          });
+        })
+        .catch(() => history.push(ROLE_URL.index()))
+        .finally(() => spinner.hide());
+    }
+  }, [roleId]);
+
   const onSubmit = async (values) => {
     const payload = {
       name: values.name,
@@ -53,16 +79,28 @@ const RoleForm = () => {
     };
     spinner.show();
     try {
-      const response = await roleApi.createRole(payload);
-      const savedId = response.data?.id;
-      notification(NotificationType.SUCCESS)({
-        message: translate({
-          id: 'react.role.saved.label',
-          defaultMessage: `Role ${savedId} created`,
-          data: { id: savedId },
-        }),
-      });
-      history.push(ROLE_URL.show(savedId));
+      if (isEdit) {
+        await roleApi.updateRole(roleId, { ...payload, version });
+        notification(NotificationType.SUCCESS)({
+          message: translate({
+            id: 'react.role.updated.label',
+            defaultMessage: `Role ${roleId} updated`,
+            data: { id: roleId },
+          }),
+        });
+        history.push(ROLE_URL.show(roleId));
+      } else {
+        const response = await roleApi.createRole(payload);
+        const savedId = response.data?.id;
+        notification(NotificationType.SUCCESS)({
+          message: translate({
+            id: 'react.role.saved.label',
+            defaultMessage: `Role ${savedId} created`,
+            data: { id: savedId },
+          }),
+        });
+        history.push(ROLE_URL.show(savedId));
+      }
     } finally {
       spinner.hide();
     }
@@ -71,7 +109,10 @@ const RoleForm = () => {
   return (
     <PageWrapper>
       <HeaderWrapper>
-        <ListTitle label={{
+        <ListTitle label={isEdit ? {
+          id: 'react.role.editRole.header.label',
+          defaultMessage: 'Edit Role',
+        } : {
           id: 'react.role.createRole.header.label',
           defaultMessage: 'Create Role',
         }}
@@ -126,8 +167,8 @@ const RoleForm = () => {
         <div className="d-flex pt-3">
           <Button
             type="submit"
-            label="react.default.button.create.label"
-            defaultLabel="Create"
+            label={isEdit ? 'react.default.button.update.label' : 'react.default.button.create.label'}
+            defaultLabel={isEdit ? 'Update' : 'Create'}
           />
         </div>
       </form>

@@ -817,6 +817,26 @@ const AsyncPersonShow = Loadable({
   loading: Loading,
 });
 
+const AsyncRoleList = Loadable({
+  loader: () => import('components/role/RoleList'),
+  loading: Loading,
+});
+
+const AsyncRoleShow = Loadable({
+  loader: () => import('components/role/RoleShow'),
+  loading: Loading,
+});
+
+const AsyncUserCreateForm = Loadable({
+  loader: () => import('components/user/UserCreateForm'),
+  loading: Loading,
+});
+
+const AsyncUserChangePhoto = Loadable({
+  loader: () => import('components/user/UserChangePhoto'),
+  loading: Loading,
+});
+
 const AsyncRoleForm = Loadable({
   loader: () => import('components/role/RoleForm'),
   loading: Loading,
@@ -1031,7 +1051,12 @@ const Router = () => {
             <MainLayoutRoute path="**/person/create" component={AsyncPersonForm} />
             <MainLayoutRoute path="**/person/edit/:id?" component={AsyncPersonForm} />
             <MainLayoutRoute path="**/person/show/:id" component={AsyncPersonShow} />
+            <MainLayoutRoute path="**/role/index" component={AsyncRoleList} />
+            <MainLayoutRoute path="**/role/show/:id" component={AsyncRoleShow} />
             <MainLayoutRoute path="**/role/create" component={AsyncRoleForm} />
+            <MainLayoutRoute path="**/role/edit/:roleId" component={AsyncRoleForm} />
+            <MainLayoutRoute path="**/user/create" component={AsyncUserCreateForm} />
+            <MainLayoutRoute path="**/user/changePhoto/:id" component={AsyncUserChangePhoto} />
             <MainLayoutRoute path="**/dashboard/:configId?" component={Dashboard} />
             <MainLayoutRoute path="**/" component={Dashboard} />
           </Switch>

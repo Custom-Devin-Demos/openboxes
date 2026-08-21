@@ -399,6 +399,17 @@ const ROLE_URL = {
   index: () => `${ROLE_URL.base}/index`,
   create: () => `${ROLE_URL.base}/create`,
   show: (id) => `${ROLE_URL.base}/show/${id}`,
+  edit: (id) => `${ROLE_URL.base}/edit/${id}`,
+};
+
+const USER_URL = {
+  base: `${CONTEXT_PATH}/user`,
+  list: () => `${USER_URL.base}/list`,
+  create: () => `${USER_URL.base}/create`,
+  show: (id) => `${USER_URL.base}/show/${id}`,
+  edit: (id) => `${USER_URL.base}/edit/${id}`,
+  changePhoto: (id) => `${USER_URL.base}/changePhoto/${id}`,
+  viewThumb: (id) => `${USER_URL.base}/viewThumb/${id}`,
 };
 
 const GL_ACCOUNT_TYPE_URL = {
@@ -512,4 +523,5 @@ export {
   STOCKLIST_URL,
   SUPPLIER_URL,
   TRANSACTION_ENTRY_URL,
+  USER_URL,
 };
