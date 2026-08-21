@@ -67,7 +67,8 @@ class RoleInterceptor {
         'locationType'              : ['create', 'edit', 'delete', 'update', 'save'],
         'locationTypeApi'           : ['create', 'delete', 'update'],
         'quartz'                    : ['*'],
-        'jobs'                      : ['*']
+        'jobs'                      : ['*'],
+        'jobApi'                    : ['*']
     ]
 
     def static invoiceActions = [

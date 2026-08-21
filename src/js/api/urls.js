@@ -427,6 +427,25 @@ export const ADMIN_SETTINGS = `${ADMIN_API}/settings`;
 export const ADMIN_TRIGGER_STOCK_ALERTS = `${ADMIN_API}/triggerStockAlerts`;
 export const ADMIN_SEND_MAIL = `${ADMIN_API}/sendMail`;
 export const ADMIN_MAIL_FORM = `${ADMIN_API}/mailForm`;
+export const ADMIN_STATUS = `${ADMIN_API}/status`;
+export const ADMIN_UPGRADE = `${ADMIN_API}/upgrade`;
+export const ADMIN_UPGRADE_DOWNLOAD = `${ADMIN_UPGRADE}/download`;
+export const ADMIN_UPGRADE_DEPLOY = `${ADMIN_UPGRADE}/deploy`;
+
+// BATCH IMPORT
+export const BATCH_IMPORT_DATA = `${API}/batch/importData`;
+
+// DATA EXPORT
+export const DATA_EXPORTS = `${API}/dataExports`;
+
+// JOBS
+export const JOB_BY_ID = (id) => `${API}/jobs/${id}`;
+export const JOB_SCHEDULE = (id) => `${API}/jobs/${id}/schedule`;
+export const JOB_TRIGGER_BY_ID = (id) => `${API}/jobs/triggers/${id}`;
+
+// LOCALIZATIONS
+export const LOCALIZATIONS = `${API}/localizations`;
+export const LOCALIZATION_LOCALE_OPTIONS = `${LOCALIZATIONS}/localeOptions`;
 
 // REQUISITIONS (legacy requisition screens migration)
 export const REQUISITION_API = `${API}/requisitions`;

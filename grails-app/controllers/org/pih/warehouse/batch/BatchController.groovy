@@ -106,6 +106,11 @@ class BatchController {
 
     def importData(ImportDataCommand command) {
 
+        if (!"POST".equals(request.getMethod())) {
+            render(view: "/common/react")
+            return
+        }
+
         if ("POST".equals(request.getMethod())) {
             def localFile = session.localFile
             if (request instanceof StandardMultipartHttpServletRequest) {

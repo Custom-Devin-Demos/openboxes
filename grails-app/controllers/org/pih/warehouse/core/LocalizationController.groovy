@@ -51,9 +51,7 @@ class LocalizationController {
     }
 
     def create() {
-        def localizationInstance = new Localization()
-        localizationInstance.properties = params
-        return [localizationInstance: localizationInstance]
+        render(view: "/common/react")
     }
 
     def save() {

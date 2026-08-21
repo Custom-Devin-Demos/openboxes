@@ -512,6 +512,36 @@ const AsyncAdminShowSettings = Loadable({
   loading: Loading,
 });
 
+const AsyncAdminStatus = Loadable({
+  loader: () => import('components/admin/StatusPage'),
+  loading: Loading,
+});
+
+const AsyncAdminUpgrade = Loadable({
+  loader: () => import('components/admin/UpgradePage'),
+  loading: Loading,
+});
+
+const AsyncBatchImportData = Loadable({
+  loader: () => import('components/batch/ImportDataPage'),
+  loading: Loading,
+});
+
+const AsyncDataExport = Loadable({
+  loader: () => import('components/dataExport/DataExportPage'),
+  loading: Loading,
+});
+
+const AsyncJobDetails = Loadable({
+  loader: () => import('components/jobs/JobDetailsPage'),
+  loading: Loading,
+});
+
+const AsyncLocalizationCreate = Loadable({
+  loader: () => import('components/localization/LocalizationCreatePage'),
+  loading: Loading,
+});
+
 const AsyncStockCardPage = Loadable({
   loader: () => import('components/stock-card/StockCardPage'),
   loading: Loading,
@@ -850,6 +880,13 @@ const Router = () => {
             <MainLayoutRoute path="**/admin/cache" component={AsyncAdminCache} />
             <MainLayoutRoute path="**/admin/sendMail" component={AsyncAdminSendMail} />
             <MainLayoutRoute path="**/admin/showSettings" component={AsyncAdminShowSettings} />
+            <MainLayoutRoute path="**/admin/status" component={AsyncAdminStatus} />
+            <MainLayoutRoute path="**/admin/showUpgrade" component={AsyncAdminUpgrade} />
+            <MainLayoutRoute path="**/batch/importData" component={AsyncBatchImportData} />
+            <MainLayoutRoute path="**/dataExport/index" component={AsyncDataExport} />
+            <MainLayoutRoute path="**/dataExport" exact component={AsyncDataExport} />
+            <MainLayoutRoute path="**/jobs/show/:jobId" component={AsyncJobDetails} />
+            <MainLayoutRoute path="**/localization/create" component={AsyncLocalizationCreate} />
             <MainLayoutRoute path="**/admin/index" component={AsyncAdminIndex} />
             <MainLayoutRoute path="**/admin" exact component={AsyncAdminIndex} />
             <MainLayoutRoute path="**/productSupplier/list" component={AsyncProductSupplierList} />
