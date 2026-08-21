@@ -80,6 +80,7 @@ const SupplierList = () => {
       Cell: (row) => (
         <TableCell
           {...row}
+          value={`${row.value ?? 0}`}
           link={PURCHASE_ORDER_URL.list({ origin: row.original.id, destination: '' })}
         />
       ),
@@ -91,6 +92,7 @@ const SupplierList = () => {
       Cell: (row) => (
         <TableCell
           {...row}
+          value={`${row.value ?? 0}`}
           link={pendingShipmentsUrl(row.original.id)}
         />
       ),

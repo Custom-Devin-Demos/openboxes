@@ -164,7 +164,7 @@ const SupplierPriceHistory = ({ supplierId }) => {
         loading={loading}
         defaultPageSize={10}
         totalData={priceHistory.length}
-        noDataText="No price history found"
+        noDataText="No records found"
       />
     </div>
   );
