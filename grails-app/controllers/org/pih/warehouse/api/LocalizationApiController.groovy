@@ -44,7 +44,7 @@ class LocalizationApiController {
     }
 
     def localeOptions() {
-        def supportedLocales = grailsApplication.config.openboxes.locale.supportedLocales?.sort()
+        def supportedLocales = grailsApplication.config.openboxes.locale.supportedLocales?.sort(false)
         def options = supportedLocales.collect { code ->
             Locale locale = LocalizationUtil.getLocale(code)
             [id: code, value: code, label: locale.getDisplayName(LocalizationUtil.currentLocale)]
