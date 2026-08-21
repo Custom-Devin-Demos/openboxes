@@ -572,9 +572,13 @@ const LOCALIZATION_URL = {
 
 const MIGRATION_URL = {
   base: `${CONTEXT_PATH}/migration`,
+  index: () => `${MIGRATION_URL.base}/index`,
   dataMigration: () => `${MIGRATION_URL.base}/dataMigration`,
   dataQuality: () => `${MIGRATION_URL.base}/dataQuality`,
   dimensionTables: () => `${MIGRATION_URL.base}/dimensionTables`,
+  factTables: () => `${MIGRATION_URL.base}/factTables`,
+  materializedViews: () => `${MIGRATION_URL.base}/materializedViews`,
+  productAvailability: () => `${MIGRATION_URL.base}/productAvailability`,
   migrateOrganizations: (preview) => `${MIGRATION_URL.base}/migrateOrganizations${preview ? '?preview=true' : ''}`,
   deleteOrganizations: () => `${MIGRATION_URL.base}/deleteOrganizations`,
   migrateProductSuppliers: (preview) => `${MIGRATION_URL.base}/migrateProductSuppliers${preview ? '?preview=true' : ''}`,
@@ -595,11 +599,19 @@ const REPORT_URL = {
   base: `${CONTEXT_PATH}/report`,
   truncateDimensions: () => `${REPORT_URL.base}/truncateDimensions`,
   buildDimensions: () => `${REPORT_URL.base}/buildDimensions`,
+  truncateFacts: () => `${REPORT_URL.base}/truncateFacts`,
+  buildFacts: () => `${REPORT_URL.base}/buildFacts`,
+  refreshTransactionFact: () => `${REPORT_URL.base}/refreshTransactionFact`,
+  refreshConsumptionFact: () => `${REPORT_URL.base}/refreshConsumptionFact`,
+  refreshStockoutFact: () => `${REPORT_URL.base}/refreshStockoutFact`,
+  refreshProductDemand: () => `${REPORT_URL.base}/refreshProductDemand`,
+  refreshProductAvailability: () => `${REPORT_URL.base}/refreshProductAvailability`,
 };
 
 const QUARTZ_URL = {
   base: `${CONTEXT_PATH}/quartz`,
   list: () => `${QUARTZ_URL.base}/list`,
+  editCronTrigger: (triggerName, triggerGroup) => `${QUARTZ_URL.base}/editCronTrigger?triggerName=${encodeURIComponent(triggerName)}&triggerGroup=${encodeURIComponent(triggerGroup)}`,
 };
 
 export {

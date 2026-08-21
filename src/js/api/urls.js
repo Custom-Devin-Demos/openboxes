@@ -544,6 +544,23 @@ export const MIGRATION_DIMENSION_TABLES = `${MIGRATION_API}/dimensionTables`;
 export const MIGRATION_RECEIPTS_WITHOUT_TRANSACTION = `${MIGRATION_API}/receiptsWithoutTransaction`;
 export const MIGRATION_SHIPMENTS_WITHOUT_TRANSACTIONS = `${MIGRATION_API}/shipmentsWithoutTransactions`;
 export const MIGRATION_STOCK_MOVEMENTS_WITHOUT_SHIPMENT_ITEMS = `${MIGRATION_API}/stockMovementsWithoutShipmentItems`;
+export const MIGRATION_FACT_TABLES = `${MIGRATION_API}/factTables`;
+export const MIGRATION_MATERIALIZED_VIEWS = `${MIGRATION_API}/materializedViews`;
+export const MIGRATION_PRODUCT_AVAILABILITY = `${MIGRATION_API}/productAvailability`;
+export const MIGRATION_PRODUCT_AVAILABILITY_COUNT = (id) => `${MIGRATION_PRODUCT_AVAILABILITY}/${id}/count`;
+export const MIGRATION_PRODUCT_AVAILABILITY_CALCULATED = (id) => `${MIGRATION_PRODUCT_AVAILABILITY}/${id}/calculated`;
+export const MIGRATION_PRODUCT_AVAILABILITY_COMPARE = (id) => `${MIGRATION_PRODUCT_AVAILABILITY}/${id}/compare`;
+export const MIGRATION_PRODUCT_AVAILABILITY_REFRESH = (id) => `${MIGRATION_PRODUCT_AVAILABILITY}/${id}/refresh`;
+
+// QUARTZ MONITOR (legacy quartz/list screen migration)
+export const QUARTZ_JOBS_LIST = `${API}/jobs/list`;
+export const QUARTZ_JOB_STOP = `${API}/jobs/stopJob`;
+export const QUARTZ_JOB_START = `${API}/jobs/startJob`;
+export const QUARTZ_JOB_PAUSE = `${API}/jobs/pauseJob`;
+export const QUARTZ_JOB_RESUME = `${API}/jobs/resumeJob`;
+export const QUARTZ_JOB_RUN_NOW = `${API}/jobs/runNowJob`;
+export const QUARTZ_SCHEDULER_START = `${API}/jobs/startScheduler`;
+export const QUARTZ_SCHEDULER_STOP = `${API}/jobs/stopScheduler`;
 
 // REQUISITIONS (legacy requisition screens migration)
 export const REQUISITION_API = `${API}/requisitions`;

@@ -12,22 +12,149 @@ package org.pih.warehouse.api
 import grails.converters.JSON
 import grails.plugins.quartz.GrailsJobClassConstants
 import grails.plugins.quartz.JobManagerService
+import grails.plugins.quartz.QuartzMonitorJobFactory
+import org.quartz.CronTrigger
 import org.quartz.JobDetail
 import org.quartz.JobKey
 import org.quartz.Scheduler
 import org.quartz.SchedulerException
 import org.quartz.Trigger
 import org.quartz.TriggerKey
+import org.quartz.impl.matchers.GroupMatcher
 import org.quartz.impl.triggers.CronTriggerImpl
 
 import java.text.ParseException
 
 class JobApiController extends BaseApiController {
 
+    static final Map<String, Trigger> stoppedTriggers = [:]
+
     JobManagerService jobManagerService
 
     Scheduler getQuartzScheduler() {
         return jobManagerService.quartzScheduler
+    }
+
+    def list() {
+        def jobsList = []
+        quartzScheduler.jobGroupNames?.each { String jobGroup ->
+            quartzScheduler.getJobKeys(GroupMatcher.jobGroupEquals(jobGroup))?.each { JobKey jobKey ->
+                List<Trigger> jobTriggers = quartzScheduler.getTriggersOfJob(jobKey)
+                if (jobTriggers) {
+                    jobTriggers.each { Trigger trigger ->
+                        def state = quartzScheduler.getTriggerState(trigger.key)
+                        def triggerStatus = Trigger.TriggerState.find { it == state } ?: "UNKNOWN"
+                        jobsList << buildJob(jobGroup, jobKey.name, trigger, triggerStatus)
+                    }
+                } else {
+                    jobsList << buildJob(jobGroup, jobKey.name, null, null)
+                }
+            }
+        }
+        render([data: [
+                jobs                  : jobsList,
+                now                   : new Date().toString(),
+                nowTime               : new Date().time,
+                schedulerInStandbyMode: quartzScheduler.isInStandbyMode(),
+        ]] as JSON)
+    }
+
+    private Map buildJob(String jobGroup, String jobName, Trigger trigger, def triggerStatus) {
+        Map jobRun = QuartzMonitorJobFactory.jobRuns[trigger?.key?.name ?: ""] ?: [:]
+        return [
+                group        : jobGroup,
+                name         : jobName,
+                status       : jobRun.status,
+                error        : jobRun.error?.toString(),
+                duration     : jobRun.duration,
+                lastRun      : jobRun.lastRun?.toString(),
+                triggerStatus: triggerStatus?.toString(),
+                trigger      : trigger ? [
+                        name        : trigger.key.name,
+                        group       : trigger.key.group,
+                        nextFireTime: trigger.nextFireTime?.toString(),
+                        nextFireTimestamp: trigger.nextFireTime?.time,
+                        mayFireAgain: trigger.mayFireAgain(),
+                        isCronTrigger: trigger instanceof CronTrigger,
+                ] : null,
+        ]
+    }
+
+    def stopJob() {
+        String message = null
+        def triggerKeys = quartzScheduler.getTriggerKeys(GroupMatcher.triggerGroupEquals(params.triggerGroup))
+        def key = triggerKeys?.find { it.name == params.triggerName }
+        if (key) {
+            Trigger trigger = quartzScheduler.getTrigger(key)
+            if (trigger) {
+                stoppedTriggers[params.jobName] = trigger
+                quartzScheduler.unscheduleJob(key)
+            } else {
+                message = "No trigger could be found for ${key}"
+            }
+        } else {
+            message = "No trigger key could be found for ${params.triggerGroup} : ${params.triggerName}"
+        }
+        render([data: [message: message?.toString()]] as JSON)
+    }
+
+    def startJob() {
+        String message = null
+        Trigger trigger = stoppedTriggers[params.jobName]
+        if (trigger) {
+            quartzScheduler.scheduleJob(trigger)
+        } else {
+            message = "No trigger could be found for ${params.jobName}"
+        }
+        render([data: [message: message?.toString()]] as JSON)
+    }
+
+    def pauseJob() {
+        String message = null
+        JobKey key = findJobKey()
+        if (key) {
+            quartzScheduler.pauseJob(key)
+        } else {
+            message = "No job key could be found for ${params.jobGroup} : ${params.jobName}"
+        }
+        render([data: [message: message?.toString()]] as JSON)
+    }
+
+    def resumeJob() {
+        String message = null
+        JobKey key = findJobKey()
+        if (key) {
+            quartzScheduler.resumeJob(key)
+        } else {
+            message = "No job key could be found for ${params.jobGroup} : ${params.jobName}"
+        }
+        render([data: [message: message?.toString()]] as JSON)
+    }
+
+    def runNowJob() {
+        String message = null
+        JobKey key = findJobKey()
+        if (key) {
+            quartzScheduler.triggerJob(key)
+        } else {
+            message = "No job key could be found for ${params.jobGroup} : ${params.jobName}"
+        }
+        render([data: [message: message?.toString()]] as JSON)
+    }
+
+    def startScheduler() {
+        quartzScheduler.start()
+        render([data: [message: null]] as JSON)
+    }
+
+    def stopScheduler() {
+        quartzScheduler.standby()
+        render([data: [message: null]] as JSON)
+    }
+
+    private JobKey findJobKey() {
+        def jobKeys = quartzScheduler.getJobKeys(GroupMatcher.jobGroupEquals(params.jobGroup))
+        return jobKeys?.find { it.name == params.jobName }
     }
 
     def read() {
