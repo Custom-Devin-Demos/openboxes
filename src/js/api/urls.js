@@ -499,6 +499,18 @@ export const JOB_TRIGGER_BY_ID = (id) => `${API}/jobs/triggers/${id}`;
 // LOCALIZATIONS
 export const LOCALIZATIONS = `${API}/localizations`;
 export const LOCALIZATION_LOCALE_OPTIONS = `${LOCALIZATIONS}/localeOptions`;
+export const LOCALIZATION_SEARCH = `${LOCALIZATIONS}/search`;
+export const LOCALIZATION_UPLOAD = `${LOCALIZATIONS}/upload`;
+export const LOCALIZATION_BY_ID = (id) => `${LOCALIZATIONS}/${id}`;
+export const LOCALIZATION_DETAILS = (id) => `${LOCALIZATIONS}/${id}/details`;
+
+// MIGRATION (legacy migration screens)
+export const MIGRATION_API = `${API}/migration`;
+export const MIGRATION_DATA_MIGRATION = `${MIGRATION_API}/dataMigration`;
+export const MIGRATION_DIMENSION_TABLES = `${MIGRATION_API}/dimensionTables`;
+export const MIGRATION_RECEIPTS_WITHOUT_TRANSACTION = `${MIGRATION_API}/receiptsWithoutTransaction`;
+export const MIGRATION_SHIPMENTS_WITHOUT_TRANSACTIONS = `${MIGRATION_API}/shipmentsWithoutTransactions`;
+export const MIGRATION_STOCK_MOVEMENTS_WITHOUT_SHIPMENT_ITEMS = `${MIGRATION_API}/stockMovementsWithoutShipmentItems`;
 
 // REQUISITIONS (legacy requisition screens migration)
 export const REQUISITION_API = `${API}/requisitions`;

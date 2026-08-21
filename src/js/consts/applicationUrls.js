@@ -519,6 +519,36 @@ const LOCALIZATION_URL = {
   base: `${CONTEXT_PATH}/localization`,
   list: () => `${LOCALIZATION_URL.base}/list`,
   create: () => `${LOCALIZATION_URL.base}/create`,
+  show: (id) => `${LOCALIZATION_URL.base}/show/${id}`,
+  edit: (id) => `${LOCALIZATION_URL.base}/edit/${id}`,
+  export: (locale) => `${LOCALIZATION_URL.base}/export${locale ? `?locale=${locale}` : ''}`,
+};
+
+const MIGRATION_URL = {
+  base: `${CONTEXT_PATH}/migration`,
+  dataMigration: () => `${MIGRATION_URL.base}/dataMigration`,
+  dataQuality: () => `${MIGRATION_URL.base}/dataQuality`,
+  dimensionTables: () => `${MIGRATION_URL.base}/dimensionTables`,
+  migrateOrganizations: (preview) => `${MIGRATION_URL.base}/migrateOrganizations${preview ? '?preview=true' : ''}`,
+  deleteOrganizations: () => `${MIGRATION_URL.base}/deleteOrganizations`,
+  migrateProductSuppliers: (preview) => `${MIGRATION_URL.base}/migrateProductSuppliers${preview ? '?preview=true' : ''}`,
+  deleteProductSuppliers: () => `${MIGRATION_URL.base}/deleteProductSuppliers`,
+  nextInventoryTransaction: () => `${MIGRATION_URL.base}/nextInventoryTransaction`,
+  locationsWithInventoryTransactions: () => `${MIGRATION_URL.base}/locationsWithInventoryTransactions`,
+  locationsWithProductInventoryTransactions: () => `${MIGRATION_URL.base}/locationsWithProductInventoryTransactions`,
+  downloadCurrentInventory: () => `${MIGRATION_URL.base}/downloadCurrentInventory?format=csv`,
+  migrateInventoryTransactions: () => `${MIGRATION_URL.base}/migrateInventoryTransactions`,
+  migrateAllInventoryTransactions: () => `${MIGRATION_URL.base}/migrateAllInventoryTransactions`,
+  migrateProductInventoryTransactions: () => `${MIGRATION_URL.base}/migrateProductInventoryTransactions`,
+  createMissingInventoryImportTransactionSources: () => `${MIGRATION_URL.base}/createMissingInventoryImportTransactionSourcesForCurrentLocation`,
+  createMissingCycleCountTransactionSources: () => `${MIGRATION_URL.base}/createMissingCycleCountTransactionSourcesForCurrentLocation`,
+  createMissingRecordStockTransactionSources: () => `${MIGRATION_URL.base}/createMissingRecordStockTransactionSourcesForCurrentLocation`,
+};
+
+const REPORT_URL = {
+  base: `${CONTEXT_PATH}/report`,
+  truncateDimensions: () => `${REPORT_URL.base}/truncateDimensions`,
+  buildDimensions: () => `${REPORT_URL.base}/buildDimensions`,
 };
 
 const QUARTZ_URL = {
@@ -549,6 +579,7 @@ export {
   LOCATION_GROUP_URL,
   LOCATION_TYPE_URL,
   LOCATION_URL,
+  MIGRATION_URL,
   ORDER_ADJUSTMENT_TYPE_URL,
   ORDER_URL,
   ORGANIZATION_URL,
@@ -570,6 +601,7 @@ export {
   QUARTZ_URL,
   RECEIPT_URL,
   REPLENISHMENT_URL,
+  REPORT_URL,
   REQUISITION_TEMPLATE_URL,
   REQUISITION_URL,
   ROLE_URL,

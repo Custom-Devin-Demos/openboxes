@@ -1724,6 +1724,46 @@ class UrlMappings {
             action = [GET: "localeOptions"]
         }
 
+        "/api/localizations/search" {
+            controller = { "localizationApi" }
+            action = [GET: "search"]
+        }
+
+        "/api/localizations/upload" {
+            controller = { "localizationApi" }
+            action = [POST: "upload"]
+        }
+
+        "/api/localizations/$id/details" {
+            controller = { "localizationApi" }
+            action = [GET: "details"]
+        }
+
+        "/api/migration/dataMigration" {
+            controller = { "migrationApi" }
+            action = [GET: "dataMigration"]
+        }
+
+        "/api/migration/dimensionTables" {
+            controller = { "migrationApi" }
+            action = [GET: "dimensionTables"]
+        }
+
+        "/api/migration/receiptsWithoutTransaction" {
+            controller = { "migrationApi" }
+            action = [GET: "receiptsWithoutTransaction"]
+        }
+
+        "/api/migration/shipmentsWithoutTransactions" {
+            controller = { "migrationApi" }
+            action = [GET: "shipmentsWithoutTransactions"]
+        }
+
+        "/api/migration/stockMovementsWithoutShipmentItems" {
+            controller = { "migrationApi" }
+            action = [GET: "stockMovementsWithoutShipmentItems"]
+        }
+
         "/api/jobs/triggers/$id" {
             controller = { "jobApi" }
             action = [DELETE: "unscheduleTrigger"]
