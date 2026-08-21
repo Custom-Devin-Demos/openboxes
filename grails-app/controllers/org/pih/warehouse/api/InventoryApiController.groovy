@@ -3,6 +3,9 @@ package org.pih.warehouse.api
 import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
+
+import java.text.SimpleDateFormat
+import org.pih.warehouse.DateUtil
 import org.pih.warehouse.PaginatedList
 import org.pih.warehouse.auth.AuthService
 import org.pih.warehouse.core.ActivityCode
@@ -34,6 +37,7 @@ import org.pih.warehouse.product.Category
 import org.pih.warehouse.product.Product
 import org.pih.warehouse.product.ProductCatalog
 import org.pih.warehouse.product.ProductType
+import org.pih.warehouse.report.InventoryReportCommand
 import org.pih.warehouse.core.Tag
 
 class InventoryApiController {
@@ -180,6 +184,24 @@ class InventoryApiController {
      * Data provider for the React inventory report (replaces server-rendered inventory/list.gsp model).
      */
     def listInventory() {
+        renderStockList("getInventoryItems")
+    }
+
+    /**
+     * Data provider for the React low stock report (replaces server-rendered inventory/listLowStock model).
+     */
+    def listLowStock() {
+        renderStockList("getLowStock")
+    }
+
+    /**
+     * Data provider for the React reorder stock report (replaces server-rendered inventory/listReorderStock model).
+     */
+    def listReorderStock() {
+        renderStockList("getReorderStock")
+    }
+
+    private void renderStockList(String methodName) {
         Location location = Location.get(session.warehouse.id)
         List<Category> categories = params.list('categories') ?
                 Category.findAllByIdInList(params.list('categories')) : []
@@ -187,7 +209,7 @@ class InventoryApiController {
         if (params.includeSubcategories) {
             categories = inventoryService.getExplodedCategories(categories)
         }
-        def inventoryItems = dashboardService.getInventoryItems(location, categories)
+        def inventoryItems = dashboardService."$methodName"(location, categories)
         boolean hasRoleFinance = userService.hasRoleFinance(User.get(session?.user?.id))
 
         render([
@@ -217,6 +239,101 @@ class InventoryApiController {
                                     (product.pricePerUnit * item.quantity) : null,
                     ]
                 }
+        ] as JSON)
+    }
+
+    /**
+     * Data provider for the React daily transactions screen (replaces inventory/listDailyTransactions.gsp model).
+     */
+    def listDailyTransactions() {
+        def dateFormat = new SimpleDateFormat("dd/MM/yyyy")
+        def dateSelected = (params.date) ? dateFormat.parse(params.date) : new Date()
+
+        def transactionsByDate = Transaction.list().groupBy {
+            DateUtil.clearTime(it?.transactionDate)
+        }?.entrySet()?.sort { it.key }?.reverse()
+
+        def transactions = Transaction.findAllByTransactionDate(dateSelected)
+
+        render([
+                dateSelected      : dateFormat.format(dateSelected),
+                transactionsByDate: transactionsByDate.collect { entry ->
+                    [date: dateFormat.format(entry.key), count: entry.value?.size() ?: 0]
+                },
+                transactions      : transactions.collect { transaction ->
+                    [
+                            id               : transaction.id,
+                            transactionNumber: transaction.transactionNumber,
+                            dateCreated      : transaction.dateCreated?.toString(),
+                            transactionType  : transaction.transactionType ?
+                                    getLocalizedMetadata(transaction.transactionType.name) : null,
+                            source           : transaction.source?.name,
+                            destination      : transaction.destination?.name,
+                            entries          : transaction.transactionEntries.collect { entry ->
+                                [
+                                        product  : serializeProduct(entry.inventoryItem?.product),
+                                        lotNumber: entry.inventoryItem?.lotNumber,
+                                        quantity : entry.quantity,
+                                ]
+                            },
+                    ]
+                },
+        ] as JSON)
+    }
+
+    /**
+     * Data provider for the React expired stock report (replaces inventory/listExpiredStock.gsp model).
+     */
+    def listExpiredStock(InventoryReportCommand command) {
+        command.location = Location.get(session.warehouse.id)
+
+        List<InventoryItem> inventoryItems = dashboardService.getExpiredStock(command)
+        List<Category> categories = inventoryItems?.collect { it.product.category }?.unique()
+
+        renderExpirationStockList(command, inventoryItems, categories)
+    }
+
+    /**
+     * Data provider for the React expiring stock report (replaces inventory/listExpiringStock.gsp model).
+     */
+    def listExpiringStock(InventoryReportCommand command) {
+        command.location = Location.get(session.warehouse.id)
+
+        List<InventoryItem> inventoryItems = dashboardService.getExpiringStock(command)
+        List<Category> categories = inventoryItems?.collect { it?.product?.category }?.unique().sort {
+            it.name
+        }
+
+        renderExpirationStockList(command, inventoryItems, categories)
+    }
+
+    private void renderExpirationStockList(InventoryReportCommand command, List<InventoryItem> inventoryItems, List<Category> categories) {
+        List<Map> data = []
+        if (!inventoryItems?.isEmpty()) {
+            data = productAvailabilityService.getQuantityOnHandByInventoryItem(command.location, inventoryItems)
+                    .collect { key, val -> [inventoryItem: key, quantity: val] }
+        }
+
+        render([
+                categories: categories.collect { [id: it.id, name: it.name] },
+                data      : data.collect { entry ->
+                    InventoryItem inventoryItem = entry.inventoryItem
+                    [
+                            inventoryItem: [
+                                    id            : inventoryItem.id,
+                                    lotNumber     : inventoryItem.lotNumber,
+                                    expirationDate: inventoryItem.expirationDate?.format("d MMM yyyy"),
+                                    product       : [
+                                            id           : inventoryItem.product?.id,
+                                            productCode  : inventoryItem.product?.productCode,
+                                            name         : inventoryItem.product?.name,
+                                            unitOfMeasure: inventoryItem.product?.unitOfMeasure,
+                                            category     : inventoryItem.product?.category?.name,
+                                    ],
+                            ],
+                            quantity     : entry.quantity,
+                    ]
+                },
         ] as JSON)
     }
 

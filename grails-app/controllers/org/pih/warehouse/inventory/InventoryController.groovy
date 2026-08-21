@@ -402,16 +402,7 @@ class InventoryController {
     }
 
     def listDailyTransactions() {
-        def dateFormat = new SimpleDateFormat("dd/MM/yyyy")
-        def dateSelected = (params.date) ? dateFormat.parse(params.date) : new Date()
-
-        def transactionsByDate = Transaction.list().groupBy {
-            DateUtil.clearTime(it?.transactionDate)
-        }?.entrySet()?.sort { it.key }?.reverse()
-
-        def transactions = Transaction.findAllByTransactionDate(dateSelected)
-
-        [transactions: transactions, transactionsByDate: transactionsByDate, dateSelected: dateSelected]
+        render(view: "/common/react")
     }
 
     private def determineCategories(params) {
@@ -464,11 +455,19 @@ class InventoryController {
     }
 
     def listLowStock() {
-        this.listStock(params, "getLowStock", "Low stock - ")
+        if (params.button == "download") {
+            this.listStock(params, "getLowStock", "Low stock - ")
+            return
+        }
+        render(view: "/common/react")
     }
 
     def listReorderStock() {
-        this.listStock(params, "getReorderStock", "Reorder stock - ")
+        if (params.button == "download") {
+            this.listStock(params, "getReorderStock", "Reorder stock - ")
+            return
+        }
+        render(view: "/common/react")
     }
 
     def reorderReport() {
@@ -504,64 +503,52 @@ class InventoryController {
 
 
     def listExpiredStock(InventoryReportCommand command) {
-        command.location = Location.get(session.warehouse.id)
-        Boolean withBinLocation = params.boolean("withBinLocation")
-
-        List<InventoryItem> inventoryItems = dashboardService.getExpiredStock(command)
-        List<Category> categories = inventoryItems?.collect { it.product.category }?.unique()
-
-        List<Map> data = []
-        if (!inventoryItems.isEmpty()) {
-            data = withBinLocation
-                    ? productAvailabilityService.getAvailableQuantityOnHandByBinLocation(command.location, inventoryItems)
-                    : productAvailabilityService.getQuantityOnHandByInventoryItem(command.location, inventoryItems)
-                    .collect{ key, val -> [ inventoryItem: key, quantity: val ] }
-        }
-
         if (params.format == "csv") {
+            command.location = Location.get(session.warehouse.id)
+            Boolean withBinLocation = params.boolean("withBinLocation")
+
+            List<InventoryItem> inventoryItems = dashboardService.getExpiredStock(command)
+
+            List<Map> data = []
+            if (!inventoryItems.isEmpty()) {
+                data = withBinLocation
+                        ? productAvailabilityService.getAvailableQuantityOnHandByBinLocation(command.location, inventoryItems)
+                        : productAvailabilityService.getQuantityOnHandByInventoryItem(command.location, inventoryItems)
+                        .collect{ key, val -> [ inventoryItem: key, quantity: val ] }
+            }
+
             def filename = "Expired stock | " + command.location?.name + ".csv"
             response.setHeader("Content-disposition", "attachment; filename=\"${filename}\"")
             render(contentType: "text/csv", text: getCsvForInventoryMap(data, withBinLocation))
             return
         }
 
-        [
-                data: data,
-                categories: categories,
-                command: command,
-        ]
+        render(view: "/common/react")
     }
 
 
     def listExpiringStock(InventoryReportCommand command) {
-        command.location = Location.get(session.warehouse.id)
-        Boolean withBinLocation = params.boolean("withBinLocation")
-
-        List<InventoryItem> inventoryItems = dashboardService.getExpiringStock(command)
-        List<Category> categories = inventoryItems?.collect { it?.product?.category }?.unique().sort {
-            it.name
-        }
-
-        List<Map> data = []
-        if (!inventoryItems?.isEmpty()) {
-            data = withBinLocation
-                    ? productAvailabilityService.getAvailableQuantityOnHandByBinLocation(command.location, inventoryItems)
-                    : productAvailabilityService.getQuantityOnHandByInventoryItem(command.location, inventoryItems)
-                    .collect{ key, val -> [ inventoryItem: key, quantity: val ] }
-        }
-
         if (params.format == "csv") {
+            command.location = Location.get(session.warehouse.id)
+            Boolean withBinLocation = params.boolean("withBinLocation")
+
+            List<InventoryItem> inventoryItems = dashboardService.getExpiringStock(command)
+
+            List<Map> data = []
+            if (!inventoryItems?.isEmpty()) {
+                data = withBinLocation
+                        ? productAvailabilityService.getAvailableQuantityOnHandByBinLocation(command.location, inventoryItems)
+                        : productAvailabilityService.getQuantityOnHandByInventoryItem(command.location, inventoryItems)
+                        .collect{ key, val -> [ inventoryItem: key, quantity: val ] }
+            }
+
             def filename = "Expiring stock | " + command.location.name + ".csv"
             response.setHeader("Content-disposition", "attachment; filename=\"${filename}\"")
             render(contentType: "text/csv", text: getCsvForInventoryMap(data, withBinLocation))
             return
         }
 
-        [
-                data: data,
-                categories: categories,
-                command: command
-        ]
+        render(view: "/common/react")
     }
 
     def exportLatestInventoryDate() {

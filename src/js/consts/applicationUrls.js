@@ -158,6 +158,11 @@ const INVENTORY_URL = {
   list: () => `${INVENTORY_URL.base}/list`,
   listTransactions: () => `${INVENTORY_URL.base}/listTransactions`,
   editTransaction: (id) => `${INVENTORY_URL.base}/editTransaction/${id}`,
+  listLowStock: () => `${INVENTORY_URL.base}/listLowStock`,
+  listReorderStock: () => `${INVENTORY_URL.base}/listReorderStock`,
+  listDailyTransactions: () => `${INVENTORY_URL.base}/listDailyTransactions`,
+  listExpiredStock: () => `${INVENTORY_URL.base}/listExpiredStock`,
+  listExpiringStock: () => `${INVENTORY_URL.base}/listExpiringStock`,
 };
 
 const SHIPMENT_URL = {

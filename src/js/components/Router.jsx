@@ -353,6 +353,31 @@ const AsyncInventoryList = Loadable({
   loading: Loading,
 });
 
+const AsyncLowStockList = Loadable({
+  loader: () => import('components/inventory/LowStockList'),
+  loading: Loading,
+});
+
+const AsyncReorderStockList = Loadable({
+  loader: () => import('components/inventory/ReorderStockList'),
+  loading: Loading,
+});
+
+const AsyncDailyTransactions = Loadable({
+  loader: () => import('components/inventory/DailyTransactions'),
+  loading: Loading,
+});
+
+const AsyncExpiredStockList = Loadable({
+  loader: () => import('components/inventory/ExpiredStockList'),
+  loading: Loading,
+});
+
+const AsyncExpiringStockList = Loadable({
+  loader: () => import('components/inventory/ExpiringStockList'),
+  loading: Loading,
+});
+
 const AsyncEditBinLocation = Loadable({
   loader: () => import('components/inventory/EditBinLocation'),
   loading: Loading,
@@ -644,6 +669,11 @@ const Router = () => {
             <MainLayoutRoute path="**/inventory/reorderReport" component={AsyncReorderReport} />
             <MainLayoutRoute path="**/inventory/browse" component={AsyncInventoryBrowser} />
             <MainLayoutRoute path="**/inventory/list" component={AsyncInventoryList} />
+            <MainLayoutRoute path="**/inventory/listLowStock" component={AsyncLowStockList} />
+            <MainLayoutRoute path="**/inventory/listReorderStock" component={AsyncReorderStockList} />
+            <MainLayoutRoute path="**/inventory/listDailyTransactions" component={AsyncDailyTransactions} />
+            <MainLayoutRoute path="**/inventory/listExpiredStock" component={AsyncExpiredStockList} />
+            <MainLayoutRoute path="**/inventory/listExpiringStock" component={AsyncExpiringStockList} />
             <MainLayoutRoute path="**/inventory/editBinLocation" component={AsyncEditBinLocation} />
             <MainLayoutRoute path="**/inventory/editTransaction/:id" component={AsyncEditTransaction} />
             <MainLayoutRoute path="**/inventory/createTransaction" component={AsyncCreateTransaction} />
