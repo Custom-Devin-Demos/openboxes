@@ -253,6 +253,15 @@ const SHIPMENT_URL = {
   bulkAction: (action) => `${SHIPMENT_URL.base}/${action}`,
 };
 
+const SHIPMENT_ITEM_URL = {
+  base: `${CONTEXT_PATH}/shipmentItem`,
+  list: () => `${SHIPMENT_ITEM_URL.base}/list`,
+  create: () => `${SHIPMENT_ITEM_URL.base}/create`,
+  edit: (id) => `${SHIPMENT_ITEM_URL.base}/edit/${id}`,
+  show: (id) => `${SHIPMENT_ITEM_URL.base}/show/${id}`,
+  pick: (id) => `${SHIPMENT_ITEM_URL.base}/pick/${id}`,
+};
+
 const REQUISITION_TEMPLATE_URL = {
   base: `${CONTEXT_PATH}/requisitionTemplate`,
   create: () => `${REQUISITION_TEMPLATE_URL.base}/create`,
@@ -614,6 +623,7 @@ export {
   REQUISITION_TEMPLATE_URL,
   REQUISITION_URL,
   ROLE_URL,
+  SHIPMENT_ITEM_URL,
   SHIPMENT_URL,
   STOCK_MOVEMENT_URL,
   STOCK_TRANSFER_URL,
