@@ -25,9 +25,7 @@ class LocationTypeController {
     }
 
     def create() {
-        def locationTypeInstance = new LocationType()
-        locationTypeInstance.properties = params
-        return [locationTypeInstance: locationTypeInstance]
+        render(view: "/common/react")
     }
 
     def save() {
@@ -53,14 +51,7 @@ class LocationTypeController {
     }
 
     def edit() {
-        LocationType locationTypeInstance = locationTypeDataService.get(params.id)
-        if (!locationTypeInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'locationType.label', default: 'LocationType'), params.id])}"
-            redirect(action: "list")
-        }
-        else {
-            return [locationTypeInstance: locationTypeInstance]
-        }
+        render(view: "/common/react")
     }
 
     def update() {

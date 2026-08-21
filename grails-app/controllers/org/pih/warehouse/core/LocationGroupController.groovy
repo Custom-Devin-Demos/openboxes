@@ -24,14 +24,11 @@ class LocationGroupController {
     }
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [locationGroupInstanceList: locationGroupService.getLocationGroups(params), locationGroupInstanceTotal: LocationGroup.count()]
+        render(view: "/common/react")
     }
 
     def create() {
-        def locationGroupInstance = new LocationGroup()
-        locationGroupInstance.properties = params
-        return [locationGroupInstance: locationGroupInstance]
+        render(view: "/common/react")
     }
 
     def save() {
@@ -45,22 +42,11 @@ class LocationGroupController {
     }
 
     def show() {
-        try {
-            [locationGroupInstance: locationGroupService.getLocationGroup(params.id)]
-        } catch (ObjectNotFoundException e) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'locationGroup.label', default: 'LocationGroup'), params.id])}"
-            redirect(action: "list")
-        }
+        render(view: "/common/react")
     }
 
     def edit() {
-        def locationGroupInstance = LocationGroup.get(params.id)
-        if (!locationGroupInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'locationGroup.label', default: 'LocationGroup'), params.id])}"
-            redirect(action: "list")
-        } else {
-            return [locationGroupInstance: locationGroupInstance]
-        }
+        render(view: "/common/react")
     }
 
     def update() {

@@ -241,6 +241,16 @@ export const INTERNAL_LOCATIONS = `${API}/internalLocations`;
 export const BUDGET_CODE_API = `${API}/budgetCodes`;
 export const BUDGET_CODE_BY_ID = (id) => `${BUDGET_CODE_API}/${id}`;
 
+// LOCATION GROUP
+export const LOCATION_GROUP_API = `${API}/locationGroups`;
+export const LOCATION_GROUP_BY_ID = (id) => `${LOCATION_GROUP_API}/${id}`;
+
+// LOCATION TYPE
+export const LOCATION_TYPE_API = `${API}/locationTypes`;
+export const LOCATION_TYPE_BY_ID = (id) => `${LOCATION_TYPE_API}/${id}`;
+export const LOCATION_TYPE_CODE_OPTIONS = `${LOCATION_TYPE_API}/locationTypeCodeOptions`;
+export const LOCATION_TYPE_SUPPORTED_ACTIVITY_OPTIONS = `${LOCATION_TYPE_API}/supportedActivityOptions`;
+
 // EVENT TYPE
 export const EVENT_TYPE_API = `${API}/eventTypes`;
 export const EVENT_TYPE_BY_ID = (id) => `${EVENT_TYPE_API}/${id}`;

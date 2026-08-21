@@ -10,6 +10,8 @@
 package org.pih.warehouse.api
 
 import grails.converters.JSON
+import grails.gorm.PagedResultList
+import org.pih.warehouse.core.Address
 import org.pih.warehouse.core.LocationGroup
 import org.pih.warehouse.core.LocationGroupCommand
 import org.pih.warehouse.core.LocationGroupService
@@ -20,12 +22,27 @@ class LocationGroupApiController extends BaseDomainApiController {
 
     def list() {
         List<LocationGroup> locationGroups = locationGroupService.getLocationGroups(params)
-        render ([data:locationGroups] as JSON)
+        Integer totalCount = locationGroups instanceof PagedResultList ? locationGroups.totalCount : locationGroups.size()
+        def data = locationGroups.collect { LocationGroup locationGroup ->
+            [
+                id            : locationGroup.id,
+                name          : locationGroup.name,
+                address       : toAddressJson(locationGroup.address),
+                locationsCount: locationGroup.locations?.size() ?: 0,
+            ]
+        }
+        render ([data: data, totalCount: totalCount] as JSON)
     }
 
     def read() {
         LocationGroup locationGroup = locationGroupService.getLocationGroup(params.id)
-        render([data: locationGroup] as JSON)
+        render([data: [
+            id       : locationGroup.id,
+            name     : locationGroup.name,
+            address  : toAddressJson(locationGroup.address),
+            version  : locationGroup.version,
+            locations: locationGroup.locations?.sort { it.name }?.collect { [id: it.id, name: it.name] } ?: [],
+        ]] as JSON)
     }
 
     def create(LocationGroupCommand command) {
@@ -41,5 +58,21 @@ class LocationGroupApiController extends BaseDomainApiController {
     def delete() {
         locationGroupService.deleteLocationGroup(params.id)
         render status: 204
+    }
+
+    private static Map toAddressJson(Address address) {
+        if (!address) {
+            return null
+        }
+        return [
+            id             : address.id,
+            address        : address.address,
+            address2       : address.address2,
+            city           : address.city,
+            stateOrProvince: address.stateOrProvince,
+            postalCode     : address.postalCode,
+            country        : address.country,
+            description    : address.description,
+        ]
     }
 }
