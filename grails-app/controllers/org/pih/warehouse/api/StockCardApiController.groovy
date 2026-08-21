@@ -751,6 +751,7 @@ class StockCardApiController {
                 render([success: false, errors: resolveErrors(transaction.errors)] as JSON)
                 return
             }
+            flushSession()
         } catch (Exception e) {
             log.error("Error transferring stock " + e.message, e)
             response.status = 400
@@ -797,6 +798,14 @@ class StockCardApiController {
             return
         }
         if (!itemInstance.hasErrors() && inventoryItemDataService.save(itemInstance)) {
+            try {
+                flushSession()
+            } catch (Exception e) {
+                log.error("Error updating inventory item " + e.message, e)
+                response.status = 400
+                render([success: false, errors: [e.message]] as JSON)
+                return
+            }
             render([success: true, message: getMessage("default.updated.message", "Updated",
                     [getMessage("inventoryItem.label", "Inventory item"), itemInstance.id] as Object[])] as JSON)
             return
@@ -855,6 +864,7 @@ class StockCardApiController {
                         "Unable to add new item to shipment. Please try again.")]] as JSON)
                 return
             }
+            flushSession()
         } catch (ShipmentItemException e) {
             response.status = 400
             render([success: false, errors: resolveErrors(e.shipmentItem.errors)] as JSON)
@@ -869,6 +879,13 @@ class StockCardApiController {
                 (inventoryItem?.lotNumber ? " #${inventoryItem.lotNumber}" : "")
         render([success: true, message: getMessage("inventoryItem.addedItemToShipment.message", "Added item to shipment",
                 [productDescription, shipmentInstance?.name] as Object[])] as JSON)
+    }
+
+    /**
+     * Forces a session flush so commit-time DB failures surface before a success response is rendered.
+     */
+    private static void flushSession() {
+        InventoryItem.withSession { session -> session.flush() }
     }
 
     private String getMessage(String code, String defaultMessage, Object[] args = null) {
