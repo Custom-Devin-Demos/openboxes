@@ -130,7 +130,6 @@ const DOCUMENT_URL = {
   uploadDocument: () => `${DOCUMENT_URL.base}/uploadDocument`,
   download: (id) => `${DOCUMENT_URL.base}/download/${id}`,
   saveDocument: () => `${DOCUMENT_URL.base}/saveDocument`,
-  download: (id) => `${DOCUMENT_URL.base}/download/${id}`,
 };
 
 const PURCHASE_ORDER_URL = {
