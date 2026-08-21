@@ -1066,6 +1066,16 @@ class UrlMappings {
             action = [DELETE: "clearPicklist"]
         }
 
+        "/api/picklists/$id/printData"(parseRequest: true) {
+            controller = { "picklistApi" }
+            action = [GET: "printData"]
+        }
+
+        "/api/picklists/$id/returnPrintData"(parseRequest: true) {
+            controller = { "picklistApi" }
+            action = [GET: "returnPrintData"]
+        }
+
         // Partial Receiving API
 
         "/api/partialReceiving"(parseRequest: true) {
@@ -1334,6 +1344,11 @@ class UrlMappings {
         "/api/replenishments/$id/picklistItem"(parseRequest: true) {
             controller = { "replenishmentApi" }
             action = [POST: "createPicklistItem"]
+        }
+
+        "/api/replenishments/$id/printData"(parseRequest: true) {
+            controller = { "replenishmentApi" }
+            action = [GET: "printData"]
         }
 
         // Dashboard API

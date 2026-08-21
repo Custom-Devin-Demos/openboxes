@@ -583,7 +583,10 @@ export const JSON_UPDATE_REQUISITION_ITEMS = (id) => `/json/updateRequisitionIte
 export const JSON_REMOVE_REQUISITION_ITEM = (itemId) => `/json/removeRequisitionItem/${itemId}`;
 export const PICKLIST_SAVE = '/picklist/save';
 
-// DELIVERY NOTE
+// PICKLIST / REPLENISHMENT PRINT
+export const PICKLIST_PRINT_DATA = (id) => `${API}/picklists/${id}/printData`;
+export const PICKLIST_RETURN_PRINT_DATA = (id) => `${API}/picklists/${id}/returnPrintData`;
+export const REPLENISHMENT_PRINT_DATA = (id) => `${API}/replenishments/${id}/printData`;
 export const DELIVERY_NOTE_API = `${API}/deliveryNotes`;
 export const DELIVERY_NOTE_PRINT_DATA = (id) => `${DELIVERY_NOTE_API}/${id}/printData`;
 export const DELIVERY_NOTE_PRINT_OUTBOUND_RETURN_DATA = (id) => `${DELIVERY_NOTE_API}/${id}/printOutboundReturnData`;

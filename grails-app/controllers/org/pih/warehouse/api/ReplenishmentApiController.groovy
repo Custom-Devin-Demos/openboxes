@@ -22,6 +22,7 @@ import org.pih.warehouse.order.OrderIdentifierService
 import org.pih.warehouse.order.OrderItem
 import org.pih.warehouse.order.OrderType
 import org.pih.warehouse.order.OrderTypeCode
+import org.pih.warehouse.picklist.Picklist
 
 class ReplenishmentApiController {
 
@@ -32,6 +33,116 @@ class ReplenishmentApiController {
     def list() {
         List<Order> replenishments = Order.findAllByOrderType(OrderType.get(OrderTypeCode.TRANSFER_ORDER.name()))
         render([data: replenishments.collect { it.toJson() }] as JSON)
+    }
+
+    private static String formatPrintDate(Date date, String pattern) {
+        return date ? new java.text.SimpleDateFormat(pattern).format(date) : null
+    }
+
+    def printData() {
+        Order transferOrder = Order.get(params.id)
+        if (!transferOrder) {
+            def message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'order.label', default: 'Order'), params.id])}"
+            response.status = 404
+            render([errorMessage: message] as JSON)
+            return
+        }
+
+        Picklist picklist = Picklist.findByOrder(transferOrder)
+        def zoneNames = picklist.picklistItems?.collect { it?.binLocation?.zone?.name }?.unique()?.sort { a, b -> !a ? !b ? 0 : 1 : !b ? -1 : a <=> b }
+        def pickListByZone = picklist.picklistItems?.groupBy { it.binLocation?.zone?.name }
+
+        def zones = []
+        zoneNames.each { zoneName ->
+            def coldChain = pickListByZone[zoneName].findAll {
+                it.orderItem.product['coldChain']
+            }.collect { it.orderItem }?.unique()
+            def controlledSubstance = pickListByZone[zoneName].findAll {
+                it.orderItem.product['controlledSubstance']
+            }.collect { it.orderItem }?.unique()
+            def hazardousMaterial = pickListByZone[zoneName].findAll {
+                it.orderItem.product['hazardousMaterial']
+            }.collect { it.orderItem }?.unique()
+            def generalGoods = pickListByZone[zoneName].findAll {
+                !it?.orderItem.product['coldChain'] && !it?.orderItem.product['controlledSubstance'] && !it?.orderItem.product['hazardousMaterial']
+            }.collect { it.orderItem }?.unique()
+
+            def groupedLineItemsMap = [
+                    'coldChain'          : coldChain,
+                    'controlledSubstance': controlledSubstance,
+                    'hazardousMaterial'  : hazardousMaterial,
+                    'generalGoods'       : generalGoods,
+            ]
+            def groupedPickListItems = pickListByZone[zoneName].groupBy { it.orderItem }
+
+            def groups = []
+            groupedLineItemsMap.each { lineItemKey, lineItems ->
+                if (lineItems.size() > 0) {
+                    groups << [
+                            key  : lineItemKey,
+                            title: warehouse.message(code: 'product.' + lineItemKey + '.label'),
+                            items: lineItems.collect { lineItem ->
+                                def groupedPicklistItems = groupedPickListItems[lineItem]
+                                [
+                                        id                : lineItem.id,
+                                        productCode       : lineItem?.product?.productCode,
+                                        productName       : lineItem?.product?.name,
+                                        destinationBin    : lineItem?.destinationBinLocation?.name,
+                                        quantity          : lineItem?.quantity,
+                                        unitOfMeasure     : lineItem?.product?.unitOfMeasure ?: "EA",
+                                        lines             : groupedPicklistItems ? groupedPicklistItems.collect { picklistItem ->
+                                            [
+                                                    binLocation   : picklistItem?.binLocation?.name,
+                                                    lotNumber     : picklistItem?.inventoryItem?.lotNumber,
+                                                    expirationDate: formatPrintDate(picklistItem?.inventoryItem?.expirationDate, "MM/dd/yyyy"),
+                                                    quantity      : picklistItem?.quantity ?: 0,
+                                            ]
+                                        } : [],
+                                ]
+                            },
+                    ]
+                }
+            }
+
+            zones << [
+                    name    : zoneName,
+                    title   : zoneName ?: warehouse.message(code: 'location.noZone.label', default: 'No zone'),
+                    showName: (zoneName || zoneNames.size() > 1) as boolean,
+                    groups  : groups,
+            ]
+        }
+
+        render([data: [
+                logoUrl   : grailsApplication.config.openboxes.report.logo.url,
+                title     : warehouse.message(code: 'inventory.printStockTransfer.label', default: 'Print Stock Transfer'),
+                heading   : warehouse.message(code: 'order.transferOrder.label', default: 'Transfer Order'),
+                headerRows: [
+                        [label: warehouse.message(code: 'order.orderNumber.label', default: 'Order Number'), value: transferOrder.orderNumber],
+                        [label: warehouse.message(code: 'order.createdBy.label', default: 'Created by'), value: transferOrder.createdBy?.toString()],
+                        [label: warehouse.message(code: 'order.dateCreated.label', default: 'Date Created'), value: transferOrder.dateCreated.format('MM/dd/yyyy')],
+                ],
+                columns   : [
+                        [key: 'number', title: warehouse.message(code: 'report.number.label', default: '#')],
+                        [key: 'currentBin', title: warehouse.message(code: 'orderItem.currentBin.label', default: 'Current bin')],
+                        [key: 'productCode', title: warehouse.message(code: 'product.productCode.label', default: 'Code')],
+                        [key: 'productName', title: warehouse.message(code: 'product.name.label', default: 'Name')],
+                        [key: 'lotNumber', title: warehouse.message(code: 'default.lotSerialNo.label', default: 'Lot/Serial No.')],
+                        [key: 'expiry', title: warehouse.message(code: 'orderItem.expiry.label', default: 'Expiry')],
+                        [key: 'transferToBin', title: warehouse.message(code: 'orderItem.transferToBin.label', default: 'Transfer to bin')],
+                        [key: 'qtyToTransfer', title: warehouse.message(code: 'orderItem.qtyToTransfer.label', default: 'Qty to transfer')],
+                        [key: 'suggestedPick', title: warehouse.message(code: 'requisitionItem.suggestedPick.label', default: 'Suggested pick')],
+                        [key: 'notes', title: warehouse.message(code: 'default.notes.label', default: 'Notes')],
+                ],
+                signatureColumns: [
+                        name     : warehouse.message(code: 'default.name.label', default: 'Name'),
+                        signature: warehouse.message(code: 'default.signature.label', default: 'Signature'),
+                        date     : warehouse.message(code: 'default.date.label', default: 'Date'),
+                ],
+                zones     : zones,
+                signatures: [
+                        [label: warehouse.message(code: 'order.completedBy.label', default: 'Completed By'), name: null, date: null],
+                ],
+        ]] as JSON)
     }
 
     def read() {
