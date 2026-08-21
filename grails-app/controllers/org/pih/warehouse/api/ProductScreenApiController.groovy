@@ -93,7 +93,7 @@ class ProductScreenApiController {
                 productSupplierAttributes: Attribute.findAllByActive(true).findAll {
                     it.entityTypeCode == EntityTypeCode.PRODUCT_SUPPLIER
                 }.collect { [id: it.id, name: it.name, code: it.code] },
-                synonymTypeCodes     : SynonymTypeCode.list().collect { it.name() },
+                synonymTypeCodes     : SynonymTypeCode.values().collect { it.name() },
                 supportedLocales     : grailsApplication.config.openboxes.locale.supportedLocales?.sort() ?: [],
                 currencyCode         : grailsApplication.config.openboxes.locale.defaultCurrencyCode,
                 bomEnabled           : grailsApplication.config.openboxes.bom.enabled ?: false,
@@ -486,7 +486,7 @@ class ProductScreenApiController {
     private List<Attribute> availableProductAttributes() {
         // Same filtering as /attribute/renderFormList with entityTypeCodes=[PRODUCT], showUnlinkedAttributes=true
         return Attribute.findAllByActive(true).findAll {
-            it.entityTypeCodes.any { code -> code == EntityTypeCode.PRODUCT } || it.entityTypeCodes.empty
+            !it.entityTypeCodes || it.entityTypeCodes.any { code -> code == EntityTypeCode.PRODUCT }
         }
     }
 
