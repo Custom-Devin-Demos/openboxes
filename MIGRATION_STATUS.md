@@ -44,7 +44,7 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | 2.0 | Module batching plan (from 0.2 live-screen inventory) | PENDING | | | Coordinator task |
 | 2.0 batching | 58 batches defined in docs/migration/live-screen-inventory.md | DONE | (coordinator) | [#1](https://github.com/Custom-Devin-Demos/openboxes/pull/1) | |
 | 2-inventory-1 | inventory-1 batch | MERGED | [cce1d959](https://app.devin.ai/sessions/cce1d9599054469987104c9096928947) | [#5](https://github.com/Custom-Devin-Demos/openboxes/pull/5) | E2E verified, CI green. Open decisions: CONSUME_STOCK seed, adjustment sign convention |
-| 2-product-catalog-1 | product-catalog-1 batch | IN_PROGRESS | [36acf165](https://app.devin.ai/sessions/36acf1659c1744f48fc9bcc3f36cf308) | | |
+| 2-product-catalog-1 | product-catalog-1 batch | MERGED | [36acf165](https://app.devin.ai/sessions/36acf1659c1744f48fc9bcc3f36cf308) | [#11](https://github.com/Custom-Devin-Demos/openboxes/pull/11) | Snapshots 121/122 (date-window artifact), Playwright 10/10, CI green after 3 rebases |
 | 2-locations-orgs-1 | locations-orgs-1 batch | MERGED | [7be46dc0](https://app.devin.ai/sessions/7be46dc091cf49ffa359a3fdde470736) | [#6](https://github.com/Custom-Devin-Demos/openboxes/pull/6) | Snapshots 122/122, Playwright 9/10 (flow-3 flake), CI green |
 | 2-requisitions-1 | requisitions-1 batch | MERGED | [86b36670](https://app.devin.ai/sessions/86b3667030ff470baf5f9cefba57bfa4) | [#8](https://github.com/Custom-Devin-Demos/openboxes/pull/8) | Snapshots 122/122, Playwright 10/10 post-rebase, CI green |
 | 2-shipments-1 | shipments-1 batch | MERGED | [88fb63b4](https://app.devin.ai/sessions/88fb63b4ceb549dd91fb4c04fe251333) | [#13](https://github.com/Custom-Devin-Demos/openboxes/pull/13) | Snapshots 122/122, Playwright 10/10, CI green |
@@ -88,3 +88,4 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 - 2026-08-20: locations-orgs-1 merged (PR #6). product-catalog-1 (#11) and shipments-1 (#13) rebasing after conflicts; stock-card-1 still in progress.
 - 2026-08-20: shipments-1 merged (PR #13). Pre-existing defect noted: deleteShipment 500s on FK constraints for shipments with events (legacy parity).
 - 2026-08-20: stock-card-1 merged (PR #15). product-catalog-1 (#11) still pending final rebase/CI.
+- 2026-08-20: product-catalog-1 merged (PR #11) after third rebase; CI 4/4 green. Wave 1 of Phase 2 fully merged (9 batches). P1.2 Grails 4 child still in progress.
