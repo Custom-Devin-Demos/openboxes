@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import moment from 'moment';
+import { useSelector } from 'react-redux';
 
 import { CATEGORY_OPTIONS, CONSUMPTION_AGGREGATE, CONSUMPTION_DEPOTS } from 'api/urls';
 import ConsumptionButtonBar from 'components/reporting/consumption/ConsumptionButtonBar';
@@ -15,12 +16,14 @@ const ConsumptionList = () => {
   useTranslation('consumption', 'default');
   const translate = useTranslate();
 
+  const currentLocation = useSelector((state) => state.session.currentLocation);
+
   const [depots, setDepots] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [location, setLocation] = useState('');
+  const [location, setLocation] = useState(currentLocation?.id || '');
   const [category, setCategory] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState(moment().subtract(6, 'months').format('YYYY-MM-DD'));
+  const [endDate, setEndDate] = useState(moment().format('YYYY-MM-DD'));
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -53,10 +56,10 @@ const ConsumptionList = () => {
   });
 
   const clearFilters = () => {
-    setLocation('');
+    setLocation(currentLocation?.id || '');
     setCategory('');
-    setStartDate('');
-    setEndDate('');
+    setStartDate(moment().subtract(6, 'months').format('YYYY-MM-DD'));
+    setEndDate(moment().format('YYYY-MM-DD'));
     fetchData({});
   };
 

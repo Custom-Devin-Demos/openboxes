@@ -37,13 +37,6 @@ const ConsumptionShow = () => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  useEffect(() => {
-    apiClient.get(CONSUMPTION_DEPOTS).then((response) => setDepots(response.data.data));
-    apiClient.get(CATEGORY_OPTIONS).then((response) => setCategories(response.data.data));
-    apiClient.get(TAG_OPTIONS, { params: { hideNumbers: true } })
-      .then((response) => setTags(response.data.data));
-  }, []);
-
   const buildParams = (extraParams = {}) => ({
     fromLocations,
     fromDate: fromDate ? moment(fromDate).format('MM/DD/YYYY') : '',
@@ -66,6 +59,15 @@ const ConsumptionShow = () => {
       })
       .finally(() => setLoading(false));
   };
+
+  useEffect(() => {
+    apiClient.get(CONSUMPTION_DEPOTS).then((response) => setDepots(response.data.data));
+    apiClient.get(CATEGORY_OPTIONS).then((response) => setCategories(response.data.data));
+    apiClient.get(TAG_OPTIONS, { params: { hideNumbers: true } })
+      .then((response) => setTags(response.data.data));
+    // Legacy screen runs the report with default parameters on initial load
+    runReport();
+  }, []);
 
   const downloadCsv = () => {
     const params = queryString.stringify({ ...buildParams(), format: 'csv' });
