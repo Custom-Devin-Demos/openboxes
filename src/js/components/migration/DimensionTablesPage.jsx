@@ -55,7 +55,7 @@ const DimensionTablesPage = () => {
                 <td />
                 <td>
                   <div className="button-container">
-                    <a className="button" href={REPORT_URL.truncateDimensions()}>Truncate</a>
+                    <a className="button mr-2" href={REPORT_URL.truncateDimensions()}>Truncate</a>
                     <a className="button" href={REPORT_URL.buildDimensions()}>Build</a>
                   </div>
                 </td>

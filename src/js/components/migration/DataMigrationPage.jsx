@@ -56,7 +56,7 @@ const DataMigrationPage = () => {
     if (amount) {
       return (
         <div className="button-group">
-          <a className="button" target="_blank" rel="noopener noreferrer" href={migrationUrl}>
+          <a className="button mr-2" target="_blank" rel="noopener noreferrer" href={migrationUrl}>
             {linkLabel}
           </a>
         </div>
@@ -76,7 +76,7 @@ const DataMigrationPage = () => {
     if (data.amountOfMissingRecordStockTransactionSources) {
       return (
         <a
-          className="button"
+          className="button mr-2"
           target="_blank"
           rel="noopener noreferrer"
           href={MIGRATION_URL.createMissingRecordStockTransactionSources()}
@@ -114,9 +114,9 @@ const DataMigrationPage = () => {
                 <td className="value">{data.organizationCount}</td>
                 <td>
                   <div className="button-group">
-                    <a className="button" href={`${ORGANIZATION_URL.base}/index`}>List</a>
-                    <button type="button" className="button" onClick={runAction(MIGRATION_URL.migrateOrganizations())}>Migrate</button>
-                    <button type="button" className="button" onClick={runAction(MIGRATION_URL.deleteOrganizations())}>Delete</button>
+                    <a className="button mr-2" href={`${ORGANIZATION_URL.base}/index`}>List</a>
+                    <button type="button" className="button mr-2" onClick={runAction(MIGRATION_URL.migrateOrganizations())}>Migrate</button>
+                    <button type="button" className="button mr-2" onClick={runAction(MIGRATION_URL.deleteOrganizations())}>Delete</button>
                   </div>
                 </td>
               </tr>
@@ -125,9 +125,9 @@ const DataMigrationPage = () => {
                 <td className="value">{data.productSupplierCount}</td>
                 <td>
                   <div className="button-group">
-                    <a className="button" href={`${PRODUCT_SUPPLIER_URL.base}/index`}>List</a>
-                    <button type="button" className="button" onClick={runAction(MIGRATION_URL.migrateProductSuppliers())}>Migrate</button>
-                    <button type="button" className="button" onClick={runAction(MIGRATION_URL.deleteProductSuppliers())}>Delete</button>
+                    <a className="button mr-2" href={`${PRODUCT_SUPPLIER_URL.base}/index`}>List</a>
+                    <button type="button" className="button mr-2" onClick={runAction(MIGRATION_URL.migrateProductSuppliers())}>Migrate</button>
+                    <button type="button" className="button mr-2" onClick={runAction(MIGRATION_URL.deleteProductSuppliers())}>Delete</button>
                   </div>
                 </td>
               </tr>
@@ -137,7 +137,7 @@ const DataMigrationPage = () => {
                 <td>
                   <div className="button-group">
                     <a
-                      className="button"
+                      className="button mr-2"
                       target="_blank"
                       rel="noopener noreferrer"
                       href={`${MIGRATION_URL.nextInventoryTransaction()}?max=1`}
@@ -145,7 +145,7 @@ const DataMigrationPage = () => {
                       Next Product
                     </a>
                     <a
-                      className="button"
+                      className="button mr-2"
                       target="_blank"
                       rel="noopener noreferrer"
                       href={MIGRATION_URL.locationsWithInventoryTransactions()}
@@ -153,7 +153,7 @@ const DataMigrationPage = () => {
                       View All Locations
                     </a>
                     <a
-                      className="button"
+                      className="button mr-2"
                       target="_blank"
                       rel="noopener noreferrer"
                       href={MIGRATION_URL.downloadCurrentInventory()}
@@ -161,7 +161,7 @@ const DataMigrationPage = () => {
                       Download Inventory (.csv)
                     </a>
                     <a
-                      className="button"
+                      className="button mr-2"
                       target="_blank"
                       rel="noopener noreferrer"
                       href={`${MIGRATION_URL.migrateInventoryTransactions()}?max=1&performMigration=false`}
@@ -169,14 +169,14 @@ const DataMigrationPage = () => {
                       Preview Migration
                     </a>
                     <a
-                      className="button"
+                      className="button mr-2"
                       target="_blank"
                       rel="noopener noreferrer"
                       href={`${MIGRATION_URL.migrateInventoryTransactions()}?performMigration=true&format=json`}
                     >
                       Migrate Current Location
                     </a>
-                    <a className="button" href={MIGRATION_URL.migrateAllInventoryTransactions()}>
+                    <a className="button mr-2" href={MIGRATION_URL.migrateAllInventoryTransactions()}>
                       Migrate All Locations
                     </a>
                   </div>
@@ -218,7 +218,7 @@ const DataMigrationPage = () => {
                 <td>
                   <div className="button-group">
                     <a
-                      className="button"
+                      className="button mr-2"
                       target="_blank"
                       rel="noopener noreferrer"
                       href={MIGRATION_URL.locationsWithProductInventoryTransactions()}
@@ -226,7 +226,7 @@ const DataMigrationPage = () => {
                       View All Locations with deprecated Product Inventory transaction
                     </a>
                     <a
-                      className="button"
+                      className="button mr-2"
                       target="_blank"
                       rel="noopener noreferrer"
                       href={MIGRATION_URL.downloadCurrentInventory()}
@@ -234,7 +234,7 @@ const DataMigrationPage = () => {
                       Download Inventory (.csv)
                     </a>
                     <a
-                      className="button mt-3"
+                      className="button mt-3 mr-2"
                       target="_blank"
                       rel="noopener noreferrer"
                       href={`${MIGRATION_URL.migrateProductInventoryTransactions()}?performMigration=false`}
@@ -244,7 +244,7 @@ const DataMigrationPage = () => {
                       Migration for Current Location
                     </a>
                     <a
-                      className="button my-3"
+                      className="button my-3 mr-2"
                       target="_blank"
                       rel="noopener noreferrer"
                       href={`${MIGRATION_URL.migrateProductInventoryTransactions()}?performMigration=true`}
