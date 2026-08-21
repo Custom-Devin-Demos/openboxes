@@ -529,6 +529,26 @@ class UrlMappings {
             action = [GET: "packingList"]
         }
 
+        "/api/shipments/$id/paginatedPackingList" {
+            controller = { "shipmentApi" }
+            action = [GET: "paginatedPackingList"]
+        }
+
+        "/api/consumption/aggregate" {
+            controller = { "consumptionApi" }
+            action = [GET: "aggregate"]
+        }
+
+        "/api/consumption/show" {
+            controller = { "consumptionApi" }
+            action = [GET: "show"]
+        }
+
+        "/api/consumption/depots" {
+            controller = { "consumptionApi" }
+            action = [GET: "depots"]
+        }
+
         "/api/shipments/$id/sendShipmentForm" {
             controller = { "shipmentApi" }
             action = [GET: "sendShipmentForm"]
