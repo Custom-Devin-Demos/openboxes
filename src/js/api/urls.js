@@ -16,6 +16,23 @@ export const ORDER_SUMMARY = (id) => `${ORDER_API}/${id}/summary`;
 export const ORDER_COMMENT_FORM_DATA = (id) => `${ORDER_API}/${id}/commentFormData`;
 export const ORDER_DOCUMENT_FORM_DATA = (id) => `${ORDER_API}/${id}/documentFormData`;
 export const ORDER_ADJUSTMENT_FORM_DATA = (id) => `${ORDER_API}/${id}/adjustmentFormData`;
+export const ORDER_SUMMARIES = `${ORDER_API}/orderSummaries`;
+export const ORDER_SUMMARY_STATUS_OPTIONS = `${ORDER_API}/orderSummaryStatusOptions`;
+export const ORDER_DETAILS = (id) => `${ORDER_API}/${id}/details`;
+export const ORDER_ITEMS_SUMMARY_DATA = (id) => `${ORDER_API}/${id}/orderItemsSummaryData`;
+export const ORDER_ITEM_STATUS_DATA = (id) => `${ORDER_API}/${id}/itemStatusData`;
+export const ORDER_ITEM_DETAILS_DATA = (id) => `${ORDER_API}/${id}/itemDetailsData`;
+export const ORDER_ADJUSTMENTS_DATA = (id) => `${ORDER_API}/${id}/adjustmentsData`;
+export const ORDER_SHIPMENTS_DATA = (id) => `${ORDER_API}/${id}/shipmentsData`;
+export const ORDER_INVOICES_DATA = (id) => `${ORDER_API}/${id}/invoicesData`;
+export const ORDER_DOCUMENTS_DATA = (id) => `${ORDER_API}/${id}/documentsData`;
+export const ORDER_COMMENTS_DATA = (id) => `${ORDER_API}/${id}/commentsData`;
+export const ORDER_PRINT_DATA = (id) => `${ORDER_API}/${id}/printData`;
+
+// ORDER ADJUSTMENT TYPE
+export const ORDER_ADJUSTMENT_TYPE_API = `${API}/orderAdjustmentTypes`;
+export const ORDER_ADJUSTMENT_TYPE_BY_ID = (id) => `${ORDER_ADJUSTMENT_TYPE_API}/${id}`;
+export const ORDER_ADJUSTMENT_TYPE_FORM_DATA = `${ORDER_ADJUSTMENT_TYPE_API}/formData`;
 
 // PURCHASE ORDER
 export const PURCHASE_ORDER_API = `${API}/purchaseOrders`;

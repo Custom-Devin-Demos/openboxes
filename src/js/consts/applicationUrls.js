@@ -128,6 +128,23 @@ const ORDER_URL = {
   rollbackOrderStatus: (id) => `${ORDER_URL.base}/rollbackOrderStatus/${id}`,
   saveComment: () => `${ORDER_URL.base}/saveComment`,
   saveAdjustment: () => `${ORDER_URL.base}/saveAdjustment`,
+  orderSummaryList: () => `${ORDER_URL.base}/orderSummaryList`,
+  withdraw: (id) => `${ORDER_URL.base}/withdraw/${id}`,
+  download: (id) => `${ORDER_URL.base}/download/${id}`,
+  downloadOrderItems: (id) => `${ORDER_URL.base}/downloadOrderItems/${id}`,
+  render: (id, documentTemplateId) => `${ORDER_URL.base}/render/${id}?documentTemplate.id=${documentTemplateId}`,
+  editComment: (commentId, orderId) => `${ORDER_URL.base}/editComment/${commentId}?order.id=${orderId}`,
+  deleteComment: (commentId, orderId) => `${ORDER_URL.base}/deleteComment/${commentId}?order.id=${orderId}`,
+  editDocument: (documentId, orderId) => `${ORDER_URL.base}/editDocument/${documentId}?order.id=${orderId}`,
+  deleteDocument: (documentId, orderId) => `${ORDER_URL.base}/deleteDocument/${documentId}?order.id=${orderId}`,
+  createCombinedShipment: (orderId) => `${ORDER_URL.base}/createCombinedShipment?direction=INBOUND&orderId=${orderId}`,
+};
+
+const ORDER_ADJUSTMENT_TYPE_URL = {
+  base: `${CONTEXT_PATH}/orderAdjustmentType`,
+  list: () => `${ORDER_ADJUSTMENT_TYPE_URL.base}/list`,
+  create: () => `${ORDER_ADJUSTMENT_TYPE_URL.base}/create`,
+  edit: (id) => `${ORDER_ADJUSTMENT_TYPE_URL.base}/edit/${id}`,
 };
 
 const DOCUMENT_URL = {
@@ -463,6 +480,7 @@ export {
   LOCATION_GROUP_URL,
   LOCATION_TYPE_URL,
   LOCATION_URL,
+  ORDER_ADJUSTMENT_TYPE_URL,
   ORDER_URL,
   PARTY_ROLE_URL,
   PARTY_URL,
