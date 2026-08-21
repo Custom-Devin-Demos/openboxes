@@ -61,15 +61,21 @@ class InventoryApiController {
             throw new IllegalArgumentException("File must be in CSV format")
         }
 
-        ImportDataCommand command = new ImportDataCommand(
+        /*
+         * Named importDataCommand rather than command: the Grails controller
+         * action transformer resolves a local variable named `command` in one
+         * action against same-named command-object parameters in other
+         * actions, generating casts to the wrong command class.
+         */
+        ImportDataCommand importDataCommand = new ImportDataCommand(
                 data: CSVUtils.csvToObjects(fileData),
                 date: new Date(System.currentTimeMillis() - 1000),
                 location: Location.get(params.facilityId)
         )
 
-        inventoryImportDataService.calculateAndApplyInventoryDifferences(command)
-        inventoryImportDataService.validateData(command)
-        inventoryImportDataService.importData(command)
+        inventoryImportDataService.calculateAndApplyInventoryDifferences(importDataCommand)
+        inventoryImportDataService.validateData(importDataCommand)
+        inventoryImportDataService.importData(importDataCommand)
 
         render(status: 200)
     }

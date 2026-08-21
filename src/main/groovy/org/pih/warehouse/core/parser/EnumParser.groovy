@@ -19,7 +19,7 @@ class EnumParser<T extends Enum> extends Parser<T, ParserContext<T>> {
      * @param enumClass the class of the Enum that we are parsing into
      * @param context the context object containing information about how to parse the string
      */
-    static T parseString(String toParse, Class<T> enumClass, ParserContext<T> context=null) {
+    static <T extends Enum> T parseString(String toParse, Class<T> enumClass, ParserContext<T> context=null) {
         if (StringUtils.isBlank(toParse)) {
             return context?.defaultValue
         }
@@ -33,7 +33,7 @@ class EnumParser<T extends Enum> extends Parser<T, ParserContext<T>> {
         }
 
         // In the rare case where we have an enum that is not uppercase, we can try a case-insensitive compare instead.
-        for (T enumValue : enumClass.getEnumConstants()) {
+        for (def enumValue : enumClass.getEnumConstants()) {
             if (enumValue.name().compareToIgnoreCase(toParseSanitized) == 0) {
                 return enumValue
             }

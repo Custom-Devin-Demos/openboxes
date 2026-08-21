@@ -1,7 +1,7 @@
 package org.pih.warehouse.common.domain.builder.base
 
 import grails.buildtestdata.TestDataBuilder
-import org.grails.datastore.gorm.GormEntity
+
 import org.springframework.core.GenericTypeResolver
 
 import org.pih.warehouse.common.util.RandomUtil
@@ -12,7 +12,7 @@ import org.pih.warehouse.common.util.RandomUtil
  *
  * @param <T> The domain object that this builder constructs.
  */
-abstract class TestBuilder<T extends GormEntity> implements TestDataBuilder {
+abstract class TestBuilder<T> implements TestDataBuilder {
 
     protected RandomUtil randomUtil = new RandomUtil()
 
