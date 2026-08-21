@@ -648,6 +648,31 @@ const AsyncRequestDetailReport = Loadable({
   loading: Loading,
 });
 
+const AsyncShowTransactionReport = Loadable({
+  loader: () => import('components/reporting/ShowTransactionReport'),
+  loading: Loading,
+});
+
+const AsyncTransactionEntryList = Loadable({
+  loader: () => import('components/transaction-entry/TransactionEntryList'),
+  loading: Loading,
+});
+
+const AsyncTransactionEntryShow = Loadable({
+  loader: () => import('components/transaction-entry/TransactionEntryShow'),
+  loading: Loading,
+});
+
+const AsyncTransactionEntryCreate = Loadable({
+  loader: () => import('components/transaction-entry/TransactionEntryCreate'),
+  loading: Loading,
+});
+
+const AsyncTransactionEntryEdit = Loadable({
+  loader: () => import('components/transaction-entry/TransactionEntryEdit'),
+  loading: Loading,
+});
+
 const AsyncShowPaginatedPackingListReport = Loadable({
   loader: () => import('components/reporting/ShowPaginatedPackingListReport'),
   loading: Loading,
@@ -1361,6 +1386,7 @@ const Router = () => {
             <MainLayoutRoute path="**/report/showInventoryByLocationReport" component={AsyncInventoryByLocationReport} />
             <MainLayoutRoute path="**/report/showOnOrderReport" component={AsyncOnOrderReport} />
             <MainLayoutRoute path="**/report/showRequestDetailReport" component={AsyncRequestDetailReport} />
+            <MainLayoutRoute path="**/report/showTransactionReport" component={AsyncShowTransactionReport} />
             <MainLayoutRoute path="**/report/showPaginatedPackingListReport" component={AsyncShowPaginatedPackingListReport} />
             <MainLayoutRoute path="**/consumption/list" component={AsyncConsumptionList} />
             <MainLayoutRoute path="**/consumption/pivot" component={AsyncConsumptionPivot} />
@@ -1624,6 +1650,10 @@ const Router = () => {
             <MainLayoutRoute path="**/partyType/create" component={AsyncPartyTypeForm} />
             <MainLayoutRoute path="**/partyType/edit/:id?" component={AsyncPartyTypeForm} />
             <MainLayoutRoute path="**/productType/show/:id" component={AsyncProductTypeShow} />
+            <MainLayoutRoute path="**/transactionEntry/list" component={AsyncTransactionEntryList} />
+            <MainLayoutRoute path="**/transactionEntry/show/:id" component={AsyncTransactionEntryShow} />
+            <MainLayoutRoute path="**/transactionEntry/create" component={AsyncTransactionEntryCreate} />
+            <MainLayoutRoute path="**/transactionEntry/edit/:id?" component={AsyncTransactionEntryEdit} />
             <MainLayoutRoute path="**/tag/list" component={AsyncTagList} />
             <MainLayoutRoute path="**/tag/show/:id" component={AsyncTagShow} />
             <MainLayoutRoute path="**/tag/create" component={AsyncTagForm} />

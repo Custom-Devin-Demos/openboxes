@@ -385,6 +385,36 @@ class UrlMappings {
             action = [POST: "removeProducts"]
         }
 
+        "/api/transactionEntries/inventoryItemOptions"(parseRequest: true) {
+            controller = { "transactionEntryApi" }
+            action = [GET: "inventoryItemOptions"]
+        }
+
+        "/api/transactionEntries/transactionOptions"(parseRequest: true) {
+            controller = { "transactionEntryApi" }
+            action = [GET: "transactionOptions"]
+        }
+
+        "/api/transactionEntries/binLocationOptions"(parseRequest: true) {
+            controller = { "transactionEntryApi" }
+            action = [GET: "binLocationOptions"]
+        }
+
+        "/api/transactionEntries"(parseRequest: true) {
+            controller = { "transactionEntryApi" }
+            action = [GET: "list", POST: "create"]
+        }
+
+        "/api/transactionEntries/$id"(parseRequest: true) {
+            controller = { "transactionEntryApi" }
+            action = [GET: "read", PUT: "update", DELETE: "delete"]
+        }
+
+        "/api/reports/transactionReportMetadata"(parseRequest: true) {
+            controller = { "reportApi" }
+            action = [GET: "transactionReportMetadata"]
+        }
+
         "/api/unitOfMeasureConversions/unitOfMeasureOptions"(parseRequest: true) {
             controller = { "unitOfMeasureConversionApi" }
             action = [GET: "unitOfMeasureOptions"]
