@@ -513,6 +513,26 @@ const AsyncInventoryBrowser = Loadable({
   loading: Loading,
 });
 
+const AsyncInventoryBrowserList = Loadable({
+  loader: () => import('components/inventory-browser/InventoryBrowserList'),
+  loading: Loading,
+});
+
+const AsyncInventorySnapshotList = Loadable({
+  loader: () => import('components/inventory-snapshot/InventorySnapshotList'),
+  loading: Loading,
+});
+
+const AsyncInventorySnapshotShow = Loadable({
+  loader: () => import('components/inventory-snapshot/InventorySnapshotShow'),
+  loading: Loading,
+});
+
+const AsyncInventorySnapshotEdit = Loadable({
+  loader: () => import('components/inventory-snapshot/InventorySnapshotEdit'),
+  loading: Loading,
+});
+
 const AsyncInventoryList = Loadable({
   loader: () => import('components/inventory/InventoryList'),
   loading: Loading,
@@ -1133,6 +1153,14 @@ const Router = () => {
             <MainLayoutRoute path="**/json/createPerson" component={AsyncCreatePersonPage} />
             <MainLayoutRoute path="**/inventory/reorderReport" component={AsyncReorderReport} />
             <MainLayoutRoute path="**/inventory/browse" component={AsyncInventoryBrowser} />
+            <MainLayoutRoute path="**/inventoryBrowser/list" component={AsyncInventoryBrowserList} />
+            <MainLayoutRoute path="**/inventoryBrowser/index" component={AsyncInventoryBrowserList} />
+            <MainLayoutRoute path="**/inventorySnapshot/list" component={AsyncInventorySnapshotList} />
+            <MainLayoutRoute path="**/inventorySnapshot/index" component={AsyncInventorySnapshotList} />
+            <MainLayoutRoute path="**/inventorySnapshot/show/:id?" component={AsyncInventorySnapshotShow} />
+            <MainLayoutRoute path="**/inventorySnapshot/edit/:id?" component={AsyncInventorySnapshotEdit} />
+            <MainLayoutRoute path="**/snapshot/list" component={AsyncInventorySnapshotList} />
+            <MainLayoutRoute path="**/snapshot/index" component={AsyncInventorySnapshotList} />
             <MainLayoutRoute path="**/inventory/list" component={AsyncInventoryList} />
             <MainLayoutRoute path="**/inventory/listLowStock" component={AsyncLowStockList} />
             <MainLayoutRoute path="**/inventory/listReorderStock" component={AsyncReorderStockList} />

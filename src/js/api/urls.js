@@ -495,6 +495,12 @@ export const INVENTORY_LIST_BIN_LOCATIONS = `${INVENTORY_SCREEN_API}/listBinLoca
 export const INVENTORY_SHOW_PRODUCTS = `${INVENTORY_SCREEN_API}/showProducts`;
 export const INVENTORY_UPLOAD = `${INVENTORY_SCREEN_API}/uploadInventory`;
 
+// INVENTORY BROWSER / INVENTORY SNAPSHOT (legacy analytics screens migration)
+export const INVENTORY_BROWSER_QOH_BY_PRODUCT_GROUP = '/json/getQuantityOnHandByProductGroup';
+export const INVENTORY_BROWSER_SUMMARY_BY_PRODUCT_GROUP = '/json/getSummaryByProductGroup';
+export const INVENTORY_SNAPSHOT_FIND_BY_DATE_AND_LOCATION = '/inventorySnapshot/findByDateAndLocation';
+export const INVENTORY_SNAPSHOT_REFRESH = '/inventorySnapshot/refresh';
+
 // ADMIN
 export const ADMIN_API = `${API}/admin`;
 export const ADMIN_CONTROLLERS = `${ADMIN_API}/controllers`;
