@@ -551,6 +551,12 @@ export const REQUISITION_ITEM_PICKLIST_ITEMS = (id, itemId) => `${REQUISITION_AP
 export const REQUISITION_UPDATE_PICKLIST_ITEMS = (id) => `${REQUISITION_API}/${id}/picklistItems`;
 export const REQUISITION_PRINT_DRAFT = (id) => `${REQUISITION_API}/${id}/printDraft`;
 export const REQUISITION_PROCESS = (id) => `${REQUISITION_API}/${id}/process`;
+export const REQUISITION_SHOW = (id) => `${REQUISITION_API}/${id}/show`;
+export const REQUISITION_TRANSFER = (id) => `${REQUISITION_API}/${id}/transfer`;
+export const REQUISITION_COMPLETE = (id) => `${REQUISITION_API}/${id}/complete`;
+export const REQUISITION_ITEM_API = `${API}/requisitionItems`;
+export const REQUISITION_ITEM_LIST = `${REQUISITION_ITEM_API}/list`;
+export const REQUISITION_ITEM_CHANGE = (itemId) => `${REQUISITION_ITEM_API}/${itemId}/change`;
 
 // REQUISITION TEMPLATES (legacy stocklist template screens migration)
 export const REQUISITION_TEMPLATE_API = `${API}/requisitionTemplates`;

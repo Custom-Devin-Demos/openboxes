@@ -297,6 +297,14 @@ const REQUISITION_URL = {
   exportRequisitionItems: () => `${REQUISITION_URL.base}/exportRequisitionItems`,
 };
 
+const REQUISITION_ITEM_URL = {
+  base: `${CONTEXT_PATH}/requisitionItem`,
+  list: () => `${REQUISITION_ITEM_URL.base}/list`,
+  edit: (id) => `${REQUISITION_ITEM_URL.base}/edit/${id}`,
+  change: (id) => `${REQUISITION_ITEM_URL.base}/change/${id}`,
+  export: (queryString) => `${REQUISITION_ITEM_URL.base}/export${queryString ? `?${queryString}` : ''}`,
+};
+
 const STOCKLIST_URL = {
   base: `${CONTEXT_PATH}/stocklist`,
   pdf: (id) => `${STOCKLIST_URL.base}/renderPdf/${id}`,
@@ -620,6 +628,7 @@ export {
   RECEIPT_URL,
   REPLENISHMENT_URL,
   REPORT_URL,
+  REQUISITION_ITEM_URL,
   REQUISITION_TEMPLATE_URL,
   REQUISITION_URL,
   ROLE_URL,

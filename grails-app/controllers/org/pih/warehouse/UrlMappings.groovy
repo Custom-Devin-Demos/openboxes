@@ -106,6 +106,26 @@ class UrlMappings {
             controller = { "requisitionApi" }
             action = [GET: "process"]
         }
+        "/api/requisitions/$id/show" {
+            controller = { "requisitionApi" }
+            action = [GET: "show"]
+        }
+        "/api/requisitions/$id/transfer" {
+            controller = { "requisitionApi" }
+            action = [GET: "transfer"]
+        }
+        "/api/requisitions/$id/complete"(parseRequest: true) {
+            controller = { "requisitionApi" }
+            action = [POST: "complete"]
+        }
+        "/api/requisitionItems/list" {
+            controller = { "requisitionApi" }
+            action = [GET: "canceledRequisitionItems"]
+        }
+        "/api/requisitionItems/$itemId/change"(parseRequest: true) {
+            controller = { "requisitionApi" }
+            action = [GET: "requisitionItemChange", POST: "changeItemQuantity"]
+        }
 
         "/api/requisitionTemplates"(parseRequest: true) {
             controller = { "requisitionTemplateApi" }

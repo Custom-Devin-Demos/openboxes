@@ -31,17 +31,7 @@ class RequisitionItemController {
     }
 
     def list() {
-        println "List requisition items " + params
-
-        def dateRequestedFrom = params.dateRequestedFrom ? Date.parse("MM/dd/yyyy", params.dateRequestedFrom) : null
-        def dateRequestedTo = params.dateRequestedTo ? Date.parse("MM/dd/yyyy", params.dateRequestedTo) : null
-
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        params.offset = params.offset ?: 0
-        def location = Location.get(session.warehouse.id)
-        def requisitionItemInstanceList = requisitionService.getCanceledRequisitionItems(location, params.list("cancelReasonCode"), dateRequestedFrom, dateRequestedTo, params.max, params.offset)
-
-        render(view: "list", model: [requisitionItemInstanceList: requisitionItemInstanceList, requisitionItemInstanceTotal: requisitionItemInstanceList.totalCount])
+        render(view: "/common/react")
     }
 
     def listCanceled() {
@@ -98,17 +88,13 @@ class RequisitionItemController {
     }
 
     def change() {
-        def location = Location.get(session.warehouse.id)
         def requisitionItemInstance = RequisitionItem.get(params.id)
-        def quantityOnHand = inventoryService.getQuantityOnHand(location, requisitionItemInstance?.product) ?: 0
-        def quantityOutgoing = inventoryService.getQuantityToShip(location, requisitionItemInstance?.product) ?: 0
-        def quantityAvailableToPromise = (quantityOnHand - quantityOutgoing) ?: 0
 
         if (!requisitionItemInstance) {
             flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'requisitionItem.label', default: 'RequisitionItem'), params.id])}"
             redirect(action: "list")
         } else {
-            return [requisitionItemInstance: requisitionItemInstance, quantityOnHand: quantityOnHand, quantityAvailableToPromise: quantityAvailableToPromise]
+            render(view: "/common/react")
         }
     }
 
