@@ -14,6 +14,7 @@ import grails.core.GrailsApplication
 import grails.util.Environment
 import grails.util.Holders
 import org.pih.warehouse.LocalizationUtil
+import org.pih.warehouse.admin.UpgradeCommand
 import org.pih.warehouse.core.MailService
 import org.pih.warehouse.core.Role
 import org.pih.warehouse.core.RoleType
@@ -67,6 +68,64 @@ class AdminApiController extends BaseApiController {
             [name: it.name, version: it.version?.toString()]
         }
         render([data: plugins] as JSON)
+    }
+
+    def status() {
+        def pluginManager = grailsApplication.mainContext.getBean('pluginManager')
+        render([data: [
+                appVersion     : grailsApplication.metadata.getProperty('info.app.version'),
+                grailsVersion  : grailsApplication.metadata.getProperty('info.app.grailsVersion'),
+                jvmVersion     : System.getProperty('java.version'),
+                controllerCount: grailsApplication.controllerClasses.size(),
+                domainCount    : grailsApplication.domainClasses.size(),
+                serviceCount   : grailsApplication.serviceClasses.size(),
+                tagLibCount    : grailsApplication.tagLibClasses.size(),
+                plugins        : pluginManager.allPlugins.collect {
+                    [name: it.name, version: it.version?.toString()]
+                },
+                controllers    : grailsApplication.controllerClasses.collect {
+                    [name: it.name, logicalPropertyName: it.logicalPropertyName]
+                },
+        ]] as JSON)
+    }
+
+    def upgrade() {
+        UpgradeCommand command = session.command
+        render([data: [
+                remoteWebArchiveUrl: command?.remoteWebArchiveUrl,
+                remoteFileSize     : command?.remoteFileSize,
+                localFileSize      : command?.localWebArchive?.size(),
+                localWebArchivePath: command?.localWebArchivePath,
+                localWebArchive    : command?.localWebArchive?.absolutePath,
+                downloadCancelled  : command?.future?.isCancelled() ?: false,
+                downloadDone       : command?.future?.isDone() ?: false,
+        ]] as JSON)
+    }
+
+    def downloadUpgrade(UpgradeCommand command) {
+        String message
+        if (command?.remoteWebArchiveUrl) {
+            session.command = command
+            session.command.future = null
+            session.command?.localWebArchive = new File("warehouse.war")
+            message = "Attempting to download '" + command?.remoteWebArchiveUrl + "' to '" + command?.localWebArchive?.absolutePath + "'"
+        } else {
+            message = "Please enter valid web archive url"
+        }
+        render([data: [message: message.toString()]] as JSON)
+    }
+
+    def deployUpgrade(UpgradeCommand command) {
+        session.command.localWebArchivePath = command.localWebArchivePath
+        command.localWebArchive = session.command.localWebArchive
+
+        def source = session.command.localWebArchive
+        def destination = new File(session.command.localWebArchivePath)
+        def backup = new File(session.command.localWebArchive.absolutePath + ".backup")
+        backup.bytes = source.bytes
+        destination.bytes = source.bytes
+
+        render([data: [message: "Deployed '${source.absolutePath}' to '${destination.absolutePath}'".toString()]] as JSON)
     }
 
     def cache() {

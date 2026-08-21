@@ -1446,6 +1446,46 @@ class UrlMappings {
             action = [GET: "settings"]
         }
 
+        "/api/admin/status" {
+            controller = { "adminApi" }
+            action = [GET: "status"]
+        }
+
+        "/api/admin/upgrade" {
+            controller = { "adminApi" }
+            action = [GET: "upgrade"]
+        }
+
+        "/api/admin/upgrade/download" {
+            controller = { "adminApi" }
+            action = [POST: "downloadUpgrade"]
+        }
+
+        "/api/admin/upgrade/deploy" {
+            controller = { "adminApi" }
+            action = [POST: "deployUpgrade"]
+        }
+
+        "/api/batch/importData" {
+            controller = { "batchApi" }
+            action = [POST: "importData"]
+        }
+
+        "/api/localizations/localeOptions" {
+            controller = { "localizationApi" }
+            action = [GET: "localeOptions"]
+        }
+
+        "/api/jobs/triggers/$id" {
+            controller = { "jobApi" }
+            action = [DELETE: "unscheduleTrigger"]
+        }
+
+        "/api/jobs/$id/schedule" {
+            controller = { "jobApi" }
+            action = [POST: "scheduleJob"]
+        }
+
         "/api/admin/triggerStockAlerts" {
             controller = { "adminApi" }
             action = [POST: "triggerStockAlerts"]

@@ -396,15 +396,47 @@ const ADMIN_URL = {
   showUpgrade: () => `${ADMIN_URL.base}/showUpgrade`,
   showDatabaseStatus: () => `${ADMIN_URL.base}/showDatabaseStatus`,
   showDatabaseProcessList: () => `${ADMIN_URL.base}/showDatabaseProcessList`,
+  status: () => `${ADMIN_URL.base}/status`,
+};
+
+const BATCH_URL = {
+  base: `${CONTEXT_PATH}/batch`,
+  importData: () => `${BATCH_URL.base}/importData`,
+  downloadTemplate: (template) => `${BATCH_URL.base}/downloadTemplate?template=${template}`,
+  downloadExcel: (type) => `${BATCH_URL.base}/downloadExcel?type=${type}`,
+};
+
+const DATA_EXPORT_URL = {
+  base: `${CONTEXT_PATH}/dataExport`,
+  index: () => `${DATA_EXPORT_URL.base}/index`,
+  render: (id, format) => `${DATA_EXPORT_URL.base}/render/${id}?format=${format}`,
+};
+
+const JOBS_URL = {
+  base: `${CONTEXT_PATH}/jobs`,
+  show: (id) => `${JOBS_URL.base}/show/${id}`,
+};
+
+const LOCALIZATION_URL = {
+  base: `${CONTEXT_PATH}/localization`,
+  list: () => `${LOCALIZATION_URL.base}/list`,
+  create: () => `${LOCALIZATION_URL.base}/create`,
+};
+
+const QUARTZ_URL = {
+  base: `${CONTEXT_PATH}/quartz`,
+  list: () => `${QUARTZ_URL.base}/list`,
 };
 
 export {
   ADMIN_URL,
   ATTRIBUTE_URL,
+  BATCH_URL,
   BUDGET_CODE_URL,
   CATEGORY_URL,
   CYCLE_COUNT,
   DASHBOARD_URL,
+  DATA_EXPORT_URL,
   DOCUMENT_URL,
   EVENT_TYPE_URL,
   GL_ACCOUNT_TYPE_URL,
@@ -413,6 +445,8 @@ export {
   INVENTORY_LEVEL_URL,
   INVENTORY_URL,
   INVOICE_URL,
+  JOBS_URL,
+  LOCALIZATION_URL,
   LOCATION_CONFIGURATION_URL,
   LOCATION_GROUP_URL,
   LOCATION_TYPE_URL,
@@ -429,6 +463,7 @@ export {
   PRODUCT_URL,
   PURCHASE_ORDER_URL,
   PUTAWAY_URL,
+  QUARTZ_URL,
   RECEIPT_URL,
   REPLENISHMENT_URL,
   REQUISITION_TEMPLATE_URL,
