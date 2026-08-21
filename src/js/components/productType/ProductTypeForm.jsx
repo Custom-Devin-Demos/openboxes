@@ -217,7 +217,7 @@ const ProductTypeForm = ({ match }) => {
               name="sequenceNumber"
               type="number"
               value={values.sequenceNumber}
-              onChange={(e) => setValue('sequenceNumber')(e.target.value)}
+              onChange={(valueAsNumber) => setValue('sequenceNumber')(valueAsNumber !== undefined ? valueAsNumber : '')}
             />
           </div>
           {!isEdit && (
@@ -236,7 +236,7 @@ const ProductTypeForm = ({ match }) => {
               name="supportedActivities"
               multiple
               options={activityOptions}
-              defaultValue={toOptions(values.supportedActivities, activityOptions)}
+              value={toOptions(values.supportedActivities, activityOptions)}
               onChange={setMultiValue('supportedActivities')}
             />
           </div>
@@ -247,7 +247,7 @@ const ProductTypeForm = ({ match }) => {
               multiple
               disabled
               options={fieldOptions}
-              defaultValue={toOptions(values.requiredFields, fieldOptions)}
+              value={toOptions(values.requiredFields, fieldOptions)}
             />
           </div>
           <div className="mb-3">
@@ -256,7 +256,7 @@ const ProductTypeForm = ({ match }) => {
               name="displayedFields"
               multiple
               options={fieldOptions}
-              defaultValue={toOptions(values.displayedFields, fieldOptions)}
+              value={toOptions(values.displayedFields, fieldOptions)}
               onChange={setMultiValue('displayedFields')}
             />
           </div>
