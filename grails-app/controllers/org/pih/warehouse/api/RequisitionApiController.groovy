@@ -12,6 +12,7 @@ package org.pih.warehouse.api
 import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
+import org.grails.orm.hibernate.cfg.GrailsHibernateUtil
 import org.pih.warehouse.core.Location
 import org.pih.warehouse.core.Person
 import org.pih.warehouse.core.ReasonCode
@@ -37,6 +38,12 @@ class RequisitionApiController {
 
     private static final String DATE_FORMAT = "MM/dd/yyyy"
     private static final String DISPLAY_DATE_FORMAT = "dd/MMM/yyyy hh:mm:ss a z"
+
+    // Person may be a Hibernate proxy backed by a User row; unwrap before reading the id
+    // to avoid reflective dispatch against the wrong declaring class
+    private static String personId(Person person) {
+        person ? ((Person) GrailsHibernateUtil.unwrapIfProxy(person)).id : null
+    }
 
     def templates() {
         def requisitionCriteria = new Requisition(isTemplate: true)
@@ -288,13 +295,13 @@ class RequisitionApiController {
                 statusName           : requisition.status?.name(),
                 commodityClass       : requisition.commodityClass?.name(),
                 requestedDeliveryDate: requisition.requestedDeliveryDate?.format(DATE_FORMAT),
-                verifiedById         : requisition.verifiedBy?.id,
-                pickerId             : requisition.picklist?.picker?.id,
+                verifiedById         : personId(requisition.verifiedBy),
+                pickerId             : personId(requisition.picklist?.picker),
                 pickerName           : requisition.picklist?.picker?.name,
                 checkedByName        : requisition.checkedBy?.name,
-                deliveredById        : requisition.deliveredBy?.id,
+                deliveredById        : personId(requisition.deliveredBy),
                 deliveredByName      : requisition.deliveredBy?.name,
-                receivedById         : requisition.receivedBy?.id,
+                receivedById         : personId(requisition.receivedBy),
                 receivedByName       : requisition.receivedBy?.name,
                 hasPicklist          : requisition.picklist != null,
                 isUserAdmin          : userService.isUserAdmin(user),
@@ -388,7 +395,7 @@ class RequisitionApiController {
         Location location = Location.get(session.warehouse.id)
         def quantityOnHandMap = getQuantityOnHandMap(location, requisition)
         render([data: requisition.toJson() + getHeaderData(requisition) + [
-                verifiedById     : requisition.verifiedBy?.id,
+                verifiedById     : personId(requisition.verifiedBy),
                 dateVerifiedInput: requisition.dateVerified?.format(DATE_FORMAT),
                 quantityOnHandMap: quantityOnHandMap,
                 requisitionItems : getReviewItemsData(requisition),
@@ -440,7 +447,6 @@ class RequisitionApiController {
                     break
                 case "approveQuantity":
                     requisitionItem.approveQuantity()
-                    message = "Requisition item was approved at ${requisitionItem.quantity}"
                     break
                 case "cancelQuantity":
                     requisitionItem.cancelQuantity(reasonCode, comments)
@@ -472,6 +478,13 @@ class RequisitionApiController {
             return
         }
         if (requisitionItem.hasErrors()) {
+            render([success: false, errors: requisitionItem.errors.allErrors.collect { g.message(error: it) }] as JSON)
+            return
+        }
+        // Domain mutation methods assign fields directly, which bypasses GORM dirty
+        // checking; mark the item dirty so the update is flushed to the database
+        requisitionItem.markDirty()
+        if (!requisitionItem.save(flush: true)) {
             render([success: false, errors: requisitionItem.errors.allErrors.collect { g.message(error: it) }] as JSON)
             return
         }
@@ -508,7 +521,7 @@ class RequisitionApiController {
             }
         }
         render([data: requisition.toJson() + getHeaderData(requisition) + [
-                pickerId        : picklist.picker?.id,
+                pickerId        : personId(picklist.picker),
                 pickerName      : picklist.picker?.name,
                 datePicked      : picklist.datePicked?.format(DATE_FORMAT),
                 requisitionItems: requisition.requisitionItems?.sort()?.collect { RequisitionItem requisitionItem ->
@@ -757,7 +770,7 @@ class RequisitionApiController {
                 datePicked       : requisition.picklist?.datePicked?.format(DISPLAY_DATE_FORMAT),
                 pickedByName     : requisition.picklist?.picker?.name,
                 dateChecked      : requisition.dateChecked?.format(DATE_FORMAT),
-                checkedById      : requisition.checkedBy?.id,
+                checkedById      : personId(requisition.checkedBy),
                 checkedByName    : requisition.checkedBy?.name,
                 dateIssued       : requisition.dateIssued?.format(DISPLAY_DATE_FORMAT),
                 issuedByName     : requisition.issuedBy?.name,

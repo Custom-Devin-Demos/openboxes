@@ -9,6 +9,7 @@
  * */
 package org.pih.warehouse.requisition
 
+import org.grails.orm.hibernate.cfg.GrailsHibernateUtil
 import org.pih.warehouse.picklist.Picklist
 import org.pih.warehouse.shipping.Shipment
 import org.pih.warehouse.auth.AuthService
@@ -424,7 +425,9 @@ class Requisition implements Comparable<Requisition>, Serializable {
                 id                   : id,
                 name                 : name,
                 version              : version,
-                requestedById        : requestedBy?.id,
+                // requestedBy may be a Person proxy backed by a User row; unwrap before
+                // reading the id to avoid reflective dispatch against the wrong class
+                requestedById        : requestedBy ? ((Person) GrailsHibernateUtil.unwrapIfProxy(requestedBy)).id : null,
                 requestedByName      : requestedBy?.name,
                 description          : description,
                 dateRequested        : dateRequested.format("MM/dd/yyyy"),

@@ -48,6 +48,11 @@ const ReviewRequisitionPage = ({ match }) => {
   }, [match.params.requisitionId]);
 
   useEffect(() => {
+    const flashError = window.sessionStorage.getItem('requisitionFlashError');
+    if (flashError) {
+      window.sessionStorage.removeItem('requisitionFlashError');
+      setErrors([flashError]);
+    }
     fetchRequisition();
   }, [fetchRequisition]);
 

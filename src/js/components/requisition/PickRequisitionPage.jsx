@@ -46,6 +46,7 @@ const PickRequisitionPage = ({ match }) => {
 
   useEffect(() => {
     if (verifiedByMissing !== null) {
+      window.sessionStorage.setItem('requisitionFlashError', verifiedByMissing);
       window.location.assign(REQUISITION_URL.review(match.params.requisitionId));
     }
   }, [verifiedByMissing, match.params.requisitionId]);
