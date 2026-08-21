@@ -163,6 +163,22 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | 2-stocklists-1 | stocklists-1 batch | MERGED | [4c56a395](https://app.devin.ai/sessions/4c56a395ee15486595dea4441e32315c) | [#39](https://github.com/Custom-Devin-Demos/openboxes/pull/39) | 4 requisitionTemplate screens; post-rebase (incl. Grails 5) snapshots 122/122, Playwright 10/10, CI 4/4 |
 | 2-users-security-3 | users-security-3 batch | MERGED | [4ec20085](https://app.devin.ai/sessions/4ec2008545fe4f3d938f00b940906626) | [#41](https://github.com/Custom-Devin-Demos/openboxes/pull/41) | 4 user screens + Groovy 3 fix (IndicatorDataService size()); post-rebase snapshots 122/122, Playwright 10/10, CI 4/4 |
 - 2026-08-20: Phase 2 wave 4 spawned (10 batches). Remaining after wave 4: 19 batches (admin-config-4, dashboard-auth, errors-misc, mobile-1/2, picking, print-documents-2, product-catalog-6/7/8, receiving, reporting-2/3/4, shipment-workflow, shipments-4, stock-movements, stock-transfers, stocklists-2).
+## Phase 2 — Wave 5 (spawned 2026-08-20)
+
+| Batch | Scope | Status | Session | PR | Evidence |
+|---|---|---|---|---|---|
+| 2-admin-config-4 | admin-config-4 batch | IN_PROGRESS | [041912f2](https://app.devin.ai/sessions/041912f26500423eb7c43aa324380801) | — | 5 migration/quartz screens |
+| 2-picking | picking batch | IN_PROGRESS | [e9a223ad](https://app.devin.ai/sessions/e9a223ad7c4a4b929b8d5d7b90699d62) | — | 3 picklist/replenishment print views |
+| 2-print-documents-2 | print-documents-2 batch | IN_PROGRESS | [0877fa23](https://app.devin.ai/sessions/0877fa23fb7f476f85e045d65a48378c) | — | 4 document/goodsReceiptNote screens |
+| 2-product-catalog-6 | product-catalog-6 batch | IN_PROGRESS | [e632af0d](https://app.devin.ai/sessions/e632af0d37594179abe3905a3ebf1a06) | — | 6 productSupplier/productType screens |
+| 2-product-catalog-7 | product-catalog-7 batch | IN_PROGRESS | [d2416979](https://app.devin.ai/sessions/d2416979721b4f27a9058c2f86ecf6a0) | — | 6 productType/tag/uomConversion screens |
+| 2-receiving | receiving batch | IN_PROGRESS | [4a653a78](https://app.devin.ai/sessions/4a653a786b034b85833923f00bd8b085) | — | partialReceiving + receiveOrderWorkflow webflow |
+| 2-reporting-2 | reporting-2 batch | IN_PROGRESS | [1bfcce2f](https://app.devin.ai/sessions/1bfcce2fe6e84839afe4582f714a365c) | — | 5 report print/detail screens |
+| 2-reporting-3 | reporting-3 batch | IN_PROGRESS | [a6c52d52](https://app.devin.ai/sessions/a6c52d5207a944faac49b6aa46d5f5d4) | — | 5 report detail screens |
+| 2-shipments-4 | shipments-4 batch | IN_PROGRESS | [9bd39418](https://app.devin.ai/sessions/9bd3941821b24dfba3d244b458ab4c98) | — | shipmentItem/split + 4 shipmentWorkflow screens |
+| 2-stocklists-2 | stocklists-2 batch | IN_PROGRESS | [d0f1323f](https://app.devin.ai/sessions/d0f1323f227641a9a754c059ba0abf7c) | — | 4 requisitionTemplate/stocklist screens |
+
+- 2026-08-20: Phase 2 wave 5 spawned (10 batches). Remaining after wave 5: 9 batches (dashboard-auth, errors-misc, mobile-1/2, product-catalog-8, reporting-4, shipment-workflow, stock-movements, stock-transfers).
 - 2026-08-20: PR #46 (inventory-4) merged (authoritatively confirmed, CI 4/4, clean merge, additive union verified: 28 keys added / 0 removed / 0 changed). PHASE 2 WAVE 4 COMPLETE (10/10 merged). P1.4 PR #48 final rebase + re-verification requested.
 - 2026-08-20: PR #44 (locations-orgs-5) merged (authoritatively confirmed, CI 4/4, clean merge, post-rebase 122/122 + 10/10, additive localization union verified). #46 is the last wave-4 PR; final rebase requested.
 - 2026-08-20: PR #45 (print-documents-1) merged (authoritatively confirmed, CI 4/4, post-rebase 122/122 + 10/10). Wave 4 at 8/10 merged; #44/#46 doing final rebases.
