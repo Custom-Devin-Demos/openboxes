@@ -1702,6 +1702,41 @@ class UrlMappings {
             action = [GET: "inventoryLevelDetails", POST: "updateInventoryLevel"]
         }
 
+        "/api/stockCard/$id/transactionLog" {
+            controller = "stockCardApi"
+            action = [GET: "transactionLog"]
+        }
+
+        "/api/inventoryLevels/search" {
+            controller = "inventoryLevelApi"
+            action = [GET: "search"]
+        }
+
+        "/api/inventoryLevels/formContext" {
+            controller = "inventoryLevelApi"
+            action = [GET: "formContext"]
+        }
+
+        "/api/inventoryLevels/$id/formContext" {
+            controller = "inventoryLevelApi"
+            action = [GET: "formContext"]
+        }
+
+        "/api/inventoryLevels/$id/details" {
+            controller = "inventoryLevelApi"
+            action = [GET: "details"]
+        }
+
+        "/api/inventoryLevels" {
+            controller = "inventoryLevelApi"
+            action = [POST: "save"]
+        }
+
+        "/api/inventoryLevels/$id" {
+            controller = "inventoryLevelApi"
+            action = [POST: "update", PUT: "update", DELETE: "delete"]
+        }
+
         "/api/stockCard/transferStock" {
             controller = "stockCardApi"
             action = [POST: "transferStock"]

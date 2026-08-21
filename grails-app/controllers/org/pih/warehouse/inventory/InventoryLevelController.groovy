@@ -35,6 +35,10 @@ class InventoryLevelController {
     }
 
     def list() {
+        if (!params.format) {
+            render(view: "/common/react")
+            return
+        }
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
 
         def terms = params.q ? params?.q?.split(" ") : null
@@ -69,9 +73,7 @@ class InventoryLevelController {
     }
 
     def create() {
-        def inventoryLevelInstance = new InventoryLevel()
-        inventoryLevelInstance.properties = params
-        return [inventoryLevelInstance: inventoryLevelInstance]
+        render(view: "/common/react")
     }
 
     def save() {
@@ -105,28 +107,11 @@ class InventoryLevelController {
     }
 
     def show() {
-        def inventoryLevelInstance = InventoryLevel.get(params.id)
-        if (!inventoryLevelInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'inventoryLevel.label', default: 'InventoryLevel'), params.id])}"
-            redirect(action: "list")
-        } else {
-            [inventoryLevelInstance: inventoryLevelInstance]
-        }
+        render(view: "/common/react")
     }
 
     def edit() {
-        def inventoryLevelInstance = InventoryLevel.get(params.id)
-
-        if (!inventoryLevelInstance) {
-            def productInstance = Product.get(params.id)
-            inventoryLevelInstance = InventoryLevel.findByProduct(productInstance)
-        }
-        if (!inventoryLevelInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'inventoryLevel.label', default: 'InventoryLevel'), params.id])}"
-            redirect(action: "create")
-        } else {
-            return [inventoryLevelInstance: inventoryLevelInstance]
-        }
+        render(view: "/common/react")
     }
 
     def update() {

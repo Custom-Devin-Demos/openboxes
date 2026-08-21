@@ -149,6 +149,24 @@ const INVENTORY_ITEM_URL = {
     url: `${INVENTORY_ITEM_URL.base}/showStockCard/${id}`,
     query: { ...params },
   }),
+  showTransactionLog: (id, params = {}) => stringifyUrl({
+    url: `${INVENTORY_ITEM_URL.base}/showTransactionLog/${id}`,
+    query: { ...params },
+  }),
+};
+
+const INVENTORY_LEVEL_URL = {
+  base: `${CONTEXT_PATH}/inventoryLevel`,
+  list: (params = {}) => stringifyUrl({
+    url: `${INVENTORY_LEVEL_URL.base}/list`,
+    query: { ...params },
+  }),
+  create: (params = {}) => stringifyUrl({
+    url: `${INVENTORY_LEVEL_URL.base}/create`,
+    query: { ...params },
+  }),
+  show: (id) => `${INVENTORY_LEVEL_URL.base}/show/${id}`,
+  edit: (id) => `${INVENTORY_LEVEL_URL.base}/edit/${id}`,
 };
 
 const INVENTORY_URL = {
@@ -376,6 +394,7 @@ export {
   GL_ACCOUNT_TYPE_URL,
   GL_ACCOUNT_URL,
   INVENTORY_ITEM_URL,
+  INVENTORY_LEVEL_URL,
   INVENTORY_URL,
   INVOICE_URL,
   LOCATION_CONFIGURATION_URL,
