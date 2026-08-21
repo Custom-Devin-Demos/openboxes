@@ -244,6 +244,17 @@ export const EVENT_TYPE_API = `${API}/eventTypes`;
 export const EVENT_TYPE_BY_ID = (id) => `${EVENT_TYPE_API}/${id}`;
 export const EVENT_TYPE_EVENT_CODE_OPTIONS = `${EVENT_TYPE_API}/eventCodeOptions`;
 
+// PARTY
+export const PARTY_API = `${API}/parties`;
+export const PARTY_BY_ID = (id) => `${PARTY_API}/${id}`;
+export const PARTY_TYPE_OPTIONS = `${PARTY_API}/partyTypeOptions`;
+export const PARTY_OPTIONS = `${PARTY_API}/partyOptions`;
+
+// PARTY ROLE
+export const PARTY_ROLE_API = `${API}/partyRoles`;
+export const PARTY_ROLE_BY_ID = (id) => `${PARTY_ROLE_API}/${id}`;
+export const PARTY_ROLE_ROLE_TYPE_OPTIONS = `${PARTY_ROLE_API}/roleTypeOptions`;
+
 // CYCLE COUNT
 export const CYCLE_COUNT = (locationId) => `${API}/facilities/${locationId}/cycle-counts`;
 export const CYCLE_COUNT_CANDIDATES = (locationId) => `${CYCLE_COUNT(locationId)}/candidates`;

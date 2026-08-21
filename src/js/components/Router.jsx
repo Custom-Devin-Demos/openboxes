@@ -497,6 +497,26 @@ const AsyncCategoryTree = Loadable({
   loading: Loading,
 });
 
+const AsyncPartyList = Loadable({
+  loader: () => import('components/party/PartyList'),
+  loading: Loading,
+});
+
+const AsyncPartyForm = Loadable({
+  loader: () => import('components/party/PartyForm'),
+  loading: Loading,
+});
+
+const AsyncPartyShow = Loadable({
+  loader: () => import('components/party/PartyShow'),
+  loading: Loading,
+});
+
+const AsyncPartyRoleForm = Loadable({
+  loader: () => import('components/partyRole/PartyRoleForm'),
+  loading: Loading,
+});
+
 const Router = () => {
   useConnectionListener();
 
@@ -626,6 +646,12 @@ const Router = () => {
             <MainLayoutRoute path="**/category/create" component={AsyncCategoryForm} />
             <MainLayoutRoute path="**/category/edit/:id?" component={AsyncCategoryForm} />
             <MainLayoutRoute path="**/category/tree" component={AsyncCategoryTree} />
+            <MainLayoutRoute path="**/party/list" component={AsyncPartyList} />
+            <MainLayoutRoute path="**/party/create" component={AsyncPartyForm} />
+            <MainLayoutRoute path="**/party/edit/:id?" component={AsyncPartyForm} />
+            <MainLayoutRoute path="**/party/show/:id" component={AsyncPartyShow} />
+            <MainLayoutRoute path="**/partyRole/create" component={AsyncPartyRoleForm} />
+            <MainLayoutRoute path="**/partyRole/edit/:id?" component={AsyncPartyRoleForm} />
             <MainLayoutRoute path="**/dashboard/:configId?" component={Dashboard} />
             <MainLayoutRoute path="**/" component={Dashboard} />
           </Switch>

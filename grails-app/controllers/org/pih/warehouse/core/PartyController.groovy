@@ -21,14 +21,11 @@ class PartyController {
     }
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [partyInstanceList: Party.list(params), partyInstanceTotal: Party.count()]
+        render(view: "/common/react", params: params)
     }
 
     def create() {
-        def partyInstance = new Party()
-        partyInstance.properties = params
-        return [partyInstance: partyInstance]
+        render(view: "/common/react", params: params)
     }
 
     def save() {
@@ -42,23 +39,11 @@ class PartyController {
     }
 
     def show() {
-        def partyInstance = Party.get(params.id)
-        if (!partyInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'party.label', default: 'Party'), params.id])}"
-            redirect(action: "list")
-        } else {
-            [partyInstance: partyInstance]
-        }
+        render(view: "/common/react", params: params)
     }
 
     def edit() {
-        def partyInstance = Party.get(params.id)
-        if (!partyInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'party.label', default: 'Party'), params.id])}"
-            redirect(action: "list")
-        } else {
-            return [partyInstance: partyInstance]
-        }
+        render(view: "/common/react", params: params)
     }
 
     def update() {
