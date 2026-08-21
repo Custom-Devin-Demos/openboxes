@@ -347,11 +347,26 @@ class UrlMappings {
 
         "/api/partyRoles"(parseRequest: true) {
             controller = { "partyRoleApi" }
-            action = [POST: "create"]
+            action = [GET: "list", POST: "create"]
         }
 
         "/api/partyRoles/$id"(parseRequest: true) {
             controller = { "partyRoleApi" }
+            action = [GET: "read", PUT: "update", DELETE: "delete"]
+        }
+
+        "/api/partyTypes/partyTypeCodeOptions"(parseRequest: true) {
+            controller = { "partyTypeApi" }
+            action = [GET: "partyTypeCodeOptions"]
+        }
+
+        "/api/partyTypes"(parseRequest: true) {
+            controller = { "partyTypeApi" }
+            action = [GET: "list", POST: "create"]
+        }
+
+        "/api/partyTypes/$id"(parseRequest: true) {
+            controller = { "partyTypeApi" }
             action = [GET: "read", PUT: "update", DELETE: "delete"]
         }
 

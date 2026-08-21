@@ -1002,6 +1002,31 @@ const AsyncPartyShow = Loadable({
   loading: Loading,
 });
 
+const AsyncPartyRoleList = Loadable({
+  loader: () => import('components/partyRole/PartyRoleList'),
+  loading: Loading,
+});
+
+const AsyncPartyRoleShow = Loadable({
+  loader: () => import('components/partyRole/PartyRoleShow'),
+  loading: Loading,
+});
+
+const AsyncPartyTypeList = Loadable({
+  loader: () => import('components/partyType/PartyTypeList'),
+  loading: Loading,
+});
+
+const AsyncPartyTypeShow = Loadable({
+  loader: () => import('components/partyType/PartyTypeShow'),
+  loading: Loading,
+});
+
+const AsyncPartyTypeForm = Loadable({
+  loader: () => import('components/partyType/PartyTypeForm'),
+  loading: Loading,
+});
+
 const AsyncPartyRoleForm = Loadable({
   loader: () => import('components/partyRole/PartyRoleForm'),
   loading: Loading,
@@ -1315,8 +1340,14 @@ const Router = () => {
             <MainLayoutRoute path="**/party/create" component={AsyncPartyForm} />
             <MainLayoutRoute path="**/party/edit/:id?" component={AsyncPartyForm} />
             <MainLayoutRoute path="**/party/show/:id" component={AsyncPartyShow} />
+            <MainLayoutRoute path="**/partyRole/list" component={AsyncPartyRoleList} />
+            <MainLayoutRoute path="**/partyRole/show/:id" component={AsyncPartyRoleShow} />
             <MainLayoutRoute path="**/partyRole/create" component={AsyncPartyRoleForm} />
             <MainLayoutRoute path="**/partyRole/edit/:id?" component={AsyncPartyRoleForm} />
+            <MainLayoutRoute path="**/partyType/list" component={AsyncPartyTypeList} />
+            <MainLayoutRoute path="**/partyType/show/:id" component={AsyncPartyTypeShow} />
+            <MainLayoutRoute path="**/partyType/create" component={AsyncPartyTypeForm} />
+            <MainLayoutRoute path="**/partyType/edit/:id?" component={AsyncPartyTypeForm} />
             <MainLayoutRoute path="**/person/list" component={AsyncPersonList} />
             <MainLayoutRoute path="**/person/create" component={AsyncPersonForm} />
             <MainLayoutRoute path="**/person/edit/:id?" component={AsyncPersonForm} />
