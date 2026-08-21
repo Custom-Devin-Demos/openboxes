@@ -252,6 +252,12 @@ const REQUISITION_URL = {
   transfer: (id) => `${REQUISITION_URL.base}/transfer/${id}`,
   show: (id) => `${REQUISITION_URL.base}/show/${id}`,
   saveRequisitionItems: () => `${REQUISITION_URL.base}/saveRequisitionItems`,
+  editHeader: (id) => `${REQUISITION_URL.base}/editHeader/${id}`,
+  printDraft: (id) => `${REQUISITION_URL.base}/printDraft/${id}`,
+  process: (id) => `${REQUISITION_URL.base}/process/${id}`,
+  picked: (id) => `${REQUISITION_URL.base}/picked/${id}`,
+  exportRequisitions: () => `${REQUISITION_URL.base}/exportRequisitions`,
+  exportRequisitionItems: () => `${REQUISITION_URL.base}/exportRequisitionItems`,
 };
 
 const STOCKLIST_URL = {
