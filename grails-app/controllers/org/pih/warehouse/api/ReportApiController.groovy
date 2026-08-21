@@ -12,6 +12,7 @@ package org.pih.warehouse.api
 import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 import org.apache.commons.lang.StringEscapeUtils
+import org.hibernate.proxy.HibernateProxy
 import org.pih.warehouse.core.Constants
 import org.pih.warehouse.core.Location
 import org.pih.warehouse.inventory.InventoryItem
@@ -22,6 +23,15 @@ class ReportApiController {
 
     def inventoryService
 
+    private static Serializable identifierOf(Object entity) {
+        if (entity == null) {
+            return null
+        }
+        return entity instanceof HibernateProxy
+                ? ((HibernateProxy) entity).hibernateLazyInitializer.identifier
+                : entity.id
+    }
+
     @Transactional(readOnly = true)
     def cycleCountReport() {
         Location location = Location.load(session.warehouse.id)
@@ -31,10 +41,10 @@ class ReportApiController {
         List rows = binLocations.collect { row ->
             // Required in order to avoid lazy initialization exception that occurs because all
             // of the querying / session work that was done above was executed in worker threads
-            Product product = Product.get(row?.product?.id)
-            Category category = row?.category?.id ? Category.get(row?.category?.id) : null
-            InventoryItem inventoryItem = row?.inventoryItem?.id ? InventoryItem.get(row?.inventoryItem?.id) : null
-            Location binLocation = row?.binLocation?.id ? Location.get(row?.binLocation?.id) : null
+            Product product = Product.get(identifierOf(row?.product))
+            Category category = identifierOf(row?.category) ? Category.get(identifierOf(row?.category)) : null
+            InventoryItem inventoryItem = identifierOf(row?.inventoryItem) ? InventoryItem.get(identifierOf(row?.inventoryItem)) : null
+            Location binLocation = identifierOf(row?.binLocation) ? Location.get(identifierOf(row?.binLocation)) : null
 
             def latestInventoryDate = product?.latestInventoryDate(location.id) ?: product?.earliestReceivingDate(location.id)
             [

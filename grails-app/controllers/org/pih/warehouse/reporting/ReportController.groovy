@@ -16,6 +16,7 @@ import grails.plugins.quartz.GrailsJobClassConstants
 import org.apache.commons.lang.StringEscapeUtils
 import org.pih.warehouse.api.StockMovement
 import org.pih.warehouse.api.StockMovementItem
+import org.hibernate.proxy.HibernateProxy
 import org.pih.warehouse.auth.AuthService
 import org.pih.warehouse.core.Constants
 import org.pih.warehouse.core.Location
@@ -624,6 +625,15 @@ class ReportController {
         render(view: "/common/react")
     }
 
+    private static Serializable identifierOf(Object entity) {
+        if (entity == null) {
+            return null
+        }
+        return entity instanceof HibernateProxy
+                ? ((HibernateProxy) entity).hibernateLazyInitializer.identifier
+                : entity.id
+    }
+
     def showCycleCountReport() {
         if (!params.print) {
             render(view: "/common/react", params: params)
@@ -636,10 +646,10 @@ class ReportController {
         List rows = binLocations.collect { row ->
             // Required in order to avoid lazy initialization exception that occurs because all
             // of the querying / session work that was done above was executed in worker threads
-            Product product = Product.get(row?.product?.id)
-            Category category = row?.category?.id ? Category.get(row?.category?.id) : null
-            InventoryItem inventoryItem = row?.inventoryItem?.id ? InventoryItem.get(row?.inventoryItem?.id) : null
-            Location binLocation = row?.binLocation?.id ? Location.get(row?.binLocation?.id) : null
+            Product product = Product.get(identifierOf(row?.product))
+            Category category = identifierOf(row?.category) ? Category.get(identifierOf(row?.category)) : null
+            InventoryItem inventoryItem = identifierOf(row?.inventoryItem) ? InventoryItem.get(identifierOf(row?.inventoryItem)) : null
+            Location binLocation = identifierOf(row?.binLocation) ? Location.get(identifierOf(row?.binLocation)) : null
 
             def latestInventoryDate = product?.latestInventoryDate(location.id) ?: product?.earliestReceivingDate(location.id)
             Map dataRow = params.print ? [
