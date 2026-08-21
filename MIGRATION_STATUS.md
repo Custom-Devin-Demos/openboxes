@@ -131,7 +131,7 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | 2-requisitions-2 | requisitions-2 batch | MERGED | [bc704178](https://app.devin.ai/sessions/bc704178b05d48cd9caf35b449b4bd67) | [#33](https://github.com/Custom-Devin-Demos/openboxes/pull/33) | 6 requisition screens (list/editHeader/review/pick/printDraft/process); post-rebase snapshots 122/122, Playwright 10/10, CI 4/4 |
 | 2-shipments-2 | shipments-2 batch | IN_PROGRESS | [fc279a04](https://app.devin.ai/sessions/fc279a04d2dd4c608c378f9fa6224f02) | | |
 | 2-stock-card-2 | stock-card-2 batch | MERGED | [eaf21e00](https://app.devin.ai/sessions/eaf21e0024bb481abde71dd75ddea3ba) | [#29](https://github.com/Custom-Devin-Demos/openboxes/pull/29) | transaction log + 4 inventoryLevel screens; snapshots 122/122, Playwright 10/10, CI 4/4 |
-| 2-users-security-2 | users-security-2 batch | REBASING | [c7adc1fd](https://app.devin.ai/sessions/c7adc1fd5a45445ab4a0a35e3ff7b6a9) | [#35](https://github.com/Custom-Devin-Demos/openboxes/pull/35) | 5 role/user screens; snapshots 122/122, Playwright 10/10; conflicts after sibling merges — rebase requested; full CI must run post-push |
+| 2-users-security-2 | users-security-2 batch | MERGED | [c7adc1fd](https://app.devin.ai/sessions/c7adc1fd5a45445ab4a0a35e3ff7b6a9) | [#35](https://github.com/Custom-Devin-Demos/openboxes/pull/35) | 5 role/user screens; post-rebase snapshots 122/122, Playwright 10/10, CI 4/4 |
 - 2026-08-20: Phase 2 wave 3 spawned (10 batches). #25 finishing final rebase; P1.3 Grails 4->5 in progress.
 - 2026-08-20: PR #25 (finance-config-3) merged. PHASE 2 WAVE 2 COMPLETE (10/10 batches merged). Wave 3 running; P1.3 Grails 4->5 in progress.
 - 2026-08-20: PRs #29 (stock-card-2) and #32 (inventory-3) merged (authoritatively confirmed). PRs #27/#28/#30 conflict after those merges; rebases requested.
@@ -143,3 +143,4 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 - 2026-08-20: PR #34 (orders-2) merged after rebase (authoritatively confirmed, CI 4/4). Root cause of missing CI checks: GitHub skips pull_request runs on unmergeable PRs.
 - 2026-08-20: PR #35 (users-security-2) open; conflicts after sibling merges (#27/#28/#30/#34); rebase requested.
 - 2026-08-20: PR #33 (requisitions-2) merged (authoritatively confirmed, CI 4/4, post-rebase 122/122 + 10/10). PR #35 re-conflicted on localizations-list.json; final rebase requested.
+- 2026-08-20: PR #35 (users-security-2) merged after final rebase incl. #33 (authoritatively confirmed, CI 4/4, post-rebase 122/122). Wave 3: 8/10 merged; locations-orgs-3 and shipments-2 remaining.
