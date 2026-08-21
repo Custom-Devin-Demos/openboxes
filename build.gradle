@@ -163,6 +163,8 @@ bootRun {
 
 task copyGitPropertiesForBootRun(type: Copy) {
     dependsOn 'generateGitProperties'
+    // git.properties lands in build/resources/main, an output of processResources
+    mustRunAfter 'processResources'
     from "${buildDir}/resources/main/git.properties"
     into "${buildDir}/bootRunGitProperties"
 }
