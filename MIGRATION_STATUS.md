@@ -89,3 +89,19 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 - 2026-08-20: shipments-1 merged (PR #13). Pre-existing defect noted: deleteShipment 500s on FK constraints for shipments with events (legacy parity).
 - 2026-08-20: stock-card-1 merged (PR #15). product-catalog-1 (#11) still pending final rebase/CI.
 - 2026-08-20: product-catalog-1 merged (PR #11) after third rebase; CI 4/4 green. Wave 1 of Phase 2 fully merged (9 batches). P1.2 Grails 4 child still in progress.
+
+## Phase 2 — Wave 2 (spawned 2026-08-20)
+
+| Batch | Scope | Status | Session | PR | Evidence |
+|---|---|---|---|---|---|
+| 2-finance-config-2 | finance-config-2 batch | IN_PROGRESS | [232ad85c](https://app.devin.ai/sessions/232ad85cf6d544f6bb868eb7f1b2a681) | | |
+| 2-finance-config-3 | finance-config-3 batch | IN_PROGRESS | [99e5aab4](https://app.devin.ai/sessions/99e5aab429d946a0ac15a681fb92b18e) | | |
+| 2-inventory-2 | inventory-2 batch | IN_PROGRESS | [5a57cc18](https://app.devin.ai/sessions/5a57cc18fc5949c9a4b5609b1ba11c20) | | |
+| 2-locations-orgs-2 | locations-orgs-2 batch | IN_PROGRESS | [48532479](https://app.devin.ai/sessions/48532479e78c4e79a20e038236265cfe) | | |
+| 2-locations-orgs-4 | locations-orgs-4 batch | IN_PROGRESS | [2f9179a2](https://app.devin.ai/sessions/2f9179a295ba4de785167901fcb932cd) | | |
+| 2-locations-orgs-6 | locations-orgs-6 batch | IN_PROGRESS | [705b3922](https://app.devin.ai/sessions/705b3922edf74221b462c43b7869e175) | | |
+| 2-product-catalog-2 | product-catalog-2 batch | IN_PROGRESS | [41cafdc5](https://app.devin.ai/sessions/41cafdc5c6b04a6d84f833293e6c8bfc) | | |
+| 2-product-catalog-4 | product-catalog-4 batch | IN_PROGRESS | [4c343f82](https://app.devin.ai/sessions/4c343f82d52b48f5baffb49f8685c2cd) | | |
+| 2-users-security-1 | users-security-1 batch | IN_PROGRESS | [d9178c80](https://app.devin.ai/sessions/d9178c80e0fd49c8a30dd73299d9a7f9) | | |
+| 2-invoicing | invoicing batch | IN_PROGRESS | [11c5c78a](https://app.devin.ai/sessions/11c5c78a6b534ffe928ef5f028d189cf) | | |
+- 2026-08-20: Phase 2 wave 2 spawned (10 batches). P1.2 (#12) asked to rebase onto latest develop before merge.
