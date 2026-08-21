@@ -88,6 +88,16 @@ const AsyncInvoiceList = Loadable({
   loading: Loading,
 });
 
+const AsyncInvoiceShow = Loadable({
+  loader: () => import('components/invoice/show/InvoiceShowPage'),
+  loading: Loading,
+});
+
+const AsyncInvoiceAddDocument = Loadable({
+  loader: () => import('components/invoice/show/InvoiceAddDocumentPage'),
+  loading: Loading,
+});
+
 const AsyncStockTransfer = Loadable({
   loader: () => import('components/stock-transfer/StockTransferWizard'),
   loading: Loading,
@@ -571,6 +581,9 @@ const Router = () => {
             <MainLayoutRoute path="**/stocklistManagement/index/:productId?" component={AsyncManagement} />
             <MainLayoutRoute path="**/invoice/create/:invoiceId?" component={AsyncInvoice} />
             <MainLayoutRoute path="**/invoice/list" component={AsyncInvoiceList} />
+            <MainLayoutRoute path="**/invoice/show/:id" component={AsyncInvoiceShow} />
+            <MainLayoutRoute path="**/invoice/addDocument/:id" component={AsyncInvoiceAddDocument} />
+            <MainLayoutRoute path="**/invoice/editDocument/:id" component={AsyncInvoiceAddDocument} />
             <MainLayoutRoute path="**/stockTransfer/create/:stockTransferId?" component={AsyncStockTransfer} />
             <MainLayoutRoute path="**/stockTransfer/createOutboundReturn/:outboundReturnId?" component={AsyncOutboundReturns} />
             <MainLayoutRoute path="**/stockTransfer/createInboundReturn/:inboundReturnId?" component={AsyncInboundReturns} />

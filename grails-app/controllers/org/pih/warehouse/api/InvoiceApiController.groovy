@@ -13,6 +13,8 @@ import grails.converters.JSON
 import grails.validation.ValidationException
 import org.apache.commons.csv.CSVPrinter
 import org.grails.web.json.JSONObject
+import org.pih.warehouse.core.Document
+import org.pih.warehouse.core.DocumentType
 import org.pih.warehouse.core.Location
 import org.pih.warehouse.core.Organization
 import org.pih.warehouse.invoice.Invoice
@@ -29,6 +31,7 @@ class InvoiceApiController {
     InvoiceIdentifierService invoiceIdentifierService
     def invoiceDataService
     def invoiceService
+    def documentService
 
     def list() {
         Location location = Location.get(session.warehouse.id)
@@ -97,6 +100,107 @@ class InvoiceApiController {
         }
 
         render([data: existingInvoice?.toJson()] as JSON)
+    }
+
+    def showDetails() {
+        Invoice invoice = Invoice.get(params.id)
+        if (!invoice) {
+            throw new IllegalArgumentException("No Invoice found for invoice ID ${params.id}")
+        }
+
+        String defaultCurrencyCode = grailsApplication.config.openboxes.locale.defaultCurrencyCode
+        render([data: [
+                id                  : invoice.id,
+                invoiceNumber       : invoice.invoiceNumber,
+                vendorInvoiceNumber : invoice.vendorInvoiceNumber?.identifier,
+                vendorName          : invoice.party?.displayName,
+                partyFromName       : invoice.partyFrom?.displayName,
+                createdByName       : invoice.createdBy?.name,
+                updatedByName       : invoice.updatedBy?.name,
+                dateCreated         : invoice.dateCreated?.format("dd/MMM/yyyy"),
+                lastUpdated         : invoice.lastUpdated?.format("dd/MMM/yyyy"),
+                dateInvoiced        : invoice.dateInvoiced?.format("dd/MMM/yyyy"),
+                datePosted          : invoice.datePosted?.format("dd/MMM/yyyy"),
+                isPosted            : invoice.datePosted != null,
+                currencyName        : invoice.currencyUom?.name,
+                currencyCode        : invoice.currencyUom?.code,
+                invoiceTypeName     : invoice.invoiceType?.name,
+                totalValue          : invoice.totalValue,
+                totalValueNormalized: invoice.totalValueNormalized,
+                defaultCurrencyCode : defaultCurrencyCode,
+                status              : invoice.status?.name(),
+                statusLabel         : "${g.message(code: 'enum.InvoiceStatus.' + invoice.status?.name(), default: invoice.status?.name())}",
+                orders              : invoice.orders?.collect { [id: it.id, orderNumber: it.orderNumber] } ?: [],
+                shipments           : invoice.shipments?.collect { [id: it.id, shipmentNumber: it.shipmentNumber] } ?: [],
+                items               : invoice.getSortedInvoiceItems()?.collect { InvoiceItem invoiceItem ->
+                    [
+                            id             : invoiceItem.id,
+                            productCode    : invoiceItem.product?.productCode,
+                            description    : invoiceItem.orderAdjustment ? invoiceItem.description : invoiceItem.product?.name,
+                            isAdjustment   : invoiceItem.orderAdjustment != null,
+                            orderNumber    : invoiceItem.order?.orderNumber,
+                            glAccountCode  : invoiceItem.glAccount?.code,
+                            budgetCodeCode : invoiceItem.budgetCode?.code,
+                            quantity       : invoiceItem.quantity,
+                            quantityPerUom : invoiceItem.quantityPerUom,
+                            unitPrice      : invoiceItem.unitPrice,
+                            amount         : invoiceItem.amount,
+                    ]
+                } ?: [],
+                documents           : invoice.documents?.collect { documentToJson(it) } ?: [],
+                orderDocuments      : invoice.orderDocuments?.collect { [
+                        id              : it.id,
+                        name            : it.name,
+                        filename        : it.filename,
+                        fileUri         : it.fileUri,
+                        documentTypeName: it.documentType?.name,
+                        size            : it.size,
+                        lastUpdated     : it.lastUpdated?.toString(),
+                ] } ?: [],
+        ]] as JSON)
+    }
+
+    def documentFormData() {
+        Invoice invoice = Invoice.get(params.id)
+        if (!invoice) {
+            throw new IllegalArgumentException("No Invoice found for invoice ID ${params.id}")
+        }
+
+        List<DocumentType> documentTypes = documentService.getNonTemplateDocumentTypes()
+        Document document = params.documentId ? Document.get(params.documentId) : null
+
+        render([data: [
+                id                 : invoice.id,
+                invoiceNumber      : invoice.invoiceNumber,
+                isPosted           : invoice.datePosted != null,
+                vendorName         : invoice.party?.displayName,
+                vendorInvoiceNumber: invoice.vendorInvoiceNumber?.identifier,
+                status             : invoice.status?.name(),
+                statusLabel        : "${g.message(code: 'enum.InvoiceStatus.' + invoice.status?.name(), default: invoice.status?.name())}",
+                documentTypes      : documentTypes.collect { DocumentType documentType ->
+                    [id: documentType.id, name: documentType.name]
+                },
+                document           : document ? [
+                        id            : document.id,
+                        name          : document.name,
+                        documentNumber: document.documentNumber,
+                        documentTypeId: document.documentType?.id,
+                        filename      : document.filename,
+                        fileUri       : document.fileUri,
+                ] : null,
+        ]] as JSON)
+    }
+
+    Map documentToJson(Document document) {
+        return [
+                id              : document.id,
+                name            : document.name,
+                filename        : document.filename,
+                fileUri         : document.fileUri,
+                documentTypeName: document.documentType?.name,
+                size            : document.size,
+                lastUpdated     : document.lastUpdated?.toString(),
+        ]
     }
 
     def statusOptions() {

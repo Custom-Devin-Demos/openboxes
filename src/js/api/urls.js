@@ -74,6 +74,8 @@ export const INVOICE_SUBMIT = (id) => `${INVOICE_BY_ID(id)}/submit`;
 export const INVOICE_ORDERS = (id) => `${INVOICE_BY_ID(id)}/orders`;
 export const INVOICE_SHIPMENTS = (id) => `${INVOICE_BY_ID(id)}/shipments`;
 export const REMOVE_INVOICE_ITEM = (id) => `${INVOICE_API}/${id}/removeItem`;
+export const INVOICE_DETAILS = (id) => `${INVOICE_BY_ID(id)}/details`;
+export const INVOICE_DOCUMENT_FORM_DATA = (id) => `${INVOICE_BY_ID(id)}/documentFormData`;
 
 // INVOICE ITEM
 export const INVOICE_ITEM_API = `${API}/invoiceItems`;
