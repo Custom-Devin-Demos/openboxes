@@ -1,0 +1,268 @@
+/*
+ * Styles for the pre-authentication React screens (login, signup, choose location).
+ * Rules are copied from the legacy stylesheet (src/main/webapp/css/openboxes.css)
+ * and the inline styles of the legacy GSP pages to preserve their look.
+ */
+
+.auth-page {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+
+  .body {
+    max-width: 500px;
+    margin: 40px auto;
+  }
+
+  .message {
+    background: #f3f8fc;
+    border: 1px solid #b2d1ff;
+    color: #006dba;
+    margin: 5px 0 5px 0;
+    padding: 5px 5px 5px 30px;
+  }
+
+  div.errors {
+    background: #fff3f3;
+    border: 1px solid red;
+    color: #cc0000;
+    margin: 10px 0 5px 0;
+    padding: 5px 0 5px 0;
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      line-height: 16px;
+      padding-left: 30px;
+    }
+  }
+
+  .box {
+    border: 1px solid lightgrey;
+    margin: 5px;
+    background-color: #fcfcfc;
+    padding: 10px;
+    border-radius: 3px;
+  }
+
+  .button {
+    border-radius: 5px;
+    padding: 2px;
+    margin: 5px;
+    border: 1px solid #aaa;
+    cursor: pointer;
+  }
+
+  .required {
+    color: red;
+  }
+
+  table {
+    width: 100%;
+  }
+}
+
+#loginContainer {
+  input,
+  button {
+    width: 100%;
+    font-size: 2em;
+    text-align: center;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+}
+
+#signupForm {
+  input,
+  select,
+  textarea {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  td.name {
+    white-space: nowrap;
+    padding-right: 8px;
+  }
+}
+
+.choose-location-page {
+  .h-100 {
+    min-height: 100vh;
+  }
+
+  .location-chooser {
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    border: none;
+    border-radius: 4px;
+    padding: 24px;
+
+    .tabs {
+      background-color: white;
+      padding: 0;
+      display: flex;
+      flex-direction: row;
+      gap: 24px;
+
+      > .ui-tabs-nav {
+        all: unset;
+        display: block;
+        list-style: none;
+        background-color: var(--blue-201);
+        padding: 0;
+        min-width: 150px;
+        max-width: 250px;
+        overflow-y: auto;
+        height: 500px;
+
+        > .organization-tab {
+          display: block;
+          background: transparent;
+          border-radius: 0;
+          border: none;
+          margin: 0;
+          padding: 4px 8px;
+          font-size: 14px;
+          cursor: pointer;
+          color: var(--blue-800);
+          box-shadow: inset 0 0 0 0 var(--blue-primary);
+          transition: box-shadow ease-in-out 0.2s;
+
+          a {
+            color: inherit;
+            white-space: break-spaces;
+            word-break: break-word;
+            text-decoration: none;
+            display: block;
+          }
+
+          &.ui-tabs-selected,
+          &:hover {
+            background-color: white;
+          }
+
+          &.ui-tabs-selected {
+            box-shadow: inset 4px 0 0 0 var(--blue-primary);
+          }
+        }
+      }
+
+      > .ui-tabs-panel {
+        all: unset;
+        display: block;
+        flex-grow: 1;
+        overflow: auto;
+        height: 500px;
+      }
+
+      .location-group {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
+
+        .heading {
+          color: var(--blue-700);
+          font-weight: 600;
+          font-size: 14px;
+          width: 100%;
+        }
+
+        .element {
+          background-color: var(--blue-201);
+          color: var(--blue-700);
+          border-radius: 4px;
+          border: 1px solid var(--location-color, var(--blue-200));
+          font-size: 14px;
+          padding: 6px 8px;
+          text-decoration: none;
+          margin: 0;
+          display: flex;
+          word-break: break-all;
+          text-align: start;
+
+          i {
+            color: var(--location-color, var(--blue-700));
+            margin-right: 4px;
+          }
+
+          &:hover {
+            background-color: var(--location-color, var(--blue-700));
+            border: 1px solid var(--location-color, var(--blue-700));
+            color: var(--blue-200);
+
+            i {
+              color: var(--blue-200);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .location-chooser__login {
+    width: clamp(670px, 70vw, 1000px);
+    background: white;
+
+    .location-chooser__header {
+      margin-bottom: 24px;
+
+      h2 {
+        all: unset;
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 32px;
+        color: var(--blue-800);
+      }
+    }
+
+    .location-chooser__footer {
+      margin-top: 24px;
+    }
+
+    .location-chooser__footer__last-signin {
+      color: var(--gray-600);
+      gap: 3px;
+    }
+
+    .location-chooser__footer__logout-user {
+      color: var(--gray-600);
+    }
+
+    .location-chooser__footer__logout-btn {
+      background: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 8px;
+      gap: 8px;
+      color: var(--blue-primary);
+      border: 1px solid var(--blue-primary);
+      border-radius: 4px;
+      text-decoration: none;
+      outline-style: outset;
+      outline-width: 0;
+      outline-color: rgba(1, 178, 237, 0.37);
+      transition: outline-width ease-in-out 0.2s;
+
+      &:active {
+        outline-width: 4px;
+      }
+
+      &:hover {
+        background: var(--blue-primary);
+        color: white;
+      }
+    }
+  }
+
+  .error.center {
+    color: #cc0000;
+    text-align: center;
+    padding: 24px;
+  }
+}

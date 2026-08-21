@@ -17,8 +17,16 @@ const TRANSLATION_PREFIXES = ['default', 'dashboard', 'combinedShipments', 'prod
 // TODO: Refactor fetching menu config
 // TODO: Refactor fetching localizations (react-localize-redux)
 
+// Pre-authentication screens (or screens shown before a location is chosen) cannot
+// use the session-dependent app context, so session bootstrapping is skipped there.
+// These screens fetch their own server-localized context from dedicated endpoints.
+const PRE_SESSION_ROUTES = /\/(auth\/(login|handleLogin|signup|handleSignup)|dashboard\/chooseLocation)\/?$/;
+
 class MainRouter extends React.Component {
   componentDidMount() {
+    if (PRE_SESSION_ROUTES.test(window.location.pathname)) {
+      return;
+    }
     this.props.fetchSessionInfo().then(() => {
       this.props.initialize({
         languages: this.props.supportedLocales,

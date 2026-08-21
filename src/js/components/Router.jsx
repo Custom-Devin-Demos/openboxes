@@ -14,6 +14,9 @@ import {
   getSpinner,
 } from 'selectors';
 
+import LoginPage from 'components/auth/LoginPage';
+import SignupPage from 'components/auth/SignupPage';
+import ChooseLocationPage from 'components/dashboard/ChooseLocationPage';
 import CustomAlert from 'components/dashboard/CustomAlert';
 import MainLayoutRoute from 'components/Layout/v2/MainLayoutRoute';
 import Loading from 'components/Loading';
@@ -1623,6 +1626,11 @@ const Router = () => {
             <MainLayoutRoute path="**/user/show/:id" component={AsyncUserShow} />
             <MainLayoutRoute path="**/user/edit/:id" component={AsyncUserEditForm} />
             <MainLayoutRoute path="**/user/cropPhoto/:id" component={AsyncUserCropPhoto} />
+            <Route path="**/auth/login" component={LoginPage} />
+            <Route path="**/auth/handleLogin" component={LoginPage} />
+            <Route path="**/auth/signup" component={SignupPage} />
+            <Route path="**/auth/handleSignup" component={SignupPage} />
+            <Route path="**/dashboard/chooseLocation" component={ChooseLocationPage} />
             <MainLayoutRoute path="**/dashboard/:configId?" component={Dashboard} />
             <MainLayoutRoute path="**/" component={Dashboard} />
           </Switch>

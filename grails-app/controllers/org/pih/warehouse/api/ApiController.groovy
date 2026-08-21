@@ -79,6 +79,69 @@ class ApiController {
         ] as JSON)
     }
 
+    private String label(String code, List args = null, String defaultMessage = null) {
+        Locale currentLocale = localizationService.getCurrentLocale()
+        return messageSource.getMessage(code, args as Object[], defaultMessage ?: code, currentLocale)
+    }
+
+    def loginContext() {
+        render([
+            data: [
+                labels: [
+                    title      : label("auth.title"),
+                    login      : label("default.login.label", null, "Login"),
+                    loginButton: label("auth.login.label"),
+                    username   : label("login.username.label"),
+                    password   : label("login.password.label"),
+                    newUserText: label("auth.newuser.text"),
+                    signup     : label("auth.signup.label", null, "Signup"),
+                ],
+            ],
+        ] as JSON)
+    }
+
+    def signupContext() {
+        Locale currentLocale = localizationService.getCurrentLocale()
+        def locales = grailsApplication.config.openboxes.locale.supportedLocales
+        def defaultLocale = new Locale(grailsApplication.config.openboxes.locale.defaultLocale ?: "en")
+        def supportedLocales = locales.collect {
+            def defaultName = LocalizationUtil.getLocale(it)?.getDisplayName(currentLocale ?: defaultLocale)
+            def name = label("locale.${it}.label", null, defaultName)
+            [code: it, name: name]
+        }
+        def additionalQuestionsConfig = grailsApplication.config.openboxes.signup.additionalQuestions
+        List additionalQuestions = additionalQuestionsConfig.enabled ? additionalQuestionsConfig.content.collect { question ->
+            [
+                id     : question.id,
+                label  : question.label,
+                options: question.options ? question.options.collect { [key: it.key, value: it.value] } : null,
+            ]
+        } : []
+        render([
+            data: [
+                labels             : [
+                    title              : label("auth.signup.label"),
+                    firstName          : label("user.firstName.label", null, "First Name"),
+                    lastName           : label("user.lastName.label", null, "Last Name"),
+                    email              : label("user.email.label", null, "Email"),
+                    password           : label("user.password.label", null, "Password"),
+                    passwordConfirm    : label("user.confirmPassword.label", null, "Confirm Password"),
+                    locale             : label("default.locale.label"),
+                    timezone           : label("default.timezone.label", null, "Timezone"),
+                    comments           : label("default.comments.label", null, "Comments"),
+                    signupButton       : label("auth.signup.label"),
+                    alreadyHaveAccount : label("auth.alreadyHaveAccount.text"),
+                    login              : label("auth.login.label", null, "Login"),
+                ],
+                recaptchaEnabled   : grailsApplication.config.openboxes.signup.recaptcha.enabled ?: false,
+                recaptchaSiteKey   : grailsApplication.config.openboxes.signup.recaptcha.v2.siteKey ?: null,
+                additionalQuestions: additionalQuestions,
+                supportedLocales   : supportedLocales,
+                timezones          : TimeZone.getAvailableIDs() as List,
+            ],
+        ] as JSON)
+    }
+
     def getMenuConfig() {
         Location location = Location.get(session.warehouse?.id)
 
