@@ -33,8 +33,8 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 |---|------|--------|---------|----|-------|
 | 1.1 | Java 8→11 + dependency cleanup | MERGED | [c54a01cd](https://app.devin.ai/sessions/c54a01cdcc264e168324562d8958adeb) | [#7](https://github.com/Custom-Devin-Demos/openboxes/pull/7) | Snapshots 122/122, Playwright 10/10 on JDK 11, CI green |
 | 1.2 | Grails 3→4 | MERGED | [e4c1b67a](https://app.devin.ai/sessions/e4c1b67a72bb47aa90fc41799a4e7271) | [#12](https://github.com/Custom-Devin-Demos/openboxes/pull/12) | Grails 4.1.4/Gradle 6.9.4/GORM 7.0.7; snapshots 120-121/122 (known artifacts), Playwright 10/10, CI green after rebase |
-| 1.3 | Grails 4→5 | PENDING | | | Blocked by 1.2 |
-| 1.4 | Grails 5→6 / Java 21 / javax→jakarta | PENDING | | | Blocked by 1.3 |
+| 1.3 | Grails 4→5 | MERGED | [7d1a20b8](https://app.devin.ai/sessions/7d1a20b8bc00418ebf43153dbe5b3e57) | [#31](https://github.com/Custom-Devin-Demos/openboxes/pull/31) | Grails 5.3.6/Gradle 7.6.4/Groovy 3.0.11/GORM 7.3.1/Boot 2.7.9/Java 11; full verification: assemble, bootRun+login, Liquibase clean+seeded, Quartz, unit 1430/0, snapshots 122/122, Playwright 10/10, CI 4/4 |
+| 1.4 | Grails 5→6 / Java 21 / javax→jakarta | IN_PROGRESS | [06d3d9e7](https://app.devin.ai/sessions/06d3d9e7f6da44399929a4ce3b0fa265) | | Spawned after 1.3 acceptance |
 | 1.5 | Re-verify Quartz jobs, Liquibase, mail/reporting integrations | PENDING | | | Blocked by 1.4 |
 
 ## Phase 2 — UI: GSP → React (parallel module waves; can start after Phase 0)
@@ -163,3 +163,4 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | 2-stocklists-1 | stocklists-1 batch | IN_PROGRESS | [4c56a395](https://app.devin.ai/sessions/4c56a395ee15486595dea4441e32315c) | | |
 | 2-users-security-3 | users-security-3 batch | IN_PROGRESS | [4ec20085](https://app.devin.ai/sessions/4ec2008545fe4f3d938f00b940906626) | | |
 - 2026-08-20: Phase 2 wave 4 spawned (10 batches). Remaining after wave 4: 19 batches (admin-config-4, dashboard-auth, errors-misc, mobile-1/2, picking, print-documents-2, product-catalog-6/7/8, receiving, reporting-2/3/4, shipment-workflow, shipments-4, stock-movements, stock-transfers, stocklists-2).
+- 2026-08-20: PR #31 (P1.3 Grails 4→5) MERGED (authoritatively confirmed; rebased onto wave-3-complete develop; CI 4/4; full verification incl. Liquibase clean+seeded, Quartz, 122/122, 10/10). PHASE 1.3 ACCEPTED. P1.4 (Grails 5→6 / Java 21 / jakarta) child spawned (06d3d9e7).
