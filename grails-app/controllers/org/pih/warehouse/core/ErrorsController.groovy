@@ -51,7 +51,7 @@ class ErrorsController {
                 return
             }
 
-            render(view: "/error")
+            renderReactErrorPage(generalErrorPayload())
         }
     }
 
@@ -68,7 +68,11 @@ class ErrorsController {
             }
             render([errorCode: 404, errorMessage: errorMessage] as JSON)
         } else {
-            render(view: "/errors/notFound")
+            renderReactErrorPage([
+                    page            : "notFound",
+                    id              : params.id,
+                    exceptionMessage: request?.exception?.message,
+            ])
         }
     }
 
@@ -88,7 +92,7 @@ class ErrorsController {
             response.status = 403
             render([errorCode: 403, errorMessage: "Access denied"] as JSON)
         } else {
-            render(view: "/errors/accessDenied")
+            renderReactErrorPage([page: "accessDenied"])
         }
     }
 
@@ -97,7 +101,15 @@ class ErrorsController {
         if (RequestUtil.isAjax(request)) {
             render([errorCode: 500, errorMessage: "Illegal data access"] as JSON)
         } else {
-            render(view: "/errors/dataAccess")
+            Throwable exception = (Throwable) (request.getAttribute("exception") ?: request.getAttribute("javax.servlet.error.exception"))
+            renderReactErrorPage([
+                    page       : "dataAccess",
+                    statusCode : request.getAttribute("javax.servlet.error.status_code"),
+                    errorMessage: request.getAttribute("javax.servlet.error.message"),
+                    servletName: request.getAttribute("javax.servlet.error.servlet_name"),
+                    requestUri : request.getAttribute("javax.servlet.error.request_uri"),
+                    exception  : exceptionDetails(exception),
+            ])
         }
     }
 
@@ -106,7 +118,7 @@ class ErrorsController {
             render([errorCode: 405, errorMessage: "Method not allowed"] as JSON)
             return
         }
-        render(view: "/errors/methodNotAllowed")
+        renderReactErrorPage([page: "methodNotAllowed"])
     }
 
     def handleValidationErrors() {
@@ -124,7 +136,7 @@ class ErrorsController {
             ] as JSON)
             return
         }
-        render(view: "/error")
+        renderReactErrorPage(generalErrorPayload())
     }
 
     def handleConstraintViolation() {
@@ -143,7 +155,65 @@ class ErrorsController {
             render([errorCode: 500, errorMessage: root.getMessage()])
         }
 
-        render(view: '/error')
+        renderReactErrorPage(generalErrorPayload())
+    }
+
+    /**
+     * Renders the React SPA host page with an error payload exposed to the
+     * frontend through the errorPageBase64 request attribute (see
+     * src/assets/grails-template.html). The response status set by the
+     * servlet error dispatch is left untouched.
+     */
+    private void renderReactErrorPage(Map payload) {
+        payload.flashMessage = flash.message
+        String json = (payload as JSON).toString()
+        request.setAttribute("errorPageBase64", json.getBytes("UTF-8").encodeBase64().toString())
+        render(view: "/common/react")
+    }
+
+    private Map generalErrorPayload() {
+        Throwable exception = (Throwable) (request.getAttribute("exception") ?: request.getAttribute("javax.servlet.error.exception"))
+        String targetUri = (request.forwardURI - request.contextPath) + (request.queryString ? "?" : "") + (request.queryString ?: "")
+        List recipients = ConfigHelper.listValue(grailsApplication.config.openboxes.mail.errors.recipients)
+        return [
+                page         : "error",
+                statusCode   : request.getAttribute("javax.servlet.error.status_code"),
+                errorMessage : request.getAttribute("javax.servlet.error.message"),
+                path         : targetUri,
+                exception    : exceptionDetails(exception),
+                bugReport    : [
+                        enabled   : ConfigHelper.booleanValue(grailsApplication.config.openboxes.mail.errors.enabled),
+                        recipients: recipients,
+                        mailFrom  : grailsApplication.config.grails.mail.from ?: null,
+                        user      : session?.user ? [
+                                username: session.user.username,
+                                name    : session.user.name,
+                                email   : session.user.email,
+                        ] : null,
+                ],
+        ]
+    }
+
+    private static Map exceptionDetails(Throwable exception) {
+        if (!exception) {
+            return null
+        }
+        Map details = [
+                message     : exception.message,
+                causeMessage: exception.cause?.message,
+                className   : exception.class.name,
+        ]
+        if (exception instanceof GrailsWrappedRuntimeException) {
+            details.className = exception.className
+            details.lineNumber = exception.lineNumber
+            details.codeSnippet = exception.codeSnippet as List
+            details.stackTraceLines = exception.stackTraceLines as List
+        } else {
+            StringWriter stringWriter = new StringWriter()
+            exception.printStackTrace(new PrintWriter(stringWriter))
+            details.stackTraceLines = stringWriter.toString().readLines()
+        }
+        return details
     }
 
     def sendFeedback() {

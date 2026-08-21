@@ -95,6 +95,8 @@ module.exports = {
           cssSource: `\${resource(dir: '${path.basename(WEBPACK_OUTPUT)}', file: 'bundle.${compilation.hash}.css')}`,
           // eslint-disable-next-line no-template-curly-in-string
           pageContext: '\${raw(reactPageContext ?: "null")}',
+          // eslint-disable-next-line no-template-curly-in-string,no-useless-escape
+          errorPageB64: "\${request.getAttribute('errorPageBase64') ?: ''}",
           receivingIfStatement: '',
         }),
       }),
@@ -118,6 +120,7 @@ module.exports = {
           cssSource: `\${resource(dir: '${path.basename(WEBPACK_OUTPUT)}', file: 'bundle.${compilation.hash}.css')}`,
           // eslint-disable-next-line no-template-curly-in-string
           pageContext: '\${raw(reactPageContext ?: "null")}',
+          errorPageB64: '',
           receivingIfStatement:
           // eslint-disable-next-line no-template-curly-in-string
           '<g:if test="${!params.id}">' +
