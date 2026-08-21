@@ -72,33 +72,11 @@ class ProductController {
      * Perform a bulk update of
      */
     def batchEdit(BatchEditCommand cmd) {
-        def startTime = System.currentTimeMillis()
-        //	def location = Location.get(session.warehouse.id)
-        def category = Category.get(params.categoryId)
-        def tagIds = params.list("tagId")
-
-        log.info "Batch edit: " + params
-
-        if (category || tagIds)
-            cmd.productInstanceList = productService.getProducts(category, tagIds, params)
-
-        cmd.productInstanceList.eachWithIndex { product, index ->
-            println product.category
-            cmd.categoryInstanceList << product.category
-        }
-        cmd.rootCategory = productService.getRootCategory()
-
-        println "batch edit products: " + (System.currentTimeMillis() - startTime) + " ms"
-
-        [commandInstance: cmd, products: cmd.productInstanceList ?: [], categoryInstance: category]
+        render(view: "/common/react", params: params)
     }
 
     def batchEditProperties() {
-        def startTime = System.currentTimeMillis()
-
-        println "batch edit products: " + (System.currentTimeMillis() - startTime) + " ms"
-
-        [products: product]
+        render(view: "/common/react", params: params)
     }
 
     @Transactional
@@ -153,15 +131,7 @@ class ProductController {
 
 
     def create() {
-        def startTime = System.currentTimeMillis()
-        def productInstance = new Product(params)
-        def rootCategory = productService.getRootCategory()
-        def location = Location.get(session?.warehouse?.id)
-
-        println "Create product: " + (System.currentTimeMillis() - startTime) + " ms"
-
-	render(view: "edit", model: [productInstance : productInstance, rootCategory: rootCategory, locationInstance: location])
-        println "After render create.gsp for product: " + (System.currentTimeMillis() - startTime) + " ms"
+        render(view: "/common/react", params: params)
     }
 
     def save() {
@@ -204,25 +174,7 @@ class ProductController {
 
 
     def edit() {
-
-        def productInstance = Product.get(params.id)
-        def location = Location.get(session?.warehouse?.id)
-        if (!productInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'product.label', default: 'Product'), params.id])}"
-            redirect(controller: "inventory", action: "browse")
-        } else {
-            productInstance.properties = params
-            def inventoryLevelInstance = InventoryLevel.findByProductAndInventory(productInstance, location.inventory)
-            if (!inventoryLevelInstance) {
-                inventoryLevelInstance = new InventoryLevel()
-            }
-			[productInstance: productInstance,
-             locationInstance: location,
-             inventoryInstance: location.inventory,
-             inventoryLevelInstance:inventoryLevelInstance,
-             productAssociationInstance: chainModel?.productAssociationInstance
-            ]
-        }
+        render(view: "/common/react", params: params)
     }
 
     def renderTemplate() {
@@ -615,7 +567,9 @@ class ProductController {
     /**
      * Renders form to begin the import process
      */
-    def importAsCsv() {}
+    def importAsCsv() {
+        render(view: "/common/react", params: params)
+    }
 
     /**
      * Upload CSV file
@@ -1015,22 +969,7 @@ class ProductController {
 
 
     def addDocument() {
-        Product productInstance = Product.get(params.id)
-        Document documentInstance = Document.get(params?.document?.id)
-        List<DocumentType> documentTypes = documentService.getNonTemplateDocumentTypes()
-
-        if (!documentInstance) {
-            documentInstance = new Document()
-        }
-        if (!productInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'product.label', default: 'Product'), params.id])}"
-            redirect(action: "list")
-        }
-        render(view: "addDocument", model: [
-                productInstance: productInstance,
-                documentInstance: documentInstance,
-                documentTypes: documentTypes
-        ])
+        render(view: "/common/react", params: params)
     }
 
     def importProductSynonyms(ImportDataCommand command) {

@@ -422,6 +422,31 @@ const AsyncInventoryLevelPage = Loadable({
   loading: Loading,
 });
 
+const AsyncProductEditPage = Loadable({
+  loader: () => import('components/product-screens/ProductEditPage'),
+  loading: Loading,
+});
+
+const AsyncProductAddDocumentPage = Loadable({
+  loader: () => import('components/product-screens/AddDocumentPage'),
+  loading: Loading,
+});
+
+const AsyncProductImportPage = Loadable({
+  loader: () => import('components/product-screens/ImportProductsPage'),
+  loading: Loading,
+});
+
+const AsyncProductBatchEditPage = Loadable({
+  loader: () => import('components/product-screens/BatchEditPage'),
+  loading: Loading,
+});
+
+const AsyncProductBatchEditPropertiesPage = Loadable({
+  loader: () => import('components/product-screens/BatchEditPropertiesPage'),
+  loading: Loading,
+});
+
 const AsyncRequisitionChooseTemplate = Loadable({
   loader: () => import('components/requisition/ChooseTemplatePage'),
   loading: Loading,
@@ -573,6 +598,12 @@ const Router = () => {
             <MainLayoutRoute path="**/requisition/edit/:requisitionId" component={AsyncRequisitionEdit} />
             <MainLayoutRoute path="**/requisition/confirm/:requisitionId" component={AsyncRequisitionConfirm} />
             <MainLayoutRoute path="**/product/list" component={AsyncProductsList} />
+            <MainLayoutRoute path="**/product/create" component={AsyncProductEditPage} />
+            <MainLayoutRoute path="**/product/edit/:id" component={AsyncProductEditPage} />
+            <MainLayoutRoute path="**/product/addDocument/:id" component={AsyncProductAddDocumentPage} />
+            <MainLayoutRoute path="**/product/importAsCsv" component={AsyncProductImportPage} />
+            <MainLayoutRoute path="**/product/batchEdit" component={AsyncProductBatchEditPage} />
+            <MainLayoutRoute path="**/product/batchEditProperties" component={AsyncProductBatchEditPropertiesPage} />
             <MainLayoutRoute path="**/stockTransfer/list" component={AsyncStockTransferList} />
             <MainLayoutRoute path="**/budgetCode/list" component={AsyncBudgetCodeList} />
             <MainLayoutRoute path="**/budgetCode/create" component={AsyncBudgetCodeForm} />

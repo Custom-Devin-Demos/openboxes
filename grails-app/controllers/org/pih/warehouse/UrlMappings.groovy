@@ -1527,6 +1527,56 @@ class UrlMappings {
         }
 
         /**
+         * Product screen API endpoints (React product edit/create, batch edit,
+         * CSV import and add document screens)
+         */
+
+        "/api/productScreens/editData" {
+            controller = "productScreenApi"
+            action = [GET: "editData"]
+        }
+
+        "/api/productScreens/$id/editData" {
+            controller = "productScreenApi"
+            action = [GET: "editData"]
+        }
+
+        "/api/productScreens/saveDetails" {
+            controller = "productScreenApi"
+            action = [POST: "saveDetails"]
+        }
+
+        "/api/productScreens/batchEdit" {
+            controller = "productScreenApi"
+            action = [GET: "batchEditData", POST: "batchSave"]
+        }
+
+        "/api/productScreens/importUpload" {
+            controller = "productScreenApi"
+            action = [POST: "importUpload"]
+        }
+
+        "/api/productScreens/importConfirm" {
+            controller = "productScreenApi"
+            action = [POST: "importConfirm"]
+        }
+
+        "/api/productScreens/$id/addDocumentContext" {
+            controller = "productScreenApi"
+            action = [GET: "addDocumentContext"]
+        }
+
+        "/api/productScreens/$id/documents" {
+            controller = "productScreenApi"
+            action = [POST: "uploadDocument"]
+        }
+
+        "/api/productScreens/$id/synonyms" {
+            controller = "productScreenApi"
+            action = [POST: "addSynonym"]
+        }
+
+        /**
          * Inventory API endpoints
          */
 
