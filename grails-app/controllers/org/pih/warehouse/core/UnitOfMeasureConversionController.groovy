@@ -23,9 +23,7 @@ class UnitOfMeasureConversionController {
     }
 
     def create() {
-        UnitOfMeasureConversion unitOfMeasureConversion = new UnitOfMeasureConversion()
-        unitOfMeasureConversion.properties = params
-        return [unitOfMeasureConversion: unitOfMeasureConversion]
+        render(view: "/common/react", params: params)
     }
 
     def edit() {

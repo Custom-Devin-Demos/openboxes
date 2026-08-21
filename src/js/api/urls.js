@@ -381,6 +381,20 @@ export const PARTY_TYPE_API = `${API}/partyTypes`;
 export const PARTY_TYPE_BY_ID = (id) => `${PARTY_TYPE_API}/${id}`;
 export const PARTY_TYPE_CODE_OPTIONS = `${PARTY_TYPE_API}/partyTypeCodeOptions`;
 
+// PRODUCT TYPE
+export const PRODUCT_TYPE_API = `${API}/productTypes`;
+export const PRODUCT_TYPE_BY_ID = (id) => `${PRODUCT_TYPE_API}/${id}`;
+
+// TAG
+export const TAG_API = `${API}/tags`;
+export const TAG_BY_ID = (id) => `${TAG_API}/${id}`;
+export const TAG_ADD_PRODUCTS = (id) => `${TAG_API}/${id}/addProducts`;
+export const TAG_REMOVE_PRODUCTS = (id) => `${TAG_API}/${id}/removeProducts`;
+
+// UNIT OF MEASURE CONVERSION
+export const UNIT_OF_MEASURE_CONVERSION_API = `${API}/unitOfMeasureConversions`;
+export const UNIT_OF_MEASURE_CONVERSION_UOM_OPTIONS = `${UNIT_OF_MEASURE_CONVERSION_API}/unitOfMeasureOptions`;
+
 // GL ACCOUNT
 export const GL_ACCOUNT_API = `${API}/glAccounts`;
 export const GL_ACCOUNT_BY_ID = (id) => `${GL_ACCOUNT_API}/${id}`;

@@ -489,6 +489,29 @@ const PARTY_TYPE_URL = {
   show: (id) => `${PARTY_TYPE_URL.base}/show/${id}`,
 };
 
+const PRODUCT_TYPE_URL = {
+  base: `${CONTEXT_PATH}/productType`,
+  list: () => `${PRODUCT_TYPE_URL.base}/list`,
+  create: () => `${PRODUCT_TYPE_URL.base}/create`,
+  edit: (id) => `${PRODUCT_TYPE_URL.base}/edit/${id}`,
+  show: (id) => `${PRODUCT_TYPE_URL.base}/show/${id}`,
+};
+
+const TAG_URL = {
+  base: `${CONTEXT_PATH}/tag`,
+  list: () => `${TAG_URL.base}/list`,
+  create: () => `${TAG_URL.base}/create`,
+  edit: (id) => `${TAG_URL.base}/edit/${id}`,
+  show: (id) => `${TAG_URL.base}/show/${id}`,
+};
+
+const UNIT_OF_MEASURE_CONVERSION_URL = {
+  base: `${CONTEXT_PATH}/unitOfMeasureConversion`,
+  list: () => `${UNIT_OF_MEASURE_CONVERSION_URL.base}/list`,
+  create: () => `${UNIT_OF_MEASURE_CONVERSION_URL.base}/create`,
+  edit: (id) => `${UNIT_OF_MEASURE_CONVERSION_URL.base}/edit/${id}`,
+};
+
 const PERSON_URL = {
   base: `${CONTEXT_PATH}/person`,
   list: () => `${PERSON_URL.base}/list`,
@@ -683,6 +706,8 @@ export {
   STOCK_TRANSFER_URL,
   STOCKLIST_URL,
   SUPPLIER_URL,
+  TAG_URL,
   TRANSACTION_ENTRY_URL,
+  UNIT_OF_MEASURE_CONVERSION_URL,
   USER_URL,
 };

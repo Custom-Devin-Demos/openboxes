@@ -25,21 +25,11 @@ class TagController {
     }
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-
-        PagedResultList tags = Tag.createCriteria().list(params) {
-            if (params.tag) {
-                ilike("tag", "%${params.tag}%")
-            }
-        } as PagedResultList
-
-        [tagInstanceList: tags, tagInstanceTotal: tags.totalCount]
+        render(view: "/common/react", params: params)
     }
 
     def create() {
-        def tagInstance = new Tag()
-        tagInstance.properties = params
-        return [tagInstance: tagInstance]
+        render(view: "/common/react", params: params)
     }
 
     //  @CacheFlush("selectTagsCache")
@@ -54,23 +44,11 @@ class TagController {
     }
 
     def show() {
-        def tagInstance = Tag.get(params.id)
-        if (!tagInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'tag.label', default: 'Tag'), params.id])}"
-            redirect(action: "list")
-        } else {
-            [tagInstance: tagInstance]
-        }
+        render(view: "/common/react", params: params)
     }
 
     def edit() {
-        def tagInstance = Tag.get(params.id)
-        if (!tagInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'tag.label', default: 'Tag'), params.id])}"
-            redirect(action: "list")
-        } else {
-            return [tagInstance: tagInstance]
-        }
+        render(view: "/common/react", params: params)
     }
 
     //  @CacheFlush("selectTagsCache")

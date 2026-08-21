@@ -57,14 +57,7 @@ class ProductTypeController {
     }
 
     def show() {
-        def productTypeInstance = ProductType.get(params.id)
-        if (!productTypeInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'productType.label', default: 'ProductType'), params.id])}"
-            redirect(action: "list")
-        }
-        else {
-            [productTypeInstance: productTypeInstance]
-        }
+        render(view: "/common/react", params: params)
     }
 
     def edit() {
