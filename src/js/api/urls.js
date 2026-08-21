@@ -571,3 +571,16 @@ export const JSON_ADD_TO_REQUISITION_ITEMS = '/json/addToRequisitionItems';
 export const JSON_UPDATE_REQUISITION_ITEMS = (id) => `/json/updateRequisitionItems/${id}`;
 export const JSON_REMOVE_REQUISITION_ITEM = (itemId) => `/json/removeRequisitionItem/${itemId}`;
 export const PICKLIST_SAVE = '/picklist/save';
+
+// DELIVERY NOTE
+export const DELIVERY_NOTE_API = `${API}/deliveryNotes`;
+export const DELIVERY_NOTE_PRINT_DATA = (id) => `${DELIVERY_NOTE_API}/${id}/printData`;
+export const DELIVERY_NOTE_PRINT_OUTBOUND_RETURN_DATA = (id) => `${DELIVERY_NOTE_API}/${id}/printOutboundReturnData`;
+
+// DOCUMENT
+export const DOCUMENT_API = `${API}/documents`;
+export const DOCUMENT_TYPE_OPTIONS = `${DOCUMENT_API}/documentTypeOptions`;
+export const DOCUMENT_DETAILS = (id) => `${DOCUMENT_API}/${id}/details`;
+export const DOCUMENT_UPDATE = (id) => `${DOCUMENT_API}/${id}/update`;
+export const DOCUMENT_UPLOAD = (id) => `${DOCUMENT_API}/${id}/upload`;
+export const DOCUMENT_DELETE = (id) => `${DOCUMENT_API}/${id}`;
