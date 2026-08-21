@@ -1297,6 +1297,26 @@ const AsyncUserCropPhoto = Loadable({
   loading: Loading,
 });
 
+const AsyncMobileDashboard = Loadable({
+  loader: () => import('components/mobile/MobileDashboard'),
+  loading: Loading,
+});
+
+const AsyncMobileLogin = Loadable({
+  loader: () => import('components/mobile/MobileLogin'),
+  loading: Loading,
+});
+
+const AsyncMobileChooseLocation = Loadable({
+  loader: () => import('components/mobile/MobileChooseLocation'),
+  loading: Loading,
+});
+
+const AsyncMobileError = Loadable({
+  loader: () => import('components/mobile/MobileError'),
+  loading: Loading,
+});
+
 const AsyncRoleForm = Loadable({
   loader: () => import('components/role/RoleForm'),
   loading: Loading,
@@ -1444,6 +1464,11 @@ const Router = () => {
             <Route path="**/report/printPaginatedPackingListReport" component={AsyncPaginatedPackingListReport} />
             <Route path="**/report/printPickListReport" component={AsyncPickListReport} />
             <Route path="**/report/printShippingReport" component={AsyncShippingReport} />
+            <Route path="**/mobile/login" component={AsyncMobileLogin} />
+            <Route path="**/mobile/chooseLocation" component={AsyncMobileChooseLocation} />
+            <Route path="**/mobile/error" component={AsyncMobileError} />
+            <Route path="**/mobile/index" component={AsyncMobileDashboard} />
+            <Route path="**/mobile" component={AsyncMobileDashboard} />
             <MainLayoutRoute path="**/report/showBinLocationReport" component={AsyncBinLocationReport} />
             <MainLayoutRoute path="**/report/showCycleCountReport" component={AsyncCycleCountReport} />
             <MainLayoutRoute path="**/report/showForecastReport" component={AsyncForecastReport} />

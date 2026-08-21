@@ -7,6 +7,20 @@ export const CONTEXT_PATH = window.CONTEXT_PATH ?? '/openboxes';
 
 const DASHBOARD_URL = {
   base: `${CONTEXT_PATH}/dashboard`,
+  chooseLocation: (id) => `${DASHBOARD_URL.base}/chooseLocation/${id}`,
+};
+
+const AUTH_URL = {
+  base: `${CONTEXT_PATH}/auth`,
+  handleLogin: () => `${AUTH_URL.base}/handleLogin`,
+};
+
+const MOBILE_URL = {
+  base: `${CONTEXT_PATH}/mobile`,
+  index: () => `${MOBILE_URL.base}`,
+  login: () => `${MOBILE_URL.base}/login`,
+  chooseLocation: () => `${MOBILE_URL.base}/chooseLocation`,
+  error: () => `${MOBILE_URL.base}/error`,
 };
 
 const LOCATION_CONFIGURATION_URL = {
@@ -665,6 +679,7 @@ const RECEIVE_ORDER_WORKFLOW_URL = {
 export {
   ADMIN_URL,
   ATTRIBUTE_URL,
+  AUTH_URL,
   BATCH_URL,
   BUDGET_CODE_URL,
   CATEGORY_URL,
@@ -688,6 +703,7 @@ export {
   LOCATION_TYPE_URL,
   LOCATION_URL,
   MIGRATION_URL,
+  MOBILE_URL,
   ORDER_ADJUSTMENT_TYPE_URL,
   ORDER_URL,
   ORGANIZATION_URL,

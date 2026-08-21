@@ -74,6 +74,11 @@ export const handleError = (error) => {
     }
 
     case 401:
+      // The mobile login screen is shown before authentication,
+      // so an unauthorized response should not open the login modal there
+      if (window.location.pathname.endsWith('/mobile/login')) {
+        break;
+      }
       confirmAlert({
         customUI: (props) => (<LoginModal {...props} />),
       });

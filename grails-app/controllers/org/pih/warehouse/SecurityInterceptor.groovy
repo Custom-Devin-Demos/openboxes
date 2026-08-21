@@ -66,6 +66,13 @@ class SecurityInterceptor {
         // When there's no authenticated user in the session and a request requires authentication
         // we redirect to the auth login page.  targetUri is the URI the user was trying to get to.
         else if (!session.user && !(actionsWithAuthUserNotRequired.contains(actionName))) {
+            // Ajax/API requests should not overwrite the target URI of the page
+            // the user was actually visiting
+            if (RequestUtil.isAjax(request)) {
+                redirect(controller: "errors", action: "handleUnauthorized")
+                return false
+            }
+
             def targetUri = ""
             // We only want to handle GETs because POSTs would be much more difficult
             if (request.method == "GET") {
@@ -83,11 +90,6 @@ class SecurityInterceptor {
                 session.targetUri = targetUri
             } else {
                 log.info "Not saving targetUri " + targetUri
-            }
-
-            if (RequestUtil.isAjax(request)) {
-                redirect(controller: "errors", action: "handleUnauthorized")
-                return false
             }
 
             redirect(controller: 'auth', action: 'login')

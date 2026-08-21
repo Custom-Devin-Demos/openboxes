@@ -2351,6 +2351,21 @@ class UrlMappings {
             action = [POST: "refreshCycleCount"]
         }
 
+        "/api/mobile/dashboard" {
+            controller = "mobileApi"
+            action = [GET: "dashboard"]
+        }
+
+        "/api/mobile/chooseLocationOptions" {
+            controller = "mobileApi"
+            action = [GET: "chooseLocationOptions"]
+        }
+
+        "/api/mobile/errorDetails" {
+            controller = "mobileApi"
+            action = [GET: "errorDetails"]
+        }
+
         "/api/reports/inventoryByLocationReport" {
             controller = "reportApi"
             action = [GET: "inventoryByLocationReport"]

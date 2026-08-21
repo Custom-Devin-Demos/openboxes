@@ -12,6 +12,7 @@ package org.pih.warehouse.core
 import grails.converters.JSON
 import grails.core.GrailsApplication
 import org.grails.exceptions.ExceptionUtils
+import org.grails.web.errors.GrailsWrappedRuntimeException
 import org.pih.warehouse.RequestUtil
 import org.springframework.http.HttpMethod
 import org.springframework.validation.BeanPropertyBindingResult
@@ -35,7 +36,18 @@ class ErrorsController {
             render([errorCode: 500, cause: root?.class, errorMessage: message] as JSON)
         } else {
             if (userAgentIdentService.isMobile()) {
-                render(view: "/mobile/error")
+                Throwable exception = request.getAttribute('exception') ?: request.getAttribute("javax.servlet.error.exception")
+                session.mobileError = [
+                        statusCode      : request.getAttribute('javax.servlet.error.status_code')?.toString(),
+                        message         : request.getAttribute('javax.servlet.error.message')?.toString(),
+                        servletName     : request.getAttribute('javax.servlet.error.servlet_name')?.toString(),
+                        requestUri      : request.getAttribute('javax.servlet.error.request_uri')?.toString(),
+                        exceptionMessage: exception?.message,
+                        causeMessage    : exception?.cause?.message,
+                        className       : exception instanceof GrailsWrappedRuntimeException ? exception.className : exception?.class?.name,
+                        stackTraceLines : exception instanceof GrailsWrappedRuntimeException ? exception.stackTraceLines?.collect { it?.toString() } : null,
+                ]
+                redirect(controller: "mobile", action: "error")
                 return
             }
 

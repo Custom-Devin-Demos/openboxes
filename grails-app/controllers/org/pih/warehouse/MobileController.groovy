@@ -12,13 +12,9 @@ package org.pih.warehouse
 import org.pih.warehouse.api.StockMovement
 import org.pih.warehouse.api.StockMovementDirection
 import org.pih.warehouse.core.Location
-import org.pih.warehouse.core.User
 import org.pih.warehouse.inventory.StockMovementStatusCode
-import org.pih.warehouse.order.Order
-import org.pih.warehouse.order.OrderTypeCode
 import org.pih.warehouse.product.Product
 import org.pih.warehouse.product.ProductSummary
-import org.pih.warehouse.requisition.Requisition
 
 class MobileController {
 
@@ -30,33 +26,19 @@ class MobileController {
     def stockMovementService
 
     def index() {
-
-        Location location = Location.get(session.warehouse.id)
-        def productCount = ProductSummary.countByLocation(location)
-        def productListUrl = g.createLink(controller: "mobile", action: "productList")
-
-        def orderCount = Order.createCriteria().count {
-            eq("destination", location)
-            orderType {
-                eq("orderTypeCode", OrderTypeCode.PURCHASE_ORDER)
-            }
-        }
-
-        def requisitionCount = Requisition.createCriteria().count {
-            eq("origin", location)
-        }
-
-        [
-                data: [
-                        [name: "Inventory Items", class: "fa fa-box", count: productCount, url: g.createLink(controller: "mobile", action: "productList")],
-                        [name: "Purchase Orders", class: "fa fa-shopping-cart", count: orderCount, url: g.createLink(controller: "order", action: "list", params: ['origin.id', location.id])],
-                        [name: "Replenishment Orders", class: "fa fa-truck", count: requisitionCount, url: g.createLink(controller: "mobile", action: "outboundList", params: ['origin.id', location.id])],
-                ]
-        ]
+        render(view: "/common/react", params: params)
     }
 
     def login() {
+        if (flash.message && !params.message) {
+            redirect(action: "login", params: [message: flash.message])
+            return
+        }
+        render(view: "/common/react", params: params)
+    }
 
+    def error() {
+        render(view: "/common/react", params: params)
     }
 
     def menu() {
@@ -68,10 +50,11 @@ class MobileController {
     }
 
     def chooseLocation() {
-        User user = User.get(session.user.id)
-        Location warehouse = Location.get(session.warehouse.id)
-        render (view: "/mobile/chooseLocation",
-            model: [savedLocations: user.warehouse ? [user.warehouse] : null, loginLocationsMap: locationService.getLoginLocationsMap(user, warehouse, true)])
+        if (flash.message && !params.message) {
+            redirect(action: "chooseLocation", params: [message: flash.message])
+            return
+        }
+        render(view: "/common/react", params: params)
     }
 
     def productList() {
