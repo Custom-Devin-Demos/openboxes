@@ -43,7 +43,7 @@ class MigrationController {
     TransactionSourceMigrationService transactionSourceMigrationService
 
     def index() {
-
+        render(view: "/common/react")
     }
 
 
@@ -60,22 +60,11 @@ class MigrationController {
     }
 
     def factTables() {
-        def stockoutFactCount = dataService.executeQuery("select count(*) as count from stockout_fact")[0]?.count ?: 0
-        [
-                transactionFactCount     : TransactionFact.count(),
-                consumptionFactCount     : ConsumptionFact.count(),
-                stockoutFactCount        : stockoutFactCount,
-        ]
+        render(view: "/common/react")
     }
 
     def materializedViews() {
-        def productDemandCount = dataService.executeQuery("select count(*) as count from product_demand_details")[0]?.count ?: 0
-        def productAvailabilityCount = dataService.executeQuery("select count(*) as count from product_availability")[0]?.count ?: 0
-
-        [
-                productDemandCount       : productDemandCount,
-                productAvailabilityCount : productAvailabilityCount
-        ]
+        render(view: "/common/react")
     }
 
     def stockMovementsWithoutShipmentItems() {
@@ -125,31 +114,7 @@ class MigrationController {
     }
 
     def productAvailability() {
-
-        def countByLocation = ProductAvailability.createCriteria().list {
-            resultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
-            projections {
-                count("id", "count")
-                groupProperty("location", "location")
-            }
-        }
-
-        def data = locationService.depots.collect { Location location ->
-            def count = countByLocation.find { it.location == location }?.count?:null
-            [
-                    "Location" : location.name,
-                    "Product Availability":
-                            "<div data-url=\"${request.contextPath}/migration/loadProductAvailability/${location.id}\" class=\"fetch-indicator\">${count}</div>",
-                    "Calculated":
-                            "<div data-url=\"${request.contextPath}/migration/calculateProductAvailability/${location.id}\" class=\"fetch-indicator\">Fetch</div>",
-                    "Actions":
-                            "<a data-title=\"${location.name}\" class=\"button btn-show-dialog\" data-url=\"${request.contextPath}/migration/compareProductAvailability?location.id=${location.id}\">show diff</a>" +
-                            "<a data-title=\"${location.name}\" class=\"button btn-show-dialog\" data-url=\"${request.contextPath}/migration/compareProductAvailability?location.id=${location.id}&showAll=true\">show all</a>" +
-                            "<a class=\"button btn-post-data\" data-url=\"${request.contextPath}/migration/refreshProductAvailability?location.id=${location.id}\">refresh</a>"
-            ]
-        }.sort { it.count }
-
-        [data:data]
+        render(view: "/common/react")
     }
 
     def refreshProductAvailability() {

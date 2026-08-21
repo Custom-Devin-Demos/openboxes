@@ -21,6 +21,8 @@ class UrlMappings {
 
         "/snapshot/$action?"(controller: "inventorySnapshot")
 
+        "/quartz/list"(controller: "jobs", action: "quartzMonitor")
+
         "/inventoryItem/delete/$id**?" {
             controller = "inventoryItem"
             action = "delete"
@@ -1938,6 +1940,41 @@ class UrlMappings {
             action = [GET: "dimensionTables"]
         }
 
+        "/api/migration/factTables" {
+            controller = { "migrationApi" }
+            action = [GET: "factTables"]
+        }
+
+        "/api/migration/materializedViews" {
+            controller = { "migrationApi" }
+            action = [GET: "materializedViews"]
+        }
+
+        "/api/migration/productAvailability" {
+            controller = { "migrationApi" }
+            action = [GET: "productAvailability"]
+        }
+
+        "/api/migration/productAvailability/$locationId/count" {
+            controller = { "migrationApi" }
+            action = [GET: "productAvailabilityCount"]
+        }
+
+        "/api/migration/productAvailability/$locationId/calculated" {
+            controller = { "migrationApi" }
+            action = [GET: "productAvailabilityCalculated"]
+        }
+
+        "/api/migration/productAvailability/$locationId/compare" {
+            controller = { "migrationApi" }
+            action = [GET: "productAvailabilityCompare"]
+        }
+
+        "/api/migration/productAvailability/$locationId/refresh" {
+            controller = { "migrationApi" }
+            action = [POST: "productAvailabilityRefresh"]
+        }
+
         "/api/migration/receiptsWithoutTransaction" {
             controller = { "migrationApi" }
             action = [GET: "receiptsWithoutTransaction"]
@@ -1951,6 +1988,46 @@ class UrlMappings {
         "/api/migration/stockMovementsWithoutShipmentItems" {
             controller = { "migrationApi" }
             action = [GET: "stockMovementsWithoutShipmentItems"]
+        }
+
+        "/api/jobs/list" {
+            controller = { "jobApi" }
+            action = [GET: "list"]
+        }
+
+        "/api/jobs/stopJob" {
+            controller = { "jobApi" }
+            action = [POST: "stopJob"]
+        }
+
+        "/api/jobs/startJob" {
+            controller = { "jobApi" }
+            action = [POST: "startJob"]
+        }
+
+        "/api/jobs/pauseJob" {
+            controller = { "jobApi" }
+            action = [POST: "pauseJob"]
+        }
+
+        "/api/jobs/resumeJob" {
+            controller = { "jobApi" }
+            action = [POST: "resumeJob"]
+        }
+
+        "/api/jobs/runNowJob" {
+            controller = { "jobApi" }
+            action = [POST: "runNowJob"]
+        }
+
+        "/api/jobs/startScheduler" {
+            controller = { "jobApi" }
+            action = [POST: "startScheduler"]
+        }
+
+        "/api/jobs/stopScheduler" {
+            controller = { "jobApi" }
+            action = [POST: "stopScheduler"]
         }
 
         "/api/jobs/triggers/$id" {

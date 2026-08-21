@@ -11,6 +11,7 @@ package org.pih.warehouse.api
 
 import grails.converters.JSON
 import grails.gorm.transactions.Transactional
+import org.hibernate.criterion.CriteriaSpecification
 
 import org.pih.warehouse.core.Constants
 import org.pih.warehouse.core.Location
@@ -18,15 +19,21 @@ import org.pih.warehouse.data.TransactionSourceMigrationService
 import org.pih.warehouse.inventory.Transaction
 import org.pih.warehouse.inventory.TransactionType
 import org.pih.warehouse.product.Product
+import org.pih.warehouse.product.ProductAvailability
+import org.pih.warehouse.reporting.ConsumptionFact
 import org.pih.warehouse.reporting.DateDimension
 import org.pih.warehouse.reporting.LocationDimension
 import org.pih.warehouse.reporting.LotDimension
 import org.pih.warehouse.reporting.ProductDimension
+import org.pih.warehouse.reporting.TransactionFact
 
 @Transactional(readOnly = true)
 class MigrationApiController {
 
     def migrationService
+    def dataService
+    def locationService
+    def productAvailabilityService
     TransactionSourceMigrationService transactionSourceMigrationService
 
     def dataMigration() {
@@ -68,6 +75,107 @@ class MigrationApiController {
                 lotDimensionCount     : LotDimension.count(),
                 productDimensionCount : ProductDimension.count(),
         ]] as JSON)
+    }
+
+    def factTables() {
+        def stockoutFactCount = dataService.executeQuery("select count(*) as count from stockout_fact")[0]?.count ?: 0
+        render([data: [
+                transactionFactCount: TransactionFact.count(),
+                consumptionFactCount: ConsumptionFact.count(),
+                stockoutFactCount   : stockoutFactCount,
+        ]] as JSON)
+    }
+
+    def materializedViews() {
+        def productDemandCount = dataService.executeQuery("select count(*) as count from product_demand_details")[0]?.count ?: 0
+        def productAvailabilityCount = dataService.executeQuery("select count(*) as count from product_availability")[0]?.count ?: 0
+        render([data: [
+                productDemandCount      : productDemandCount,
+                productAvailabilityCount: productAvailabilityCount,
+        ]] as JSON)
+    }
+
+    def productAvailability() {
+        def countByLocation = ProductAvailability.createCriteria().list {
+            resultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
+            projections {
+                count("id", "count")
+                groupProperty("location", "location")
+            }
+        }
+
+        def rows = locationService.depots.collect { Location location ->
+            def count = countByLocation.find { it.location == location }?.count ?: null
+            [
+                    locationId              : location.id,
+                    locationName            : location.name,
+                    productAvailabilityCount: count,
+            ]
+        }.sort { it.productAvailabilityCount }
+        render([data: rows, totalCount: rows.size()] as JSON)
+    }
+
+    def productAvailabilityCount() {
+        Location location = Location.get(params.locationId)
+        def results = ProductAvailability.createCriteria().list {
+            resultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
+            projections {
+                count("id", "count")
+            }
+            eq("location", location)
+        }
+        def count = results ? results[0].count : null
+        render([data: [count: count]] as JSON)
+    }
+
+    def productAvailabilityCalculated() {
+        Location location = Location.get(params.locationId)
+        def binLocations = productAvailabilityService.calculateBinLocations(location)
+        render([data: [count: binLocations.size()]] as JSON)
+    }
+
+    def productAvailabilityCompare() {
+        Location location = Location.get(params.locationId)
+        boolean showAll = params.boolean("showAll") ?: false
+        def binLocations = productAvailabilityService.calculateBinLocations(location)
+
+        def data = ProductAvailability.findAllByLocation(location)
+        data = data.collect { ProductAvailability pa ->
+            def binLocation = binLocations.find {
+                it.product?.id == pa.product?.id &&
+                        it.inventoryItem?.id == pa.inventoryItem?.id &&
+                        it.binLocation?.id == pa.binLocation?.id
+            }
+            binLocations.remove(binLocation)
+            return [
+                    productCode                    : pa?.productCode,
+                    lotNumber                      : pa?.lotNumber,
+                    binLocation                    : pa?.binLocationName,
+                    quantityFromProductAvailability: pa.quantityOnHand ?: 0,
+                    quantityFromTransactions       : binLocation?.quantity,
+                    includedInProductAvailability  : true,
+            ]
+        }.findAll { it.quantityFromProductAvailability != it.quantityFromTransactions || showAll }
+
+        def binLocationsRemaining = binLocations.collect {
+            [
+                    productCode                    : it?.product?.productCode,
+                    lotNumber                      : it?.inventoryItem?.lotNumber,
+                    binLocation                    : it?.binLocation?.name,
+                    quantityFromProductAvailability: null,
+                    quantityFromTransactions       : it.quantity,
+                    includedInProductAvailability  : false,
+            ]
+        }
+        data.addAll(binLocationsRemaining)
+        render([data: data, totalCount: data.size()] as JSON)
+    }
+
+    @Transactional
+    def productAvailabilityRefresh() {
+        Location location = Location.get(params.locationId)
+        productAvailabilityService.refreshProductAvailability(location, true)
+        render([data: [message: "Refreshed product availability for location ${location.name}".toString()]] as JSON)
     }
 
     def receiptsWithoutTransaction() {

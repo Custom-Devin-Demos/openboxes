@@ -51,6 +51,10 @@ class JobsController {
         render(view: "/common/react")
     }
 
+    def quartzMonitor() {
+        render(view: "/common/react")
+    }
+
 
     def unscheduleJob() {
         // find jobKey of job

@@ -767,6 +767,31 @@ const AsyncDimensionTables = Loadable({
   loading: Loading,
 });
 
+const AsyncFactTables = Loadable({
+  loader: () => import('components/migration/FactTablesPage'),
+  loading: Loading,
+});
+
+const AsyncMaterializedViews = Loadable({
+  loader: () => import('components/migration/MaterializedViewsPage'),
+  loading: Loading,
+});
+
+const AsyncMigrationIndex = Loadable({
+  loader: () => import('components/migration/MigrationIndexPage'),
+  loading: Loading,
+});
+
+const AsyncMigrationProductAvailability = Loadable({
+  loader: () => import('components/migration/ProductAvailabilityPage'),
+  loading: Loading,
+});
+
+const AsyncQuartzJobs = Loadable({
+  loader: () => import('components/jobs/QuartzJobsPage'),
+  loading: Loading,
+});
+
 const AsyncStockCardPage = Loadable({
   loader: () => import('components/stock-card/StockCardPage'),
   loading: Loading,
@@ -1335,6 +1360,12 @@ const Router = () => {
             <MainLayoutRoute path="**/migration/dataMigration" component={AsyncDataMigration} />
             <MainLayoutRoute path="**/migration/dataQuality" component={AsyncDataQuality} />
             <MainLayoutRoute path="**/migration/dimensionTables" component={AsyncDimensionTables} />
+            <MainLayoutRoute path="**/migration/factTables" component={AsyncFactTables} />
+            <MainLayoutRoute path="**/migration/materializedViews" component={AsyncMaterializedViews} />
+            <MainLayoutRoute path="**/migration/productAvailability" component={AsyncMigrationProductAvailability} />
+            <MainLayoutRoute path="**/migration/index" component={AsyncMigrationIndex} />
+            <MainLayoutRoute path="**/migration" exact component={AsyncMigrationIndex} />
+            <MainLayoutRoute path="**/quartz/list" component={AsyncQuartzJobs} />
             <MainLayoutRoute path="**/admin/index" component={AsyncAdminIndex} />
             <MainLayoutRoute path="**/admin" exact component={AsyncAdminIndex} />
             <MainLayoutRoute path="**/productSupplier/list" component={AsyncProductSupplierList} />
