@@ -5925,7 +5925,19 @@
       "react.receiveOrder.itemsOrdered.label": "Items ordered",
       "react.receiveOrder.product.label": "Product",
       "react.receiveOrder.itemsReceived.label": "Items received",
-      "react.receiveOrder.destination.label": "Destination"
+      "react.receiveOrder.destination.label": "Destination",
+      "react.mobile.stockMovement.requestedDeliveryDate.label": "Requested Delivery Date",
+      "react.mobile.stockMovement.destination.label": "Destination",
+      "react.mobile.status.label": "Status",
+      "react.mobile.inStock.label": "In Stock",
+      "react.mobile.stockMovement.identifier.label": "Identifier",
+      "react.mobile.details.label": "Details",
+      "react.mobile.barcode.label": "Barcode",
+      "react.mobile.description.label": "Description",
+      "react.mobile.qoh.label": "QoH",
+      "react.mobile.stockMovement.status.label": "Status",
+      "react.mobile.outOfStock.label": "Out of Stock",
+      "react.mobile.button.view.label": "View"
     },
     "supportedLocales": [
       "ar",
