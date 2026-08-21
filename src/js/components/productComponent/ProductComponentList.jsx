@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { PRODUCT_COMPONENT_API } from 'api/urls';
 import DataTable, { TableCell } from 'components/DataTable';
@@ -15,6 +15,7 @@ import PageWrapper from 'wrappers/PageWrapper';
 
 const ProductComponentList = () => {
   useTranslation('productComponent', 'default');
+  const [filterParams] = useState({ q: '' });
 
   const getParams = ({ offset, state }) => ({
     offset: `${offset}`,
@@ -27,7 +28,7 @@ const ProductComponentList = () => {
     onFetchHandler,
     tableData,
   } = useTableData({
-    filterParams: {},
+    filterParams,
     url: PRODUCT_COMPONENT_API,
     errorMessageId: 'react.productComponent.error.productComponentList.label',
     defaultErrorMessage: 'Unable to fetch product components',
