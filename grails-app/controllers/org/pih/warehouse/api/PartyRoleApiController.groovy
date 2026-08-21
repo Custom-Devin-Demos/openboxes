@@ -13,6 +13,7 @@ import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 import java.time.Instant
+import org.grails.orm.hibernate.cfg.GrailsHibernateUtil
 import org.hibernate.ObjectNotFoundException
 import org.pih.warehouse.core.Party
 import org.pih.warehouse.core.PartyRole
@@ -95,12 +96,13 @@ class PartyRoleApiController {
     }
 
     private static Map toJson(PartyRole partyRole) {
+        Party party = partyRole.party ? (Party) GrailsHibernateUtil.unwrapIfProxy(partyRole.party) : null
         return [
                 id       : partyRole.id,
                 version  : partyRole.version,
-                party    : partyRole.party ? [
-                        id  : partyRole.party.id,
-                        name: partyRole.party.toString(),
+                party    : party ? [
+                        id  : party.id,
+                        name: party.toString(),
                 ] : null,
                 roleType : partyRole.roleType?.name(),
                 startDate: partyRole.startDate?.toString(),

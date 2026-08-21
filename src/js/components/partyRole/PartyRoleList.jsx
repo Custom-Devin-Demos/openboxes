@@ -16,6 +16,10 @@ import HeaderWrapper from 'wrappers/HeaderWrapper';
 import ListTableWrapper from 'wrappers/ListTableWrapper';
 import PageWrapper from 'wrappers/PageWrapper';
 
+// useTableData skips fetching when filterParams is empty,
+// so pass a stable non-empty object for screens without filters
+const filterParams = { initialized: true };
+
 const PartyRoleList = () => {
   useTranslation('partyRole', 'default');
   const history = useHistory();
@@ -32,7 +36,7 @@ const PartyRoleList = () => {
     onFetchHandler,
     tableData,
   } = useTableData({
-    filterParams: { q: '' },
+    filterParams,
     url: PARTY_ROLE_API,
     errorMessageId: 'react.partyRole.error.partyRoleList.label',
     defaultErrorMessage: 'Unable to fetch party roles',

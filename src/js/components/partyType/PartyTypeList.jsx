@@ -16,6 +16,10 @@ import HeaderWrapper from 'wrappers/HeaderWrapper';
 import ListTableWrapper from 'wrappers/ListTableWrapper';
 import PageWrapper from 'wrappers/PageWrapper';
 
+// useTableData skips fetching when filterParams is empty,
+// so pass a stable non-empty object for screens without filters
+const filterParams = { initialized: true };
+
 const PartyTypeList = () => {
   useTranslation('partyType', 'default');
   const history = useHistory();
@@ -32,7 +36,7 @@ const PartyTypeList = () => {
     onFetchHandler,
     tableData,
   } = useTableData({
-    filterParams: { q: '' },
+    filterParams,
     url: PARTY_TYPE_API,
     errorMessageId: 'react.partyType.error.partyTypeList.label',
     defaultErrorMessage: 'Unable to fetch party types',
