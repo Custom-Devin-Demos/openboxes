@@ -484,6 +484,61 @@ class UrlMappings {
             action = [GET: "eventForm"]
         }
 
+        "/api/shipments/shipmentList" {
+            controller = { "shipmentApi" }
+            action = [GET: "shipmentList"]
+        }
+
+        "/api/shipments/$id/showDetails" {
+            controller = { "shipmentApi" }
+            action = [GET: "showDetails"]
+        }
+
+        "/api/shipments/$id/packingList" {
+            controller = { "shipmentApi" }
+            action = [GET: "packingList"]
+        }
+
+        "/api/shipments/$id/sendShipmentForm" {
+            controller = { "shipmentApi" }
+            action = [GET: "sendShipmentForm"]
+        }
+
+        "/api/shipments/$id/sendShipment" {
+            controller = { "shipmentApi" }
+            action = [POST: "sendShipment"]
+        }
+
+        "/api/shipments/$id/receiveShipmentForm" {
+            controller = { "shipmentApi" }
+            action = [GET: "receiveShipmentForm"]
+        }
+
+        "/api/shipments/$id/receiveShipment" {
+            controller = { "shipmentApi" }
+            action = [POST: "receiveShipment"]
+        }
+
+        "/api/shipments/receiptItems/$id/split" {
+            controller = { "shipmentApi" }
+            action = [POST: "splitReceiptItem"]
+        }
+
+        "/api/shipments/receiptItems/$id/delete" {
+            controller = { "shipmentApi" }
+            action = [POST: "deleteReceiptItem"]
+        }
+
+        "/api/shipments/receipts/$id/delete" {
+            controller = { "shipmentApi" }
+            action = [POST: "deleteReceipt"]
+        }
+
+        "/api/shipments/receiptItems/$id/putawayLocations" {
+            controller = { "shipmentApi" }
+            action = [GET: "putawayLocations"]
+        }
+
         "/api/products"(parseRequest: true) {
             controller = { "productApi" }
             action = [GET: "list", POST: "save"]

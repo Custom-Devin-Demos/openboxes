@@ -138,6 +138,17 @@ export const SHIPMENT_COMMENT_FORM = `${SHIPMENT_API}/commentForm`;
 export const SHIPMENT_DOCUMENT_FORM = (id) => `${SHIPMENT_API}/${id}/documentForm`;
 export const SHIPMENT_EVENT_FORM = (id) => `${SHIPMENT_API}/${id}/eventForm`;
 export const SHIPMENT_ADD_TO_SHIPMENT_FORM = `${SHIPMENT_API}/addToShipmentForm`;
+export const SHIPMENT_LIST = `${SHIPMENT_API}/shipmentList`;
+export const SHIPMENT_SHOW_DETAILS = (id) => `${SHIPMENT_API}/${id}/showDetails`;
+export const SHIPMENT_PACKING_LIST = (id) => `${SHIPMENT_API}/${id}/packingList`;
+export const SHIPMENT_SEND_FORM = (id) => `${SHIPMENT_API}/${id}/sendShipmentForm`;
+export const SHIPMENT_SEND = (id) => `${SHIPMENT_API}/${id}/sendShipment`;
+export const SHIPMENT_RECEIVE_FORM = (id) => `${SHIPMENT_API}/${id}/receiveShipmentForm`;
+export const SHIPMENT_RECEIVE = (id) => `${SHIPMENT_API}/${id}/receiveShipment`;
+export const SHIPMENT_RECEIPT_ITEM_SPLIT = (id) => `${SHIPMENT_API}/receiptItems/${id}/split`;
+export const SHIPMENT_RECEIPT_ITEM_DELETE = (id) => `${SHIPMENT_API}/receiptItems/${id}/delete`;
+export const SHIPMENT_RECEIPT_DELETE = (id) => `${SHIPMENT_API}/receipts/${id}/delete`;
+export const SHIPMENT_RECEIPT_ITEM_PUTAWAY_LOCATIONS = (id) => `${SHIPMENT_API}/receiptItems/${id}/putawayLocations`;
 
 // PAYMENT TERMS
 export const PAYMENT_TERMS_OPTION = `${API}/paymentTermOptions`;
