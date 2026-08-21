@@ -1,12 +1,12 @@
 package org.pih.warehouse.api
 
+import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 import org.hibernate.ObjectNotFoundException
 import org.pih.warehouse.core.EntityTypeCode
-import org.pih.warehouse.product.Attribute
 import org.pih.warehouse.core.UnitOfMeasureClass
-import grails.converters.JSON
+import org.pih.warehouse.product.Attribute
 import org.pih.warehouse.product.AttributeService
 import org.springframework.dao.DataIntegrityViolationException
 
