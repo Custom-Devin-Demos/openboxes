@@ -364,6 +364,8 @@ configurations {
             force 'org.apache.ant:ant:1.9.15'  // use consistent version
             force 'org.apache.ant:ant-launcher:1.9.15'  // use consistent version
             force 'org.junit:junit-bom:5.9.2'  // use consistent version
+            force 'org.apache.logging.log4j:log4j-api:2.19.0'  // use consistent version
+            force 'org.jetbrains:annotations:20.1.0'  // use consistent version
             force "org.testcontainers:testcontainers-bom:${testContainersVersion}"  // use consistent version
             force 'org.apache.ant:ant-junit:1.9.15'  // use consistent version
             force 'org.apache.commons:commons-lang3:3.12.0'  // security patch
