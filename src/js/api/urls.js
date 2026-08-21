@@ -147,6 +147,10 @@ export const SHIPMENT_LIST = `${SHIPMENT_API}/shipmentList`;
 export const SHIPMENT_SHOW_DETAILS = (id) => `${SHIPMENT_API}/${id}/showDetails`;
 export const SHIPMENT_PACKING_LIST = (id) => `${SHIPMENT_API}/${id}/packingList`;
 export const SHIPMENT_PAGINATED_PACKING_LIST = (id) => `${SHIPMENT_API}/${id}/paginatedPackingList`;
+export const SHIPMENT_PICK_LIST_REPORT = (id) => `${SHIPMENT_API}/${id}/pickListReport`;
+export const SHIPMENT_SHIPPING_REPORT = (id) => `${SHIPMENT_API}/${id}/shippingReport`;
+export const REPORT_CYCLE_COUNT = `${API}/reports/cycleCountReport`;
+export const JSON_GET_BIN_LOCATION_REPORT = '/json/getBinLocationReport';
 
 // CONSUMPTION
 export const CONSUMPTION_AGGREGATE = `${API}/consumption/aggregate`;
@@ -188,6 +192,7 @@ export const CATEGORY_DETAILS = (id) => `${CATEGORIES}/${id}/details`;
 export const CATEGORY_DELETE = (id) => `${CATEGORIES}/${id}/deleteCategory`;
 export const CATEGORY_OPTIONS = `${API}/categoryOptions`;
 export const TAG_OPTIONS = `${API}/tagOptions`;
+export const CATALOG_OPTIONS = `${API}/catalogOptions`;
 export const UNIT_OF_MEASURE_CLASS_OPTIONS = `${API}/unitOfMeasureClassOptions`;
 
 // PERSONS

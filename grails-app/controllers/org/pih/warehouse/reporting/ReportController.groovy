@@ -318,21 +318,11 @@ class ReportController {
     }
 
     def printShippingReport(ChecklistReportCommand command) {
-        command.rootCategory = productService.getRootCategory()
-        if (!command?.hasErrors()) {
-            reportService.generateShippingReport(command)
-        }
-        [command: command]
+        render(view: "/common/react", params: params)
     }
 
     def printPickListReport(ChecklistReportCommand command) {
-
-        Map binLocations
-        if (!command?.hasErrors()) {
-            reportService.generateShippingReport(command)
-            binLocations = inventoryService.getBinLocations(command.shipment)
-        }
-        [command: command, binLocations: binLocations]
+        render(view: "/common/react", params: params)
     }
 
     def printPaginatedPackingListReport(ChecklistReportCommand command) {
@@ -460,12 +450,7 @@ class ReportController {
         }
 
         log.info("Show bin location report: " + (System.currentTimeMillis() - startTime) + " ms")
-        [
-                location   : location,
-                elapsedTime: (System.currentTimeMillis() - startTime),
-                statuses   : ["inStock", "outOfStock"]
-        ]
-
+        render(view: "/common/react", params: params)
     }
 
     def showOnOrderReport() {
@@ -639,6 +624,10 @@ class ReportController {
     }
 
     def showCycleCountReport() {
+        if (!params.print) {
+            render(view: "/common/react", params: params)
+            return
+        }
         Location location = Location.load(session.warehouse.id)
         List binLocations = inventoryService.getQuantityByBinLocation(location)
         log.info "Returned ${binLocations.size()} bin locations for location ${location}"
@@ -682,15 +671,10 @@ class ReportController {
             return dataRow
         }
 
-        if (params.print) {
-            def filename = "CycleCountReport-${location.name}-${new Date().format("dd MMM yyyy hhmmss")}"
-            response.contentType = "application/vnd.ms-excel"
-            response.setHeader("Content-disposition", "attachment; filename=\"${filename}.xls\"")
-            documentService.generateInventoryTemplate(response.outputStream, rows)
-            return
-        }
-
-        render(view: "showCycleCountReport", model: [rows: rows])
+        def filename = "CycleCountReport-${location.name}-${new Date().format("dd MMM yyyy hhmmss")}"
+        response.contentType = "application/vnd.ms-excel"
+        response.setHeader("Content-disposition", "attachment; filename=\"${filename}.xls\"")
+        documentService.generateInventoryTemplate(response.outputStream, rows)
     }
 
     def showForecastReport() {
@@ -762,9 +746,10 @@ class ReportController {
                 log.info("Unable to generate forecast report due to lack of data")
                 flash.message = "Unable to generate forecast report due to lack of data"
             }
+            return
         }
 
-        render(view: 'showForecastReport', params: params)
+        render(view: "/common/react", params: params)
     }
 
     def amountOutstandingOnOrdersReport() {
