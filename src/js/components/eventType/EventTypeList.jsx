@@ -67,7 +67,11 @@ const EventTypeList = () => {
       Header: <Translate id="react.eventType.column.sortOrder.label" defaultMessage="Sort Order" />,
       accessor: 'sortOrder',
       minWidth: 100,
-      Cell: (row) => <TableCell {...row} />,
+      Cell: (row) => (
+        <TableCell {...row}>
+          {row.original.sortOrder != null ? `${row.original.sortOrder}` : ''}
+        </TableCell>
+      ),
     },
     {
       Header: <Translate id="react.eventType.column.eventCode.label" defaultMessage="Event Status" />,

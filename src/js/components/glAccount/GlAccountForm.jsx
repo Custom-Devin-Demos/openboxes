@@ -69,7 +69,7 @@ const GlAccountForm = ({ match }) => {
       code: values.code,
       name: values.name,
       description: values.description,
-      'glAccountType.id': values.glAccountType?.id || null,
+      glAccountType: values.glAccountType?.id ? { id: values.glAccountType.id } : null,
     };
     if (isEdit) {
       await glAccountApi.updateGlAccount(glAccountId, {
