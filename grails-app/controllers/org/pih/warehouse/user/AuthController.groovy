@@ -9,6 +9,7 @@
  **/
 package org.pih.warehouse.user
 
+import grails.converters.JSON
 import grails.core.GrailsApplication
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
@@ -51,6 +52,7 @@ class AuthController {
         if (session.user) {
             flash.message = "You have already logged in."
             redirect(controller: "dashboard", action: "index")
+            return
         }
 
         if (userAgentIdentService.isMobile()) {
@@ -58,6 +60,20 @@ class AuthController {
             return
         }
 
+        renderReactHost([
+                page        : "login",
+                flashMessage: flash.message ?: null,
+                username    : params.username ?: null,
+                targetUri   : params.targetUri ?: null,
+        ])
+    }
+
+    /**
+     * Renders the React SPA host page, passing an optional page context consumed by
+     * pre-authentication React screens (login, signup, choose location).
+     */
+    private void renderReactHost(Map context) {
+        render(view: "/common/react", model: [reactPageContext: (context as JSON).toString().replace("<", "\\u003c")])
     }
 
 
@@ -121,7 +137,13 @@ class AuthController {
                 userInstance = new User(username: params['username'])
                 userInstance.errors.rejectValue("version", "default.authentication.failure",
                         [warehouse.message(code: 'user.label', default: 'User')] as Object[], "${warehouse.message(code: 'auth.unableToAuthenticateUser.message')}")
-                render(view: "login", model: [userInstance: userInstance])
+                renderReactHost([
+                        page        : "login",
+                        flashMessage: flash.message ?: null,
+                        errors      : userInstance.errors.allErrors.collect { g.message(error: it).toString() },
+                        username    : params.username ?: null,
+                        targetUri   : params.targetUri ?: null,
+                ])
             }
         } else {
             flash.message = "${warehouse.message(code: 'auth.userNotFound.message', args: [params.username])}"
@@ -156,13 +178,20 @@ class AuthController {
             flash.message = "Apologies, but the signup feature is disabled on your system. " +
                     "Please contact a system administrator for access."
             redirect(controller: "auth", action: "login")
+            return
         }
         Boolean configured = grailsApplication.config.openboxes.signup.recaptcha.v2.secretKey?.trim()
         if (!configured) {
             flash.message = "Apologies, but reCAPTCHA is not set up on this system. " +
                     "Please contact a system administrator for access."
             redirect(controller: "auth", action: "login")
+            return
         }
+
+        renderReactHost([
+                page        : "signup",
+                flashMessage: flash.message ?: null,
+        ])
     }
 
     /**
@@ -206,7 +235,23 @@ class AuthController {
                 // If there's an error, reset the password to what the user entered and redirect to signup
                 userInstance.password = params.password
                 userInstance.passwordConfirm = params.passwordConfirm
-                render(view: "signup", model: [userInstance: userInstance])
+                renderReactHost([
+                        page        : "signup",
+                        flashMessage: flash.message ?: null,
+                        errors      : userInstance.errors.allErrors.collect { g.message(error: it).toString() },
+                        errorFields : userInstance.errors.fieldErrors*.field.unique(),
+                        values      : [
+                                firstName          : userInstance.firstName,
+                                lastName           : userInstance.lastName,
+                                email              : userInstance.email,
+                                password           : userInstance.password,
+                                passwordConfirm    : userInstance.passwordConfirm,
+                                locale             : params.locale ?: userInstance.locale?.toString(),
+                                timezone           : params.timezone ?: userInstance.timezone,
+                                additionalQuestions: params.additionalQuestions ?: null,
+                                comments           : params.comments ?: null,
+                        ],
+                ])
                 return
             }
         }

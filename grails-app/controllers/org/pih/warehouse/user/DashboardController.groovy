@@ -257,7 +257,44 @@ class DashboardController {
             return
         }
 
-        [savedLocations: savedLocations, loginLocationsMap: loginLocationsMap]
+        List organizations = loginLocationsMap.collect { organizationName, locations ->
+            def locationGroups = locations.collect { it?.locationGroup }.unique()
+            [
+                organization  : organizationName,
+                locationGroups: locationGroups.sort { a, b -> !a ? !b ? 0 : 1 : !b ? -1 : a <=> b }.collect { locationGroup ->
+                    [
+                        name     : locationGroup?.toString(),
+                        locations: locations.findAll { it.locationGroup == locationGroup }.collect { location ->
+                            [
+                                id             : location.id,
+                                name           : location.name,
+                                backgroundColor: location.bgColor,
+                            ]
+                        },
+                    ]
+                },
+            ]
+        }
+
+        render(view: "/common/react", model: [reactPageContext: ([
+                page          : "chooseLocation",
+                flashMessage  : flash.message ? g.message(code: flash.message, default: flash.message).toString() : null,
+                targetUri     : params.targetUri ?: null,
+                labels        : [
+                    chooseLocation: g.message(code: "dashboard.chooseLocation.label").toString(),
+                    savedLocations: g.message(code: "user.savedLocations.label").toString(),
+                    noWarehouse   : g.message(code: "dashboard.noWarehouse.message").toString(),
+                    lastLoggedIn  : g.message(code: "dashboard.youLastLoggedInHereOn.message",
+                            args: [g.prettyDateFormat(date: user.lastLoginDate).toString(),
+                                   g.formatDate(date: user.lastLoginDate, format: "MMM dd yyyy hh:mm:ss a z").toString()]).toString(),
+                    loggedInAs    : g.message(code: "dashboard.loggedInAs.message", args: [user.name]).toString(),
+                    logout        : g.message(code: "default.logout.label").toString(),
+                ],
+                organizations : organizations,
+                savedLocations: savedLocations?.collect {
+                    [id: it.id, name: it.name, backgroundColor: it.bgColor]
+                },
+        ] as JSON).toString().replace("<", "\\u003c")])
     }
 
 

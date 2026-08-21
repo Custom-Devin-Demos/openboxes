@@ -93,6 +93,8 @@ module.exports = {
           contextPath: '\${util.ConfigHelper.contextPath}',
           jsSource: `\${resource(dir: '${path.basename(WEBPACK_OUTPUT)}', file: 'bundle.${compilation.hash}.js')}`,
           cssSource: `\${resource(dir: '${path.basename(WEBPACK_OUTPUT)}', file: 'bundle.${compilation.hash}.css')}`,
+          // eslint-disable-next-line no-template-curly-in-string
+          pageContext: '\${raw(reactPageContext ?: "null")}',
           receivingIfStatement: '',
         }),
       }),
@@ -114,6 +116,8 @@ module.exports = {
           contextPath: '\${util.ConfigHelper.contextPath}',
           jsSource: `\${resource(dir: '${path.basename(WEBPACK_OUTPUT)}', file: 'bundle.${compilation.hash}.js')}`,
           cssSource: `\${resource(dir: '${path.basename(WEBPACK_OUTPUT)}', file: 'bundle.${compilation.hash}.css')}`,
+          // eslint-disable-next-line no-template-curly-in-string
+          pageContext: '\${raw(reactPageContext ?: "null")}',
           receivingIfStatement:
           // eslint-disable-next-line no-template-curly-in-string
           '<g:if test="${!params.id}">' +
