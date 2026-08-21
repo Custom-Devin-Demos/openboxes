@@ -238,6 +238,11 @@ const AsyncOrderPrint = Loadable({
   loading: Loading,
 });
 
+const AsyncReceiveOrderPage = Loadable({
+  loader: () => import('components/receive-order/ReceiveOrderPage'),
+  loading: Loading,
+});
+
 const AsyncDeliveryNotePrint = Loadable({
   loader: () => import('components/deliveryNote/DeliveryNotePrint'),
   loading: Loading,
@@ -1433,6 +1438,7 @@ const Router = () => {
             <MainLayoutRoute path="**/order/addAdjustment/:id" component={AsyncOrderEditAdjustmentPage} />
             <MainLayoutRoute path="**/order/editAdjustment/:id?" component={AsyncOrderEditAdjustmentPage} />
             <MainLayoutRoute path="**/order/orderSummaryList" component={AsyncOrderSummaryList} />
+            <MainLayoutRoute path="**/receiveOrderWorkflow/receiveOrder" component={AsyncReceiveOrderPage} />
             <MainLayoutRoute path="**/order/show/:id" component={AsyncOrderShow} />
             <Route path="**/order/print/:id" component={AsyncOrderPrint} />
             <Route path="**/report/printPaginatedPackingListReport" component={AsyncPaginatedPackingListReport} />

@@ -337,7 +337,11 @@ class OrderService {
                 shipmentItem.quantity = orderItemCommand.quantityReceived
                 shipmentItem.recipient = orderCommand?.recipient
                 shipmentItem.inventoryItem = inventoryItem
-                shipmentItem.addToOrderItems(orderItemCommand?.orderItem)
+                // Re-fetch the order item so it is attached to the current session
+                // (the session clear above detaches previously loaded instances)
+                OrderItem orderItem = OrderItem.get(orderItemCommand?.orderItem?.id)
+                shipmentItem.addToOrderItems(orderItem)
+                orderItem?.addToShipmentItems(shipmentItem)
                 shipmentInstance.addToShipmentItems(shipmentItem)
             }
         }
@@ -349,6 +353,10 @@ class OrderService {
             log.info("Errors with shipment " + shipmentInstance?.errors)
             throw new ShipmentException(message: "Validation errors on shipment ", shipment: shipmentInstance)
         }
+
+        // Flush the shipment insert before shipment events are created so that the
+        // current_event_id foreign key can be resolved at the next session flush
+        shipmentInstance.save(flush: true)
 
         // Send shipment, receive shipment, and add
         if (shipmentInstance) {
@@ -368,6 +376,9 @@ class OrderService {
                 throw new ShipmentException(message: "Unable to save receipt ", shipment: shipmentInstance)
             }
 
+            // Re-fetch the order so lazy associations detached by the session clear
+            // above are re-associated with the current session before validation
+            orderCommand.order = Order.get(orderCommand?.order?.id)
             saveOrder(orderCommand?.order)
         }
         return orderCommand
