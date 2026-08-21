@@ -53,8 +53,8 @@ const ExpirationHistoryReport = () => {
     filtersInitialized,
   });
 
-  const isExportDisabled =
-    !filterParams.startDate && !filterParams.endDate && !tableData?.data?.length > 0;
+  const isExportDisabled = !filterParams.startDate && !filterParams.endDate
+    && !tableData?.data?.length > 0;
 
   const totalAmount = useMemo(() =>
     `${translate('react.report.expirationHistory.totalAmount.label', 'Total amount')}: ${tableData?.totalValueLostToExpiry?.toLocaleString([LocaleConverter[locale] || Locale.EN]) ?? 0} ${currencyCode}`,

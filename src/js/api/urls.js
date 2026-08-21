@@ -258,6 +258,8 @@ export const GLOBAL_SEARCH = (term) => `${CONTEXT_PATH}/dashboard/globalSearch?s
 
 // ORGANIZATIONS
 export const ORGANIZATION_API = `${API}/organizations`;
+export const ORGANIZATION_BY_ID = (id) => `${ORGANIZATION_API}/${id}`;
+export const ORGANIZATION_DETAILS = (id) => `${ORGANIZATION_API}/${id}/details`;
 
 // PRODUCT SUPPLIER
 export const PRODUCT_SUPPLIER_API = `${API}/productSuppliers`;

@@ -20,8 +20,7 @@ class LocationTypeController {
     }
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [locationTypeInstanceList: LocationType.list(params), locationTypeInstanceTotal: LocationType.count()]
+        render(view: "/common/react")
     }
 
     def create() {
@@ -40,14 +39,7 @@ class LocationTypeController {
     }
 
     def show() {
-        LocationType locationTypeInstance = locationTypeDataService.get(params.id)
-        if (!locationTypeInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'locationType.label', default: 'LocationType'), params.id])}"
-            redirect(action: "list")
-        }
-        else {
-            [locationTypeInstance: locationTypeInstance]
-        }
+        render(view: "/common/react")
     }
 
     def edit() {

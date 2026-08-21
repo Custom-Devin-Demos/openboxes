@@ -303,6 +303,31 @@ const AsyncLocationTypeForm = Loadable({
   loading: Loading,
 });
 
+const AsyncLocationTypeList = Loadable({
+  loader: () => import('components/locationType/LocationTypeList'),
+  loading: Loading,
+});
+
+const AsyncLocationTypeShow = Loadable({
+  loader: () => import('components/locationType/LocationTypeShow'),
+  loading: Loading,
+});
+
+const AsyncOrganizationList = Loadable({
+  loader: () => import('components/organization/OrganizationList'),
+  loading: Loading,
+});
+
+const AsyncOrganizationForm = Loadable({
+  loader: () => import('components/organization/OrganizationForm'),
+  loading: Loading,
+});
+
+const AsyncOrganizationShow = Loadable({
+  loader: () => import('components/organization/OrganizationShow'),
+  loading: Loading,
+});
+
 const AsyncEventTypeList = Loadable({
   loader: () => import('components/eventType/EventTypeList'),
   loading: Loading,
@@ -1024,6 +1049,12 @@ const Router = () => {
             <MainLayoutRoute path="**/locationGroup/show/:locationGroupId" component={AsyncLocationGroupShow} />
             <MainLayoutRoute path="**/locationType/create" component={AsyncLocationTypeForm} />
             <MainLayoutRoute path="**/locationType/edit/:locationTypeId" component={AsyncLocationTypeForm} />
+            <MainLayoutRoute path="**/locationType/list" component={AsyncLocationTypeList} />
+            <MainLayoutRoute path="**/locationType/show/:id" component={AsyncLocationTypeShow} />
+            <MainLayoutRoute path="**/organization/list" component={AsyncOrganizationList} />
+            <MainLayoutRoute path="**/organization/create" component={AsyncOrganizationForm} />
+            <MainLayoutRoute path="**/organization/edit/:organizationId" component={AsyncOrganizationForm} />
+            <MainLayoutRoute path="**/organization/show/:id" component={AsyncOrganizationShow} />
             <MainLayoutRoute path="**/glAccount/list" component={AsyncGlAccountList} />
             <MainLayoutRoute path="**/glAccount/create" component={AsyncGlAccountForm} />
             <MainLayoutRoute path="**/glAccount/edit/:glAccountId" component={AsyncGlAccountForm} />

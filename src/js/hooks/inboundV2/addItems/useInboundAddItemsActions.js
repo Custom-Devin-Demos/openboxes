@@ -59,7 +59,7 @@ const useInboundAddItemsActions = ({
   });
 
   const getNextSortOrder = () => {
-    const maxSortOrder = Math.max(0, ...getValues('values.lineItems').map(item => item.sortOrder || 0));
+    const maxSortOrder = Math.max(0, ...getValues('values.lineItems').map((item) => item.sortOrder || 0));
     return maxSortOrder + 100;
   };
 
@@ -395,8 +395,8 @@ const useInboundAddItemsActions = ({
     );
     const duplicateGroups = Object.values(itemsMap).filter((g) => g.length > 1);
     const hasDuplicates = duplicateGroups.length > 0;
-    const skipConfirm =
-      formValues.values.origin.locationType.locationTypeCode === locationType.SUPPLIER
+    const skipConfirm = formValues.values.origin.locationType.locationTypeCode
+      === locationType.SUPPLIER
       || !formValues.values.hasManageInventory;
 
     if (hasDuplicates && !skipConfirm) {

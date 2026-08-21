@@ -205,8 +205,9 @@ class EditLineModal extends Component {
     });
 
     if (itemsWithMismatchedExpiry.length > 0) {
-      const shouldUpdateExpirationDate =
-        await this.props.confirmExpirationDateSave(itemsWithMismatchedExpiry);
+      const shouldUpdateExpirationDate = await this.props.confirmExpirationDateSave(
+        itemsWithMismatchedExpiry,
+      );
       if (!shouldUpdateExpirationDate) {
         return Promise.reject();
       }
