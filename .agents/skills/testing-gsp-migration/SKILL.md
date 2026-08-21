@@ -7,8 +7,9 @@ description: How to verify GSP→React screen-migration batches in OpenBoxes (be
 
 ## App boot
 - DB: `docker start openboxes-db` (mariadb:10, openboxes/openboxes, root pw `root`).
-- App: `JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 ./gradlew bootRun` (~4–8 min; poll `http://localhost:8080/openboxes/auth/login` for HTTP 200). Login admin:password. NOTE: after the Grails 5.3.6/Gradle 7 upgrade on develop, use `JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64` instead.
+- App: `JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 ./gradlew bootRun` (Java 11 required since the Grails 5.3.6 / Gradle 7.6.4 upgrade; install with `sudo apt-get install -y openjdk-11-jdk-headless` if missing) (~4–8 min; poll `http://localhost:8080/openboxes/auth/login` for HTTP 200). Login admin:password.
 - Seed demo data AFTER boot: `docker exec -i openboxes-db mysql -uopenboxes -popenboxes openboxes < docker/seed-demo-data.sql`.
+- The seed can silently insert 0 rows if run immediately after boot: verify `select count(*) from product` = 8 and re-run the script once if 0 (it is insert-only and idempotent against duplicates).
 - To kill the app reliably: `pkill -f GradleWrapperMain; pkill -f GradleDaemon` then verify with `pgrep -fa java` (a plain `pkill -f gradle` can kill your own shell and leave GradleDaemon alive holding port 8080).
 
 ## BEFORE/AFTER screenshots
