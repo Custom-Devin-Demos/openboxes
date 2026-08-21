@@ -76,6 +76,9 @@ export const STOCK_TRANSFER_API = `${API}/stockTransfers`;
 export const STOCK_TRANSFER_BY_ID = (id) => `${STOCK_TRANSFER_API}/${id}`;
 export const STOCK_TRANSFER_REMOVE_ALL_ITEMS = (id) => `${STOCK_TRANSFER_BY_ID(id)}/removeAllItems`;
 export const STOCK_TRANSFER_CANDIDATES = `${STOCK_TRANSFER_API}/candidates`;
+export const STOCK_TRANSFER_SHOW_DETAILS = (id) => `${STOCK_TRANSFER_BY_ID(id)}/showDetails`;
+export const STOCK_TRANSFER_PRINT_DATA = (id) => `${STOCK_TRANSFER_BY_ID(id)}/printData`;
+export const STOCK_MOVEMENT_RETURN_SHOW_DETAILS = (id) => `${STOCK_MOVEMENT_API}/${id}/returnShowDetails`;
 
 // STOCK TRANSFER ITEMS
 export const STOCK_TRANSFER_ITEM_API = `${API}/stockTransferItems`;

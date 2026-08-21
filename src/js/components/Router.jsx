@@ -842,6 +842,21 @@ const AsyncStockTransferList = Loadable({
   loading: Loading,
 });
 
+const AsyncStockTransferShow = Loadable({
+  loader: () => import('components/stock-transfer/show/StockTransferShow'),
+  loading: Loading,
+});
+
+const AsyncStockTransferPrint = Loadable({
+  loader: () => import('components/stock-transfer/print/StockTransferPrint'),
+  loading: Loading,
+});
+
+const AsyncReturnsShow = Loadable({
+  loader: () => import('components/returns/show/ReturnsShow'),
+  loading: Loading,
+});
+
 const AsyncAdminIndex = Loadable({
   loader: () => import('components/admin/AdminIndexPage'),
   loading: Loading,
@@ -1527,6 +1542,8 @@ const Router = () => {
             <MainLayoutRoute path="**/product/batchEdit" component={AsyncProductBatchEditPage} />
             <MainLayoutRoute path="**/product/batchEditProperties" component={AsyncProductBatchEditPropertiesPage} />
             <MainLayoutRoute path="**/stockTransfer/list" component={AsyncStockTransferList} />
+            <MainLayoutRoute path="**/stockTransfer/show/:stockTransferId" component={AsyncStockTransferShow} />
+            <MainLayoutRoute path="**/stockMovement/show/:id" component={AsyncReturnsShow} />
             <MainLayoutRoute path="**/budgetCode/list" component={AsyncBudgetCodeList} />
             <MainLayoutRoute path="**/budgetCode/create" component={AsyncBudgetCodeForm} />
             <MainLayoutRoute path="**/budgetCode/edit/:budgetCodeId" component={AsyncBudgetCodeForm} />
@@ -1558,6 +1575,7 @@ const Router = () => {
             <MainLayoutRoute path="**/organization/show/:id" component={AsyncOrganizationShow} />
             <Route path="**/deliveryNote/print/:id" component={AsyncDeliveryNotePrint} />
             <Route path="**/deliveryNote/printOutboundReturn/:id" component={AsyncOutboundReturnPrint} />
+            <Route path="**/stockTransfer/print/:id" component={AsyncStockTransferPrint} />
             <Route path="**/picklist/print/:id" component={AsyncPicklistPrint} />
             <Route path="**/picklist/returnPrint/:id" component={AsyncReturnPicklistPrint} />
             <Route path="**/replenishment/print/:id" component={AsyncReplenishmentPrint} />

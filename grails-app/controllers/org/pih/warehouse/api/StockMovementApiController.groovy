@@ -12,6 +12,11 @@ package org.pih.warehouse.api
 import grails.converters.JSON
 import org.grails.web.json.JSONObject
 
+import java.text.SimpleDateFormat
+
+import org.pih.warehouse.LocalizationUtil
+import org.pih.warehouse.core.Constants
+
 import org.pih.warehouse.core.ActivityCode
 import org.pih.warehouse.core.DocumentService
 import org.pih.warehouse.core.Location
@@ -763,5 +768,198 @@ class StockMovementApiController {
     def getDocuments() {
         List<Map> documents = stockMovementService.getDocuments(params.id)
         render([data: documents] as JSON)
+    }
+
+    def returnShowDetails() {
+        Location currentLocation = Location.get(session.warehouse.id)
+        User user = User.get(session.user.id)
+
+        def stockMovement
+        try {
+            stockMovement = outboundStockMovementService.getStockMovement(params.id)
+            if (!stockMovement) {
+                stockMovement = stockMovementService.getStockMovement(params.id)
+            }
+        } catch (Exception e) {
+            stockMovement = null
+        }
+        if (!stockMovement) {
+            response.status = 404
+            render([errorMessage: "Stock Movement not found with id ${params.id}"] as JSON)
+            return
+        }
+        stockMovement.documents = stockMovementService.getDocuments(stockMovement)
+
+        def shipment = stockMovement?.shipment
+        boolean isUserAdmin = userService.isUserAdmin(user)
+        boolean isSuperuser = userService.isSuperuser(user)
+        boolean hasRoleFinance = userService.hasRoleFinance(user)
+
+        String noneLabel = g.message(code: "default.none.label")
+        String blurredMessage = g.message(code: 'errors.blurred.message', args: [noneLabel])
+        String currencyCode = grailsApplication.config.openboxes.locale.defaultCurrencyCode
+        String totalValueDisplay = hasRoleFinance ?
+                "${new java.text.DecimalFormat('###,###,##0.00').format(shipment?.calculateTotalValue() ?: 0.00)} ${currencyCode}" :
+                blurredMessage
+        String totalWeightDisplay = "${new java.text.DecimalFormat('#,##0.00').format(shipment?.totalWeightInPounds() ?: 0.00)} ${g.message(code: 'default.lbs.label')}"
+
+        String shipmentTypeName = shipment?.shipmentType ?
+                LocalizationUtil.getLocalizedString(shipment.shipmentType.name, LocalizationUtil.currentLocale) : null
+        String shipmentTypeDefaultName = shipment?.shipmentType ?
+                shipment.shipmentType.name?.split(/\|/)?.first() : null
+
+        Closure formatFullDate = { Date date ->
+            date ? new SimpleDateFormat("MMMM dd, yyyy").format(date) : null
+        }
+        Closure formatShortDate = { Date date ->
+            date ? new SimpleDateFormat(Constants.DEFAULT_MONTH_YEAR_DATE_FORMAT).format(date) : null
+        }
+
+        boolean hasBeenPlaced = stockMovement?.hasBeenShipped() || stockMovement?.hasBeenPartiallyReceived()
+        boolean isSameOrigin = stockMovement?.origin?.id == currentLocation?.id
+
+        def shipmentItemsByContainer = shipment?.shipmentItems?.groupBy { it.container }
+        boolean showReceivedColumns = shipment?.wasReceived() || shipment?.wasPartiallyReceived()
+        def packingListRows = []
+        def previousContainer = "__NONE__"
+        shipment?.sortShipmentItemsBySortOrder()?.each { shipmentItem ->
+            boolean newContainer = previousContainer != shipmentItem?.container
+            def container = shipmentItem?.container
+            def receiptItems = shipmentItem?.receiptItems?.sort { it.sortOrder }
+            packingListRows << [
+                    id                : shipmentItem.id,
+                    hasRecalledLot    : shipmentItem?.hasRecalledLot as boolean,
+                    newContainer      : newContainer,
+                    rowspan           : shipmentItemsByContainer?.get(shipmentItem?.container)?.size() ?: 1,
+                    containerName     : container?.name,
+                    parentContainerName: container?.parentContainer?.name,
+                    orderNumber       : shipmentItem?.orderNumber,
+                    productId         : shipmentItem?.inventoryItem?.product?.id,
+                    productCode       : shipmentItem?.inventoryItem?.product?.productCode,
+                    productName       : shipmentItem?.inventoryItem?.product?.displayNameOrDefaultName,
+                    productColor      : shipmentItem?.inventoryItem?.product?.color,
+                    binLocation       : isSameOrigin ? shipmentItem?.binLocation?.name : null,
+                    lotNumber         : shipmentItem?.inventoryItem?.lotNumber,
+                    expirationDate    : formatShortDate(shipmentItem?.inventoryItem?.expirationDate),
+                    receiptItems      : receiptItems?.collect {
+                        [
+                                binLocation      : it?.binLocation?.name,
+                                lotNumber        : it?.lotNumber,
+                                expirationDate   : formatShortDate(it?.expirationDate),
+                                recipientName    : it?.recipient?.name,
+                                quantityReceived : it?.quantityReceived,
+                                unitOfMeasure    : it?.inventoryItem?.product?.unitOfMeasure ?: 'EA',
+                        ]
+                    } ?: [],
+                    quantityShipped   : shipmentItem?.quantity,
+                    quantityReceived  : shipmentItem?.quantityReceived(),
+                    quantityCanceled  : shipmentItem?.quantityCanceled(),
+                    unitOfMeasure     : shipmentItem?.inventoryItem?.product?.unitOfMeasure,
+                    recipientName     : shipmentItem?.recipient?.name,
+                    recipientEmail    : shipmentItem?.recipient?.email,
+                    comments          : shipmentItem?.comments ?: [],
+                    isFullyReceived   : g.message(code: "default.boolean.${shipmentItem?.isFullyReceived()}"),
+            ]
+            previousContainer = shipmentItem.container
+        }
+
+        def receiptItems = stockMovementService.getStockMovementReceiptItems(stockMovement)
+        def receiptRows = receiptItems?.collect { receiptItem ->
+            boolean received = receiptItem?.receipt?.receiptStatusCode == org.pih.warehouse.receiving.ReceiptStatusCode.RECEIVED
+            [
+                    statusLabel      : LocalizationUtil.getLocalizedString(receiptItem?.receipt?.receiptStatusCode?.toString()),
+                    statusTitle      : "${receiptItem?.receipt?.receiptStatusCode} on ${receiptItem?.receipt?.actualDeliveryDate} ${g.message(code: 'default.created.label')} ${receiptItem?.receipt?.dateCreated}".toString(),
+                    receiptNumber    : receiptItem?.receipt?.receiptNumber ?: receiptItem?.receipt?.id,
+                    shipmentNumber   : receiptItem?.receipt?.shipment?.shipmentNumber,
+                    transactionId    : receiptItem?.receipt?.transaction?.id,
+                    transactionNumber: receiptItem?.receipt?.transaction ?
+                            (receiptItem?.receipt?.transaction?.transactionNumber ?: receiptItem?.receipt?.transaction?.id) : null,
+                    productId        : receiptItem?.product?.id,
+                    productCode      : receiptItem?.product?.productCode,
+                    productName      : receiptItem?.product?.displayNameOrDefaultName,
+                    lotNumber        : receiptItem?.inventoryItem?.lotNumber ?: "Default",
+                    expirationDate   : formatShortDate(receiptItem?.inventoryItem?.expirationDate),
+                    binLocation      : receiptItem?.binLocation?.name,
+                    quantityCanceled : receiptItem?.quantityCanceled ?: 0,
+                    quantityPending  : received ? 0 : (receiptItem?.quantityReceived ?: 0),
+                    quantityReceived : received ? (receiptItem?.quantityReceived ?: 0) : 0,
+            ]
+        } ?: []
+
+        render([data: [
+                id                   : stockMovement.id,
+                identifier           : stockMovement.identifier,
+                name                 : stockMovement.name,
+                statusLabel          : stockMovement.displayStatus?.label,
+                originId             : stockMovement.origin?.id,
+                originName           : stockMovement.origin?.name,
+                destinationId        : stockMovement.destination?.id,
+                destinationName      : stockMovement.destination?.name,
+                comments             : stockMovement.comments,
+                trackingNumber       : stockMovement.trackingNumber,
+                driverName           : stockMovement.driverName,
+                shipmentTypeName     : shipmentTypeName,
+                shipmentTypeDefaultName: shipmentTypeDefaultName,
+                barcodeUrl           : stockMovement.identifier ? g.createLink(controller: 'product', action: 'barcode',
+                        params: [data: stockMovement.identifier, width: 100, height: 30, format: 'CODE_128']) : null,
+                lineItemsCount       : stockMovement.lineItems?.size() ?: 0,
+                totalValueDisplay    : totalValueDisplay,
+                totalWeightDisplay   : totalWeightDisplay,
+                direction            : stockMovement.destination?.id == currentLocation?.id ? 'INBOUND' : 'OUTBOUND',
+                showDateRequested    : !stockMovement.dateRequested,
+                dateRequested        : formatShortDate(stockMovement.dateRequested),
+                hasShipped           : shipment?.hasShipped() as boolean,
+                wasReceived          : shipment?.wasReceived() as boolean,
+                expectedShippingDate : formatShortDate(shipment?.expectedShippingDate),
+                actualShippingDate   : formatShortDate(shipment?.actualShippingDate),
+                expectedDeliveryDate : formatShortDate(shipment?.expectedDeliveryDate),
+                actualDeliveryDate   : formatShortDate(shipment?.actualDeliveryDate),
+                lastUpdatedPretty    : stockMovement.lastUpdated ? new org.ocpsoft.prettytime.PrettyTime().format(stockMovement.lastUpdated) : null,
+                documents            : stockMovement.documents,
+                orderId              : stockMovement.order?.id,
+                orderNumber          : stockMovement.order?.orderNumber,
+                orderTypeLabel       : stockMovement.order?.orderType?.name ?
+                        LocalizationUtil.getLocalizedString(stockMovement.order.orderType.name, LocalizationUtil.currentLocale) : null,
+                shipmentId           : shipment?.id,
+                shipmentNumber       : shipment?.shipmentNumber,
+                incomingTransactions : shipment?.incomingTransactions?.collect {
+                    [id: it.id, transactionNumber: it.transactionNumber ?: it.id]
+                } ?: [],
+                outgoingTransactions : shipment?.outgoingTransactions?.collect {
+                    [id: it.id, transactionNumber: it.transactionNumber ?: it.id]
+                } ?: [],
+                isUserAdmin          : isUserAdmin,
+                isSuperuser          : isSuperuser,
+                hasBeenPlaced        : hasBeenPlaced,
+                showRollbackLastReceipt: isUserAdmin && (stockMovement.hasBeenReceived() || stockMovement.hasBeenPartiallyReceived()),
+                showRollback         : isUserAdmin && !(stockMovement.hasBeenReceived() || stockMovement.hasBeenPartiallyReceived()) && stockMovement.hasBeenShipped(),
+                showDelete           : isUserAdmin && (stockMovement.isPending() || !shipment?.currentStatus) && (isSameOrigin || !stockMovement.origin?.isDepot()),
+                auditing             : [
+                        dateShipped      : shipment?.hasShipped() ? formatFullDate(stockMovement.dateShipped) : null,
+                        dateShippedTitle : stockMovement.dateShipped?.toString(),
+                        shippedBy        : shipment?.hasShipped() ? shipment?.shippedBy?.name : null,
+                        receipts         : shipment?.receipts?.collect {
+                            [
+                                    actualDeliveryDate     : formatFullDate(it.actualDeliveryDate),
+                                    actualDeliveryDateTitle: it.actualDeliveryDate?.toString(),
+                                    recipientName          : it.recipient?.name,
+                            ]
+                        } ?: [],
+                        dateCreated      : formatFullDate(stockMovement.dateCreated),
+                        dateCreatedTitle : stockMovement.dateCreated?.toString(),
+                        createdByName    : stockMovement.createdBy?.name,
+                        lastUpdated      : formatFullDate(stockMovement.lastUpdated),
+                        lastUpdatedTitle : stockMovement.lastUpdated?.toString(),
+                        updatedByName    : stockMovement.updatedBy?.name,
+                ],
+                packingList          : [
+                        isFromPurchaseOrder: shipment?.isFromPurchaseOrder as boolean,
+                        isOrigin           : isSameOrigin,
+                        isDestination      : shipment?.destination?.id == currentLocation?.id,
+                        showReceivedColumns: showReceivedColumns,
+                        rows               : packingListRows,
+                ],
+                receipts             : receiptRows,
+        ]] as JSON)
     }
 }
