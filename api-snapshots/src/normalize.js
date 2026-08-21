@@ -18,7 +18,9 @@
  *    replaced with "<volatile>" regardless of type:
  *    dateCreated, lastUpdated, dateImported, requestId, buildDate, buildNumber,
  *    branchName, revisionNumber, ipAddress, hostname, timestamp, serverName,
- *    time, responseTime, elapsedTime, productAvailabilityId.
+ *    time, responseTime, elapsedTime, productAvailabilityId, grailsVersion,
+ *    appVersion (framework/app version strings change on every upgrade and are
+ *    not part of the behavioral contract being characterized).
  * 4. Non-deterministic ordering: endpoints flagged with `sortArrays: true` in
  *    endpoints.js have all their JSON arrays sorted by the JSON serialization
  *    of the (already normalized) elements, because the underlying SQL has no
@@ -26,7 +28,12 @@
  * 5. Unordered collections: values under keys listed in SORTED_ARRAY_KEYS
  *    (currently `roles`, which is backed by a java Set with no defined order)
  *    are sorted after normalization.
- * 6. Generated sequence numbers: strings on keys identifierKeys
+ * 6. Date-valued URL query parameters: dates embedded as MM/dd/yyyy query
+ *    parameter values inside link/URL strings (e.g. dashboard indicator links
+ *    like "...&createdAfter=08/16/2026&createdBefore=08/19/2026") are computed
+ *    relative to the current date at request time, so they change every day.
+ *    They are replaced with "=<date>" in place.
+ * 7. Generated sequence numbers: strings on keys identifierKeys
  *    (identifier, movementNumber, orderNumber, invoiceNumber, shipmentNumber,
  *    requestNumber, transactionNumber) that look like generated identifiers
  *    (e.g. "AB12CD3E") are left as-is by default because the demo fixtures are
@@ -62,9 +69,19 @@ const VOLATILE_KEYS = new Set([
   // Hyphenated random UUID regenerated on every product-availability refresh
   // (not a GORM 32-hex id, so the <uuid> replacement does not catch it).
   'productAvailabilityId',
+  // Framework/application version strings: change on every framework or app
+  // version bump (e.g. Grails 3.3.16 -> 4.1.4) without any behavioral meaning
+  // for the characterized API contract.
+  'grailsVersion',
+  'appVersion',
 ]);
 
 const DATE_KEY_RE = /(date|Date|expirationDate|dateShipped|dateRequested)$/;
+
+// MM/dd/yyyy dates used as URL query parameter values (always preceded by
+// "="), e.g. dashboard links with createdAfter/createdBefore windows computed
+// relative to "today".
+const QUERY_PARAM_DATE_RE = /=\d{2}\/\d{2}\/\d{4}/g;
 
 const SORTED_ARRAY_KEYS = new Set(['roles']);
 
@@ -75,6 +92,10 @@ function isDateString(value) {
 function normalizeValue(value, key) {
   if (typeof value === 'string') {
     if (isDateString(value)) return '<date>';
+    if (QUERY_PARAM_DATE_RE.test(value)) {
+      QUERY_PARAM_DATE_RE.lastIndex = 0;
+      value = value.replace(QUERY_PARAM_DATE_RE, '=<date>');
+    }
     if (UUID_RE.test(value)) {
       UUID_RE.lastIndex = 0;
       return value.replace(UUID_RE, '<uuid>');

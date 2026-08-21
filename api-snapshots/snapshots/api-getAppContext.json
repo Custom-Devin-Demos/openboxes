@@ -133,8 +133,8 @@
         "MANAGE_INVENTORY"
       ],
       "isImpersonated": false,
-      "grailsVersion": "3.3.16",
-      "appVersion": "0.9.9-SNAPSHOT",
+      "grailsVersion": "<volatile>",
+      "appVersion": "<volatile>",
       "branchName": "<volatile>",
       "buildNumber": "<volatile>",
       "environment": "development",
