@@ -485,7 +485,10 @@ const CreateShipmentPage = ({ location, match }) => {
             name="name"
             className="form-control form-control-sm mb-2"
             value={details.name}
-            onChange={(e) => setDetails((prev) => ({ ...prev, name: e.target.value }))}
+            onChange={(e) => {
+              const { value } = e.target;
+              setDetails((prev) => ({ ...prev, name: value }));
+            }}
           />
           <SelectField
             title={{ id: 'react.createShipment.shipmentType.label', defaultMessage: 'Shipment type' }}
@@ -513,8 +516,10 @@ const CreateShipmentPage = ({ location, match }) => {
             name="expectedShippingDate"
             className="form-control form-control-sm mb-2"
             value={details.expectedShippingDate}
-            onChange={(e) => setDetails((prev) => (
-              { ...prev, expectedShippingDate: e.target.value }))}
+            onChange={(e) => {
+              const { value } = e.target;
+              setDetails((prev) => ({ ...prev, expectedShippingDate: value }));
+            }}
           />
           <label className="font-weight-bold">
             <Translate id="react.createShipment.expectedDeliveryDate.label" defaultMessage="Expected delivery date" />
@@ -524,8 +529,10 @@ const CreateShipmentPage = ({ location, match }) => {
             name="expectedDeliveryDate"
             className="form-control form-control-sm mb-2"
             value={details.expectedDeliveryDate}
-            onChange={(e) => setDetails((prev) => (
-              { ...prev, expectedDeliveryDate: e.target.value }))}
+            onChange={(e) => {
+              const { value } = e.target;
+              setDetails((prev) => ({ ...prev, expectedDeliveryDate: value }));
+            }}
           />
         </div>
       </div>
@@ -575,8 +582,10 @@ const CreateShipmentPage = ({ location, match }) => {
                 name="trackingNumber"
                 className="form-control form-control-sm mb-2"
                 value={tracking.trackingNumber}
-                onChange={(e) => setTracking((prev) => (
-                  { ...prev, trackingNumber: e.target.value }))}
+                onChange={(e) => {
+                  const { value } = e.target;
+                  setTracking((prev) => ({ ...prev, trackingNumber: value }));
+                }}
               />
             </>
           )}
@@ -597,10 +606,13 @@ const CreateShipmentPage = ({ location, match }) => {
                 name={`referenceNumber-${type.id}`}
                 className="form-control form-control-sm mb-2"
                 value={tracking.referenceNumbers[type.id] || ''}
-                onChange={(e) => setTracking((prev) => ({
-                  ...prev,
-                  referenceNumbers: { ...prev.referenceNumbers, [type.id]: e.target.value },
-                }))}
+                onChange={(e) => {
+                  const { value } = e.target;
+                  setTracking((prev) => ({
+                    ...prev,
+                    referenceNumbers: { ...prev.referenceNumbers, [type.id]: value },
+                  }));
+                }}
               />
             </div>
           ))}
@@ -614,7 +626,10 @@ const CreateShipmentPage = ({ location, match }) => {
                 name="statedValue"
                 className="form-control form-control-sm mb-2"
                 value={tracking.statedValue}
-                onChange={(e) => setTracking((prev) => ({ ...prev, statedValue: e.target.value }))}
+                onChange={(e) => {
+                  const { value } = e.target;
+                  setTracking((prev) => ({ ...prev, statedValue: value }));
+                }}
               />
             </>
           )}
@@ -628,7 +643,10 @@ const CreateShipmentPage = ({ location, match }) => {
                 name="totalValue"
                 className="form-control form-control-sm mb-2"
                 value={tracking.totalValue}
-                onChange={(e) => setTracking((prev) => ({ ...prev, totalValue: e.target.value }))}
+                onChange={(e) => {
+                  const { value } = e.target;
+                  setTracking((prev) => ({ ...prev, totalValue: value }));
+                }}
               />
             </>
           )}
@@ -642,8 +660,10 @@ const CreateShipmentPage = ({ location, match }) => {
                 className="form-control form-control-sm mb-2"
                 rows="3"
                 value={tracking.additionalInformation}
-                onChange={(e) => setTracking((prev) => (
-                  { ...prev, additionalInformation: e.target.value }))}
+                onChange={(e) => {
+                  const { value } = e.target;
+                  setTracking((prev) => ({ ...prev, additionalInformation: value }));
+                }}
               />
             </>
           )}
@@ -818,7 +838,10 @@ const CreateShipmentPage = ({ location, match }) => {
             name="addItemQuantity"
             className="form-control form-control-sm mb-2"
             value={addItem.quantity}
-            onChange={(e) => setAddItem((prev) => ({ ...prev, quantity: e.target.value }))}
+            onChange={(e) => {
+              const { value } = e.target;
+              setAddItem((prev) => ({ ...prev, quantity: value }));
+            }}
           />
           <button type="button" className="btn btn-outline-primary btn-sm" onClick={onAddItem}>
             <Translate id="react.createShipment.addItem.label" defaultMessage="Add item" />
@@ -903,8 +926,10 @@ const CreateShipmentPage = ({ location, match }) => {
                         name="binLocationSelection"
                         className="form-control form-control-sm mb-2"
                         value={pick.selection}
-                        onChange={(e) => setPick((prev) => (
-                          { ...prev, selection: e.target.value }))}
+                        onChange={(e) => {
+                          const { value } = e.target;
+                          setPick((prev) => ({ ...prev, selection: value }));
+                        }}
                       >
                         <option value="">--</option>
                         {binLocations.map((bin) => (
@@ -930,8 +955,10 @@ const CreateShipmentPage = ({ location, match }) => {
                             name="pickQuantity"
                             className="form-control form-control-sm"
                             value={pick.quantity}
-                            onChange={(e) => setPick((prev) => (
-                              { ...prev, quantity: e.target.value }))}
+                            onChange={(e) => {
+                              const { value } = e.target;
+                              setPick((prev) => ({ ...prev, quantity: value }));
+                            }}
                           />
                         </div>
                         <button type="button" className="btn btn-primary btn-sm mr-2" onClick={onPickItem}>
@@ -946,8 +973,10 @@ const CreateShipmentPage = ({ location, match }) => {
                             name="splitQuantity"
                             className="form-control form-control-sm"
                             value={pick.splitQuantity}
-                            onChange={(e) => setPick((prev) => (
-                              { ...prev, splitQuantity: e.target.value }))}
+                            onChange={(e) => {
+                              const { value } = e.target;
+                              setPick((prev) => ({ ...prev, splitQuantity: value }));
+                            }}
                           />
                         </div>
                         <button type="button" className="btn btn-outline-primary btn-sm mr-2" onClick={onSplitItem}>
@@ -1007,7 +1036,10 @@ const CreateShipmentPage = ({ location, match }) => {
             name="actualShippingDate"
             className="form-control form-control-sm mb-2"
             value={send.actualShippingDate}
-            onChange={(e) => setSend((prev) => ({ ...prev, actualShippingDate: e.target.value }))}
+            onChange={(e) => {
+              const { value } = e.target;
+              setSend((prev) => ({ ...prev, actualShippingDate: value }));
+            }}
           />
           <label className="font-weight-bold">
             <Translate id="react.createShipment.comments.label" defaultMessage="Comments" />
@@ -1017,7 +1049,10 @@ const CreateShipmentPage = ({ location, match }) => {
             className="form-control form-control-sm mb-2"
             rows="3"
             value={send.comments}
-            onChange={(e) => setSend((prev) => ({ ...prev, comments: e.target.value }))}
+            onChange={(e) => {
+              const { value } = e.target;
+              setSend((prev) => ({ ...prev, comments: value }));
+            }}
           />
           {data?.emailRecipients?.length > 0 && (
             <div className="mb-2" aria-label="email-recipients">

@@ -9,11 +9,12 @@
  **/
 package org.pih.warehouse.shipping
 
+import grails.validation.Validateable
 import org.pih.warehouse.inventory.Transaction
 import org.pih.warehouse.shipping.Shipment
 import org.pih.warehouse.shipping.ShipmentWorkflow
 
-class SendShipmentCommand implements Serializable {
+class SendShipmentCommand implements Serializable, Validateable {
 
     String comments
     Shipment shipment

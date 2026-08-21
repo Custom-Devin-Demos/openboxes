@@ -42,7 +42,6 @@ class CreateShipmentApiController {
     def locationService
     def userService
     def mailService
-    def groovyPageRenderer
     MessageSource messageSource
 
     def read() {
@@ -422,7 +421,7 @@ class CreateShipmentApiController {
             def shipmentType = "${LocalizationUtil.getLocalizedString(shipmentInstance.shipmentType?.name, currentLocale())}"
             def shipmentDate = "${shipmentInstance?.actualShippingDate?.format('MMMMM dd yyyy')}"
             def subject = "${warehouse.message(code: 'shipment.hasBeenShipped.message', args: [shipmentType, shipmentName, shipmentDate])}"
-            def body = groovyPageRenderer.render(template: "/email/shipmentShipped",
+            def body = g.render(template: "/email/shipmentShipped",
                     model: [shipmentInstance: shipmentInstance, userInstance: userInstance])
             def toList = recipients?.collect { it?.email }?.unique()
             log.info("Mailing shipment emails to ${toList} ")
@@ -436,12 +435,9 @@ class CreateShipmentApiController {
     }
 
     private void bindReferenceNumbers(Shipment shipment, ShipmentWorkflow workflow, def referenceNumbers) {
-        if (!shipment.referenceNumbers) {
-            shipment.referenceNumbers = []
-        }
         for (ReferenceNumberType type in workflow?.referenceNumberTypes) {
 
-            ReferenceNumber referenceNumber = shipment.referenceNumbers.find({
+            ReferenceNumber referenceNumber = shipment.referenceNumbers?.find({
                 it.referenceNumberType.id == type.id
             })
 
@@ -450,12 +446,12 @@ class CreateShipmentApiController {
                 if (referenceNumber) {
                     referenceNumber.identifier = identifier
                 } else {
-                    shipment.referenceNumbers.add(new ReferenceNumber([identifier         : identifier,
-                                                                       referenceNumberType: type]))
+                    shipment.addToReferenceNumbers(new ReferenceNumber([identifier         : identifier,
+                                                                        referenceNumberType: type]))
                 }
             } else {
                 if (referenceNumber) {
-                    shipment.referenceNumbers.remove(referenceNumber)
+                    shipment.removeFromReferenceNumbers(referenceNumber)
                 }
             }
         }
