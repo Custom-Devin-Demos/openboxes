@@ -10,7 +10,6 @@
 package org.pih.warehouse.api
 
 import grails.converters.JSON
-import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 import org.pih.warehouse.LocalizationUtil
 import org.pih.warehouse.core.Location
@@ -30,7 +29,6 @@ import org.springframework.http.HttpStatus
 
 import java.text.SimpleDateFormat
 
-@Transactional
 class ReceiveOrderApiController {
 
     def orderService
@@ -56,12 +54,14 @@ class ReceiveOrderApiController {
         ]] as JSON)
     }
 
+    private static final List<String> SHIPMENT_DETAILS_FIELDS = ["shipmentType", "recipient", "shippedOn", "deliveredOn"]
+
     def validateShipmentDetails() {
         OrderCommand orderCommand = bindOrderCommand(request.JSON)
         if (!orderCommand) {
             return
         }
-        if (!orderCommand.validate()) {
+        if (!orderCommand.validate(SHIPMENT_DETAILS_FIELDS)) {
             render(status: HttpStatus.BAD_REQUEST.value(), text: [errorMessages: localizeErrors(orderCommand)] as JSON, contentType: "application/json")
             return
         }
@@ -83,7 +83,7 @@ class ReceiveOrderApiController {
         if (!orderCommand) {
             return
         }
-        if (!orderCommand.validate()) {
+        if (!orderCommand.validate(SHIPMENT_DETAILS_FIELDS)) {
             render(status: HttpStatus.BAD_REQUEST.value(), text: [errorMessages: localizeErrors(orderCommand)] as JSON, contentType: "application/json")
             return
         }
@@ -92,11 +92,16 @@ class ReceiveOrderApiController {
             render(status: HttpStatus.BAD_REQUEST.value(), text: [errorMessages: itemErrors] as JSON, contentType: "application/json")
             return
         }
-        orderCommand.orderItems = jsonObject.orderItems.collect { bindOrderItemCommand(it) }
-        orderCommand.currentUser = User.get(session.user.id)
-        orderCommand.currentLocation = Location.get(session.warehouse.id)
         try {
-            orderService.saveOrderShipment(orderCommand)
+            Order.withTransaction {
+                orderCommand.order = Order.get(params.id)
+                // Initialize the order type proxy so downstream shipment validation can use it
+                orderCommand.order.orderType?.isReturnOrder()
+                orderCommand.orderItems = jsonObject.orderItems.collect { bindOrderItemCommand(it) }
+                orderCommand.currentUser = User.get(session.user.id)
+                orderCommand.currentLocation = Location.get(session.warehouse.id)
+                orderService.saveOrderShipment(orderCommand)
+            }
         }
         catch (ShipmentException se) {
             render(status: HttpStatus.BAD_REQUEST.value(), text: [errorMessages: localizeErrors(se.shipment)] as JSON, contentType: "application/json")
@@ -151,7 +156,7 @@ class ReceiveOrderApiController {
         Locale locale = currentLocale()
         jsonItems?.each { jsonItem ->
             OrderItemCommand orderItemCommand = bindOrderItemCommand(jsonItem)
-            if (orderItemCommand.quantityReceived && !orderItemCommand.validate()) {
+            if (orderItemCommand.quantityReceived && !orderItemCommand.validate(["productReceived"])) {
                 orderItemCommand.errors.allErrors.each { error ->
                     errorMessages << messageSource.getMessage(error, locale)
                 }

@@ -350,6 +350,10 @@ class OrderService {
             throw new ShipmentException(message: "Validation errors on shipment ", shipment: shipmentInstance)
         }
 
+        // Flush the shipment insert before shipment events are created so that the
+        // current_event_id foreign key can be resolved at the next session flush
+        shipmentInstance.save(flush: true)
+
         // Send shipment, receive shipment, and add
         if (shipmentInstance) {
             // Send shipment
@@ -368,6 +372,9 @@ class OrderService {
                 throw new ShipmentException(message: "Unable to save receipt ", shipment: shipmentInstance)
             }
 
+            // Re-fetch the order so lazy associations detached by the session clear
+            // above are re-associated with the current session before validation
+            orderCommand.order = Order.get(orderCommand?.order?.id)
             saveOrder(orderCommand?.order)
         }
         return orderCommand
