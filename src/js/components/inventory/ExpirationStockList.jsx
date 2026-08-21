@@ -15,6 +15,18 @@ import PageWrapper from 'wrappers/PageWrapper';
 
 import './inventoryLegacy.scss';
 
+// The backend binds InventoryReportCommand dates using the legacy datepicker
+// format (MM/dd/yyyy), so convert to/from the ISO format used by <input type="date">
+const isoToLegacyDate = (iso) => {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+  return match ? `${match[2]}/${match[3]}/${match[1]}` : iso;
+};
+
+const legacyToIsoDate = (legacy) => {
+  const match = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(legacy);
+  return match ? `${match[3]}-${match[1]}-${match[2]}` : legacy;
+};
+
 const EXPIRATION_STATUSES = [
   { value: 'within30Days', defaultMessage: 'Expiring within 30 days' },
   { value: 'within90Days', defaultMessage: 'Expiring within 90 days' },
@@ -41,8 +53,8 @@ const ExpirationStockList = ({
   const [data, setData] = useState(null);
   const [category, setCategory] = useState(query.category || '');
   const [status, setStatus] = useState(query.status || '');
-  const [startDate, setStartDate] = useState(query.startDate || '');
-  const [endDate, setEndDate] = useState(query.endDate || '');
+  const [startDate, setStartDate] = useState(query.startDate ? legacyToIsoDate(query.startDate) : '');
+  const [endDate, setEndDate] = useState(query.endDate ? legacyToIsoDate(query.endDate) : '');
   const [selectedItems, setSelectedItems] = useState([]);
 
   const fetchData = useCallback(() => {
@@ -62,8 +74,8 @@ const ExpirationStockList = ({
     const params = {
       ...(category ? { category } : {}),
       ...(showStatusFilter && status ? { status } : {}),
-      ...(startDate ? { startDate } : {}),
-      ...(endDate ? { endDate } : {}),
+      ...(startDate ? { startDate: isoToLegacyDate(startDate) } : {}),
+      ...(endDate ? { endDate: isoToLegacyDate(endDate) } : {}),
     };
     history.push({ pathname: location.pathname, search: queryString.stringify(params) });
   };
