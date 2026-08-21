@@ -1069,6 +1069,31 @@ class UrlMappings {
             action = [GET: "listInventory"]
         }
 
+        "/api/inventory/listLowStock" {
+            controller = { "inventoryApi" }
+            action = [GET: "listLowStock"]
+        }
+
+        "/api/inventory/listReorderStock" {
+            controller = { "inventoryApi" }
+            action = [GET: "listReorderStock"]
+        }
+
+        "/api/inventory/listDailyTransactions" {
+            controller = { "inventoryApi" }
+            action = [GET: "listDailyTransactions"]
+        }
+
+        "/api/inventory/listExpiredStock" {
+            controller = { "inventoryApi" }
+            action = [GET: "listExpiredStock"]
+        }
+
+        "/api/inventory/listExpiringStock" {
+            controller = { "inventoryApi" }
+            action = [GET: "listExpiringStock"]
+        }
+
         "/api/inventory/editBinLocation" {
             controller = { "inventoryApi" }
             action = [GET: "editBinLocation"]
