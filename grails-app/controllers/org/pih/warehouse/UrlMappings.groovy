@@ -1861,6 +1861,31 @@ class UrlMappings {
             action = [GET: "export"]
         }
 
+        "/api/productSuppliers/$id/details" {
+            controller = { "productSupplierApi" }
+            action = [GET: "details"]
+        }
+
+        "/api/productTypes/productActivityCodeOptions"(parseRequest: true) {
+            controller = { "productTypeApi" }
+            action = [GET: "productActivityCodeOptions"]
+        }
+
+        "/api/productTypes/productFieldOptions"(parseRequest: true) {
+            controller = { "productTypeApi" }
+            action = [GET: "productFieldOptions"]
+        }
+
+        "/api/productTypes"(parseRequest: true) {
+            controller = { "productTypeApi" }
+            action = [GET: "list", POST: "create"]
+        }
+
+        "/api/productTypes/$id"(parseRequest: true) {
+            controller = { "productTypeApi" }
+            action = [GET: "read", PUT: "update", DELETE: "delete"]
+        }
+
         // Load Data
 
         "/api/loadData/listOfDemoData"(parseRequest: true) {
