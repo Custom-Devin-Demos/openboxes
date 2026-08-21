@@ -478,6 +478,13 @@ springBoot {
     mainClassName = 'org.pih.warehouse.Application'
 }
 
+// Gradle 7 fails on duplicate archive entries by default; the Grails plugin
+// merges i18n bundles into resources that are also a source dir, so archive
+// tasks see messages.properties twice. Keep the first occurrence.
+tasks.withType(AbstractArchiveTask).configureEach {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 bootWar {
     archiveFileName = 'openboxes.war'
     launchScript()
@@ -968,15 +975,13 @@ jacocoTestReport {
         html.enabled true  // Useful for verifying locally during development.
     }
 
-    doFirst {
-        // Our source code builds to both "build/classes/groovy" and "build/classes/java" so we need to filter one of
-        // the two class paths out to avoid "Can't add different class with same name" errors. It's dirty to do this
-        // in the "doFirst" block, but it's the only way to tell Jacoco to ONLY use this path.
-        classDirectories.setFrom(files(files("build/classes/groovy/main").collect {
-            // Then also exclude any packages from the report that we didn't actually generate any coverage % for.
-            fileTree(dir: it, exclude: jacocoExcludes)
-        }))
-    }
+    // Our source code builds to both "build/classes/groovy" and "build/classes/java" so we need to filter one of
+    // the two class paths out to avoid "Can't add different class with same name" errors. Gradle 7 finalizes this
+    // file collection before task execution, so it must be configured here rather than in a "doFirst" block.
+    classDirectories.setFrom(files(files("build/classes/groovy/main").collect {
+        // Then also exclude any packages from the report that we didn't actually generate any coverage % for.
+        fileTree(dir: it, exclude: jacocoExcludes)
+    }))
 }
 
 // Configuration for both "test" and "integrationTest" tasks.
