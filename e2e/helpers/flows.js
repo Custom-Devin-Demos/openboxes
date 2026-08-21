@@ -60,16 +60,16 @@ async function ensureDepot(page) {
 async function ensureInvoiceRole(page) {
   await page.goto('user/edit/1');
   await page.locator('a[href="#authorization-tab"]').click();
-  const choices = page.locator('.chosen-choices');
-  await expect(choices.first()).toBeVisible();
-  if (await page.locator('.chosen-choices li', { hasText: 'Invoice user' }).count()) {
+  const rolesSelect = page.locator('[data-testid="default-roles-select"]');
+  await expect(rolesSelect.first()).toBeVisible();
+  if (await rolesSelect.getByText('Invoice user', { exact: false }).count()) {
     return false;
   }
-  await page.locator('.chosen-choices input').first().click();
+  await rolesSelect.locator('input').first().click();
   await page.keyboard.type('Invoice');
-  await page.locator('.chosen-results li.active-result', { hasText: 'Invoice user' }).first().click();
+  await page.locator('[class*="option"]').filter({ hasText: 'Invoice user' }).first().click();
   await page.getByRole('button', { name: 'Save' }).click();
-  await page.waitForLoadState('domcontentloaded');
+  await expect(rolesSelect.getByText('Invoice user', { exact: false }).first()).toBeVisible();
   return true;
 }
 

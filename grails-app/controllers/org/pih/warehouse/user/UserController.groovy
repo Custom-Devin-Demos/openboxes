@@ -54,19 +54,7 @@ class UserController {
      * Show list of users
      */
     def list() {
-
-        println params
-        def userInstanceList = []
-        def userInstanceTotal = 0
-
-        params.max = Math.min(params.max ? params.int('max') : 15, 100)
-
-        def query = params.q ? "%" + params.q + "%" : ""
-
-        userInstanceList = userService.findUsers(query, params)
-        userInstanceTotal = userInstanceList.totalCount
-
-        [userInstanceList: userInstanceList, userInstanceTotal: userInstanceTotal]
+        render(view: "/common/react", params: params)
     }
 
 
@@ -169,13 +157,7 @@ class UserController {
      * Show a user
      */
     def show() {
-        def userInstance = User.get(params.id)
-        if (!userInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'user.label'), params.id])}"
-            redirect(action: "list")
-        } else {
-            [userInstance: userInstance]
-        }
+        render(view: "/common/react", params: params)
     }
 
     /**
@@ -186,14 +168,7 @@ class UserController {
     }
 
     def cropPhoto() {
-        log.info "change photo for given user"
-        def userInstance = User.get(params.id)
-        if (!userInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'user.label'), params.id])}"
-            redirect(action: "list")
-        } else {
-            [userInstance: userInstance]
-        }
+        render(view: "/common/react", params: params)
     }
 
 
@@ -209,15 +184,7 @@ class UserController {
      * Show the edit form for a user
      */
     def edit() {
-
-        def userInstance = User.get(params.id)
-        if (!userInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'user.label'), params.id])}"
-            redirect(action: "list")
-        } else {
-            def locations = locationService.getLoginLocations(session.warehouse).sort()
-            return [userInstance: userInstance, locations: locations]
-        }
+        render(view: "/common/react", params: params)
     }
 
 

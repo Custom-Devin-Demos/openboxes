@@ -199,6 +199,15 @@ export const USER_BY_ID = (id) => `${USERS_API}/${id}`;
 export const USER_CREATE = `${USERS_API}/create`;
 export const USER_PHOTO = (id) => `${USERS_API}/${id}/photo`;
 export const USER_LOCALE_OPTIONS = `${USERS_API}/localeOptions`;
+export const USER_LIST = `${USERS_API}/list`;
+export const USER_LOGIN_LOCATION_OPTIONS = `${USERS_API}/loginLocationOptions`;
+export const USER_TIMEZONE_OPTIONS = `${USERS_API}/timezoneOptions`;
+export const USER_ROLE_OPTIONS = `${USERS_API}/roleOptions`;
+export const USER_CHANGE_PASSWORD = (id) => `${USERS_API}/${id}/changePassword`;
+export const USER_TOGGLE_ACTIVATION = (id) => `${USERS_API}/${id}/toggleActivation`;
+export const USER_SEND_TEST_EMAIL = (id) => `${USERS_API}/${id}/sendTestEmail`;
+export const USER_LOCATION_ROLES = (id) => `${USERS_API}/${id}/locationRoles`;
+export const USER_LOCATION_ROLE_BY_ID = (id, locationRoleId) => `${USERS_API}/${id}/locationRoles/${locationRoleId}`;
 
 // PRODUCT ASSOCIATIONS
 export const PRODUCT_ASSOCIATIONS = `${API}/productAssociations`;

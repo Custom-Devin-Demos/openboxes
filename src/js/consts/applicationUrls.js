@@ -467,7 +467,10 @@ const USER_URL = {
   show: (id) => `${USER_URL.base}/show/${id}`,
   edit: (id) => `${USER_URL.base}/edit/${id}`,
   changePhoto: (id) => `${USER_URL.base}/changePhoto/${id}`,
+  cropPhoto: (id) => `${USER_URL.base}/cropPhoto/${id}`,
   viewThumb: (id) => `${USER_URL.base}/viewThumb/${id}`,
+  viewPhoto: (id) => `${USER_URL.base}/viewPhoto/${id}`,
+  impersonate: (id) => `${USER_URL.base}/impersonate/${id}`,
 };
 
 const GL_ACCOUNT_TYPE_URL = {
