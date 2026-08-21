@@ -167,9 +167,9 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 
 | Batch | Scope | Status | Session | PR | Evidence |
 |---|---|---|---|---|---|
-| 2-admin-config-4 | admin-config-4 batch | IN_PROGRESS | [041912f2](https://app.devin.ai/sessions/041912f26500423eb7c43aa324380801) | — | 5 migration/quartz screens |
+| 2-admin-config-4 | admin-config-4 batch | MERGED | [041912f2](https://app.devin.ai/sessions/041912f26500423eb7c43aa324380801) | [#49](https://github.com/Custom-Devin-Demos/openboxes/pull/49) | 5 migration/quartz screens; new /api/migration/* + /api/jobs/* (superuser-only rules kept); post-rebase (JDK 21) snapshots 122/122, Playwright 10/10, CI 4/4 |
 | 2-picking | picking batch | IN_PROGRESS | [e9a223ad](https://app.devin.ai/sessions/e9a223ad7c4a4b929b8d5d7b90699d62) | — | 3 picklist/replenishment print views |
-| 2-print-documents-2 | print-documents-2 batch | IN_PROGRESS | [0877fa23](https://app.devin.ai/sessions/0877fa23fb7f476f85e045d65a48378c) | — | 4 document/goodsReceiptNote screens |
+| 2-print-documents-2 | print-documents-2 batch | MERGED | [0877fa23](https://app.devin.ai/sessions/0877fa23fb7f476f85e045d65a48378c) | [#55](https://github.com/Custom-Devin-Demos/openboxes/pull/55) | 4 document/GRN print screens; GET /api/documents + /api/goodsReceiptNotes/{id}/printData; post-rebase (JDK 21) snapshots 122/122, Playwright 10/10, CI 4/4; localization union verified (27 added/0 removed/0 changed); pre-existing document/upload GET 500 documented |
 | 2-product-catalog-6 | product-catalog-6 batch | IN_PROGRESS | [e632af0d](https://app.devin.ai/sessions/e632af0d37594179abe3905a3ebf1a06) | — | 6 productSupplier/productType screens |
 | 2-product-catalog-7 | product-catalog-7 batch | IN_PROGRESS | [d2416979](https://app.devin.ai/sessions/d2416979721b4f27a9058c2f86ecf6a0) | — | 6 productType/tag/uomConversion screens |
 | 2-receiving | receiving batch | IN_PROGRESS | [4a653a78](https://app.devin.ai/sessions/4a653a786b034b85833923f00bd8b085) | — | partialReceiving + receiveOrderWorkflow webflow |
@@ -178,6 +178,7 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | 2-shipments-4 | shipments-4 batch | IN_PROGRESS | [9bd39418](https://app.devin.ai/sessions/9bd3941821b24dfba3d244b458ab4c98) | — | shipmentItem/split + 4 shipmentWorkflow screens |
 | 2-stocklists-2 | stocklists-2 batch | IN_PROGRESS | [d0f1323f](https://app.devin.ai/sessions/d0f1323f227641a9a754c059ba0abf7c) | — | 4 requisitionTemplate/stocklist screens |
 
+- 2026-08-20: Wave 5: PR #49 (admin-config-4) and PR #55 (print-documents-2) merged (authoritatively confirmed, CI 4/4 each, clean merges; #55 localization union verified 27/0/0). 8 wave-5 batches still in progress.
 - 2026-08-20: P1.4 ACCEPTED — PR #48 merged (authoritatively confirmed, CI 4/4, clean rebase onto post-wave-4 develop): Grails 6.2.3 / grails-gradle-plugin 6.2.4 / Gradle 8.11.1 / Groovy 3.0.23 / GORM 8.1.2 / Spring Boot 2.7.18 / JDK 21 (bytecode 17). Evidence: assemble+bootRun on JDK 21, Liquibase clean (983 changesets) + seeded boot, admin login, Quartz registration, snapshots 122/122, Playwright 10/10. javax→jakarta deferred to Grails 7/Spring Boot 3 (documented in PR: Grails 6 stays on javax servlet stack). Wave-5 children notified to rebase and use JDK 21.
 - 2026-08-20: Phase 2 wave 5 spawned (10 batches). Remaining after wave 5: 9 batches (dashboard-auth, errors-misc, mobile-1/2, product-catalog-8, reporting-4, shipment-workflow, stock-movements, stock-transfers).
 - 2026-08-20: PR #46 (inventory-4) merged (authoritatively confirmed, CI 4/4, clean merge, additive union verified: 28 keys added / 0 removed / 0 changed). PHASE 2 WAVE 4 COMPLETE (10/10 merged). P1.4 PR #48 final rebase + re-verification requested.
