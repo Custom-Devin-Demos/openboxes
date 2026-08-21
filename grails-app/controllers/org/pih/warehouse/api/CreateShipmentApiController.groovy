@@ -473,6 +473,7 @@ class CreateShipmentApiController {
     }
 
     private void renderShipment() {
+        Shipment.withSession { session -> session.flush() }
         Shipment shipment = Shipment.get(params.id)
         if (!shipment) {
             renderNotFound()
