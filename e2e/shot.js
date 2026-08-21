@@ -6,12 +6,10 @@ const { chromium } = require('@playwright/test');
 const BASE = 'http://localhost:8080/openboxes';
 const outDir = process.argv[2] || '/tmp/shots/before';
 const urls = [
-  ['productAssociation-list', '/productAssociation/list'],
-  ['productAssociation-show', '/productAssociation/show/seed-assoc-01'],
-  ['productCatalog-list', '/productCatalog/list'],
-  ['productCatalog-create', '/productCatalog/create'],
-  ['productCatalog-edit', '/productCatalog/edit/seed-catalog-01'],
-  ['productCatalog-show', '/productCatalog/show/seed-catalog-01'],
+  ['paymentTerm-list', '/paymentTerm/list'],
+  ['preferenceType-list', '/preferenceType/list'],
+  ['preferenceType-create', '/preferenceType/create'],
+  ['preferenceType-edit', '/preferenceType/edit/APPROVED'],
 ];
 
 (async () => {

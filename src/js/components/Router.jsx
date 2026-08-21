@@ -313,6 +313,21 @@ const AsyncPaymentTermForm = Loadable({
   loading: Loading,
 });
 
+const AsyncPaymentTermList = Loadable({
+  loader: () => import('components/paymentTerm/PaymentTermList'),
+  loading: Loading,
+});
+
+const AsyncPreferenceTypeList = Loadable({
+  loader: () => import('components/preferenceType/PreferenceTypeList'),
+  loading: Loading,
+});
+
+const AsyncPreferenceTypeForm = Loadable({
+  loader: () => import('components/preferenceType/PreferenceTypeForm'),
+  loading: Loading,
+});
+
 const AsyncProductSupplierList = Loadable({
   loader: () => import('components/productSupplier/ProductSupplierList'),
   loading: Loading,
@@ -845,6 +860,10 @@ const Router = () => {
             <MainLayoutRoute path="**/glAccountType/edit/:glAccountTypeId" component={AsyncGlAccountTypeForm} />
             <MainLayoutRoute path="**/paymentTerm/create" component={AsyncPaymentTermForm} />
             <MainLayoutRoute path="**/paymentTerm/edit/:paymentTermId" component={AsyncPaymentTermForm} />
+            <MainLayoutRoute path="**/paymentTerm/list" component={AsyncPaymentTermList} />
+            <MainLayoutRoute path="**/preferenceType/list" component={AsyncPreferenceTypeList} />
+            <MainLayoutRoute path="**/preferenceType/create" component={AsyncPreferenceTypeForm} />
+            <MainLayoutRoute path="**/preferenceType/edit/:preferenceTypeId" component={AsyncPreferenceTypeForm} />
             <MainLayoutRoute path="**/admin/controllerActions" component={AsyncControllerActions} />
             <MainLayoutRoute path="**/admin/plugins" component={AsyncAdminPlugins} />
             <MainLayoutRoute path="**/admin/cache" component={AsyncAdminCache} />

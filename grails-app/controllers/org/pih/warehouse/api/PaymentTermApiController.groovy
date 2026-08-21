@@ -18,6 +18,11 @@ import org.springframework.http.HttpStatus
 
 class PaymentTermApiController {
 
+    def list() {
+        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        render([data: PaymentTerm.list(params).collect { toJson(it) }, totalCount: PaymentTerm.count()] as JSON)
+    }
+
     def read() {
         PaymentTerm paymentTerm = PaymentTerm.get(params.id)
         if (!paymentTerm) {

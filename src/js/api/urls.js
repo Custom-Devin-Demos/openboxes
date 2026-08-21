@@ -307,6 +307,11 @@ export const GL_ACCOUNT_API = `${API}/glAccounts`;
 export const GL_ACCOUNT_BY_ID = (id) => `${GL_ACCOUNT_API}/${id}`;
 export const GL_ACCOUNT_TYPE_OPTIONS = `${GL_ACCOUNT_API}/glAccountTypeOptions`;
 
+// PREFERENCE TYPE
+export const PREFERENCE_TYPE_API = `${API}/preferenceTypes`;
+export const PREFERENCE_TYPE_BY_ID = (id) => `${PREFERENCE_TYPE_API}/${id}`;
+export const PREFERENCE_TYPE_VALIDATION_CODE_OPTIONS = `${PREFERENCE_TYPE_API}/validationCodeOptions`;
+
 // CYCLE COUNT
 export const CYCLE_COUNT = (locationId) => `${API}/facilities/${locationId}/cycle-counts`;
 export const CYCLE_COUNT_CANDIDATES = (locationId) => `${CYCLE_COUNT(locationId)}/candidates`;

@@ -205,7 +205,7 @@ class UrlMappings {
 
         "/api/paymentTerms"(parseRequest: true) {
             controller = { "paymentTermApi" }
-            action = [POST: "create"]
+            action = [GET: "list", POST: "create"]
         }
 
         "/api/paymentTerms/$id"(parseRequest: true) {
@@ -300,6 +300,21 @@ class UrlMappings {
 
         "/api/glAccounts/$id"(parseRequest: true) {
             controller = { "glAccountApi" }
+            action = [GET: "read", PUT: "update", DELETE: "delete"]
+        }
+
+        "/api/preferenceTypes/validationCodeOptions"(parseRequest: true) {
+            controller = { "preferenceTypeApi" }
+            action = [GET: "validationCodeOptions"]
+        }
+
+        "/api/preferenceTypes"(parseRequest: true) {
+            controller = { "preferenceTypeApi" }
+            action = [GET: "list", POST: "create"]
+        }
+
+        "/api/preferenceTypes/$id"(parseRequest: true) {
+            controller = { "preferenceTypeApi" }
             action = [GET: "read", PUT: "update", DELETE: "delete"]
         }
 

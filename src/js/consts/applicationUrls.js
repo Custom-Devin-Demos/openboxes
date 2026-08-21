@@ -309,6 +309,20 @@ const GL_ACCOUNT_URL = {
   edit: (id) => `${GL_ACCOUNT_URL.base}/edit/${id}`,
 };
 
+const PAYMENT_TERM_URL = {
+  base: `${CONTEXT_PATH}/paymentTerm`,
+  list: () => `${PAYMENT_TERM_URL.base}/list`,
+  create: () => `${PAYMENT_TERM_URL.base}/create`,
+  edit: (id) => `${PAYMENT_TERM_URL.base}/edit/${id}`,
+};
+
+const PREFERENCE_TYPE_URL = {
+  base: `${CONTEXT_PATH}/preferenceType`,
+  list: () => `${PREFERENCE_TYPE_URL.base}/list`,
+  create: () => `${PREFERENCE_TYPE_URL.base}/create`,
+  edit: (id) => `${PREFERENCE_TYPE_URL.base}/edit/${id}`,
+};
+
 const PARTY_URL = {
   base: `${CONTEXT_PATH}/party`,
   list: () => `${PARTY_URL.base}/list`,
@@ -366,13 +380,6 @@ const GL_ACCOUNT_TYPE_URL = {
   edit: (id) => `${GL_ACCOUNT_TYPE_URL.base}/edit/${id}`,
 };
 
-const PAYMENT_TERM_URL = {
-  base: `${CONTEXT_PATH}/paymentTerm`,
-  list: () => `${PAYMENT_TERM_URL.base}/list`,
-  create: () => `${PAYMENT_TERM_URL.base}/create`,
-  edit: (id) => `${PAYMENT_TERM_URL.base}/edit/${id}`,
-};
-
 const CYCLE_COUNT = {
   base: `${CONTEXT_PATH}/inventory/cycleCount`,
   list: (tab) => `${CYCLE_COUNT.base}?tab=${tab}`,
@@ -422,6 +429,7 @@ export {
   PARTY_URL,
   PAYMENT_TERM_URL,
   PERSON_URL,
+  PREFERENCE_TYPE_URL,
   PRODUCT_ASSOCIATION_URL,
   PRODUCT_CATALOG_URL,
   PRODUCT_CONFIGURATION_URL,
