@@ -293,6 +293,21 @@ const AsyncStockList = Loadable({
   loading: Loading,
 });
 
+const AsyncRequisitionTemplateShow = Loadable({
+  loader: () => import('components/requisition-template/ShowRequisitionTemplatePage'),
+  loading: Loading,
+});
+
+const AsyncRequisitionTemplateSendMail = Loadable({
+  loader: () => import('components/requisition-template/SendMailRequisitionTemplatePage'),
+  loading: Loading,
+});
+
+const AsyncStocklistShow = Loadable({
+  loader: () => import('components/stock-list/ShowStocklistPage'),
+  loading: Loading,
+});
+
 const AsyncProductsList = Loadable({
   loader: () => import('components/products/ProductsList'),
   loading: Loading,
@@ -1254,6 +1269,9 @@ const Router = () => {
             <MainLayoutRoute path="**/requisitionTemplate/edit/:templateId" component={AsyncRequisitionTemplateEdit} />
             <MainLayoutRoute path="**/requisitionTemplate/editHeader/:templateId" component={AsyncRequisitionTemplateEditHeader} />
             <MainLayoutRoute path="**/requisitionTemplate/batch/:templateId" component={AsyncRequisitionTemplateBatch} />
+            <MainLayoutRoute path="**/requisitionTemplate/show/:templateId" component={AsyncRequisitionTemplateShow} />
+            <MainLayoutRoute path="**/requisitionTemplate/sendMail/:templateId" component={AsyncRequisitionTemplateSendMail} />
+            <MainLayoutRoute path="**/stocklist/show/:locationId" component={AsyncStocklistShow} />
             <MainLayoutRoute path="**/requisition/chooseTemplate" component={AsyncRequisitionChooseTemplate} />
             <MainLayoutRoute path="**/requisition/createStockFromTemplate/:templateId" component={AsyncRequisitionCreateStock} />
             <MainLayoutRoute path="**/requisition/create" component={AsyncRequisitionCreate} />

@@ -155,6 +155,14 @@ class UrlMappings {
             controller = { "requisitionTemplateApi" }
             action = [POST: "addItems"]
         }
+        "/api/requisitionTemplates/$id/sendMailContext" {
+            controller = { "requisitionTemplateApi" }
+            action = [GET: "sendMailContext"]
+        }
+        "/api/requisitionTemplates/$id/sendMail"(parseRequest: true) {
+            controller = { "requisitionTemplateApi" }
+            action = [POST: "sendMail"]
+        }
 
         "/api/categories"(parseRequest: true) {
             controller = { "categoryApi" }
@@ -1113,6 +1121,11 @@ class UrlMappings {
         }
 
         // Stocklist API
+
+        "/api/stocklists/location/$id"(parseRequest: true) {
+            controller = "stocklistApi"
+            action = [GET: "locationDetails"]
+        }
 
         "/api/stocklists/sendMail/$id"(parseRequest: true) {
             controller = "stocklistApi"

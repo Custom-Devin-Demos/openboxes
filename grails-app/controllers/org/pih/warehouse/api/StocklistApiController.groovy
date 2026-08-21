@@ -15,6 +15,7 @@ import org.grails.web.json.JSONObject
 import org.hibernate.ObjectNotFoundException
 import org.pih.warehouse.requisition.Requisition
 import org.pih.warehouse.core.Location
+import org.pih.warehouse.inventory.InventoryLevel
 import org.pih.warehouse.requisition.RequisitionItemSortByCode
 import grails.plugins.csv.CSVWriter
 
@@ -103,6 +104,28 @@ class StocklistApiController {
             return
         }
         render status: 204
+    }
+
+    def locationDetails() {
+        Location location = Location.get(params.id)
+        if (!location) {
+            response.status = 404
+            render([errorMessage: "Could not find location with ID ${params.id}"] as JSON)
+            return
+        }
+        def inventoryLevels = InventoryLevel.findAllByInventory(location.inventory)
+        render([data: [
+                locationName   : location.name,
+                inventoryLevels: inventoryLevels.collect { InventoryLevel inventoryLevel ->
+                    [
+                            id             : inventoryLevel.id,
+                            productName    : inventoryLevel.product?.toString(),
+                            minimumQuantity: inventoryLevel.minimumQuantity,
+                            maximumQuantity: inventoryLevel.maximumQuantity,
+                            reorderQuantity: inventoryLevel.reorderQuantity,
+                    ]
+                },
+        ]] as JSON)
     }
 
     def sendMail() {

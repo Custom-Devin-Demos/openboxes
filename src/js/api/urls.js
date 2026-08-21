@@ -577,6 +577,9 @@ export const REQUISITION_TEMPLATE_HEADER = (id) => `${REQUISITION_TEMPLATE_API}/
 export const REQUISITION_TEMPLATE_IMPORT_DATA = (id) => `${REQUISITION_TEMPLATE_API}/${id}/importData`;
 export const REQUISITION_TEMPLATE_DO_IMPORT = (id) => `${REQUISITION_TEMPLATE_API}/${id}/import`;
 export const REQUISITION_TEMPLATE_ADD_ITEMS = (id) => `${REQUISITION_TEMPLATE_API}/${id}/addItems`;
+export const REQUISITION_TEMPLATE_SEND_MAIL_CONTEXT = (id) => `${REQUISITION_TEMPLATE_API}/${id}/sendMailContext`;
+export const REQUISITION_TEMPLATE_SEND_MAIL = (id) => `${REQUISITION_TEMPLATE_API}/${id}/sendMail`;
+export const STOCKLIST_LOCATION_DETAILS = (id) => `${API}/stocklists/location/${id}`;
 export const JSON_GET_REQUISITION_ITEMS = (id) => `/json/getRequisitionItems/${id}`;
 export const JSON_ADD_TO_REQUISITION_ITEMS = '/json/addToRequisitionItems';
 export const JSON_UPDATE_REQUISITION_ITEMS = (id) => `/json/updateRequisitionItems/${id}`;

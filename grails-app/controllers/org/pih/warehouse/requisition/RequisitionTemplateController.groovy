@@ -62,11 +62,8 @@ class RequisitionTemplateController {
         if (!requisition) {
             flash.message = "Could not find requisition with ID ${params.id}"
             redirect(action: "list")
-        } else if (!requisition.requestedBy) {
-            flash.error = "${warehouse.message(code: 'stockList.noManagerAssociated.label')}"
-            redirect(controller: "requisitionTemplate", action: "show", params: [id: params.id])
         } else {
-            [requisition: requisition]
+            render(view: "/common/react")
         }
     }
 
@@ -154,7 +151,7 @@ class RequisitionTemplateController {
             flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'request.label', default: 'Request'), params.id])}"
             redirect(action: "list")
         } else {
-            return [requisition: requisition]
+            render(view: "/common/react")
         }
     }
 
