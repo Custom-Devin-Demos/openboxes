@@ -311,6 +311,20 @@ const ATTRIBUTE_URL = {
   show: (id) => `${ATTRIBUTE_URL.base}/show/${id}`,
 };
 
+const PRODUCT_GROUP_URL = {
+  base: `${CONTEXT_PATH}/productGroup`,
+  list: () => `${PRODUCT_GROUP_URL.base}/list`,
+  create: () => `${PRODUCT_GROUP_URL.base}/create`,
+  edit: (id) => `${PRODUCT_GROUP_URL.base}/edit/${id}`,
+  show: (id) => `${PRODUCT_GROUP_URL.base}/show/${id}`,
+};
+
+const PRODUCT_COMPONENT_URL = {
+  base: `${CONTEXT_PATH}/productComponent`,
+  index: () => `${PRODUCT_COMPONENT_URL.base}/index`,
+  create: () => `${PRODUCT_COMPONENT_URL.base}/create`,
+};
+
 const PRODUCT_ASSOCIATION_URL = {
   base: `${CONTEXT_PATH}/productAssociation`,
   list: () => `${PRODUCT_ASSOCIATION_URL.base}/list`,
@@ -546,7 +560,9 @@ export {
   PREFERENCE_TYPE_URL,
   PRODUCT_ASSOCIATION_URL,
   PRODUCT_CATALOG_URL,
+  PRODUCT_COMPONENT_URL,
   PRODUCT_CONFIGURATION_URL,
+  PRODUCT_GROUP_URL,
   PRODUCT_SUPPLIER_URL,
   PRODUCT_URL,
   PURCHASE_ORDER_URL,

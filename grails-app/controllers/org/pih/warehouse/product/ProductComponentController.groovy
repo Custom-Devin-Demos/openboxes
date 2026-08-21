@@ -13,4 +13,8 @@ class ProductComponentController {
 
     static scaffold = ProductComponent
 
+    def index() {
+        render(view: "/common/react")
+    }
+
 }
