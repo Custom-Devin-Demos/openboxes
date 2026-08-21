@@ -12,6 +12,7 @@ import TextInput from 'components/form-elements/v2/TextInput';
 import notification from 'components/Layout/notifications/notification';
 import { ORGANIZATION_URL, PARTY_ROLE_URL } from 'consts/applicationUrls';
 import NotificationType from 'consts/notificationTypes';
+import useTranslate from 'hooks/useTranslate';
 import useTranslation from 'hooks/useTranslation';
 import confirmationModal from 'utils/confirmationModalUtils';
 import Translate from 'utils/Translate';
@@ -19,6 +20,7 @@ import PageWrapper from 'wrappers/PageWrapper';
 
 const OrganizationForm = ({ match }) => {
   useTranslation('organization', 'default');
+  const translate = useTranslate();
   const { organizationId } = match.params;
   const isEdit = Boolean(organizationId);
 
@@ -34,6 +36,7 @@ const OrganizationForm = ({ match }) => {
   });
   const [details, setDetails] = useState(null);
   const [partyTypeOptions, setPartyTypeOptions] = useState([]);
+  const [nameError, setNameError] = useState(null);
 
   useEffect(() => {
     partyApi.getPartyTypeOptions()
@@ -137,6 +140,11 @@ const OrganizationForm = ({ match }) => {
 
   const onSubmit = (event) => {
     event.preventDefault();
+    if (!values.name?.trim()) {
+      setNameError(translate('react.default.error.requiredField.label', 'This field is required'));
+      return;
+    }
+    setNameError(null);
     if (isEdit && details?.active && !values.active) {
       confirmationModal({
         buttons: inactiveConfirmationModalButtons,
@@ -238,6 +246,7 @@ const OrganizationForm = ({ match }) => {
               title={{ id: 'react.organization.name.label', defaultMessage: 'Name' }}
               name="name"
               value={values.name}
+              errorMessage={nameError}
               onChange={(e) => setValue('name')(e.target.value)}
             />
           </div>
