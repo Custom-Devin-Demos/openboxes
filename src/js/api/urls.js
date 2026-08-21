@@ -258,6 +258,28 @@ export const INDICATORS_PRODUCTS_INVENTORIED = `${INDICATORS_REPORT}/productsInv
 export const INDICATORS_INVENTORY_SHRINKAGE = `${INDICATORS_REPORT}/inventoryShrinkage`;
 export const INDICATORS_INVENTORY_ACCURACY = `${INDICATORS_REPORT}/inventoryAccuracy`;
 
+// STOCK CARD
+export const STOCK_CARD_API = `${API}/stockCard`;
+export const STOCK_CARD_DETAILS = (id) => `${STOCK_CARD_API}/${id}/details`;
+export const STOCK_CARD_CURRENT_STOCK = (id) => `${STOCK_CARD_API}/${id}/currentStock`;
+export const STOCK_CARD_STOCK_HISTORY = (id) => `${STOCK_CARD_API}/${id}/stockHistory`;
+export const STOCK_CARD_ALL_LOCATIONS = (id) => `${STOCK_CARD_API}/${id}/allLocations`;
+export const STOCK_CARD_SUPPLIERS = (id) => `${STOCK_CARD_API}/${id}/suppliers`;
+export const STOCK_CARD_ASSOCIATIONS = (id) => `${STOCK_CARD_API}/${id}/associations`;
+export const STOCK_CARD_PENDING_INBOUND = (id) => `${STOCK_CARD_API}/${id}/pendingInbound`;
+export const STOCK_CARD_PENDING_OUTBOUND = (id) => `${STOCK_CARD_API}/${id}/pendingOutbound`;
+export const STOCK_CARD_DEMAND = (id) => `${STOCK_CARD_API}/${id}/demand`;
+export const STOCK_CARD_SNAPSHOT = (id) => `${STOCK_CARD_API}/${id}/snapshot`;
+export const STOCK_CARD_DOCUMENTS = (id) => `${STOCK_CARD_API}/${id}/documents`;
+export const STOCK_CARD_LOT_NUMBERS = (id) => `${STOCK_CARD_API}/${id}/lotNumbers`;
+export const STOCK_CARD_ACTION_CONTEXT = `${STOCK_CARD_API}/actionContext`;
+export const STOCK_CARD_BIN_LOCATIONS = `${STOCK_CARD_API}/binLocations`;
+export const STOCK_CARD_RECORD_INVENTORY = `${STOCK_CARD_API}/recordInventory`;
+export const STOCK_CARD_INVENTORY_LEVEL = `${STOCK_CARD_API}/inventoryLevel`;
+export const STOCK_CARD_TRANSFER_STOCK = `${STOCK_CARD_API}/transferStock`;
+export const STOCK_CARD_UPDATE_INVENTORY_ITEM = `${STOCK_CARD_API}/updateInventoryItem`;
+export const STOCK_CARD_ADD_TO_SHIPMENT = `${STOCK_CARD_API}/addToShipment`;
+
 // INVENTORY
 export const INVENTORY_API = (id) => `${API}/facilities/${id}/inventories`;
 export const REORDER_REPORT = (id) => `${INVENTORY_API(id)}/reorderReport`;
