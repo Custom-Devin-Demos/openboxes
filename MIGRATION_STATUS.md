@@ -34,8 +34,8 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | 1.1 | Java 8→11 + dependency cleanup | MERGED | [c54a01cd](https://app.devin.ai/sessions/c54a01cdcc264e168324562d8958adeb) | [#7](https://github.com/Custom-Devin-Demos/openboxes/pull/7) | Snapshots 122/122, Playwright 10/10 on JDK 11, CI green |
 | 1.2 | Grails 3→4 | MERGED | [e4c1b67a](https://app.devin.ai/sessions/e4c1b67a72bb47aa90fc41799a4e7271) | [#12](https://github.com/Custom-Devin-Demos/openboxes/pull/12) | Grails 4.1.4/Gradle 6.9.4/GORM 7.0.7; snapshots 120-121/122 (known artifacts), Playwright 10/10, CI green after rebase |
 | 1.3 | Grails 4→5 | MERGED | [7d1a20b8](https://app.devin.ai/sessions/7d1a20b8bc00418ebf43153dbe5b3e57) | [#31](https://github.com/Custom-Devin-Demos/openboxes/pull/31) | Grails 5.3.6/Gradle 7.6.4/Groovy 3.0.11/GORM 7.3.1/Boot 2.7.9/Java 11; full verification: assemble, bootRun+login, Liquibase clean+seeded, Quartz, unit 1430/0, snapshots 122/122, Playwright 10/10, CI 4/4 |
-| 1.4 | Grails 5→6 / Java 21 / javax→jakarta | IN_PROGRESS | [06d3d9e7](https://app.devin.ai/sessions/06d3d9e7f6da44399929a4ce3b0fa265) | | Spawned after 1.3 acceptance |
-| 1.5 | Re-verify Quartz jobs, Liquibase, mail/reporting integrations | PENDING | | | Blocked by 1.4 |
+| 1.4 | Grails 5→6 / Java 21 / javax→jakarta | MERGED | [06d3d9e7](https://app.devin.ai/sessions/06d3d9e7f6da44399929a4ce3b0fa265) | [#48](https://github.com/Custom-Devin-Demos/openboxes/pull/48) | Grails 6.2.3/Gradle 8.11.1/GORM 8.1.2/Boot 2.7.18/JDK 21; snapshots 122/122, Playwright 10/10, CI 4/4; jakarta deferred to Grails 7 (documented) |
+| 1.5 | Re-verify Quartz jobs, Liquibase, mail/reporting integrations | IN_PROGRESS | [abeaccde](https://app.devin.ai/sessions/abeaccde2b2441639a3955786e5c954c) | | Spawned after 1.4 acceptance |
 
 ## Phase 2 — UI: GSP → React (parallel module waves; can start after Phase 0)
 
@@ -178,6 +178,7 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | 2-shipments-4 | shipments-4 batch | IN_PROGRESS | [9bd39418](https://app.devin.ai/sessions/9bd3941821b24dfba3d244b458ab4c98) | — | shipmentItem/split + 4 shipmentWorkflow screens |
 | 2-stocklists-2 | stocklists-2 batch | IN_PROGRESS | [d0f1323f](https://app.devin.ai/sessions/d0f1323f227641a9a754c059ba0abf7c) | — | 4 requisitionTemplate/stocklist screens |
 
+- 2026-08-20: P1.4 ACCEPTED — PR #48 merged (authoritatively confirmed, CI 4/4, clean rebase onto post-wave-4 develop): Grails 6.2.3 / grails-gradle-plugin 6.2.4 / Gradle 8.11.1 / Groovy 3.0.23 / GORM 8.1.2 / Spring Boot 2.7.18 / JDK 21 (bytecode 17). Evidence: assemble+bootRun on JDK 21, Liquibase clean (983 changesets) + seeded boot, admin login, Quartz registration, snapshots 122/122, Playwright 10/10. javax→jakarta deferred to Grails 7/Spring Boot 3 (documented in PR: Grails 6 stays on javax servlet stack). Wave-5 children notified to rebase and use JDK 21.
 - 2026-08-20: Phase 2 wave 5 spawned (10 batches). Remaining after wave 5: 9 batches (dashboard-auth, errors-misc, mobile-1/2, product-catalog-8, reporting-4, shipment-workflow, stock-movements, stock-transfers).
 - 2026-08-20: PR #46 (inventory-4) merged (authoritatively confirmed, CI 4/4, clean merge, additive union verified: 28 keys added / 0 removed / 0 changed). PHASE 2 WAVE 4 COMPLETE (10/10 merged). P1.4 PR #48 final rebase + re-verification requested.
 - 2026-08-20: PR #44 (locations-orgs-5) merged (authoritatively confirmed, CI 4/4, clean merge, post-rebase 122/122 + 10/10, additive localization union verified). #46 is the last wave-4 PR; final rebase requested.
