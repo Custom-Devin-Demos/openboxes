@@ -10,6 +10,7 @@
 package org.pih.warehouse.api
 
 import grails.converters.JSON
+import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 import org.pih.warehouse.LocalizationUtil
 import org.pih.warehouse.core.Location
@@ -35,6 +36,7 @@ import org.springframework.http.HttpStatus
 
 import java.text.SimpleDateFormat
 
+@Transactional
 class CreateShipmentApiController {
 
     def shipmentService
