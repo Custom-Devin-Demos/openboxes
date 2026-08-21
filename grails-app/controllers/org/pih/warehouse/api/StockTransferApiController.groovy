@@ -14,6 +14,7 @@ import org.grails.web.json.JSONObject
 import org.pih.warehouse.core.Constants
 import org.pih.warehouse.core.Location
 import org.pih.warehouse.core.Person
+import org.pih.warehouse.core.RoleType
 import org.pih.warehouse.core.User
 import org.pih.warehouse.inventory.InventoryItem
 import org.pih.warehouse.order.Order
@@ -33,6 +34,11 @@ class StockTransferApiController {
     def orderService
     def shipmentService
     def stockTransferService
+    def userService
+
+    private static String formatDate(Date date, String pattern) {
+        return date ? new SimpleDateFormat(pattern).format(date) : null
+    }
 
     def list() {
         if (!params.location) {
@@ -271,6 +277,218 @@ class StockTransferApiController {
 
         orderService.deleteOrder(order)
         render status: 204
+    }
+
+    def showDetails() {
+        Order order = Order.get(params.id)
+        if (!order) {
+            def message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'inventory.stockTransfer.label', default: 'Stock Transfer'), params.id])}"
+            response.status = 404
+            render([errorMessage: message] as JSON)
+            return
+        }
+
+        Location currentLocation = Location.get(session.warehouse.id)
+
+        String editAction
+        if (order.isOutbound(currentLocation)) {
+            editAction = "createOutboundReturn"
+        } else if (order.isInbound(currentLocation)) {
+            editAction = "createInboundReturn"
+        } else if (order.orderNumber?.startsWith(grailsApplication.config.openboxes.stockTransfer.binReplenishment.prefix as String)) {
+            editAction = "replenishment"
+        } else {
+            editAction = "create"
+        }
+
+        boolean isUserManager = userService.isUserInRole(session.user.id as String,
+                [RoleType.ROLE_SUPERUSER, RoleType.ROLE_ADMIN, RoleType.ROLE_MANAGER])
+
+        def orderItems = order.orderItems?.findAll { !it.orderItems }?.sort { a, b ->
+            a.dateCreated <=> b.dateCreated ?: a.orderIndex <=> b.orderIndex
+        }
+
+        render([data: [
+                id                 : order.id,
+                orderNumber        : order.orderNumber,
+                statusLabel        : order.status ? warehouse.message(code: 'enum.OrderStatus.' + order.status.name()) : null,
+                originName         : order.origin?.name,
+                dateCreated        : formatDate(order.dateCreated, Constants.DEFAULT_DATE_FORMAT),
+                createdByName      : order.createdBy?.name,
+                updatedByName      : order.updatedBy?.name,
+                lastUpdated        : formatDate(order.lastUpdated, Constants.DEFAULT_DATE_FORMAT),
+                completedByName    : order.completedBy?.name,
+                dateCompleted      : formatDate(order.dateCompleted, Constants.DEFAULT_DATE_FORMAT),
+                editAction         : editAction,
+                editDisabled       : order.status >= OrderStatus.COMPLETED,
+                editDisabledMessage: warehouse.message(code: 'inventory.stockTransfers.editCompleted', default: 'Cannot edit completed order'),
+                canDelete          : isUserManager && (order.status == OrderStatus.PENDING || order.status == OrderStatus.APPROVED),
+                labels             : [
+                        listStockTransfers : warehouse.message(code: 'default.list.label', args: [warehouse.message(code: 'inventory.stockTransfers.label', default: 'Stock Transfers')]),
+                        editStockTransfer  : warehouse.message(code: 'inventory.editStockTransfer.label', default: 'Edit Stock Transfer'),
+                        printStockTransfer : warehouse.message(code: 'inventory.printStockTransfer.label', default: 'Print Stock Transfer'),
+                        deleteButton       : warehouse.message(code: 'default.button.delete.label', default: 'Delete'),
+                        deleteConfirm      : warehouse.message(code: 'default.button.delete.confirm.message', default: 'Are you sure?'),
+                        orderHeader        : warehouse.message(code: 'order.orderHeader.label', default: 'Order Header'),
+                        orderNumber        : warehouse.message(code: 'inventory.stockTransfers.orderNumber.label', default: 'Order Number'),
+                        status             : warehouse.message(code: 'default.status.label', default: 'Status'),
+                        location           : warehouse.message(code: 'location.label', default: 'Location'),
+                        auditing           : warehouse.message(code: 'default.auditing.label', default: 'Auditing'),
+                        createdBy          : warehouse.message(code: 'order.createdBy.label', default: 'Created by'),
+                        updatedBy          : warehouse.message(code: 'default.updatedBy.label', default: 'Updated by'),
+                        completedBy        : warehouse.message(code: 'order.completedBy.label', default: 'Completed by'),
+                        none               : warehouse.message(code: 'default.none.label', default: 'None'),
+                        summary            : warehouse.message(code: 'default.summary.label', default: 'Summary'),
+                        productCode        : warehouse.message(code: 'product.productCode.label', default: 'Code'),
+                        productName        : warehouse.message(code: 'product.name.label', default: 'Name'),
+                        lot                : warehouse.message(code: 'inventoryItem.lot.label', default: 'Lot'),
+                        expirationDate     : warehouse.message(code: 'inventoryItem.expirationDate.label', default: 'Expiration date'),
+                        qtyTransferred     : warehouse.message(code: 'inventory.stockTransfers.qtyTransferred', default: 'Qty transferred'),
+                        transferredFrom    : warehouse.message(code: 'inventory.stockTransfers.transferredFrom', default: 'Transferred From'),
+                        transferredTo      : warehouse.message(code: 'inventory.stockTransfers.transferredTo', default: 'Transferred To'),
+                        noItems            : warehouse.message(code: 'default.noItems.label', default: 'No items'),
+                ],
+                items              : orderItems?.collect { orderItem ->
+                    [
+                            id             : orderItem.id,
+                            productId      : orderItem.product?.id,
+                            productCode    : orderItem.product?.productCode,
+                            productName    : orderItem.product?.displayNameOrDefaultName,
+                            productColor   : orderItem.product?.color,
+                            lotNumber      : orderItem.inventoryItem?.lotNumber,
+                            expirationDate : formatDate(orderItem.inventoryItem?.expirationDate, Constants.DEFAULT_DATE_FORMAT),
+                            quantity       : orderItem.quantity,
+                            originBin      : orderItem.originBinLocation?.name,
+                            destinationBin : orderItem.destinationBinLocation?.name,
+                    ]
+                } ?: [],
+        ]] as JSON)
+    }
+
+    def printData() {
+        Order order = Order.get(params.id)
+        if (!order) {
+            def message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'inventory.stockTransfer.label', default: 'Stock Transfer'), params.id])}"
+            response.status = 404
+            render([errorMessage: message] as JSON)
+            return
+        }
+
+        def allStockTransferItems = order.orderItems.findAll { !it.parentOrderItem }.sort { it.product.name }
+        def zoneNames = allStockTransferItems?.collect { it?.originBinLocation?.zone?.name }?.unique()?.sort { a, b ->
+            !a ? !b ? 0 : 1 : !b ? -1 : a <=> b
+        }
+        def stockTransferItemsByZone = allStockTransferItems?.groupBy { it?.originBinLocation?.zone?.name } ?: [:]
+
+        Closure itemJson = { orderItem ->
+            def splitItems = orderItem?.orderItems?.sort { a, b ->
+                a.destinationBinLocation?.name <=> b.destinationBinLocation?.name ?: b.quantity <=> a.quantity
+            }
+            return [
+                    id            : orderItem.id,
+                    originBin     : orderItem?.originBinLocation?.name,
+                    productCode   : orderItem?.product?.productCode,
+                    productName   : orderItem?.product?.name,
+                    lotNumber     : orderItem?.inventoryItem?.lotNumber,
+                    expirationDate: formatDate(orderItem?.inventoryItem?.expirationDate, "MM/dd/yyyy"),
+                    destinationBin: orderItem?.destinationBinLocation?.name,
+                    quantity      : orderItem?.quantity,
+                    splitItems    : splitItems?.collect {
+                        [
+                                id            : it.id,
+                                destinationBin: it?.destinationBinLocation?.name,
+                                quantity      : it?.quantity,
+                        ]
+                    } ?: [],
+            ]
+        }
+
+        def zones = []
+        zoneNames?.each { zoneName ->
+            def stockTransferItems = stockTransferItemsByZone[zoneName] ?: []
+
+            def stockTransferItemsColdChain = stockTransferItems.findAll { it?.product?.coldChain }
+            def stockTransferItemsControlled = stockTransferItems.findAll { it?.product?.controlledSubstance }
+            def stockTransferItemsHazmat = stockTransferItems.findAll { it?.product?.hazardousMaterial }
+            def stockTransferItemsOther = stockTransferItems.findAll {
+                !it?.product?.hazardousMaterial && !it?.product?.coldChain && !it?.product?.controlledSubstance
+            }
+
+            def groups = []
+            if (stockTransferItemsColdChain) {
+                groups << [
+                        key         : "coldChain",
+                        title       : warehouse.message(code: 'product.coldChain.label', default: 'Cold Chain'),
+                        hasFollowing: (stockTransferItemsControlled || stockTransferItemsHazmat || stockTransferItemsOther) as boolean,
+                        items       : stockTransferItemsColdChain.collect(itemJson),
+                ]
+            }
+            if (stockTransferItemsControlled) {
+                groups << [
+                        key         : "controlledSubstance",
+                        title       : warehouse.message(code: 'product.controlledSubstance.label', default: 'Controlled Substance'),
+                        hasFollowing: (stockTransferItemsHazmat || stockTransferItemsOther) as boolean,
+                        items       : stockTransferItemsControlled.collect(itemJson),
+                ]
+            }
+            if (stockTransferItemsHazmat) {
+                groups << [
+                        key         : "hazardousMaterial",
+                        title       : warehouse.message(code: 'product.hazardousMaterial.label', default: 'Hazardous Material'),
+                        hasFollowing: (stockTransferItemsOther) as boolean,
+                        items       : stockTransferItemsHazmat.collect(itemJson),
+                ]
+            }
+            if (stockTransferItemsOther) {
+                groups << [
+                        key         : "generalGoods",
+                        title       : warehouse.message(code: 'product.generalGoods.label', default: 'General Goods'),
+                        hasFollowing: true,
+                        items       : stockTransferItemsOther.collect(itemJson),
+                ]
+            }
+
+            zones << [
+                    name    : zoneName,
+                    title   : zoneName ?: warehouse.message(code: 'location.noZone.label', default: 'No zone'),
+                    showName: (zoneName || zoneNames.size() > 1) as boolean,
+                    groups  : groups,
+            ]
+        }
+
+        render([data: [
+                title          : warehouse.message(code: 'inventory.printStockTransfer.label', default: 'Print Stock Transfer'),
+                heading        : warehouse.message(code: 'order.transferOrder.label', default: 'Transfer Order'),
+                logoUrl        : grailsApplication.config.openboxes.report.logo.url,
+                orderNumber    : order.orderNumber,
+                createdByName  : order.createdBy?.name,
+                dateCreated    : formatDate(order.dateCreated, "MM/dd/yyyy"),
+                headerRows     : [
+                        [label: warehouse.message(code: 'order.orderNumber.label', default: 'Order Number'), value: order.orderNumber],
+                        [label: warehouse.message(code: 'default.createdBy.label', default: 'Created By'), value: order.createdBy?.name],
+                        [label: warehouse.message(code: 'default.dateCreated.label', default: 'Date Created'), value: formatDate(order.dateCreated, "MM/dd/yyyy")],
+                ],
+                columns        : [
+                        [key: 'number', title: warehouse.message(code: 'report.number.label', default: '#')],
+                        [key: 'currentBin', title: warehouse.message(code: 'orderItem.currentBin.label', default: 'Current Bin')],
+                        [key: 'productCode', title: warehouse.message(code: 'product.productCode.label', default: 'Code')],
+                        [key: 'productName', title: warehouse.message(code: 'product.name.label', default: 'Name')],
+                        [key: 'lotSerialNo', title: warehouse.message(code: 'default.lotSerialNo.label', default: 'Lot/Serial No.')],
+                        [key: 'expiry', title: warehouse.message(code: 'orderItem.expiry.label', default: 'Expiry')],
+                        [key: 'transferToBin', title: warehouse.message(code: 'orderItem.transferToBin.label', default: 'Transfer To Bin')],
+                        [key: 'qtyToTransfer', title: warehouse.message(code: 'orderItem.qtyToTransfer.label', default: 'Quantity To Transfer')],
+                        [key: 'notes', title: warehouse.message(code: 'default.notes.label', default: 'Notes')],
+                ],
+                signatureColumns: [
+                        name     : warehouse.message(code: 'default.name.label', default: 'Name'),
+                        signature: warehouse.message(code: 'default.signature.label', default: 'Signature'),
+                        date     : warehouse.message(code: 'default.date.label', default: 'Date'),
+                ],
+                signatures     : [
+                        [label: warehouse.message(code: 'order.completedBy.label', default: 'Completed By'), name: null, date: null],
+                ],
+                zones          : zones,
+        ]] as JSON)
     }
 
     def statusOptions() {

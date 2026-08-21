@@ -1146,6 +1146,11 @@ class UrlMappings {
             action = [GET: "downloadPackingListTemplate"]
         }
 
+        "/api/stockMovements/$id/returnShowDetails" {
+            controller = "stockMovementApi"
+            action = [GET: "returnShowDetails"]
+        }
+
         "/api/stockMovements/$id/documents" {
             controller = "stockMovementApi"
             action = [GET: "getDocuments"]
@@ -1412,6 +1417,16 @@ class UrlMappings {
         "/api/stockTransferItems/$id/"(parseRequest: true) {
             controller = { "stockTransferApi" }
             action = [DELETE: "removeItem"]
+        }
+
+        "/api/stockTransfers/$id/showDetails" {
+            controller = { "stockTransferApi" }
+            action = [GET: "showDetails"]
+        }
+
+        "/api/stockTransfers/$id/printData" {
+            controller = { "stockTransferApi" }
+            action = [GET: "printData"]
         }
 
         "/api/stockTransfers/$id/sendShipment"(parseRequest: true) {
