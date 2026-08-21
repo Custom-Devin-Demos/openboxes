@@ -66,6 +66,46 @@ class UrlMappings {
             controller = { "requisitionApi" }
             action = [POST: "updateDetails"]
         }
+        "/api/requisitions/list" {
+            controller = { "requisitionApi" }
+            action = [GET: "list"]
+        }
+        "/api/requisitions/$id/editHeader"(parseRequest: true) {
+            controller = { "requisitionApi" }
+            action = [GET: "editHeader", POST: "saveHeader"]
+        }
+        "/api/requisitions/$id/review" {
+            controller = { "requisitionApi" }
+            action = [GET: "review"]
+        }
+        "/api/requisitions/$id/items/$itemId"(parseRequest: true) {
+            controller = { "requisitionApi" }
+            action = [POST: "updateRequisitionItem"]
+        }
+        "/api/requisitions/$id/items/$itemId/details" {
+            controller = { "requisitionApi" }
+            action = [GET: "requisitionItemDetails"]
+        }
+        "/api/requisitions/$id/pick" {
+            controller = { "requisitionApi" }
+            action = [GET: "pick"]
+        }
+        "/api/requisitions/$id/items/$itemId/picklistItems" {
+            controller = { "requisitionApi" }
+            action = [GET: "picklistItems"]
+        }
+        "/api/requisitions/$id/picklistItems"(parseRequest: true) {
+            controller = { "requisitionApi" }
+            action = [POST: "updatePicklistItems"]
+        }
+        "/api/requisitions/$id/printDraft" {
+            controller = { "requisitionApi" }
+            action = [GET: "printDraft"]
+        }
+        "/api/requisitions/$id/process" {
+            controller = { "requisitionApi" }
+            action = [GET: "process"]
+        }
 
         "/api/categories"(parseRequest: true) {
             controller = { "categoryApi" }

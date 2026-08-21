@@ -481,3 +481,14 @@ export const REQUISITION_TEMPLATE_BY_ID = (id) => `${REQUISITION_TEMPLATES}/${id
 export const REQUISITION_EDIT = (id) => `${REQUISITION_API}/${id}/edit`;
 export const REQUISITION_CONFIRM = (id) => `${REQUISITION_API}/${id}/confirm`;
 export const REQUISITION_DETAILS = (id) => `${REQUISITION_API}/${id}/details`;
+export const REQUISITION_LIST = `${REQUISITION_API}/list`;
+export const REQUISITION_EDIT_HEADER = (id) => `${REQUISITION_API}/${id}/editHeader`;
+export const REQUISITION_REVIEW = (id) => `${REQUISITION_API}/${id}/review`;
+export const REQUISITION_ITEM_UPDATE = (id, itemId) => `${REQUISITION_API}/${id}/items/${itemId}`;
+export const REQUISITION_ITEM_DETAILS = (id, itemId) => `${REQUISITION_API}/${id}/items/${itemId}/details`;
+export const REQUISITION_PICK = (id) => `${REQUISITION_API}/${id}/pick`;
+export const REQUISITION_ITEM_PICKLIST_ITEMS = (id, itemId) => `${REQUISITION_API}/${id}/items/${itemId}/picklistItems`;
+export const REQUISITION_UPDATE_PICKLIST_ITEMS = (id) => `${REQUISITION_API}/${id}/picklistItems`;
+export const REQUISITION_PRINT_DRAFT = (id) => `${REQUISITION_API}/${id}/printDraft`;
+export const REQUISITION_PROCESS = (id) => `${REQUISITION_API}/${id}/process`;
+export const PICKLIST_SAVE = '/picklist/save';

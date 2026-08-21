@@ -42,17 +42,7 @@ class RequisitionController {
     }
 
     def list() {
-        def user = User.get(session?.user?.id)
-        def location = Location.get(session?.warehouse?.id)
-
-        params.origin = Location.get(session?.warehouse?.id)
-        def requisition = new Requisition(params)
-
-        // Requisitions to display in the table
-        def requisitions = requisitionService.getRequisitions(requisition, params)
-        def requisitionStatistics = requisitionService.getRequisitionStatistics(null, requisition.origin, user)
-
-        render(view: "list", model: [requisitions: requisitions, requisitionStatistics: requisitionStatistics])
+        render(view: "/common/react")
     }
 
     def chooseTemplate() {
@@ -105,8 +95,7 @@ class RequisitionController {
     }
 
     def editHeader() {
-        def requisition = Requisition.get(params.id)
-        [requisition: requisition]
+        render(view: "/common/react")
     }
 
 
@@ -145,36 +134,7 @@ class RequisitionController {
 
 
     def review() {
-        def requisition = Requisition.get(params.id)
-
-        if (requisition.status < RequisitionStatus.VERIFYING) {
-            requisition.status = RequisitionStatus.VERIFYING
-            requisition.save(flush: true)
-        }
-
-        if (!requisition) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'request.label', default: 'Request'), params.id])}"
-            redirect(action: "list")
-        } else {
-
-            def location = Location.get(session.warehouse.id)
-            def quantityAvailableToPromiseMap = [:]
-            def quantityOnHandMap = [:]
-
-            def products = requisition.requisitionItems.collect { it.product }
-            def quantityProductMap = inventoryService.getQuantityByProductMap(location.inventory, products)
-
-            requisition?.requisitionItems?.each { requisitionItem ->
-                quantityOnHandMap[requisitionItem?.product?.id] = quantityProductMap[requisitionItem?.product] ?: 0
-            }
-
-            def requisitionItem = RequisitionItem.get(params?.requisitionItem?.id)
-
-            println "Requisition Status: " + requisition.id + " [" + requisition.status + "]"
-            [requisition            : requisition,
-             quantityOnHandMap      : quantityOnHandMap,
-             selectedRequisitionItem: requisitionItem]
-        }
+        render(view: "/common/react")
     }
 
 
@@ -226,55 +186,7 @@ class RequisitionController {
 
 
     def pick() {
-        println "Pick " + params
-        def requisition = Requisition.get(params?.id)
-        if (requisition) {
-
-            if (!requisition.verifiedBy) {
-                flash.message = "${warehouse.message(code: 'requisition.verifiedBy.invalid.message')}"
-                chain(controller: "requisition", action: "review", id: params.id, model: [requisition: requisition])
-                return
-            }
-
-            if (requisition.status < RequisitionStatus.PICKING) {
-                requisition.status = RequisitionStatus.PICKING
-                // Approve all pending requisition items
-                requisition.requisitionItems.each { requisitionItem ->
-                    if (requisitionItem.isPending()) {
-                        requisitionItem.approveQuantity()
-                    }
-                }
-
-                requisition.save(flush: true)
-            }
-            def location = Location.get(session.warehouse.id)
-            def picklist = Picklist.findByRequisition(requisition)
-
-            if (!picklist) {
-                picklist = new Picklist()
-                picklist.requisition = requisition
-                if (!picklist.save(flush: true)) {
-                    throw new ValidationException("Unable to create new picklist", picklist.errors)
-                }
-            }
-
-            def productInventoryItemsMap = [:]
-            List<Product> products = requisition.requisitionItems?.collect { it.product }
-            products.each { product ->
-                productInventoryItemsMap[product.id] = inventoryService.getAvailableBinLocations(location, product)
-            }
-
-            def requisitionItem = RequisitionItem.get(params?.requisitionItem?.id)
-            [
-                    requisition             : requisition,
-                    productInventoryItemsMap: productInventoryItemsMap,
-                    picklist                : picklist,
-                    selectedRequisitionItem : requisitionItem
-            ]
-
-        } else {
-            response.sendError(404)
-        }
+        render(view: "/common/react")
     }
 
     def generatePicklist() {
@@ -344,26 +256,7 @@ class RequisitionController {
 
 
     def process() {
-        def requisition = Requisition.get(params?.id)
-        if (requisition) {
-            def currentInventory = Location.get(session.warehouse.id).inventory
-            def picklist = Picklist.findByRequisition(requisition) ?: new Picklist()
-            def productInventoryItemsMap = [:]
-            def productInventoryItems = inventoryService.getInventoryItemsWithQuantity(requisition.requisitionItems?.collect {
-                it.product
-            }, currentInventory)
-            productInventoryItems.keySet().each { product ->
-                productInventoryItemsMap[product.id] = productInventoryItems[product].collect {
-                    it.toJson()
-                }
-            }
-
-
-            String jsonString = [requisition: requisition.toJson(), productInventoryItemsMap: productInventoryItemsMap, picklist: picklist.toJson()] as JSON
-            return [data: jsonString, requisitionId: requisition.id, requisition: requisition]
-        } else {
-            response.sendError(404)
-        }
+        render(view: "/common/react")
     }
 
     def transfer() {
@@ -476,11 +369,7 @@ class RequisitionController {
     }
 
     def printDraft() {
-        println "print draft " + params
-        def requisition = Requisition.get(params.id)
-        def picklist = Picklist.findByRequisition(requisition)
-        def location = Location.get(session.warehouse.id)
-        [requisition: requisition, picklist: picklist, location: location]
+        render(view: "/common/react")
     }
 
 

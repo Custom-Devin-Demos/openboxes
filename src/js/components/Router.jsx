@@ -677,6 +677,36 @@ const AsyncRequisitionConfirm = Loadable({
   loading: Loading,
 });
 
+const AsyncRequisitionList = Loadable({
+  loader: () => import('components/requisition/RequisitionListPage'),
+  loading: Loading,
+});
+
+const AsyncRequisitionEditHeader = Loadable({
+  loader: () => import('components/requisition/EditRequisitionHeaderPage'),
+  loading: Loading,
+});
+
+const AsyncRequisitionReview = Loadable({
+  loader: () => import('components/requisition/ReviewRequisitionPage'),
+  loading: Loading,
+});
+
+const AsyncRequisitionPick = Loadable({
+  loader: () => import('components/requisition/PickRequisitionPage'),
+  loading: Loading,
+});
+
+const AsyncRequisitionPrintDraft = Loadable({
+  loader: () => import('components/requisition/PrintDraftRequisitionPage'),
+  loading: Loading,
+});
+
+const AsyncRequisitionProcess = Loadable({
+  loader: () => import('components/requisition/ProcessRequisitionPage'),
+  loading: Loading,
+});
+
 const AsyncAttributeList = Loadable({
   loader: () => import('components/attribute/AttributeList'),
   loading: Loading,
@@ -917,6 +947,12 @@ const Router = () => {
             <MainLayoutRoute path="**/requisition/create" component={AsyncRequisitionCreate} />
             <MainLayoutRoute path="**/requisition/edit/:requisitionId" component={AsyncRequisitionEdit} />
             <MainLayoutRoute path="**/requisition/confirm/:requisitionId" component={AsyncRequisitionConfirm} />
+            <MainLayoutRoute path="**/requisition/list" component={AsyncRequisitionList} />
+            <MainLayoutRoute path="**/requisition/editHeader/:requisitionId" component={AsyncRequisitionEditHeader} />
+            <MainLayoutRoute path="**/requisition/review/:requisitionId" component={AsyncRequisitionReview} />
+            <MainLayoutRoute path="**/requisition/pick/:requisitionId" component={AsyncRequisitionPick} />
+            <MainLayoutRoute path="**/requisition/printDraft/:requisitionId" component={AsyncRequisitionPrintDraft} />
+            <MainLayoutRoute path="**/requisition/process/:requisitionId" component={AsyncRequisitionProcess} />
             <MainLayoutRoute path="**/product/list" component={AsyncProductsList} />
             <MainLayoutRoute path="**/product/create" component={AsyncProductEditPage} />
             <MainLayoutRoute path="**/product/edit/:id" component={AsyncProductEditPage} />
