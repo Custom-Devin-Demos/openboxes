@@ -211,6 +211,7 @@ const GeneralErrorPage = ({ errorPage }) => {
         ) : (
           <ul className="error-page-errors" role="alert" aria-label="error-message">
             <li>An error has occurred</li>
+            <li>Exception:</li>
             <li>
               Message:
               {' '}
