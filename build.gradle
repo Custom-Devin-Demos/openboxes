@@ -32,11 +32,7 @@ buildscript {
          */
         resolutionStrategy.force 'org.eclipse.jgit:org.eclipse.jgit:5.13.1.202206130422-r'
 
-        /*
-         * grails-gradle-plugin releases after 5.3.1 are only published to the
-         * Gradle Plugin Portal / Maven Central, not to repo.grails.org. The
-         * 5.3.1 plugin builds Grails 5.3.x apps fine.
-         */
+        // pin the Grails 6.2 build plugin (published to Maven Central)
         resolutionStrategy.force "org.grails:grails-gradle-plugin:${grailsGradlePluginVersion}"
     }
     dependencies {
@@ -46,9 +42,8 @@ buildscript {
         // database-migration 4.x declares a versionless dependency on
         // grails-shell, expecting the Grails BOM to supply it
         classpath "org.grails:grails-shell:${grailsVersion}"
-        classpath "org.grails.plugins:views-gradle:${grailsViewsVersion}"
         classpath "org.owasp:dependency-check-gradle:${owaspVersion}"
-        classpath "org.grails.plugins:hibernate5:${gormVersion - '.RELEASE'}"
+        classpath "org.grails.plugins:hibernate5:${gormHibernate5Version}"
     }
     repositories {
         mavenCentral()
@@ -99,18 +94,19 @@ apply plugin: 'asset-pipeline'  // enable `assets` block, but see deps below
 apply plugin: 'org.grails.grails-gsp'
 
 /*
- * This plugin must load *after* the core grails/gradle plugins.
- * http://views.grails.org/latest/#_installation
+ * N.B. we do not apply the views-gradle (org.grails.plugins.views-json)
+ * build plugin: its JsonViewCompilerTask cannot be instantiated under
+ * Gradle 8, and this app has no *.gson views to precompile anyway. The
+ * views-json runtime plugin remains on the classpath (see dependencies).
  */
-apply plugin: 'org.grails.plugins.views-json'
 
 // enable `grails gradle dependencyCheckAnalyze` (security checker)
 apply plugin: 'org.owasp.dependencycheck'
 
 group 'com.openboxes'
 mainClassName = 'org.pih.warehouse.Application'
-sourceCompatibility = JavaVersion.VERSION_11
-targetCompatibility = JavaVersion.VERSION_11
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 /*
  * From the asset-pipeline manual: "If you want settings to apply to
@@ -285,8 +281,15 @@ configurations {
 
                 if (details.requested.group == 'org.grails' &&
                     details.requested.name.startsWith('grails-datastore')) {
-                    details.because 'align GORM datastore modules with the hibernate5 plugin'
-                    details.useVersion(gormVersion)
+                    // the GORM hibernate5 modules are released separately
+                    // from gorm-core since Grails 6
+                    if (details.requested.name.contains('hibernate')) {
+                        details.because 'align GORM hibernate5 modules with the hibernate5 plugin'
+                        details.useVersion(gormHibernate5Version)
+                    } else {
+                        details.because 'align GORM datastore modules with gorm-core'
+                        details.useVersion(gormVersion)
+                    }
                 }
 
                 if (details.requested.group.startsWith('org.apache.tomcat')) {
@@ -686,7 +689,7 @@ dependencies {
     implementation 'org.grails.plugins:browser-detection:3.4.0'
 
     // enable `import grails.plugin.cache.Cacheable`
-    implementation 'org.grails.plugins:cache:5.0.1'
+    implementation 'org.grails.plugins:cache:7.0.0'
 
     // enable `grails test-app -coverage`
     testImplementation('org.grails.plugins:code-coverage:2.0.3-3') {
@@ -730,7 +733,7 @@ dependencies {
     implementation 'org.grails.plugins:gsp'
 
     // prevent `No GORM implementations configured. Ensure GORM has been initialized correctly`
-    implementation("org.grails.plugins:hibernate5:${gormVersion-'.RELEASE'}") {
+    implementation("org.grails.plugins:hibernate5:${gormHibernate5Version}") {
         exclude group: 'com.h2database', module: 'h2'
     }
 
@@ -780,6 +783,10 @@ dependencies {
 
     // joda-time support for hibernate
     implementation 'org.jadira.usertype:usertype.jodatime:2.0.1'
+
+    // RequisitionService throws javassist.NotFoundException; under Grails 5
+    // this came in transitively via Hibernate, but GORM 8 no longer provides it
+    implementation 'org.javassist:javassist:3.24.0-GA'
 
     // used in only one place: DocumentTemplateService.groovy for Customer Invoice Template
     implementation 'org.jxls:jxls:2.12.0'
@@ -859,9 +866,9 @@ dependencies {
 
     implementation 'com.github.albfernandez:juniversalchardet:2.4.0'
 
-    // security patch
-    implementation 'org.yaml:snakeyaml:1.33'
-    console 'org.yaml:snakeyaml:1.33'
+    // Grails 6 requires SnakeYAML 2.x
+    implementation 'org.yaml:snakeyaml:2.2'
+    console 'org.yaml:snakeyaml:2.2'
 
     // For integration tests
     testImplementation 'org.apache.commons:commons-compress:1.21'  // Needed to avoid a dependency conflict
@@ -880,7 +887,7 @@ dependencies {
  *
  * https://grails.org/blog/2017-04-02.html
  */
-buildProperties.doLast {
+tasks.matching { it.name == 'buildProperties' }.configureEach { task -> task.doLast {
     File grailsBuildInfoFile = it.outputs.files.files.find {
         it.name == 'grails.build.info'
     }
@@ -916,7 +923,7 @@ buildProperties.doLast {
     grailsBuildInfoFile.withOutputStream {
         properties.store(it, null)
     }
-}
+} }
 
 task cleanWebpack(type: Delete) {
     description = "Delete webpack's file cache and output directory"
@@ -971,8 +978,8 @@ jacocoTestReport {
     executionData test, integrationTest
 
     reports {
-        xml.enabled true  // Needed so that we can upload to Codecov.
-        html.enabled true  // Useful for verifying locally during development.
+        xml.required = true  // Needed so that we can upload to Codecov.
+        html.required = true  // Useful for verifying locally during development.
     }
 
     // Our source code builds to both "build/classes/groovy" and "build/classes/java" so we need to filter one of
