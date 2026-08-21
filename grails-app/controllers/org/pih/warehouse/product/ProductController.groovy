@@ -170,7 +170,9 @@ class ProductController {
     }
 
 
-    def show() {}
+    def show() {
+        render(view: "/common/react", params: params)
+    }
 
 
     def edit() {
@@ -379,11 +381,7 @@ class ProductController {
     }
 
     def search() {
-        log.info "search " + params
-        if (params.q) {
-            def products = productService.findProducts(URLEncoder.encode(params.q))
-            [products: products]
-        }
+        render(view: "/common/react", params: params)
     }
 
     def barcode() {
@@ -417,43 +415,7 @@ class ProductController {
     }
 
     def upnDatabase() {
-
-        def file = new File("/home/jmiranda/Dropbox/OpenBoxes/Product Databases/HIBCC/UPNDownload.txt")
-        def rows = []
-        try {
-            def line = ""
-            file.withReader { reader ->
-                while ((line = reader.readLine()) != null) {
-                    rows << [
-                            line                  : line,
-                            upn                   : line[0..19].trim(),
-                            supplier              : line[20..54].trim(),
-                            division              : line[55..89].trim(),
-                            tradeName             : line[90..124].trim(),
-                            description           : line[125..204].trim(),
-                            uom                   : line[205..206].trim(),
-                            qty                   : line[207..214].trim(),
-                            partno                : line[215..234].trim(),
-                            saleable              : line[235..235].trim(),
-                            upnQualifierCode      : line[236..237].trim(),
-                            srcCode               : line[238..239].trim(),
-                            trackingRequired      : line[240..240].trim(),
-                            upnCreateDate         : line[241..248].trim(),
-                            upnEditDate           : line[249..256].trim(),
-                            statusCode            : line[257..258].trim(),
-                            actionCode            : line[259..260].trim(),
-                            reference             : line[261..280].trim(),
-                            referenceQualifierCode: line[281..282].trim()
-                    ]
-                }
-            }
-
-
-        } catch (RuntimeException e) {
-            log.error(e.message)
-        }
-
-        [rows: rows]
+        render(view: "/common/react", params: params)
     }
 
 
@@ -1043,9 +1005,6 @@ class ProductController {
      * Temporary helper for testing and looking at Product Merge logs for QA
      * */
     def productMergeLogs() {
-        params.max = params.max?:10
-        params.offset = params.offset?:0
-        def productMergeLogs = productMergeService.getProductMergeLogs(params)
-        render(view: "productMergeLogs", model: [productMergeLogs: productMergeLogs ?: []], params: params)
+        render(view: "/common/react", params: params)
     }
 }

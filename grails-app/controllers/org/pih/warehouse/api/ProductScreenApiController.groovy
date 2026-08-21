@@ -47,6 +47,92 @@ class ProductScreenApiController {
     @Value('${openboxes.import.product.createMissingCategories}')
     boolean createMissingCategories
 
+    def productMergeService
+
+    /**
+     * Data for the React product merge logs page. Mirrors ProductController.productMergeLogs().
+     */
+    def productMergeLogs() {
+        params.max = params.max ?: 10
+        params.offset = params.offset ?: 0
+        def productMergeLogs = productMergeService.getProductMergeLogs(params)
+        render([
+                data      : productMergeLogs.collect {
+                    [
+                            id                    : it.id,
+                            primaryProductCode    : it.primaryProduct?.productCode,
+                            obsoleteProductCode   : it.obsoleteProduct?.productCode,
+                            relatedObjectId       : it.relatedObjectId,
+                            relatedObjectClassName: it.relatedObjectClassName,
+                            dateMerged            : it.dateMerged?.toString(),
+                            createdBy             : it.createdBy?.name,
+                    ]
+                },
+                totalCount: productMergeLogs?.totalCount ?: 0,
+        ] as JSON)
+    }
+
+    /**
+     * Data for the React product search page. Mirrors ProductController.search(),
+     * calling ProductService.findProducts() with the query as a search term list.
+     */
+    def searchResults() {
+        def products = params.q ? productService.findProducts([URLEncoder.encode(params.q as String)]) : null
+        render([
+                data: products?.collect { Product product ->
+                    [
+                            id          : product.id,
+                            productCode : product.productCode,
+                            name        : product.name,
+                            description : product.description,
+                            upc         : product.upc,
+                            manufacturer: product.manufacturer,
+                            category    : product.category ? localizationService.getLocalizedString(product.category.name) : null,
+                    ]
+                } ?: [],
+        ] as JSON)
+    }
+
+    /**
+     * Data for the React UPN database page. Mirrors ProductController.upnDatabase(),
+     * parsing the fixed-width HIBCC UPN download file when present and returning no
+     * rows when the file cannot be read.
+     */
+    def upnDatabase() {
+        def file = new File("/home/jmiranda/Dropbox/OpenBoxes/Product Databases/HIBCC/UPNDownload.txt")
+        def rows = []
+        try {
+            def line = ""
+            file.withReader { reader ->
+                while ((line = reader.readLine()) != null) {
+                    rows << [
+                            upn                   : line[0..19].trim(),
+                            supplier              : line[20..54].trim(),
+                            division              : line[55..89].trim(),
+                            tradeName             : line[90..124].trim(),
+                            description           : line[125..204].trim(),
+                            uom                   : line[205..206].trim(),
+                            qty                   : line[207..214].trim(),
+                            partno                : line[215..234].trim(),
+                            saleable              : line[235..235].trim(),
+                            upnQualifierCode      : line[236..237].trim(),
+                            srcCode               : line[238..239].trim(),
+                            trackingRequired      : line[240..240].trim(),
+                            upnCreateDate         : line[241..248].trim(),
+                            upnEditDate           : line[249..256].trim(),
+                            statusCode            : line[257..258].trim(),
+                            actionCode            : line[259..260].trim(),
+                            reference             : line[261..280].trim(),
+                            referenceQualifierCode: line[281..282].trim()
+                    ]
+                }
+            }
+        } catch (Exception e) {
+            log.error(e.message)
+        }
+        render([data: rows, totalCount: rows.size()] as JSON)
+    }
+
     /**
      * Data for the React product edit page (and create page when no id is given).
      * Mirrors the model provided to product/edit.gsp and its tab templates.

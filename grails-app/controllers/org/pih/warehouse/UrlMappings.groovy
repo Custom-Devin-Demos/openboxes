@@ -115,6 +115,14 @@ class UrlMappings {
             controller = { "productAssociationApi" }
             action = [DELETE: "delete"]
         }
+        "/api/productAssociations/saveAssociation"(parseRequest: true) {
+            controller = { "productAssociationApi" }
+            action = [POST: "save"]
+        }
+        "/api/productAssociations/$id/updateAssociation"(parseRequest: true) {
+            controller = { "productAssociationApi" }
+            action = [PUT: "update"]
+        }
         "/api/productCatalogs/search"(parseRequest: true) {
             controller = { "productCatalogApi" }
             action = [GET: "search"]
@@ -1841,6 +1849,21 @@ class UrlMappings {
          * Product screen API endpoints (React product edit/create, batch edit,
          * CSV import and add document screens)
          */
+
+        "/api/productScreens/productMergeLogs" {
+            controller = "productScreenApi"
+            action = [GET: "productMergeLogs"]
+        }
+
+        "/api/productScreens/searchResults" {
+            controller = "productScreenApi"
+            action = [GET: "searchResults"]
+        }
+
+        "/api/productScreens/upnDatabase" {
+            controller = "productScreenApi"
+            action = [GET: "upnDatabase"]
+        }
 
         "/api/productScreens/editData" {
             controller = "productScreenApi"

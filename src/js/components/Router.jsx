@@ -677,6 +677,31 @@ const AsyncProductAssociationShow = Loadable({
   loading: Loading,
 });
 
+const AsyncProductAssociationForm = Loadable({
+  loader: () => import('components/productAssociation/ProductAssociationForm'),
+  loading: Loading,
+});
+
+const AsyncProductMergeLogsList = Loadable({
+  loader: () => import('components/products/ProductMergeLogsList'),
+  loading: Loading,
+});
+
+const AsyncProductSearch = Loadable({
+  loader: () => import('components/products/ProductSearch'),
+  loading: Loading,
+});
+
+const AsyncProductShow = Loadable({
+  loader: () => import('components/products/ProductShow'),
+  loading: Loading,
+});
+
+const AsyncUpnDatabase = Loadable({
+  loader: () => import('components/products/UpnDatabase'),
+  loading: Loading,
+});
+
 const AsyncProductCatalogList = Loadable({
   loader: () => import('components/productCatalog/ProductCatalogList'),
   loading: Loading,
@@ -916,6 +941,12 @@ const Router = () => {
             <MainLayoutRoute path="**/attribute/show/:id" component={AsyncAttributeShow} />
             <MainLayoutRoute path="**/productAssociation/list" component={AsyncProductAssociationList} />
             <MainLayoutRoute path="**/productAssociation/show/:id" component={AsyncProductAssociationShow} />
+            <MainLayoutRoute path="**/productAssociation/create" component={AsyncProductAssociationForm} />
+            <MainLayoutRoute path="**/productAssociation/edit/:id" component={AsyncProductAssociationForm} />
+            <MainLayoutRoute path="**/product/productMergeLogs" component={AsyncProductMergeLogsList} />
+            <MainLayoutRoute path="**/product/search" component={AsyncProductSearch} />
+            <MainLayoutRoute path="**/product/show/:id?" component={AsyncProductShow} />
+            <MainLayoutRoute path="**/product/upnDatabase" component={AsyncUpnDatabase} />
             <MainLayoutRoute path="**/productCatalog/list" component={AsyncProductCatalogList} />
             <MainLayoutRoute path="**/productCatalog/create" component={AsyncProductCatalogForm} />
             <MainLayoutRoute path="**/productCatalog/edit/:id?" component={AsyncProductCatalogForm} />

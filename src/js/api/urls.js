@@ -165,6 +165,8 @@ export const PRODUCT_ASSOCIATIONS_SEARCH = `${PRODUCT_ASSOCIATIONS}/search`;
 export const PRODUCT_ASSOCIATION_DETAILS = (id) => `${PRODUCT_ASSOCIATIONS}/${id}/details`;
 export const PRODUCT_ASSOCIATION_DELETE = (id) => `${PRODUCT_ASSOCIATIONS}/${id}/deleteAssociation`;
 export const PRODUCT_ASSOCIATION_TYPE_CODE_OPTIONS = `${API}/productAssociationTypeCodeOptions`;
+export const PRODUCT_ASSOCIATION_SAVE = `${PRODUCT_ASSOCIATIONS}/saveAssociation`;
+export const PRODUCT_ASSOCIATION_UPDATE = (id) => `${PRODUCT_ASSOCIATIONS}/${id}/updateAssociation`;
 
 // PRODUCT CATALOGS
 export const PRODUCT_CATALOGS = `${API}/productCatalogs`;
@@ -389,6 +391,9 @@ export const PRODUCT_SCREENS_IMPORT_CONFIRM = `${PRODUCT_SCREENS_API}/importConf
 export const PRODUCT_SCREENS_ADD_DOCUMENT_CONTEXT = (id) => `${PRODUCT_SCREENS_API}/${id}/addDocumentContext`;
 export const PRODUCT_SCREENS_UPLOAD_DOCUMENT = (id) => `${PRODUCT_SCREENS_API}/${id}/documents`;
 export const PRODUCT_SCREENS_ADD_SYNONYM = (id) => `${PRODUCT_SCREENS_API}/${id}/synonyms`;
+export const PRODUCT_SCREENS_MERGE_LOGS = `${PRODUCT_SCREENS_API}/productMergeLogs`;
+export const PRODUCT_SCREENS_SEARCH_RESULTS = `${PRODUCT_SCREENS_API}/searchResults`;
+export const PRODUCT_SCREENS_UPN_DATABASE = `${PRODUCT_SCREENS_API}/upnDatabase`;
 
 // INVENTORY
 export const INVENTORY_API = (id) => `${API}/facilities/${id}/inventories`;
