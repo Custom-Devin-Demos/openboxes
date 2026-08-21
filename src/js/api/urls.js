@@ -392,6 +392,12 @@ export const PARTY_TYPE_API = `${API}/partyTypes`;
 export const PARTY_TYPE_BY_ID = (id) => `${PARTY_TYPE_API}/${id}`;
 export const PARTY_TYPE_CODE_OPTIONS = `${PARTY_TYPE_API}/partyTypeCodeOptions`;
 
+// MOBILE
+export const MOBILE_API = `${API}/mobile`;
+export const MOBILE_PRODUCT_SUMMARIES = `${MOBILE_API}/productSummaries`;
+export const MOBILE_PRODUCT_SUMMARY_BY_ID = (id) => `${MOBILE_PRODUCT_SUMMARIES}/${id}`;
+export const MOBILE_OUTBOUND_ITEMS = `${MOBILE_API}/outboundItems`;
+
 // TAG
 export const TAG_API = `${API}/tags`;
 export const TAG_BY_ID = (id) => `${TAG_API}/${id}`;
