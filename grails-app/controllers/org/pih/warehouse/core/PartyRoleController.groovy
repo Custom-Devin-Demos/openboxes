@@ -21,8 +21,7 @@ class PartyRoleController {
     }
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [partyRoleInstanceList: PartyRole.list(params), partyRoleInstanceTotal: PartyRole.count()]
+        render(view: "/common/react", params: params)
     }
 
     def create() {
@@ -40,13 +39,7 @@ class PartyRoleController {
     }
 
     def show() {
-        def partyRoleInstance = PartyRole.get(params.id)
-        if (!partyRoleInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'partyRole.label', default: 'PartyRole'), params.id])}"
-            redirect(action: "list")
-        } else {
-            [partyRoleInstance: partyRoleInstance]
-        }
+        render(view: "/common/react", params: params)
     }
 
     def edit() {

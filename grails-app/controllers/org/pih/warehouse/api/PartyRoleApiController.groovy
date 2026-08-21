@@ -21,6 +21,11 @@ import org.springframework.http.HttpStatus
 
 class PartyRoleApiController {
 
+    def list() {
+        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        render([data: PartyRole.list(params).collect { toJson(it) }, totalCount: PartyRole.count()] as JSON)
+    }
+
     def read() {
         PartyRole partyRole = PartyRole.get(params.id)
         if (!partyRole) {

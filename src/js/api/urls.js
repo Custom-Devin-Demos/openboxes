@@ -369,6 +369,11 @@ export const PARTY_ROLE_API = `${API}/partyRoles`;
 export const PARTY_ROLE_BY_ID = (id) => `${PARTY_ROLE_API}/${id}`;
 export const PARTY_ROLE_ROLE_TYPE_OPTIONS = `${PARTY_ROLE_API}/roleTypeOptions`;
 
+// PARTY TYPE
+export const PARTY_TYPE_API = `${API}/partyTypes`;
+export const PARTY_TYPE_BY_ID = (id) => `${PARTY_TYPE_API}/${id}`;
+export const PARTY_TYPE_CODE_OPTIONS = `${PARTY_TYPE_API}/partyTypeCodeOptions`;
+
 // GL ACCOUNT
 export const GL_ACCOUNT_API = `${API}/glAccounts`;
 export const GL_ACCOUNT_BY_ID = (id) => `${GL_ACCOUNT_API}/${id}`;

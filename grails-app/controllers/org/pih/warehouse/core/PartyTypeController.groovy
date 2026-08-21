@@ -21,14 +21,11 @@ class PartyTypeController {
     }
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [partyTypeInstanceList: PartyType.list(params), partyTypeInstanceTotal: PartyType.count()]
+        render(view: "/common/react", params: params)
     }
 
     def create() {
-        def partyTypeInstance = new PartyType()
-        partyTypeInstance.properties = params
-        return [partyTypeInstance: partyTypeInstance]
+        render(view: "/common/react", params: params)
     }
 
     def save() {
@@ -42,23 +39,11 @@ class PartyTypeController {
     }
 
     def show() {
-        def partyTypeInstance = PartyType.get(params.id)
-        if (!partyTypeInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'partyType.label', default: 'PartyType'), params.id])}"
-            redirect(action: "list")
-        } else {
-            [partyTypeInstance: partyTypeInstance]
-        }
+        render(view: "/common/react", params: params)
     }
 
     def edit() {
-        def partyTypeInstance = PartyType.get(params.id)
-        if (!partyTypeInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'partyType.label', default: 'PartyType'), params.id])}"
-            redirect(action: "list")
-        } else {
-            return [partyTypeInstance: partyTypeInstance]
-        }
+        render(view: "/common/react", params: params)
     }
 
     def update() {

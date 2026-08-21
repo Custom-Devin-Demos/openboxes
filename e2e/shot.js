@@ -6,6 +6,8 @@ const { chromium } = require('@playwright/test');
 const BASE = 'http://localhost:8080/openboxes';
 const outDir = process.argv[2] || '/tmp/shots/before';
 const shipmentItemId = process.env.SHIPMENT_ITEM_ID;
+const partyRoleId = process.env.PARTY_ROLE_ID;
+const partyTypeId = process.env.PARTY_TYPE_ID;
 const urls = [
   ['shipmentItem-list', '/shipmentItem/list'],
   ['shipmentItem-create', '/shipmentItem/create'],
@@ -16,6 +18,12 @@ const urls = [
   ['deliveryNote-printOutboundReturn', '/deliveryNote/printOutboundReturn/ff808081a024cf3201a024cfd2e40001'],
   ['document-create', '/document/create'],
   ['document-edit', '/document/edit/ff808081a024cf3201a024d136a00010'],
+  ['partyRole-list', '/partyRole/list'],
+  ['partyRole-show', `/partyRole/show/${partyRoleId}`],
+  ['partyType-list', '/partyType/list'],
+  ['partyType-show', `/partyType/show/${partyTypeId}`],
+  ['partyType-create', '/partyType/create'],
+  ['partyType-edit', `/partyType/edit/${partyTypeId}`],
 ];
 
 (async () => {

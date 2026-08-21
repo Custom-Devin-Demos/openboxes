@@ -460,6 +460,9 @@ const ORGANIZATION_URL = {
 
 const PARTY_TYPE_URL = {
   base: `${CONTEXT_PATH}/partyType`,
+  list: () => `${PARTY_TYPE_URL.base}/list`,
+  create: () => `${PARTY_TYPE_URL.base}/create`,
+  edit: (id) => `${PARTY_TYPE_URL.base}/edit/${id}`,
   show: (id) => `${PARTY_TYPE_URL.base}/show/${id}`,
 };
 
