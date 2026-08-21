@@ -365,11 +365,6 @@ class UrlMappings {
             action = [GET: "read", PUT: "update", DELETE: "delete"]
         }
 
-        "/api/productTypes/$id"(parseRequest: true) {
-            controller = { "productTypeApi" }
-            action = [GET: "read", DELETE: "delete"]
-        }
-
         "/api/tags"(parseRequest: true) {
             controller = { "tagApi" }
             action = [GET: "list", POST: "create"]

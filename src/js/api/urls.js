@@ -381,10 +381,6 @@ export const PARTY_TYPE_API = `${API}/partyTypes`;
 export const PARTY_TYPE_BY_ID = (id) => `${PARTY_TYPE_API}/${id}`;
 export const PARTY_TYPE_CODE_OPTIONS = `${PARTY_TYPE_API}/partyTypeCodeOptions`;
 
-// PRODUCT TYPE
-export const PRODUCT_TYPE_API = `${API}/productTypes`;
-export const PRODUCT_TYPE_BY_ID = (id) => `${PRODUCT_TYPE_API}/${id}`;
-
 // TAG
 export const TAG_API = `${API}/tags`;
 export const TAG_BY_ID = (id) => `${TAG_API}/${id}`;
