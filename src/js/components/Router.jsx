@@ -248,6 +248,21 @@ const AsyncOutboundReturnPrint = Loadable({
   loading: Loading,
 });
 
+const AsyncPicklistPrint = Loadable({
+  loader: () => import('components/picklist/PicklistPrint'),
+  loading: Loading,
+});
+
+const AsyncReturnPicklistPrint = Loadable({
+  loader: () => import('components/picklist/ReturnPicklistPrint'),
+  loading: Loading,
+});
+
+const AsyncReplenishmentPrint = Loadable({
+  loader: () => import('components/replenishment/ReplenishmentPrint'),
+  loading: Loading,
+});
+
 const AsyncDocumentCreate = Loadable({
   loader: () => import('components/document/DocumentCreate'),
   loading: Loading,
@@ -1348,6 +1363,9 @@ const Router = () => {
             <MainLayoutRoute path="**/organization/show/:id" component={AsyncOrganizationShow} />
             <Route path="**/deliveryNote/print/:id" component={AsyncDeliveryNotePrint} />
             <Route path="**/deliveryNote/printOutboundReturn/:id" component={AsyncOutboundReturnPrint} />
+            <Route path="**/picklist/print/:id" component={AsyncPicklistPrint} />
+            <Route path="**/picklist/returnPrint/:id" component={AsyncReturnPicklistPrint} />
+            <Route path="**/replenishment/print/:id" component={AsyncReplenishmentPrint} />
             <MainLayoutRoute path="**/document/create" component={AsyncDocumentCreate} />
             <MainLayoutRoute path="**/document/edit/:documentId" component={AsyncDocumentEdit} />
             <MainLayoutRoute path="**/document/list" component={AsyncDocumentList} />
