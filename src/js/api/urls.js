@@ -408,6 +408,12 @@ export const INVENTORY_SAVE_CREDIT_TRANSACTION = `${INVENTORY_SCREEN_API}/saveCr
 export const INVENTORY_TRANSACTION_BY_ID = (id) => `${INVENTORY_SCREEN_API}/transactions/${id}`;
 export const INVENTORY_SAVE_TRANSACTION = `${INVENTORY_SCREEN_API}/saveTransaction`;
 export const INVENTORY_TRANSACTION_ENTRY_DELETE = (id) => `${INVENTORY_SCREEN_API}/transactionEntries/${id}`;
+export const INVENTORY_LIST_TRANSACTIONS = `${INVENTORY_SCREEN_API}/listTransactions`;
+export const INVENTORY_SHOW_TRANSACTION = (id) => `${INVENTORY_SCREEN_API}/showTransaction/${id}`;
+export const INVENTORY_DELETE_TRANSACTION = (id) => `${INVENTORY_SCREEN_API}/deleteTransaction/${id}`;
+export const INVENTORY_LIST_BIN_LOCATIONS = `${INVENTORY_SCREEN_API}/listBinLocations`;
+export const INVENTORY_SHOW_PRODUCTS = `${INVENTORY_SCREEN_API}/showProducts`;
+export const INVENTORY_UPLOAD = `${INVENTORY_SCREEN_API}/uploadInventory`;
 
 // ADMIN
 export const ADMIN_API = `${API}/admin`;
