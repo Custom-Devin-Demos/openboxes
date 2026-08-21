@@ -55,47 +55,7 @@ class ShipmentController {
     }
 
     def list() {
-        def startTime = System.currentTimeMillis()
-        println "Get shipments: " + params
-
-        params.max = Math.min(params.max ? params.int('max') : 100, 10000)
-
-        Calendar calendar = Calendar.instance
-        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
-        int firstDayOfMonth = calendar.getActualMinimum(Calendar.DAY_OF_MONTH)
-        int lastDayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
-        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), firstDayOfMonth)
-        def lastUpdatedFromDefault = calendar.getTime()
-        def lastUpdatedToDefault = calendar.getTime()
-
-        boolean incoming = params?.type?.toUpperCase() == "INCOMING"
-        def origin = incoming ? (params.origin ? Location.get(params.origin) : null) : Location.get(session.warehouse.id)
-        def destination = incoming ? Location.get(session.warehouse.id) : (params.destination ? Location.get(params.destination) : null)
-        def shipmentType = params.shipmentType ? ShipmentType.get(params.shipmentType) : null
-        def statusCode = params.status ? Enum.valueOf(ShipmentStatusCode.class, params.status) : null
-        def statusStartDate = params.statusStartDate ? Date.parse("MM/dd/yyyy", params.statusStartDate) : null
-        def statusEndDate = params.statusEndDate ? Date.parse("MM/dd/yyyy", params.statusEndDate) : null
-        def lastUpdatedFrom = params.lastUpdatedFrom ? Date.parse("MM/dd/yyyy", params.lastUpdatedFrom) : null
-        def lastUpdatedTo = params.lastUpdatedTo ? Date.parse("MM/dd/yyyy", params.lastUpdatedTo) : null
-
-
-        println "lastUpdatedFrom = " + lastUpdatedFrom + " lastUpdatedTo = " + lastUpdatedTo
-
-        def shipments = shipmentService.getShipments(params.terms, shipmentType, origin, destination,
-                statusCode, statusStartDate, statusEndDate, lastUpdatedFrom, lastUpdatedTo, params.max)
-
-        println "List shipments: " + (System.currentTimeMillis() - startTime) + " ms"
-
-        [
-                shipments      : shipments,
-                shipmentType   : shipmentType?.id,
-                origin         : origin?.id,
-                destination    : destination?.id,
-                status         : statusCode?.name,
-                lastUpdatedFrom: lastUpdatedFrom,
-                lastUpdatedTo  : lastUpdatedTo,
-                incoming       : incoming
-        ]
+        render(view: "/common/react", params: params)
     }
 
 
@@ -236,9 +196,7 @@ class ShipmentController {
                 return
             }
 
-            def eventTypes = EventType.list()
-            def shipmentWorkflow = shipmentService.getShipmentWorkflow(shipmentInstance)
-            [shipmentInstance: shipmentInstance, shipmentWorkflow: shipmentWorkflow, shippingEventTypes: eventTypes]
+            render(view: "/common/react", params: params)
         }
     }
 
@@ -282,7 +240,6 @@ class ShipmentController {
     def sendShipment() {
         def transactionInstance
         def shipmentInstance = Shipment.get(params.id)
-        def shipmentWorkflow = shipmentService.getShipmentWorkflow(params.id)
 
         if (!shipmentInstance) {
             flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'shipment.label', default: 'Shipment'), params.id])}"
@@ -293,7 +250,7 @@ class ShipmentController {
                 // make sure a shipping date has been specified and that is not the future
                 if (!params.actualShippingDate || Date.parse("MM/dd/yyyy HH:mm XXX", params.actualShippingDate) > new Date()) {
                     flash.message = "${warehouse.message(code: 'shipping.specifyValidShipmentDate.message')}"
-                    render(view: "sendShipment", model: [shipmentInstance: shipmentInstance, shipmentWorkflow: shipmentWorkflow])
+                    redirect(action: "sendShipment", id: shipmentInstance?.id)
                     return
                 }
 
@@ -310,20 +267,21 @@ class ShipmentController {
                 }
                 catch (TransactionException e) {
                     transactionInstance = e.transaction
-                    shipmentInstance = Shipment.get(params.id)
-                    shipmentWorkflow = shipmentService.getShipmentWorkflow(params.id)
-                    render(view: "sendShipment", model: [shipmentInstance: shipmentInstance, shipmentWorkflow: shipmentWorkflow, transactionInstance: transactionInstance])
+                    flash.message = transactionInstance?.errors?.allErrors?.collect {
+                        g.message(error: it)
+                    }?.join("<br/>")
+                    redirect(action: "sendShipment", id: shipmentInstance?.id)
                     return
                 }
 
                 if (!shipmentInstance?.hasErrors() && !transactionInstance?.hasErrors()) {
                     flash.message = "${warehouse.message(code: 'default.updated.message', args: [warehouse.message(code: 'shipment.label', default: 'Shipment'), shipmentInstance.id])}"
                     redirect(action: "showDetails", id: shipmentInstance?.id)
+                    return
                 }
             }
 
-            // populate the model and render the page
-            render(view: "sendShipment", model: [shipmentInstance: shipmentInstance, shipmentWorkflow: shipmentWorkflow])
+            render(view: "/common/react", params: params)
         }
     }
 
@@ -484,8 +442,8 @@ class ShipmentController {
             // FIXME Prevent delete of the last receipt item for a shipment item (kind of a hack). There should be a
             // way to represent one receipt item as the primary so we don't even show the delete button in the UI.
             if (receiptItem.shipmentItem.receiptItems.size() <= 1) {
-                shipmentInstance?.receipt?.errors?.reject("shipping.mustHaveAtLeastOneReceiptItemPerShimentItem")
-                render(view: "receiveShipment", model: [shipmentInstance: shipmentInstance, receiptInstance: shipmentInstance.receipt])
+                flash.message = "${warehouse.message(code: 'shipping.mustHaveAtLeastOneReceiptItemPerShimentItem', default: 'shipping.mustHaveAtLeastOneReceiptItemPerShimentItem')}"
+                redirect(controller: "shipment", action: "receiveShipment", id: shipmentInstance?.id)
                 return
             } else {
                 shipmentInstance?.receipt.removeFromReceiptItems(receiptItem)
@@ -548,7 +506,8 @@ class ShipmentController {
 
             // check for errors
             if (receiptInstance.hasErrors() || !receiptInstance.validate()) {
-                render(view: "receiveShipment", model: [shipmentInstance: shipmentInstance, receiptInstance: receiptInstance])
+                flash.message = receiptInstance.errors?.allErrors?.collect { g.message(error: it) }?.join("<br/>")
+                redirect(action: "receiveShipment", id: shipmentInstance?.id)
                 return
             }
 
@@ -569,9 +528,8 @@ class ShipmentController {
                         return
                     }
                 } catch (ValidationException e) {
-                    shipmentInstance = Shipment.read(params.id)
-                    receiptInstance.errors = e.errors
-                    render(view: "receiveShipment", model: [shipmentInstance: shipmentInstance, receiptInstance: receiptInstance])
+                    flash.message = e.errors?.allErrors?.collect { g.message(error: it) }?.join("<br/>")
+                    redirect(action: "receiveShipment", id: params.id)
                     return
                 }
             } else {
@@ -587,18 +545,7 @@ class ShipmentController {
             }
         }
 
-        // Display form
-        else {
-
-            if (shipmentInstance?.destination != location) {
-                flash.message = "${g.message(code: 'shipping.mustBeLoggedIntoDestinationToReceive.message', args: [shipmentInstance?.destination])}"
-            }
-
-            receiptInstance = shipmentService.findOrCreateReceipt(shipmentInstance)
-
-        }
-
-        render(view: "receiveShipment", model: [shipmentInstance: shipmentInstance, receiptInstance: receiptInstance])
+        render(view: "/common/react", params: params)
     }
 
 
@@ -664,7 +611,7 @@ class ShipmentController {
             flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'shipment.label', default: 'Shipment'), params.id])}"
             redirect(action: "list", params: [type: params.type])
         } else {
-            [shipmentInstance: shipmentInstance]
+            render(view: "/common/react", params: params)
         }
     }
 

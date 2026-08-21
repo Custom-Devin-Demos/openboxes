@@ -473,6 +473,31 @@ const AsyncShipmentEditEvent = Loadable({
   loading: Loading,
 });
 
+const AsyncShipmentList = Loadable({
+  loader: () => import('components/shipment/ShipmentList'),
+  loading: Loading,
+});
+
+const AsyncShowShipment = Loadable({
+  loader: () => import('components/shipment/ShowShipment'),
+  loading: Loading,
+});
+
+const AsyncSendShipment = Loadable({
+  loader: () => import('components/shipment/SendShipment'),
+  loading: Loading,
+});
+
+const AsyncReceiveShipment = Loadable({
+  loader: () => import('components/shipment/ReceiveShipment'),
+  loading: Loading,
+});
+
+const AsyncShipmentPackingList = Loadable({
+  loader: () => import('components/shipment/ShipmentPackingList'),
+  loading: Loading,
+});
+
 const StockMovementList = (props) => {
   const parsedSearchQuery = queryString.parse(props?.location?.search);
   const direction = parsedSearchQuery?.direction?.toUpperCase();
@@ -867,6 +892,11 @@ const Router = () => {
             <MainLayoutRoute path="**/shipment/editDocument" component={AsyncShipmentAddDocument} />
             <MainLayoutRoute path="**/shipment/addToShipment" component={AsyncShipmentAddToShipment} />
             <MainLayoutRoute path="**/shipment/deleteShipment/:shipmentId" component={AsyncShipmentDeleteShipment} />
+            <MainLayoutRoute path="**/shipment/list" component={AsyncShipmentList} />
+            <MainLayoutRoute path="**/shipment/showDetails/:shipmentId" component={AsyncShowShipment} />
+            <MainLayoutRoute path="**/shipment/sendShipment/:shipmentId" component={AsyncSendShipment} />
+            <MainLayoutRoute path="**/shipment/receiveShipment/:shipmentId" component={AsyncReceiveShipment} />
+            <MainLayoutRoute path="**/shipment/showPackingList/:shipmentId" component={AsyncShipmentPackingList} />
             <MainLayoutRoute path="**/shipment/editEvent/:eventId" component={AsyncShipmentEditEvent} />
             <MainLayoutRoute path="**/shipment/addEvent/:shipmentId" component={AsyncShipmentEditEvent} />
             <MainLayoutRoute path="**/purchaseOrder/list" component={AsyncPurchaseOrderList} />
