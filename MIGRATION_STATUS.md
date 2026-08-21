@@ -32,7 +32,7 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | # | Task | Status | Session | PR | Notes |
 |---|------|--------|---------|----|-------|
 | 1.1 | Java 8→11 + dependency cleanup | MERGED | [c54a01cd](https://app.devin.ai/sessions/c54a01cdcc264e168324562d8958adeb) | [#7](https://github.com/Custom-Devin-Demos/openboxes/pull/7) | Snapshots 122/122, Playwright 10/10 on JDK 11, CI green |
-| 1.2 | Grails 3→4 | IN_PROGRESS | [e4c1b67a](https://app.devin.ai/sessions/e4c1b67a72bb47aa90fc41799a4e7271) | | |
+| 1.2 | Grails 3→4 | MERGED | [e4c1b67a](https://app.devin.ai/sessions/e4c1b67a72bb47aa90fc41799a4e7271) | [#12](https://github.com/Custom-Devin-Demos/openboxes/pull/12) | Grails 4.1.4/Gradle 6.9.4/GORM 7.0.7; snapshots 120-121/122 (known artifacts), Playwright 10/10, CI green after rebase |
 | 1.3 | Grails 4→5 | PENDING | | | Blocked by 1.2 |
 | 1.4 | Grails 5→6 / Java 21 / javax→jakarta | PENDING | | | Blocked by 1.3 |
 | 1.5 | Re-verify Quartz jobs, Liquibase, mail/reporting integrations | PENDING | | | Blocked by 1.4 |
@@ -105,3 +105,4 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | 2-users-security-1 | users-security-1 batch | IN_PROGRESS | [d9178c80](https://app.devin.ai/sessions/d9178c80e0fd49c8a30dd73299d9a7f9) | | |
 | 2-invoicing | invoicing batch | IN_PROGRESS | [11c5c78a](https://app.devin.ai/sessions/11c5c78a6b534ffe928ef5f028d189cf) | | |
 - 2026-08-20: Phase 2 wave 2 spawned (10 batches). P1.2 (#12) asked to rebase onto latest develop before merge.
+- 2026-08-20: P1.2 Grails 4.1.4 merged (PR #12) after rebase onto develop with all wave-1 Phase 2 batches. P1.3 (Grails 4→5) spawning next.
