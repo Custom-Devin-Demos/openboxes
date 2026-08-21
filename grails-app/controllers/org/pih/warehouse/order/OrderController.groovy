@@ -245,7 +245,7 @@ class OrderController {
             flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'order.label', default: 'Order'), params.id])}"
             redirect(action: "list")
         } else {
-            [orderInstance: orderInstance]
+            render(view: "/common/react")
         }
     }
 
@@ -946,7 +946,7 @@ class OrderController {
                 render documentTemplateService.renderGroovyServerPageDocumentTemplate(documentTemplate, [orderInstance:orderInstance])
                 return
             }
-            [orderInstance: orderInstance]
+            render(view: "/common/react")
         }
     }
 
@@ -1169,10 +1169,7 @@ class OrderController {
 
     // For testing order derived status feature. orderSummaryList action gets the data from extended SQL view
     def orderSummaryList() {
-        params.max = params.max?:10
-        params.offset = params.offset?:0
-        def orderSummaryList = orderService.getOrderSummaryList(params)
-        render(view: "orderSummaryList", model: [orderSummaryList: orderSummaryList ?: []], params: params)
+        render(view: "/common/react", params: params)
     }
 
     // For testing order item derived status feature. orderItemSummary action gets the data from extended SQL view

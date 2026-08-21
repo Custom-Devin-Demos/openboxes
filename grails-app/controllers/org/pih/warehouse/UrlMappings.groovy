@@ -1366,6 +1366,81 @@ class UrlMappings {
             action = [GET: "adjustmentFormData"]
         }
 
+        "/api/orders/orderSummaries"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "orderSummaries"]
+        }
+
+        "/api/orders/orderSummaryStatusOptions"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "orderSummaryStatusOptions"]
+        }
+
+        "/api/orders/$id/details"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "details"]
+        }
+
+        "/api/orders/$id/orderItemsSummaryData"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "orderItemsSummaryData"]
+        }
+
+        "/api/orders/$id/itemStatusData"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "itemStatusData"]
+        }
+
+        "/api/orders/$id/itemDetailsData"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "itemDetailsData"]
+        }
+
+        "/api/orders/$id/adjustmentsData"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "adjustmentsData"]
+        }
+
+        "/api/orders/$id/shipmentsData"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "shipmentsData"]
+        }
+
+        "/api/orders/$id/invoicesData"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "invoicesData"]
+        }
+
+        "/api/orders/$id/documentsData"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "documentsData"]
+        }
+
+        "/api/orders/$id/commentsData"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "commentsData"]
+        }
+
+        "/api/orders/$id/printData"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "printData"]
+        }
+
+        "/api/orderAdjustmentTypes/formData"(parseRequest: true) {
+            controller = { "orderAdjustmentTypeApi" }
+            action = [GET: "formData"]
+        }
+
+        "/api/orderAdjustmentTypes"(parseRequest: true) {
+            controller = { "orderAdjustmentTypeApi" }
+            action = [GET: "list", POST: "create"]
+        }
+
+        "/api/orderAdjustmentTypes/$id"(parseRequest: true) {
+            controller = { "orderAdjustmentTypeApi" }
+            action = [GET: "read", PUT: "update", DELETE: "delete"]
+        }
+
         /**
          * Products Configuration API endpoints
          */

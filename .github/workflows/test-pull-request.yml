@@ -5,7 +5,7 @@ on:
   # Use pull_request instead of pull_request_target for security purposes and so that tests run on the source branch
   # (ie the PR branch), not the target branch.
   pull_request:
-    types: [opened, synchronize]
+    types: [opened, synchronize, reopened]
 
 jobs:
   run-frontend-tests:
