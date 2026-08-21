@@ -32,6 +32,15 @@ const PRODUCT_URL = {
 const LOCATION_URL = {
   base: `${CONTEXT_PATH}/location`,
   list: () => `${LOCATION_URL.base}/list`,
+  create: () => `${LOCATION_URL.base}/edit`,
+  edit: (id) => `${LOCATION_URL.base}/edit/${id}`,
+  showBinLocations: (id) => `${LOCATION_URL.base}/showBinLocations/${id}`,
+  showZoneLocations: (id) => `${LOCATION_URL.base}/showZoneLocations/${id}`,
+  showContents: (id) => `${LOCATION_URL.base}/showContents/${id}`,
+  uploadLogo: (id) => `${LOCATION_URL.base}/uploadLogo/${id}`,
+  viewLogo: (id) => `${LOCATION_URL.base}/viewLogo/${id}`,
+  exportBinLocations: (id) => `${LOCATION_URL.base}/exportBinLocations/${id}`,
+  exportLocations: () => `${CONTEXT_PATH}/batch/downloadExcel?type=Location`,
 };
 
 const STOCK_MOVEMENT_URL = {
@@ -68,6 +77,7 @@ const PUTAWAY_URL = {
   base: `${CONTEXT_PATH}/putAway`,
   create: () => `${PUTAWAY_URL.base}/create`,
   edit: (id) => `${PUTAWAY_URL.create()}/${id}`,
+  generatePdf: (id) => `${PUTAWAY_URL.base}/generatePdf/${id}`,
 };
 
 const STOCK_TRANSFER_URL = {
@@ -87,12 +97,23 @@ const STOCK_TRANSFER_URL = {
 const ORDER_URL = {
   base: `${CONTEXT_PATH}/order`,
   list: () => `${ORDER_URL.base}/list`,
+  listPutaway: () => `${ORDER_URL.base}/list?orderType=PUTAWAY_ORDER`,
   create: () => `${ORDER_URL.base}/create`,
   show: (id) => `${ORDER_URL.base}/show/${id}`,
   print: (id) => `${ORDER_URL.base}/print/${id}`,
   addComment: (id) => `${ORDER_URL.base}/addComment/${id}`,
   addDocument: (id) => `${ORDER_URL.base}/addDocument/${id}`,
   placeOrder: (id) => `${ORDER_URL.base}/placeOrder/${id}`,
+  remove: (id) => `${ORDER_URL.base}/remove/${id}`,
+  rollbackOrderStatus: (id) => `${ORDER_URL.base}/rollbackOrderStatus/${id}`,
+  saveComment: () => `${ORDER_URL.base}/saveComment`,
+  saveAdjustment: () => `${ORDER_URL.base}/saveAdjustment`,
+};
+
+const DOCUMENT_URL = {
+  base: `${CONTEXT_PATH}/document`,
+  uploadDocument: () => `${DOCUMENT_URL.base}/uploadDocument`,
+  saveDocument: () => `${DOCUMENT_URL.base}/saveDocument`,
 };
 
 const PURCHASE_ORDER_URL = {
@@ -119,6 +140,25 @@ const INVENTORY_URL = {
   editTransaction: (id) => `${INVENTORY_URL.base}/editTransaction/${id}`,
 };
 
+const SHIPMENT_URL = {
+  base: `${CONTEXT_PATH}/shipment`,
+  showDetails: (id) => `${SHIPMENT_URL.base}/showDetails/${id}`,
+  addComment: (id) => `${SHIPMENT_URL.base}/addComment/${id}`,
+  saveComment: () => `${SHIPMENT_URL.base}/saveComment`,
+  addDocument: (id) => `${SHIPMENT_URL.base}/addDocument/${id}`,
+  deleteShipment: (id) => `${SHIPMENT_URL.base}/deleteShipment/${id}`,
+  editEvent: (id, params = {}) => stringifyUrl({
+    url: `${SHIPMENT_URL.base}/editEvent/${id}`,
+    query: { ...params },
+  }),
+  saveEvent: () => `${SHIPMENT_URL.base}/saveEvent`,
+  deleteEvent: (id, params = {}) => stringifyUrl({
+    url: `${SHIPMENT_URL.base}/deleteEvent/${id}`,
+    query: { ...params },
+  }),
+  addToShipmentPost: () => `${SHIPMENT_URL.base}/addToShipmentPost`,
+};
+
 const REQUISITION_TEMPLATE_URL = {
   base: `${CONTEXT_PATH}/requisitionTemplate`,
   create: () => `${REQUISITION_TEMPLATE_URL.base}/create`,
@@ -126,6 +166,21 @@ const REQUISITION_TEMPLATE_URL = {
   edit: (id) => `${REQUISITION_TEMPLATE_URL.base}/edit/${id}`,
   batch: (id) => `${REQUISITION_TEMPLATE_URL.base}/batch/${id}`,
   editHeader: (id) => `${REQUISITION_TEMPLATE_URL.base}/editHeader/${id}`,
+};
+
+const REQUISITION_URL = {
+  base: `${CONTEXT_PATH}/requisition`,
+  list: () => `${REQUISITION_URL.base}/list`,
+  chooseTemplate: () => `${REQUISITION_URL.base}/chooseTemplate`,
+  create: (type) => `${REQUISITION_URL.base}/create${type ? `?type=${type}` : ''}`,
+  createStockFromTemplate: (id) => `${REQUISITION_URL.base}/createStockFromTemplate/${id}`,
+  edit: (id) => `${REQUISITION_URL.base}/edit/${id}`,
+  review: (id) => `${REQUISITION_URL.base}/review/${id}`,
+  pick: (id) => `${REQUISITION_URL.base}/pick/${id}`,
+  confirm: (id) => `${REQUISITION_URL.base}/confirm/${id}`,
+  transfer: (id) => `${REQUISITION_URL.base}/transfer/${id}`,
+  show: (id) => `${REQUISITION_URL.base}/show/${id}`,
+  saveRequisitionItems: () => `${REQUISITION_URL.base}/saveRequisitionItems`,
 };
 
 const STOCKLIST_URL = {
@@ -189,6 +244,7 @@ export {
   CATEGORY_URL,
   CYCLE_COUNT,
   DASHBOARD_URL,
+  DOCUMENT_URL,
   EVENT_TYPE_URL,
   INVENTORY_ITEM_URL,
   INVENTORY_URL,
@@ -203,6 +259,8 @@ export {
   PUTAWAY_URL,
   REPLENISHMENT_URL,
   REQUISITION_TEMPLATE_URL,
+  REQUISITION_URL,
+  SHIPMENT_URL,
   STOCK_MOVEMENT_URL,
   STOCK_TRANSFER_URL,
   STOCKLIST_URL,

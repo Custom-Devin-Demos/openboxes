@@ -42,6 +42,31 @@ class UrlMappings {
 
         // REST APIs with complex resource names or subresources
 
+        "/api/requisitions"(parseRequest: true) {
+            controller = { "requisitionApi" }
+            action = [POST: "create"]
+        }
+        "/api/requisitions/templates" {
+            controller = { "requisitionApi" }
+            action = [GET: "templates"]
+        }
+        "/api/requisitions/templates/$id" {
+            controller = { "requisitionApi" }
+            action = [GET: "template"]
+        }
+        "/api/requisitions/$id/edit" {
+            controller = { "requisitionApi" }
+            action = [GET: "edit"]
+        }
+        "/api/requisitions/$id/confirm" {
+            controller = { "requisitionApi" }
+            action = [GET: "confirm"]
+        }
+        "/api/requisitions/$id/details"(parseRequest: true) {
+            controller = { "requisitionApi" }
+            action = [POST: "updateDetails"]
+        }
+
         "/api/categories"(parseRequest: true) {
             controller = { "categoryApi" }
             action = [GET: "list", POST: "save"]
@@ -146,6 +171,31 @@ class UrlMappings {
             action = [GET: "shipmentStatusCodesOptions"]
         }
 
+        "/api/shipments/commentForm" {
+            controller = { "shipmentApi" }
+            action = [GET: "commentForm"]
+        }
+
+        "/api/shipments/addToShipmentForm" {
+            controller = { "shipmentApi" }
+            action = [GET: "addToShipmentForm"]
+        }
+
+        "/api/shipments/$id/summary" {
+            controller = { "shipmentApi" }
+            action = [GET: "summary"]
+        }
+
+        "/api/shipments/$id/documentForm" {
+            controller = { "shipmentApi" }
+            action = [GET: "documentForm"]
+        }
+
+        "/api/shipments/$id/eventForm" {
+            controller = { "shipmentApi" }
+            action = [GET: "eventForm"]
+        }
+
         "/api/products"(parseRequest: true) {
             controller = { "productApi" }
             action = [GET: "list", POST: "save"]
@@ -193,6 +243,26 @@ class UrlMappings {
         "/api/facilities/$facilityId/inventory-levels(.$format)?" {
             controller = "inventoryLevelApi"
             action = [GET: "list"]
+        }
+
+        "/api/locations/search" {
+            controller = { "locationApi" }
+            action = [GET: "search"]
+        }
+
+        "/api/locations/$id/details" {
+            controller = { "locationApi" }
+            action = [GET: "details"]
+        }
+
+        "/api/locations/$id/contents" {
+            controller = { "locationApi" }
+            action = [GET: "contents"]
+        }
+
+        "/api/locations/$id/logo" {
+            controller = { "locationApi" }
+            action = [DELETE: "deleteLogo"]
         }
 
         "/api/locations/locationTypes" {
@@ -957,6 +1027,55 @@ class UrlMappings {
         "/api/purchaseOrders/$id"(parseRequest: true) {
             controller = { "purchaseOrderApi" }
             action = [GET: "read", DELETE: "delete"]
+        }
+
+        /**
+         * Orders API endpoints
+         */
+
+        "/api/orders"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "list"]
+        }
+
+        "/api/orders/statusOptions"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "statusOptions"]
+        }
+
+        "/api/orders/orderTypeOptions"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "orderTypeOptions"]
+        }
+
+        "/api/orders/pendingOrderItems"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "pendingOrderItems"]
+        }
+
+        "/api/orders/orderItemSummaries"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "orderItemSummaries"]
+        }
+
+        "/api/orders/$id/summary"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "summary"]
+        }
+
+        "/api/orders/$id/commentFormData"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "commentFormData"]
+        }
+
+        "/api/orders/$id/documentFormData"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "documentFormData"]
+        }
+
+        "/api/orders/$id/adjustmentFormData"(parseRequest: true) {
+            controller = { "orderApi" }
+            action = [GET: "adjustmentFormData"]
         }
 
         /**

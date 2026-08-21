@@ -1,6 +1,6 @@
 // @ts-check
 const { expect } = require('@playwright/test');
-const { pickField, pickOption, pickToday, setChosenSelect } = require('./ui');
+const { pickField, pickOption, pickToday } = require('./ui');
 
 const DEPOT_NAME = process.env.OB_E2E_DEPOT || 'E2E Depot';
 
@@ -9,21 +9,46 @@ const DEPOT_NAME = process.env.OB_E2E_DEPOT || 'E2E Depot';
  * requests have a destination/fulfilling location other than the main
  * warehouse. Idempotent: only creates the location on first run.
  *
- * Note: the legacy app has no location/create action; the "add location"
- * button on location/list points at location/edit with no id.
+ * The location list/edit screens are React (they fetch their data through
+ * /api/locations/search), so this waits for the list data and drives the
+ * React form fields rather than the legacy GSP inputs.
  */
 async function ensureDepot(page) {
+  const listResponse = page.waitForResponse((r) => r.url().includes('/api/locations/search'));
   await page.goto('location/list');
-  await page.waitForLoadState('domcontentloaded');
+  await listResponse.catch(() => {});
   if (await page.locator(`text=${DEPOT_NAME}`).count()) return;
 
   await page.goto('location/edit');
-  await page.locator('input[name="name"]:visible').first().fill(DEPOT_NAME);
-  await setChosenSelect(page, 'organization.id', 'Main Organization');
-  await setChosenSelect(page, 'locationType.id', 'Depot');
-  await page.locator('button:has-text("Save")').first().click();
-  await page.waitForLoadState('domcontentloaded');
-  await expect(page).toHaveURL(/location\/edit\/\w+/);
+  const nameInput = page
+    .locator('[data-testid="form-field"][aria-label="Name"] input:visible')
+    .first();
+  const typeField = page.locator('[data-testid="form-field"][aria-label="Location Type"]');
+  // The form re-initializes asynchronously after mount (location types load
+  // and set the default type), so verify the values settled and retry when a
+  // re-render wiped them.
+  await expect(typeField).toContainText('Depot', { timeout: 15_000 });
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    if (!(await nameInput.inputValue().catch(() => ''))) {
+      await nameInput.fill(DEPOT_NAME);
+    }
+    if (!(((await typeField.textContent().catch(() => '')) || '').includes('Depot'))) {
+      await pickField(page, 'Location Type', 'Depot');
+    }
+    const orgField = page.locator('[data-testid="form-field"][aria-label="Organization"]');
+    if (!(((await orgField.textContent().catch(() => '')) || '').includes('Main Organization'))) {
+      await pickField(page, 'Organization', 'Main Organization');
+    }
+    await page.waitForTimeout(1000);
+    if (!(await nameInput.inputValue().catch(() => ''))) continue;
+    await page.locator('button:has-text("Save")').first().click();
+    const saved = await page
+      .waitForURL(/location\/edit\/\w+/, { timeout: 20_000 })
+      .then(() => true)
+      .catch(() => false);
+    if (saved) return;
+  }
+  throw new Error('Could not create depot: location edit form kept resetting its fields');
 }
 
 /**
@@ -64,6 +89,9 @@ async function sendShipmentStep(page) {
   await page.waitForLoadState('networkidle').catch(() => {});
 
   for (let attempt = 0; attempt < 4; attempt += 1) {
+    // The click may have gone through even when the detached-wait below timed
+    // out (e.g. a slow re-render); if we already left the send step, be done.
+    if (!(await sendButton.isVisible().catch(() => false))) return;
     if (!(((await typeField.textContent().catch(() => '')) || '').includes('Land'))) {
       await typeField.click();
       await pickOption(page, 'Land');

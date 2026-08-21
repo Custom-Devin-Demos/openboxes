@@ -38,17 +38,7 @@ class LocationController {
     }
 
     def list() {
-        def defaultLocationType = LocationType.findByLocationTypeCode(LocationTypeCode.DEPOT)
-        def locationType = params.containsKey("locationType.id")?LocationType.get(params["locationType.id"])?:null:defaultLocationType
-        def locationGroup = LocationGroup.get(params["locationGroup.id"])
-        def organization = Organization.get(params["organization.id"])
-
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        params.offset = params.offset ? params.int("offset") : 0
-
-        def locations = locationService.getLocations(organization, locationType, locationGroup, params.q, params.max, params.offset as int, params.sort ?: "name", params.order ?: "asc")
-
-        [locationInstanceList: locations, locationInstanceTotal: locations.totalCount, defaultLocationType:defaultLocationType]
+        render(view: "/common/react", params: params)
     }
 
     def show() {
@@ -56,13 +46,7 @@ class LocationController {
     }
 
     def edit() {
-        def locationInstance = inventoryService.getLocation(params.id)
-        if (!locationInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'location.label', default: 'Location'), params.id])}"
-            redirect(action: "list")
-        } else {
-            return [locationInstance: locationInstance]
-        }
+        render(view: "/common/react", params: params)
     }
 
     @Transactional
@@ -202,16 +186,7 @@ class LocationController {
     }
 
     def showContents() {
-        def binLocation = Location.get(params.id)
-        if (!binLocation) {
-            render "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'location.label', default: 'Location'), params.id])}"
-
-        } else {
-            List contents = inventoryService.getQuantityByBinLocation(binLocation.parentLocation, binLocation)
-            return [binLocation: binLocation, contents: contents]
-        }
-
-
+        render(view: "/common/react", params: params)
     }
 
 
@@ -241,47 +216,7 @@ class LocationController {
 
 
     def uploadLogo() {
-        def locationInstance = Location.get(params.id)
-
-        if (request.method == "POST") {
-            if (locationInstance) {
-                def logo = request.getFile("logo")
-
-                // List of OK mime-types
-                def okcontents = [
-                        'image/png',
-                        'image/jpeg',
-                        'image/gif'
-                ]
-
-                if (!okcontents.contains(logo.getContentType())) {
-                    log.info "Photo is not correct type"
-                    flash.message = "Photo must be one of: ${okcontents}"
-                    render(view: "uploadLogo", model: [locationInstance: locationInstance])
-                    return
-                }
-
-                if (!logo?.empty && logo.size < 1024 * 1000) { // not empty AND less than 1MB
-                    locationInstance.logo = logo.bytes
-                    if (!locationInstance.hasErrors()) {
-                        inventoryService.saveLocation(locationInstance)
-                        flash.message = "${warehouse.message(code: 'default.updated.message', args: [warehouse.message(code: 'warehouse.label', default: 'Location'), locationInstance.id])}"
-                    } else {
-                        // there were errors, the logo was not saved
-                        flash.message = "${warehouse.message(code: 'default.not.updated.message', args: [warehouse.message(code: 'user.label'), locationInstance.id])}"
-                        render(view: "uploadPhoto", model: [locationInstance: locationInstance])
-                        return
-                    }
-                } else {
-                    flash.message = "${warehouse.message(code: 'user.photoTooLarge.message', args: [warehouse.message(code: 'location.label'), locationInstance.id])}"
-                }
-
-                redirect(action: "edit", id: locationInstance.id)
-            } else {
-                "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'warehouse.label', default: 'Location'), params.id])}"
-            }
-        }
-        [locationInstance: locationInstance]
+        render(view: "/common/react", params: params)
     }
 
     def deleteLogo() {
@@ -338,29 +273,11 @@ class LocationController {
     }
 
     def showBinLocations() {
-
-        def locationInstance = Location.get(params.id)
-        if (!locationInstance) {
-            render "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'location.label', default: 'Location'), params.id])}"
-        } else {
-            def binLocations
-            if (locationInstance.isZoneLocation()) {
-                binLocations = Location.findAllByZone(locationInstance)
-            } else {
-                binLocations = locationService.getBinLocations(locationInstance)
-            }
-            [locationInstance: locationInstance, binLocations: binLocations]
-        }
+        render(view: "/common/react", params: params)
     }
 
     def showZoneLocations() {
-        def locationInstance = Location.get(params.id)
-        if (!locationInstance) {
-            render "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'location.label', default: 'Location'), params.id])}"
-        } else {
-            def zoneLocations = locationService.getZones(locationInstance)
-            [locationInstance: locationInstance, zoneLocations: zoneLocations]
-        }
+        render(view: "/common/react", params: params)
     }
 
     def importBinLocations() {

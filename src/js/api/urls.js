@@ -6,6 +6,17 @@ const API = '/api';
 export const GENERIC_API = `${API}/generic`;
 const { CONTEXT_PATH } = window;
 
+// ORDER
+export const ORDER_API = `${API}/orders`;
+export const ORDER_PENDING_ORDER_ITEMS = `${ORDER_API}/pendingOrderItems`;
+export const ORDER_ITEM_SUMMARIES = `${ORDER_API}/orderItemSummaries`;
+export const ORDER_STATUS_OPTIONS = `${ORDER_API}/statusOptions`;
+export const ORDER_TYPE_OPTIONS = `${ORDER_API}/orderTypeOptions`;
+export const ORDER_SUMMARY = (id) => `${ORDER_API}/${id}/summary`;
+export const ORDER_COMMENT_FORM_DATA = (id) => `${ORDER_API}/${id}/commentFormData`;
+export const ORDER_DOCUMENT_FORM_DATA = (id) => `${ORDER_API}/${id}/documentFormData`;
+export const ORDER_ADJUSTMENT_FORM_DATA = (id) => `${ORDER_API}/${id}/adjustmentFormData`;
+
 // PURCHASE ORDER
 export const PURCHASE_ORDER_API = `${API}/purchaseOrders`;
 export const PURCHASE_ORDER_DELETE = (id) => `${PURCHASE_ORDER_API}/${id}`;
@@ -101,6 +112,14 @@ export const PRODUCT_GROUP_OPTION = `${API}/productGroupOptions`;
 // SHIPMENT TYPES
 export const SHIPMENT_TYPES = `${GENERIC_API}/shipmentType`;
 
+// SHIPMENTS
+export const SHIPMENT_API = `${API}/shipments`;
+export const SHIPMENT_SUMMARY = (id) => `${SHIPMENT_API}/${id}/summary`;
+export const SHIPMENT_COMMENT_FORM = `${SHIPMENT_API}/commentForm`;
+export const SHIPMENT_DOCUMENT_FORM = (id) => `${SHIPMENT_API}/${id}/documentForm`;
+export const SHIPMENT_EVENT_FORM = (id) => `${SHIPMENT_API}/${id}/eventForm`;
+export const SHIPMENT_ADD_TO_SHIPMENT_FORM = `${SHIPMENT_API}/addToShipmentForm`;
+
 // PAYMENT TERMS
 export const PAYMENT_TERMS_OPTION = `${API}/paymentTermOptions`;
 
@@ -122,6 +141,11 @@ export const LOCATION_TYPES = `${LOCATION_API}/locationTypes`;
 export const LOCATION_TEMPLATE = `${CONTEXT_PATH}${LOCATION_API}/template`;
 export const LOCATION_IMPORT = `${CONTEXT_PATH}${LOCATION_API}/importCsv`;
 export const LOCATION = (id) => `${LOCATION_API}/${id}`;
+export const LOCATION_SEARCH = `${LOCATION_API}/search`;
+export const LOCATION_DETAILS = (id) => `${LOCATION_API}/${id}/details`;
+export const LOCATION_CONTENTS = (id) => `${LOCATION_API}/${id}/contents`;
+export const LOCATION_LOGO = (id) => `${LOCATION_API}/${id}/logo`;
+export const LOCATION_SUPPORTED_ACTIVITIES = `${LOCATION_API}/supportedActivities`;
 
 // PUTAWAY
 export const PUTAWAY_GENERATE_PDF = (id) => `/putAway/generatePdf/${id}`;
@@ -287,3 +311,11 @@ export const ADMIN_SETTINGS = `${ADMIN_API}/settings`;
 export const ADMIN_TRIGGER_STOCK_ALERTS = `${ADMIN_API}/triggerStockAlerts`;
 export const ADMIN_SEND_MAIL = `${ADMIN_API}/sendMail`;
 export const ADMIN_MAIL_FORM = `${ADMIN_API}/mailForm`;
+
+// REQUISITIONS (legacy requisition screens migration)
+export const REQUISITION_API = `${API}/requisitions`;
+export const REQUISITION_TEMPLATES = `${REQUISITION_API}/templates`;
+export const REQUISITION_TEMPLATE_BY_ID = (id) => `${REQUISITION_TEMPLATES}/${id}`;
+export const REQUISITION_EDIT = (id) => `${REQUISITION_API}/${id}/edit`;
+export const REQUISITION_CONFIRM = (id) => `${REQUISITION_API}/${id}/confirm`;
+export const REQUISITION_DETAILS = (id) => `${REQUISITION_API}/${id}/details`;

@@ -354,7 +354,7 @@ class ShipmentController {
                 return
             }
         }
-        [shipmentInstance: shipmentInstance]
+        render(view: "/common/react", params: params)
     }
 
     def markAsReceived() {
@@ -824,12 +824,9 @@ class ShipmentController {
         if (!shipmentInstance) {
             flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'shipment.label', default: 'Shipment'), params.id])}"
             redirect(action: "list")
+            return
         }
-        render(view: "addDocument", model: [
-                shipmentInstance: shipmentInstance,
-                documentInstance: documentInstance,
-                documentTypes: documentTypes
-        ])
+        render(view: "/common/react", params: params)
     }
 
     def editDocument() {
@@ -844,19 +841,15 @@ class ShipmentController {
         if (!documentInstance) {
             flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'document.label', default: 'Document'), params.documentId])}"
             redirect(action: "showDetails", id: shipmentInstance?.id)
+            return
         }
-        render(view: "addDocument", model: [
-                shipmentInstance: shipmentInstance,
-                documentInstance: documentInstance,
-                documentTypes: documentTypes
-        ])
+        render(view: "/common/react", params: params)
     }
 
 
     def addComment() {
         log.debug "params " + params
-        def shipmentInstance = Shipment.get(params.id)
-        render(view: "addComment", model: [shipmentInstance: shipmentInstance, comment: new Comment()])
+        render(view: "/common/react", params: params)
     }
 
     /**
@@ -1001,9 +994,10 @@ class ShipmentController {
         if (!eventInstance) {
             flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'shipmentEvent.label', default: 'ShipmentEvent'), params.id])}"
             redirect(action: "showDetails", id: params.shipmentId)
+            return
         }
 
-        render(view: "editEvent", model: [shipmentInstance: shipmentInstance, eventInstance: eventInstance])
+        render(view: "/common/react", params: params)
     }
 
 
@@ -1015,8 +1009,7 @@ class ShipmentController {
             redirect(action: "list")
         }
 
-        def eventInstance = new Event(params)
-        render(view: "editEvent", model: [shipmentInstance: shipmentInstance, eventInstance: eventInstance])
+        render(view: "/common/react", params: params)
     }
 
     def saveEvent() {
@@ -1101,15 +1094,7 @@ class ShipmentController {
 
 
     def addToShipment() {
-
-        // Get product IDs and convert them to String
-        def productIds = params.list('product.id')
-        productIds = productIds.collect { String.valueOf(it) }
-
-        Location location = Location.get(session.warehouse.id)
-        def commandInstance = shipmentService.getAddToShipmentCommand(productIds, location)
-
-        [commandInstance: commandInstance]
+        render(view: "/common/react", params: params)
     }
 
 

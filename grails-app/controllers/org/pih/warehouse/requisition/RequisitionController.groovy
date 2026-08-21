@@ -56,42 +56,15 @@ class RequisitionController {
     }
 
     def chooseTemplate() {
-        render(view: "chooseTemplate")
+        render(view: "/common/react")
     }
 
     def createStockFromTemplate() {
-        def requisition = new Requisition()
-        def requisitionTemplate = Requisition.get(params.id)
-        if (requisitionTemplate) {
-            requisition.type = requisitionTemplate.type
-            requisition.origin = requisitionTemplate.origin
-            requisition.destination = requisitionTemplate.destination
-            requisition.commodityClass = requisitionTemplate.commodityClass
-            requisition.createdBy = User.get(session.user.id)
-            requisition.dateRequested = new Date()
-
-            requisitionTemplate.requisitionItems.each {
-                println "Adding requisition item " + it.product.name + " [" + it.orderIndex + "]"
-                def requisitionItem = new RequisitionItem()
-                requisitionItem.inventoryItem = it.inventoryItem
-                requisitionItem.quantity = it.quantity
-                requisitionItem.product = it.product
-                requisitionItem.productPackage = it.productPackage
-                requisitionItem.orderIndex = it.orderIndex
-                requisition.addToRequisitionItems(requisitionItem)
-            }
-        } else {
-            flash.message = "Could not find requisition template"
-        }
-
-        println "redirecting to create stock page " + requisition.id
-        render(view: "createStock", model: [requisition: requisition])
+        render(view: "/common/react")
     }
 
     def create() {
-        def requisition = new Requisition(status: RequisitionStatus.CREATED)
-        requisition.type = params.type as RequisitionType
-        render(view: "createNonStock", model: [requisition: requisition])
+        render(view: "/common/react")
     }
 
     def save() {
@@ -128,23 +101,7 @@ class RequisitionController {
 
 
     def edit() {
-        def requisition = Requisition.get(params.id)
-        if (requisition) {
-
-            if (requisition.status < RequisitionStatus.EDITING) {
-                requisition.status = RequisitionStatus.EDITING
-                requisition.save(flush: true)
-            }
-
-
-            println "Requisition json: " + requisition.toJson()
-
-            return [requisition: requisition]
-
-
-        } else {
-            response.sendError(404)
-        }
+        render(view: "/common/react")
     }
 
     def editHeader() {
@@ -254,26 +211,7 @@ class RequisitionController {
 
 
     def confirm() {
-        def requisition = Requisition.get(params?.id)
-        if (requisition) {
-
-            if (requisition.status < RequisitionStatus.CHECKING) {
-                requisition.status = RequisitionStatus.CHECKING
-                requisition.save(flush: true)
-            }
-
-            def currentInventory = Location.get(session.warehouse.id).inventory
-            def productInventoryItemsMap = [:]
-            def productInventoryItems = inventoryService.getInventoryItemsWithQuantity(requisition.requisitionItems?.collect {
-                it.product
-            }, currentInventory)
-            productInventoryItems.keySet().each { product ->
-                productInventoryItemsMap[product.id] = productInventoryItems[product].collect {
-                    it.toJson()
-                }
-            }
-        }
-        [requisition: requisition]
+        render(view: "/common/react")
     }
 
     def saveDetails() {
