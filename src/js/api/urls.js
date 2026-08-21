@@ -294,6 +294,13 @@ export const PRODUCT_SUPPLIER_BY_ID = (id) => `${PRODUCT_SUPPLIER_API}/${id}`;
 export const PRODUCT_SUPPLIER_PREFERENCES_API = `${API}/productSupplierPreferences`;
 export const PRODUCT_SUPPLIER_PREFERENCES_BY_ID = (id) => `${PRODUCT_SUPPLIER_PREFERENCES_API}/${id}`;
 export const PRODUCT_SUPPLIER_EXPORT = `${PRODUCT_SUPPLIER_API}/export`;
+export const PRODUCT_SUPPLIER_DETAILS = (id) => `${PRODUCT_SUPPLIER_API}/${id}/details`;
+
+// PRODUCT TYPE
+export const PRODUCT_TYPE_API = `${API}/productTypes`;
+export const PRODUCT_TYPE_BY_ID = (id) => `${PRODUCT_TYPE_API}/${id}`;
+export const PRODUCT_TYPE_ACTIVITY_CODE_OPTIONS = `${PRODUCT_TYPE_API}/productActivityCodeOptions`;
+export const PRODUCT_TYPE_FIELD_OPTIONS = `${PRODUCT_TYPE_API}/productFieldOptions`;
 
 // UNIT OF MEASURE
 export const UNIT_OF_MEASURE_API = `${API}/unitOfMeasures`;

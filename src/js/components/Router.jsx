@@ -448,6 +448,21 @@ const AsyncProductSupplierCreatePage = Loadable({
   loading: Loading,
 });
 
+const AsyncProductSupplierShow = Loadable({
+  loader: () => import('components/productSupplier/ProductSupplierShow'),
+  loading: Loading,
+});
+
+const AsyncProductTypeList = Loadable({
+  loader: () => import('components/productType/ProductTypeList'),
+  loading: Loading,
+});
+
+const AsyncProductTypeForm = Loadable({
+  loader: () => import('components/productType/ProductTypeForm'),
+  loading: Loading,
+});
+
 const AsyncOutboundImport = Loadable({
   loader: () => import('components/stock-movement-wizard/outboundImport/OutboundImport'),
   loading: Loading,
@@ -1339,6 +1354,11 @@ const Router = () => {
             <MainLayoutRoute path="**/admin" exact component={AsyncAdminIndex} />
             <MainLayoutRoute path="**/productSupplier/list" component={AsyncProductSupplierList} />
             <MainLayoutRoute path="**/productSupplier/create/:productSupplierId?" component={AsyncProductSupplierCreatePage} />
+            <MainLayoutRoute path="**/productSupplier/edit/:productSupplierId?" component={AsyncProductSupplierCreatePage} />
+            <MainLayoutRoute path="**/productSupplier/show/:id" component={AsyncProductSupplierShow} />
+            <MainLayoutRoute path="**/productType/list" component={AsyncProductTypeList} />
+            <MainLayoutRoute path="**/productType/create" component={AsyncProductTypeForm} />
+            <MainLayoutRoute path="**/productType/edit/:id?" component={AsyncProductTypeForm} />
             <MainLayoutRoute path="**/attribute/list" component={AsyncAttributeList} />
             <MainLayoutRoute path="**/attribute/create" component={AsyncAttributeForm} />
             <MainLayoutRoute path="**/attribute/edit/:id?" component={AsyncAttributeForm} />

@@ -23,15 +23,11 @@ class ProductTypeController {
     }
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [productTypeInstanceList: ProductType.list(params), productTypeInstanceTotal: ProductType.count()]
+        render(view: "/common/react")
     }
 
     def create() {
-        def productTypeInstance = new ProductType(productTypeCode: ProductTypeCode.GOOD,
-                requiredFields: [ProductField.PRODUCT_CODE, ProductField.NAME, ProductField.CATEGORY, ProductField.GL_ACCOUNT])
-        productTypeInstance.properties = params
-        return [productTypeInstance: productTypeInstance]
+        render(view: "/common/react")
     }
 
     def save() {
@@ -72,14 +68,7 @@ class ProductTypeController {
     }
 
     def edit() {
-        def productTypeInstance = ProductType.get(params.id)
-        if (!productTypeInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'productType.label', default: 'ProductType'), params.id])}"
-            redirect(action: "list")
-        }
-        else {
-            return [productTypeInstance: productTypeInstance]
-        }
+        render(view: "/common/react")
     }
 
     def update() {
