@@ -195,3 +195,19 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 - 2026-08-20: Wave 5: PR #57 (shipments-4) merged post-rebase (CI 4/4, clean merge, localization union 22 added/0 removed/0 changed). Wave 5 at 7/10 merged.
 - 2026-08-20: P1.5 (#58) merged — PHASE 1 (backend upgrades) COMPLETE: Java 21 / Grails 6.2.3 / Boot 2.7.18 with all integrations re-verified (Quartz, Liquibase, mail, reporting). Pre-existing caveats documented in docs/migration/integrations-verification.md.
 - 2026-08-20: Wave 5: PRs #56 (product-catalog-7, rebased additively over #52) and #53 (reporting-3) merged (CI 4/4 each, clean merges, localization unions verified: #56 32 added/0 removed, #53 no i18n changes). Wave 5 at 9/10 merged; only receiving (#59) remains, child rebasing.
+
+## Phase 2 — wave 6 (final 9 batches, spawned 2026-08-20)
+
+| # | Task | Status | Session | PR | Notes |
+|---|---|---|---|---|---|
+| 2-dashboard-auth | dashboard-auth batch | IN_PROGRESS | [0a087765](https://app.devin.ai/sessions/0a087765e4e342e59ae0f9b5ea176a48) | — | login/signup/chooseLocation/megamenu + react host (special care) |
+| 2-errors-misc | errors-misc batch | IN_PROGRESS | [5f96b368](https://app.devin.ai/sessions/5f96b368c1574241ba1c350ec02c945b) | — | 5 error pages (status codes preserved) |
+| 2-mobile-1 | mobile-1 batch | IN_PROGRESS | [8663f28c](https://app.devin.ai/sessions/8663f28c912844519d84bbe7e1de14ed) | — | mobile login/chooseLocation/index/error |
+| 2-mobile-2 | mobile-2 batch | IN_PROGRESS | [a6fbe255](https://app.devin.ai/sessions/a6fbe255040e452a9a067fad7be0200f) | — | mobile menu/outboundList/product screens |
+| 2-product-catalog-8 | product-catalog-8 batch | IN_PROGRESS | [4db11c99](https://app.devin.ai/sessions/4db11c99507542808c32c2d3931da794) | — | uomConversion edit/list (extends #56) |
+| 2-reporting-4 | reporting-4 batch | IN_PROGRESS | [9aea9c11](https://app.devin.ai/sessions/9aea9c118fec4a60be67fc20d25fab70) | — | transaction report + transactionEntry screens |
+| 2-shipment-workflow | shipment-workflow batch | IN_PROGRESS | [48c116e0](https://app.devin.ai/sessions/48c116e04d5b40f0b2534f56e03693a8) | — | createShipmentWorkflow 5-step webflow |
+| 2-stock-movements | stock-movements batch | IN_PROGRESS | [a73c93a9](https://app.devin.ai/sessions/a73c93a9ffa54d4bbd341b78eadec84e) | — | stockMovement list/show/addComment/addDocument |
+| 2-stock-transfers | stock-transfers batch | IN_PROGRESS | [36e97af6](https://app.devin.ai/sessions/36e97af6efc749e49705ae20932ae48f) | — | returns/show + stockTransfer list/print/show |
+
+- 2026-08-20: Phase 2 wave 6 spawned (final 9 batches). After wave 6 + receiving (#59), all 58 Phase 2 batches will be complete.
