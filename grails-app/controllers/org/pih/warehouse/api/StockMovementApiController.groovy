@@ -15,7 +15,16 @@ import org.grails.web.json.JSONObject
 import java.text.SimpleDateFormat
 
 import org.pih.warehouse.LocalizationUtil
+import org.pih.warehouse.core.Comment
 import org.pih.warehouse.core.Constants
+import org.pih.warehouse.core.Document
+import org.pih.warehouse.core.DocumentType
+import org.pih.warehouse.core.EventType
+import org.pih.warehouse.core.history.HistoryItem
+import org.pih.warehouse.inventory.OutboundStockMovement
+import org.pih.warehouse.receiving.ReceiptStatusCode
+import org.pih.warehouse.requisition.RequisitionItemStatus
+
 
 import org.pih.warehouse.core.ActivityCode
 import org.pih.warehouse.core.DocumentService
@@ -961,5 +970,385 @@ class StockMovementApiController {
                 ],
                 receipts             : receiptRows,
         ]] as JSON)
+    }
+
+    def showDetails() {
+        def stockMovement = getStockMovementForDisplay(params.id)
+        if (!stockMovement) {
+            response.status = 404
+            render([errorMessage: "${g.message(code: 'default.not.found.message', args: [g.message(code: 'stockMovement.label', default: 'Stock Movement'), params.id])}"] as JSON)
+            return
+        }
+        Location currentLocation = Location.get(session.warehouse.id)
+        User user = User.get(session.user.id)
+        HistoryItem latestHistoryItem = stockMovement instanceof OutboundStockMovement ?
+                outboundStockMovementService.getLatestHistoryItem(stockMovement) :
+                stockMovementService.getLatestHistoryItem(stockMovement)
+        List<Map> documents = stockMovementService.getDocuments(stockMovement)
+        def shipment = stockMovement.shipment
+
+        boolean isSameOrigin = stockMovement?.origin?.id == currentLocation?.id
+        boolean isSameDestination = stockMovement?.destination?.id == currentLocation?.id
+        boolean userHasRequestApproverRole = userService.isUserInAllRoles(user.id, [RoleType.ROLE_REQUISITION_APPROVER], stockMovement?.origin?.id)
+        def comments = stockMovement?.requisition?.comments ?: shipment?.comments
+
+        boolean isApprovalRequired = stockMovement?.isApprovalRequired() ?: false
+        boolean supportsApproveRequest = stockMovement?.origin ? stockMovement.origin.supports(ActivityCode.APPROVE_REQUEST) : false
+
+        def person = stockMovement?.requisition?.approvedBy ?: stockMovement?.requisition?.rejectedBy
+        def approvalDate = stockMovement?.requisition?.dateApproved ?: stockMovement?.requisition?.dateRejected
+
+        render([data: [
+                id                        : stockMovement.id,
+                identifier                : stockMovement.identifier,
+                name                      : stockMovement.name,
+                statusLabel               : stockMovement?.displayStatus?.label,
+                latestEvent               : latestHistoryItem ? [
+                        name      : latestHistoryItem?.eventType?.name,
+                        isPutaway : latestHistoryItem?.eventType?.eventCode?.isPutawayEvent() ?: false,
+                        url       : latestHistoryItem?.referenceDocument?.url,
+                        identifier: latestHistoryItem?.referenceDocument?.identifier,
+                ] : null,
+                isFromPurchaseOrder       : shipment?.isFromPurchaseOrder ?: false,
+                originCode                : stockMovement?.origin?.organization?.code,
+                originName                : stockMovement?.origin?.name,
+                destinationName           : stockMovement?.destination?.name,
+                isSameOrigin              : isSameOrigin,
+                isSameDestination         : isSameDestination,
+                requestTypeName           : localizedMetadata(stockMovement?.requestType),
+                isElectronicType          : stockMovement?.isElectronicType() ?: false,
+                dateDeliveryRequested     : formatLegacyDate(stockMovement?.requisition?.dateDeliveryRequested),
+                stocklistName             : stockMovement?.stocklist?.name,
+                approvers                 : stockMovement?.requisition?.approvers ? stockMovement?.requisition?.approvers?.join(', ') : null,
+                comments                  : stockMovement?.comments,
+                trackingNumber            : stockMovement?.trackingNumber,
+                driverName                : stockMovement?.driverName,
+                shipmentTypeName          : stockMovement?.shipmentType ? localizedMetadata(stockMovement?.shipmentType?.name) : null,
+                totalValue                : financeProtectedValue(shipment),
+                orders                    : shipment?.orders?.collect { [id: it.id, orderNumber: it.orderNumber] } ?: [],
+                requisitionLink           : stockMovement.requisition ? [id: stockMovement.requisition.id, number: stockMovement.requisition.requestNumber] : null,
+                shipmentLink              : shipment ? [id: shipment.id, number: shipment.shipmentNumber] : null,
+                inboundTransactions       : shipment?.incomingTransactions?.collect { [id: it.id, number: it.transactionNumber ?: it.id] } ?: [],
+                outboundTransactions      : shipment?.outgoingTransactions?.collect { [id: it.id, number: it.transactionNumber ?: it.id] } ?: [],
+                auditing                  : [
+                        dateRequested: formatLegacyDate(stockMovement?.dateRequested),
+                        requestedBy  : stockMovement?.requestedBy?.name,
+                        approvalLabel: stockMovement?.requisition?.dateApproved ? 'dateApproved' : (stockMovement?.requisition?.dateRejected ? 'dateRejected' : null),
+                        approvalDate : (person && approvalDate) ? formatLegacyDate(approvalDate) : null,
+                        approvalBy   : person?.toString(),
+                        dateShipped  : shipment?.hasShipped() ? formatLegacyDate(stockMovement?.dateShipped) : null,
+                        shippedBy    : shipment?.hasShipped() ? shipment?.shippedBy?.toString() : null,
+                        receipts     : shipment?.receipts?.collect { [date: formatLegacyDate(it.actualDeliveryDate), recipient: it.recipient?.name] } ?: [],
+                        dateCreated  : formatLegacyDate(stockMovement?.dateCreated),
+                        createdBy    : stockMovement?.createdBy?.name,
+                        lastUpdated  : formatLegacyDate(stockMovement?.lastUpdated),
+                        updatedBy    : stockMovement?.updatedBy?.name,
+                ],
+                documents                 : documents,
+                isReturn                  : stockMovement.isReturn ?: false,
+                showListButton            : !(!currentLocation.supports(ActivityCode.MANAGE_INVENTORY) && currentLocation.supports(ActivityCode.SUBMIT_REQUEST)),
+                listDirection             : isSameDestination ? 'INBOUND' : 'OUTBOUND',
+                isApprovalRequired        : isApprovalRequired,
+                orderId                   : stockMovement?.order?.id,
+                shipmentId                : shipment?.id,
+                canUserEdit               : isApprovalRequired ? (stockMovement?.canUserEdit(user.id, currentLocation) ?: false) : false,
+                userHasRequestApproverRole: userHasRequestApproverRole,
+                supportsApproveRequest    : supportsApproveRequest,
+                isPendingApproval         : stockMovement?.requisition?.status == RequisitionStatus.PENDING_APPROVAL,
+                pendingApproval           : stockMovement?.pendingApproval ?: false,
+                canRollbackApproval       : (isApprovalRequired && supportsApproveRequest) ? (stockMovement?.canRollbackApproval(user.id, currentLocation) ?: false) : false,
+                isUserAdmin               : userService.isUserAdmin(user),
+                isSuperuser               : userService.isSuperuser(user),
+                hasBeenReceived           : stockMovement?.hasBeenReceived() ?: false,
+                hasBeenPartiallyReceived  : stockMovement?.hasBeenPartiallyReceived() ?: false,
+                hasBeenIssued             : stockMovement?.hasBeenIssued() ?: false,
+                hasBeenShipped            : stockMovement?.hasBeenShipped() ?: false,
+                isFromOrder               : stockMovement?.isFromOrder ?: false,
+                isPending                 : (stockMovement?.isPending() || !shipment?.currentStatus) ?: false,
+                originIsDepot             : stockMovement?.origin?.isDepot() ?: false,
+                electronicType            : stockMovement?.electronicType ?: false,
+                originIsSupplier          : stockMovement?.origin?.isSupplier() ?: false,
+                commentCount              : comments ? comments.size() : 0,
+                defaultTabIsFirst         : ((shipment?.currentStatus == ShipmentStatusCode.PENDING && isSameOrigin) || stockMovement?.origin?.isSupplier()) ?: false,
+                summary                   : buildSummary(stockMovement, shipment, currentLocation),
+        ]] as JSON)
+    }
+
+    def requisitionItemsData() {
+        def stockMovement = getStockMovementForDisplay(params.id)
+        def requisitionItems = stockMovement?.requisition?.originalRequisitionItems?.sort()
+        List<Map> items = []
+        requisitionItems?.eachWithIndex { requisitionItem, i ->
+            boolean isCanceled = requisitionItem.isCanceled()
+            boolean isSubstituted = requisitionItem.isSubstituted()
+            boolean isChanged = requisitionItem.isChanged()
+            String statusLabel
+            if (isCanceled || requisitionItem.isCanceledDuringPick()) {
+                statusLabel = g.message(code: "enum.RequisitionItemStatus.CANCELED")
+            } else if (requisitionItem.isReduced() && !isSubstituted) {
+                statusLabel = g.message(code: "enum.RequisitionItemStatus.REDUCED")
+            } else if (requisitionItem.isIncreased() && !isSubstituted) {
+                statusLabel = g.message(code: "enum.RequisitionItemStatus.INCREASED")
+            } else if (requisitionItem?.status == RequisitionItemStatus.APPROVED && requisitionItem?.requisition?.status == RequisitionStatus.ISSUED) {
+                statusLabel = localizedMetadata(requisitionItem?.requisition?.status)
+            } else {
+                statusLabel = localizedMetadata(requisitionItem?.displayStatus)
+            }
+            String statusSeverity = (isCanceled || requisitionItem.isCanceledDuringPick() || requisitionItem.isRejected()) ? 'danger' :
+                    (isSubstituted || requisitionItem.isReduced()) ? 'warning' : 'alert'
+            def pickReasonCode = requisitionItem?.modificationItem?.pickReasonCode ?: requisitionItem?.substitutionItem?.pickReasonCode ?: requisitionItem?.pickReasonCode
+            items << [
+                    id                         : requisitionItem.id,
+                    index                      : i + 1,
+                    statusLabel                : statusLabel,
+                    statusSeverity             : statusSeverity,
+                    isCanceled                 : isCanceled,
+                    isSubstituted              : isSubstituted,
+                    productId                  : requisitionItem?.product?.id,
+                    productCode                : requisitionItem?.product?.productCode,
+                    productName                : requisitionItem?.product?.name,
+                    substitutions              : requisitionItem.substitutionItems?.collect {
+                        [productId: it?.product?.id, productCode: it?.product?.productCode, productName: it?.product?.name, quantity: it?.quantity ?: 0]
+                    } ?: [],
+                    unitOfMeasure              : requisitionItem?.product?.unitOfMeasure ?: "EA",
+                    quantityRequested          : requisitionItem?.quantity ?: 0,
+                    substitutionQuantitiesMatch: isSubstituted ? (requisitionItem?.quantity == requisitionItem.substitutionItems.sum { it.quantity }) : true,
+                    quantityApproved           : (isSubstituted ? requisitionItem.substitutionItems.sum { it.quantityApproved } :
+                            isChanged ? requisitionItem?.modificationItem?.quantityApproved : requisitionItem?.quantityApproved) ?: 0,
+                    quantityPicked             : (isChanged && !isSubstituted && !isCanceled ? requisitionItem?.modificationItem?.calculateQuantityPicked() :
+                            requisitionItem?.calculateQuantityPicked()) ?: 0,
+                    quantityAdjusted           : requisitionItem?.quantityAdjusted ?: 0,
+                    quantityIssued             : (isChanged && !isSubstituted && !isCanceled ? requisitionItem?.modificationItem?.quantityIssued : requisitionItem?.quantityIssued) ?: 0,
+                    cancelReasonCode           : requisitionItem?.cancelReasonCode?.toString(),
+                    pickReasonCode             : pickReasonCode?.toString(),
+            ]
+        }
+        render([data: [requisitionItems: items]] as JSON)
+    }
+
+    def packingListData() {
+        def stockMovement = getStockMovementForDisplay(params.id)
+        def shipment = stockMovement?.shipment
+        Location currentLocation = Location.get(session.warehouse.id)
+        boolean isOrigin = shipment?.origin?.id == currentLocation?.id
+        boolean isDestination = shipment?.destination?.id == currentLocation?.id
+        boolean showReceivedColumns = shipment?.wasReceived() || shipment?.wasPartiallyReceived()
+        List<Map> items = shipment?.sortShipmentItemsBySortOrder()?.collect { shipmentItem ->
+            def container = shipmentItem?.container
+            def receiptItems = shipmentItem?.receiptItems?.sort { it.sortOrder }
+            [
+                    id               : shipmentItem.id,
+                    hasRecalledLot   : shipmentItem?.hasRecalledLot ?: false,
+                    containerKey     : container?.id ?: '',
+                    containerName    : container ? "${container?.parentContainer ? container?.parentContainer?.name + ' › ' : ''}${container?.name ?: ''}" : null,
+                    orderNumber      : shipmentItem?.orderNumber,
+                    productId        : shipmentItem?.inventoryItem?.product?.id,
+                    productCode      : shipmentItem?.inventoryItem?.product?.productCode,
+                    productName      : shipmentItem?.inventoryItem?.product?.name,
+                    binLocation      : shipmentItem?.binLocation?.name,
+                    lotNumber        : shipmentItem?.inventoryItem?.lotNumber,
+                    expirationDate   : formatLegacyDate(shipmentItem?.inventoryItem?.expirationDate),
+                    receiptItems     : receiptItems?.collect {
+                        [
+                                binLocation   : it?.binLocation?.name,
+                                lotNumber     : it?.lotNumber,
+                                expirationDate: formatLegacyDate(it?.expirationDate),
+                                recipient     : it?.recipient?.name,
+                                quantity      : it?.quantityReceived,
+                                unitOfMeasure : it?.inventoryItem?.product?.unitOfMeasure ?: 'EA',
+                        ]
+                    } ?: [],
+                    quantityShipped  : shipmentItem?.quantity ?: 0,
+                    quantityReceived : shipmentItem?.quantityReceived() ?: 0,
+                    quantityCanceled : shipmentItem?.quantityCanceled() ?: 0,
+                    unitOfMeasure    : shipmentItem?.inventoryItem?.product?.unitOfMeasure,
+                    recipient        : shipmentItem?.recipient?.name,
+                    comments         : shipmentItem?.comments ?: [],
+                    isFullyReceived  : shipmentItem?.isFullyReceived() ?: false,
+            ]
+        } ?: []
+        render([data: [
+                isFromPurchaseOrder: shipment?.isFromPurchaseOrder ?: false,
+                isOrigin           : isOrigin,
+                isDestination      : isDestination,
+                showReceivedColumns: showReceivedColumns ?: false,
+                shipmentItems      : items,
+        ]] as JSON)
+    }
+
+    def receiptsData() {
+        def stockMovement = getStockMovementForDisplay(params.id)
+        def receiptItems = stockMovementService.getStockMovementReceiptItems(stockMovement)
+        List<Map> items = receiptItems?.collect { receiptItem ->
+            boolean isReceived = receiptItem?.receipt?.receiptStatusCode == ReceiptStatusCode.RECEIVED
+            [
+                    id                : receiptItem.id,
+                    receiptStatus     : localizedMetadata(receiptItem?.receipt?.receiptStatusCode),
+                    receiptNumber     : receiptItem?.receipt?.receiptNumber ?: receiptItem?.receipt?.id,
+                    shipmentNumber    : receiptItem?.receipt?.shipment?.shipmentNumber,
+                    transactionId     : receiptItem?.receipt?.transaction?.id,
+                    transactionNumber : receiptItem?.receipt?.transaction ? (receiptItem?.receipt?.transaction?.transactionNumber ?: receiptItem?.receipt?.transaction?.id) : null,
+                    productId         : receiptItem?.product?.id,
+                    productCode       : receiptItem?.product?.productCode,
+                    productName       : receiptItem?.product?.name,
+                    lotNumber         : receiptItem?.inventoryItem?.lotNumber ?: "Default",
+                    expirationDate    : formatLegacyDate(receiptItem?.inventoryItem?.expirationDate),
+                    binLocation       : receiptItem?.binLocation?.name,
+                    quantityCanceled  : receiptItem?.quantityCanceled ?: 0,
+                    quantityPending   : !isReceived ? (receiptItem?.quantityReceived ?: 0) : 0,
+                    quantityReceived  : isReceived ? (receiptItem?.quantityReceived ?: 0) : 0,
+            ]
+        } ?: []
+        render([data: [receiptItems: items]] as JSON)
+    }
+
+    def eventsData() {
+        def stockMovement = getStockMovementForDisplay(params.id)
+        List<HistoryItem> historyItems = stockMovementService.getHistory(stockMovement)
+        SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.EUROPEAN_DATE_FORMAT_WITH_TIME)
+        List<Map> items = historyItems?.collect { historyItem ->
+            [
+                    eventName          : historyItem?.eventType?.name,
+                    isPutaway          : historyItem?.eventType?.eventCode?.isPutawayEvent() ?: false,
+                    referenceUrl       : historyItem?.referenceDocument?.url,
+                    referenceIdentifier: historyItem?.referenceDocument?.identifier,
+                    dateLogged         : historyItem?.dateLogged ? dateFormat.format(historyItem.dateLogged) : null,
+                    date               : historyItem?.date ? dateFormat.format(historyItem.date) : null,
+                    location           : historyItem?.location?.toString(),
+                    createdBy          : historyItem?.createdBy?.toString(),
+                    comment            : historyItem?.comment?.toString(),
+            ]
+        } ?: []
+        render([data: [
+                historyItems: items,
+                shipmentId  : stockMovement?.shipment?.id,
+                eventTypes  : EventType.listCustomEventTypes()?.collect { [id: it.id, name: localizedMetadata(it)] } ?: [],
+                locations   : Location.listNonInternalLocations()?.collect { [id: it.id, name: it.name] } ?: [],
+        ]] as JSON)
+    }
+
+    def commentsData() {
+        def stockMovement = getStockMovementForDisplay(params.id)
+        def comments = stockMovement?.requisition?.comments ?: stockMovement?.shipment?.comments
+        List<Map> items = comments?.sort()?.collect { comment ->
+            [
+                    id         : comment.id,
+                    recipient  : comment?.recipient?.name,
+                    sender     : comment?.sender?.name,
+                    senderId   : comment?.sender?.id,
+                    comment    : comment?.comment,
+                    lastUpdated: comment?.lastUpdated?.toString(),
+            ]
+        } ?: []
+        render([data: [
+                comments     : items,
+                isReturn     : stockMovement?.isReturn ?: false,
+                currentUserId: session.user.id,
+        ]] as JSON)
+    }
+
+    def commentFormData() {
+        def stockMovement = getStockMovementForDisplay(params.id)
+        if (!stockMovement) {
+            response.status = 404
+            render([errorMessage: "${g.message(code: 'default.not.found.message', args: [g.message(code: 'stockMovement.label', default: 'Stock Movement'), params.id])}"] as JSON)
+            return
+        }
+        Comment comment = params.commentId ? Comment.get(params.commentId) : null
+        render([data: [
+                recipients   : User.list().collect { User user -> [id: user.id, name: user.name] },
+                requestedById: stockMovement?.requestedBy?.id,
+                rejectMessage: "${g.message(code: 'request.rejectReason.message', default: 'Please provide a reason for rejecting this request')}: ${stockMovement?.identifier}",
+                comment   : comment ? [
+                        id         : comment.id,
+                        comment    : comment.comment,
+                        recipientId: comment.recipient?.id,
+                ] : null,
+                summary   : buildSummary(stockMovement, stockMovement.shipment, Location.get(session.warehouse.id)),
+        ]] as JSON)
+    }
+
+    def documentFormData() {
+        def stockMovement = getStockMovementForDisplay(params.id)
+        if (!stockMovement) {
+            response.status = 404
+            render([errorMessage: "${g.message(code: 'default.not.found.message', args: [g.message(code: 'stockMovement.label', default: 'Stock Movement'), params.id])}"] as JSON)
+            return
+        }
+        List<DocumentType> documentTypes = documentService.getNonTemplateDocumentTypes()
+        Document document = params.documentId ? Document.get(params.documentId) : null
+        render([data: [
+                shipmentId   : stockMovement?.shipment?.id,
+                documentTypes: documentTypes.collect { DocumentType documentType ->
+                    [id: documentType.id, name: localizedMetadata(documentType)]
+                },
+                document     : document ? [
+                        id            : document.id,
+                        name          : document.name,
+                        documentTypeId: document.documentType?.id,
+                        filename      : document.filename,
+                        fileUri       : document.fileUri,
+                ] : null,
+                summary      : buildSummary(stockMovement, stockMovement.shipment, Location.get(session.warehouse.id)),
+        ]] as JSON)
+    }
+
+    // Used by the React show/comment/document screens (mirrors StockMovementController.getStockMovement)
+    private def getStockMovementForDisplay(String stockMovementId) {
+        def stockMovement = outboundStockMovementService.getStockMovement(stockMovementId)
+        if (!stockMovement) {
+            stockMovement = stockMovementService.getStockMovement(stockMovementId)
+        }
+        return stockMovement
+    }
+
+    private String financeProtectedValue(def shipment) {
+        if (!userService.hasRoleFinance(User.get(session.user.id))) {
+            return g.message(code: 'errors.blurred.message', args: [g.message(code: 'default.none.label')])
+        }
+        String amount = g.formatNumber(format: '###,###,##0.00', number: shipment?.calculateTotalValue() ?: 0.00)
+        return "${amount} ${grailsApplication.config.openboxes.locale.defaultCurrencyCode}"
+    }
+
+    private Map buildSummary(def stockMovement, def shipment, Location currentLocation) {
+        return [
+                id                  : stockMovement?.id,
+                identifier          : stockMovement?.identifier,
+                name                : stockMovement?.name,
+                direction           : shipment?.origin?.id == currentLocation?.id ? 'OUTBOUND' :
+                        (shipment?.destination?.id == currentLocation?.id ? 'INBOUND' : null),
+                shipmentTypeName    : stockMovement?.shipmentType ? localizedMetadata(stockMovement?.shipmentType) : null,
+                originName          : stockMovement?.origin?.name,
+                destinationName     : stockMovement?.destination?.name,
+                lineItemCount       : stockMovement?.lineItems?.size() ?: 0,
+                totalValue          : financeProtectedValue(shipment),
+                totalWeight         : "${g.formatNumber(format: '#,##0.00', number: shipment?.totalWeightInPounds() ?: 0.00)} ${g.message(code: 'default.lbs.label', default: 'lbs')}",
+                dateRequested       : formatLegacyDate(stockMovement?.dateRequested),
+                hasShipped          : shipment?.hasShipped() ?: false,
+                expectedShippingDate: formatLegacyDate(shipment?.expectedShippingDate),
+                actualShippingDate  : formatLegacyDate(shipment?.actualShippingDate),
+                wasReceived         : shipment?.wasReceived() ?: false,
+                expectedDeliveryDate: formatLegacyDate(shipment?.expectedDeliveryDate),
+                actualDeliveryDate  : formatLegacyDate(shipment?.actualDeliveryDate),
+                lastUpdated         : stockMovement?.lastUpdated?.toString(),
+                statusLabel         : stockMovement?.displayStatus?.label,
+        ]
+    }
+
+    private String formatLegacyDate(Date date) {
+        return date ? new SimpleDateFormat(Constants.DEFAULT_MONTH_YEAR_DATE_FORMAT).format(date) : null
+    }
+
+    private String localizedMetadata(Object obj) {
+        if (obj == null) {
+            return null
+        }
+        if (obj instanceof Enum) {
+            return "${g.message(code: 'enum.' + obj.getClass().getSimpleName() + '.' + obj)}"
+        }
+        if (obj.hasProperty("name") && obj.name) {
+            return obj.name?.toString()
+        }
+        return obj.toString()
     }
 }

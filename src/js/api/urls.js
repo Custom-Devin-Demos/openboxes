@@ -61,6 +61,14 @@ export const PACKING_LIST_TEMPLATE = `${STOCK_MOVEMENT_API}/packingList/template
 export const STOCK_MOVEMENT_UPDATE_SHIPMENT = (id) => `${STOCK_MOVEMENT_BY_ID(id)}/updateShipment`;
 export const STOCK_MOVEMENT_UPLOAD_DOCUMENTS = (id) => `${STOCK_MOVEMENT_BY_ID(id)}/uploadDocuments`;
 export const STOCK_MOVEMENT_DOCUMENTS = (id) => `${STOCK_MOVEMENT_BY_ID(id)}/documents`;
+export const STOCK_MOVEMENT_SHOW_DETAILS = (id) => `${STOCK_MOVEMENT_BY_ID(id)}/showDetails`;
+export const STOCK_MOVEMENT_REQUISITION_ITEMS_DATA = (id) => `${STOCK_MOVEMENT_BY_ID(id)}/requisitionItemsData`;
+export const STOCK_MOVEMENT_PACKING_LIST_DATA = (id) => `${STOCK_MOVEMENT_BY_ID(id)}/packingListData`;
+export const STOCK_MOVEMENT_RECEIPTS_DATA = (id) => `${STOCK_MOVEMENT_BY_ID(id)}/receiptsData`;
+export const STOCK_MOVEMENT_EVENTS_DATA = (id) => `${STOCK_MOVEMENT_BY_ID(id)}/eventsData`;
+export const STOCK_MOVEMENT_COMMENTS_DATA = (id) => `${STOCK_MOVEMENT_BY_ID(id)}/commentsData`;
+export const STOCK_MOVEMENT_COMMENT_FORM_DATA = (id) => `${STOCK_MOVEMENT_BY_ID(id)}/commentFormData`;
+export const STOCK_MOVEMENT_DOCUMENT_FORM_DATA = (id) => `${STOCK_MOVEMENT_BY_ID(id)}/documentFormData`;
 
 // STOCK MOVEMENT ITEMS
 export const STOCK_MOVEMENT_ITEM_API = `${API}/stockMovementItems`;

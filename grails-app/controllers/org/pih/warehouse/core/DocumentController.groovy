@@ -10,6 +10,7 @@
 package org.pih.warehouse.core
 
 import fr.opensagres.xdocreport.converter.ConverterTypeTo
+import grails.converters.JSON
 import fr.w3blog.zpl.utils.ZebraUtils
 import grails.core.GrailsApplication
 import grails.gorm.transactions.Transactional
@@ -222,6 +223,7 @@ class DocumentController {
                 flash.message = "${warehouse.message(code: 'document.cannotSave.message', args: [documentInstance.errors])}"
                 if (shipmentInstance) {
                     redirect(controller: "stockMovement", action: "addDocument", id: shipmentInstance.id,
+                            params: [flash: flash as JSON],
                             model: [shipmentInstance: shipmentInstance, documentInstance: documentInstance])
                     return
                 } else if (orderInstance) {
@@ -245,11 +247,11 @@ class DocumentController {
             log.info "Document is too large"
             flash.message = "${warehouse.message(code: 'document.documentTooLarge.message')}"
             if (stockMovement) {
-                redirect(controller: 'stockMovement', action: 'show', id: stockMovement.id)
+                redirect(controller: 'stockMovement', action: 'show', id: stockMovement.id, params: [flash: flash as JSON])
                 return
             }
             if (shipmentInstance) {
-                redirect(controller: 'stockMovement', action: 'show', id: command.shipmentId)
+                redirect(controller: 'stockMovement', action: 'show', id: command.shipmentId, params: [flash: flash as JSON])
                 return
             } else if (orderInstance) {
                 redirect(controller: 'order', action: 'show', id: command.orderId)
@@ -270,11 +272,11 @@ class DocumentController {
         // these controllers.
         log.info("Redirecting to appropriate show details page")
         if (stockMovement) {
-            redirect(controller: 'stockMovement', action: 'show', id: stockMovement.id)
+            redirect(controller: 'stockMovement', action: 'show', id: stockMovement.id, params: [flash: flash as JSON])
             return
         }
         if (shipmentInstance) {
-            redirect(controller: 'stockMovement', action: 'show', id: command.shipmentId)
+            redirect(controller: 'stockMovement', action: 'show', id: command.shipmentId, params: [flash: flash as JSON])
             return
         } else if (orderInstance) {
             redirect(controller: 'order', action: 'show', id: command.orderId)

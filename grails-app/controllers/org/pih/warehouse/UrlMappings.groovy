@@ -1206,6 +1206,46 @@ class UrlMappings {
             action = [GET: "getDocuments"]
         }
 
+        "/api/stockMovements/$id/showDetails" {
+            controller = "stockMovementApi"
+            action = [GET: "showDetails"]
+        }
+
+        "/api/stockMovements/$id/requisitionItemsData" {
+            controller = "stockMovementApi"
+            action = [GET: "requisitionItemsData"]
+        }
+
+        "/api/stockMovements/$id/packingListData" {
+            controller = "stockMovementApi"
+            action = [GET: "packingListData"]
+        }
+
+        "/api/stockMovements/$id/receiptsData" {
+            controller = "stockMovementApi"
+            action = [GET: "receiptsData"]
+        }
+
+        "/api/stockMovements/$id/eventsData" {
+            controller = "stockMovementApi"
+            action = [GET: "eventsData"]
+        }
+
+        "/api/stockMovements/$id/commentsData" {
+            controller = "stockMovementApi"
+            action = [GET: "commentsData"]
+        }
+
+        "/api/stockMovements/$id/commentFormData" {
+            controller = "stockMovementApi"
+            action = [GET: "commentFormData"]
+        }
+
+        "/api/stockMovements/$id/documentFormData" {
+            controller = "stockMovementApi"
+            action = [GET: "documentFormData"]
+        }
+
         "/api/picklists/$id/items" {
             controller = "picklistApi"
             action = [DELETE: "clearPicklist"]
