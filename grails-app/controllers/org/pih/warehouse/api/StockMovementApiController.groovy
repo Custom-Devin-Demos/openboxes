@@ -1204,7 +1204,9 @@ class StockMovementApiController {
 
     def eventsData() {
         def stockMovement = getStockMovementForDisplay(params.id)
-        List<HistoryItem> historyItems = stockMovementService.getHistory(stockMovement)
+        List<HistoryItem> historyItems = stockMovement instanceof OutboundStockMovement ?
+                outboundStockMovementService.getHistory(stockMovement) :
+                stockMovementService.getHistory(stockMovement)
         SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.EUROPEAN_DATE_FORMAT_WITH_TIME)
         List<Map> items = historyItems?.collect { historyItem ->
             [
