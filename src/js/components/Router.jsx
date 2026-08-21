@@ -1484,11 +1484,6 @@ const Router = () => {
             <Route path="**/report/printPaginatedPackingListReport" component={AsyncPaginatedPackingListReport} />
             <Route path="**/report/printPickListReport" component={AsyncPickListReport} />
             <Route path="**/report/printShippingReport" component={AsyncShippingReport} />
-            <Route path="**/mobile/login" component={AsyncMobileLogin} />
-            <Route path="**/mobile/chooseLocation" component={AsyncMobileChooseLocation} />
-            <Route path="**/mobile/error" component={AsyncMobileError} />
-            <Route path="**/mobile/index" component={AsyncMobileDashboard} />
-            <Route path="**/mobile" component={AsyncMobileDashboard} />
             <MainLayoutRoute path="**/report/showBinLocationReport" component={AsyncBinLocationReport} />
             <MainLayoutRoute path="**/report/showCycleCountReport" component={AsyncCycleCountReport} />
             <MainLayoutRoute path="**/report/showForecastReport" component={AsyncForecastReport} />
@@ -1658,6 +1653,11 @@ const Router = () => {
             <MainLayoutRoute path="**/mobile/productList" component={AsyncMobileProductList} />
             <MainLayoutRoute path="**/mobile/productDetails/:id" component={AsyncMobileProductDetails} />
             <MainLayoutRoute path="**/mobile/outboundList" component={AsyncMobileOutboundList} />
+            <Route path="**/mobile/login" component={AsyncMobileLogin} />
+            <Route path="**/mobile/chooseLocation" component={AsyncMobileChooseLocation} />
+            <Route path="**/mobile/error" component={AsyncMobileError} />
+            <Route path="**/mobile/index" component={AsyncMobileDashboard} />
+            <Route path="**/mobile" component={AsyncMobileDashboard} />
             <MainLayoutRoute path="**/person/list" component={AsyncPersonList} />
             <MainLayoutRoute path="**/person/create" component={AsyncPersonForm} />
             <MainLayoutRoute path="**/person/edit/:id?" component={AsyncPersonForm} />

@@ -15,14 +15,6 @@ const AUTH_URL = {
   handleLogin: () => `${AUTH_URL.base}/handleLogin`,
 };
 
-const MOBILE_URL = {
-  base: `${CONTEXT_PATH}/mobile`,
-  index: () => `${MOBILE_URL.base}`,
-  login: () => `${MOBILE_URL.base}/login`,
-  chooseLocation: () => `${MOBILE_URL.base}/chooseLocation`,
-  error: () => `${MOBILE_URL.base}/error`,
-};
-
 const LOCATION_CONFIGURATION_URL = {
   base: `${CONTEXT_PATH}/locationsConfiguration`,
   create: () => `${LOCATION_CONFIGURATION_URL.base}/create`,
@@ -508,6 +500,9 @@ const ORGANIZATION_URL = {
 const MOBILE_URL = {
   base: `${CONTEXT_PATH}/mobile`,
   index: () => `${MOBILE_URL.base}/index`,
+  login: () => `${MOBILE_URL.base}/login`,
+  chooseLocation: () => `${MOBILE_URL.base}/chooseLocation`,
+  error: () => `${MOBILE_URL.base}/error`,
   menu: () => `${MOBILE_URL.base}/menu`,
   productList: () => `${MOBILE_URL.base}/productList`,
   productDetails: (id) => `${MOBILE_URL.base}/productDetails/${id}`,
