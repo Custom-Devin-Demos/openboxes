@@ -512,4 +512,17 @@ export const REQUISITION_ITEM_PICKLIST_ITEMS = (id, itemId) => `${REQUISITION_AP
 export const REQUISITION_UPDATE_PICKLIST_ITEMS = (id) => `${REQUISITION_API}/${id}/picklistItems`;
 export const REQUISITION_PRINT_DRAFT = (id) => `${REQUISITION_API}/${id}/printDraft`;
 export const REQUISITION_PROCESS = (id) => `${REQUISITION_API}/${id}/process`;
+
+// REQUISITION TEMPLATES (legacy stocklist template screens migration)
+export const REQUISITION_TEMPLATE_API = `${API}/requisitionTemplates`;
+export const REQUISITION_TEMPLATE_CREATE_CONTEXT = `${REQUISITION_TEMPLATE_API}/createContext`;
+export const REQUISITION_TEMPLATE_DETAILS = (id) => `${REQUISITION_TEMPLATE_API}/${id}/details`;
+export const REQUISITION_TEMPLATE_HEADER = (id) => `${REQUISITION_TEMPLATE_API}/${id}/header`;
+export const REQUISITION_TEMPLATE_IMPORT_DATA = (id) => `${REQUISITION_TEMPLATE_API}/${id}/importData`;
+export const REQUISITION_TEMPLATE_DO_IMPORT = (id) => `${REQUISITION_TEMPLATE_API}/${id}/import`;
+export const REQUISITION_TEMPLATE_ADD_ITEMS = (id) => `${REQUISITION_TEMPLATE_API}/${id}/addItems`;
+export const JSON_GET_REQUISITION_ITEMS = (id) => `/json/getRequisitionItems/${id}`;
+export const JSON_ADD_TO_REQUISITION_ITEMS = '/json/addToRequisitionItems';
+export const JSON_UPDATE_REQUISITION_ITEMS = (id) => `/json/updateRequisitionItems/${id}`;
+export const JSON_REMOVE_REQUISITION_ITEM = (itemId) => `/json/removeRequisitionItem/${itemId}`;
 export const PICKLIST_SAVE = '/picklist/save';

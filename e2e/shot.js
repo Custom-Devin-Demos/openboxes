@@ -5,11 +5,12 @@ const { chromium } = require('@playwright/test');
 
 const BASE = 'http://localhost:8080/openboxes';
 const outDir = process.argv[2] || '/tmp/shots/before';
+const templateId = process.argv[3] || 'ff808081a024ca1801a024cafabe0000';
 const urls = [
-  ['paymentTerm-list', '/paymentTerm/list'],
-  ['preferenceType-list', '/preferenceType/list'],
-  ['preferenceType-create', '/preferenceType/create'],
-  ['preferenceType-edit', '/preferenceType/edit/APPROVED'],
+  ['requisitionTemplate-create', '/requisitionTemplate/create?type=STOCK'],
+  ['requisitionTemplate-editHeader', `/requisitionTemplate/editHeader/${templateId}`],
+  ['requisitionTemplate-edit', `/requisitionTemplate/edit/${templateId}`],
+  ['requisitionTemplate-batch', `/requisitionTemplate/batch/${templateId}`],
 ];
 
 (async () => {

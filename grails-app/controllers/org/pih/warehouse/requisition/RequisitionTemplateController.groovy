@@ -12,7 +12,6 @@ package org.pih.warehouse.requisition
 import grails.gorm.transactions.Transactional
 import org.apache.commons.lang.StringEscapeUtils
 import grails.plugins.csv.CSVWriter
-import org.pih.warehouse.core.Location
 import org.pih.warehouse.core.UserService
 import org.pih.warehouse.product.Product
 import org.pih.warehouse.auth.AuthService
@@ -35,12 +34,7 @@ class RequisitionTemplateController {
     }
 
     def create() {
-        println params
-        def requisition = new Requisition(status: RequisitionStatus.CREATED)
-        requisition.type = params.type as RequisitionType
-        requisition.isTemplate = true
-        requisition.origin = Location.get(session?.warehouse?.id)
-        [requisition: requisition]
+        render(view: "/common/react")
     }
 
     def edit() {
@@ -49,7 +43,7 @@ class RequisitionTemplateController {
             flash.message = "Could not find requisition with ID ${params.id}"
             redirect(action: "list")
         } else {
-            [requisition: requisition]
+            render(view: "/common/react")
         }
     }
 
@@ -59,7 +53,7 @@ class RequisitionTemplateController {
             flash.message = "Could not find requisition with ID ${params.id}"
             redirect(action: "list")
         } else {
-            [requisition: requisition]
+            render(view: "/common/react")
         }
     }
 
@@ -343,9 +337,12 @@ class RequisitionTemplateController {
 
     def batch() {
         def requisition = Requisition.get(params.id)
-
-
-        [requisition: requisition]
+        if (!requisition) {
+            flash.message = "Could not find requisition with ID ${params.id}"
+            redirect(action: "list")
+        } else {
+            render(view: "/common/react")
+        }
     }
 
     def importData() {

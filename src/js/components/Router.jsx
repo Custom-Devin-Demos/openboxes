@@ -248,6 +248,26 @@ const AsyncOrderAdjustmentTypeForm = Loadable({
   loading: Loading,
 });
 
+const AsyncRequisitionTemplateCreate = Loadable({
+  loader: () => import('components/requisition-template/CreateRequisitionTemplatePage'),
+  loading: Loading,
+});
+
+const AsyncRequisitionTemplateEdit = Loadable({
+  loader: () => import('components/requisition-template/EditRequisitionTemplatePage'),
+  loading: Loading,
+});
+
+const AsyncRequisitionTemplateEditHeader = Loadable({
+  loader: () => import('components/requisition-template/EditRequisitionTemplateHeaderPage'),
+  loading: Loading,
+});
+
+const AsyncRequisitionTemplateBatch = Loadable({
+  loader: () => import('components/requisition-template/BatchRequisitionTemplatePage'),
+  loading: Loading,
+});
+
 const AsyncStockList = Loadable({
   loader: () => import('components/stock-list/StockList'),
   loading: Loading,
@@ -1017,6 +1037,10 @@ const Router = () => {
             <MainLayoutRoute path="**/orderAdjustmentType/create" component={AsyncOrderAdjustmentTypeForm} />
             <MainLayoutRoute path="**/orderAdjustmentType/edit/:orderAdjustmentTypeId" component={AsyncOrderAdjustmentTypeForm} />
             <MainLayoutRoute path="**/requisitionTemplate/list" component={AsyncStockList} />
+            <MainLayoutRoute path="**/requisitionTemplate/create" component={AsyncRequisitionTemplateCreate} />
+            <MainLayoutRoute path="**/requisitionTemplate/edit/:templateId" component={AsyncRequisitionTemplateEdit} />
+            <MainLayoutRoute path="**/requisitionTemplate/editHeader/:templateId" component={AsyncRequisitionTemplateEditHeader} />
+            <MainLayoutRoute path="**/requisitionTemplate/batch/:templateId" component={AsyncRequisitionTemplateBatch} />
             <MainLayoutRoute path="**/requisition/chooseTemplate" component={AsyncRequisitionChooseTemplate} />
             <MainLayoutRoute path="**/requisition/createStockFromTemplate/:templateId" component={AsyncRequisitionCreateStock} />
             <MainLayoutRoute path="**/requisition/create" component={AsyncRequisitionCreate} />
