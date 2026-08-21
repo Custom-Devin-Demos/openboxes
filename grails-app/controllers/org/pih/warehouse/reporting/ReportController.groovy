@@ -12,6 +12,8 @@ package org.pih.warehouse.reporting
 import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 import grails.plugins.csv.CSVWriter
+import groovy.transform.CompileStatic
+import org.grails.datastore.gorm.GormEntity
 import grails.plugins.quartz.GrailsJobClassConstants
 import org.apache.commons.lang.StringEscapeUtils
 import org.pih.warehouse.api.StockMovement
@@ -625,13 +627,15 @@ class ReportController {
         render(view: "/common/react")
     }
 
+    @CompileStatic
     private static Serializable identifierOf(Object entity) {
         if (entity == null) {
             return null
         }
-        return entity instanceof HibernateProxy
-                ? ((HibernateProxy) entity).hibernateLazyInitializer.identifier
-                : entity.id
+        if (entity instanceof HibernateProxy) {
+            return ((HibernateProxy) entity).getHibernateLazyInitializer().getIdentifier()
+        }
+        return ((GormEntity) entity).ident()
     }
 
     def showCycleCountReport() {

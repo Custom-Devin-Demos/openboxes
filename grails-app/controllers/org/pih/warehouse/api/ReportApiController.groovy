@@ -10,6 +10,8 @@
 package org.pih.warehouse.api
 
 import grails.converters.JSON
+import groovy.transform.CompileStatic
+import org.grails.datastore.gorm.GormEntity
 import grails.gorm.transactions.Transactional
 import org.apache.commons.lang.StringEscapeUtils
 import org.hibernate.proxy.HibernateProxy
@@ -23,13 +25,15 @@ class ReportApiController {
 
     def inventoryService
 
+    @CompileStatic
     private static Serializable identifierOf(Object entity) {
         if (entity == null) {
             return null
         }
-        return entity instanceof HibernateProxy
-                ? ((HibernateProxy) entity).hibernateLazyInitializer.identifier
-                : entity.id
+        if (entity instanceof HibernateProxy) {
+            return ((HibernateProxy) entity).getHibernateLazyInitializer().getIdentifier()
+        }
+        return ((GormEntity) entity).ident()
     }
 
     @Transactional(readOnly = true)
