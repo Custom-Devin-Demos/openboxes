@@ -558,6 +558,11 @@ export const TRANSACTION_ENTRY_BIN_LOCATION_OPTIONS = `${TRANSACTION_ENTRY_API}/
 export const SHIPMENT_SELECT_OPTIONS = `${API}/shipmentOptions`;
 export const REQUEST_REASON_CODE_OPTIONS = `${API}/requestReasonCodeOptions`;
 
+// MOBILE (legacy mobile mini-app screens migration)
+export const MOBILE_DASHBOARD = `${MOBILE_API}/dashboard`;
+export const MOBILE_CHOOSE_LOCATION_OPTIONS = `${MOBILE_API}/chooseLocationOptions`;
+export const MOBILE_ERROR_DETAILS = `${MOBILE_API}/errorDetails`;
+
 // ADMIN
 export const ADMIN_API = `${API}/admin`;
 export const ADMIN_CONTROLLERS = `${ADMIN_API}/controllers`;

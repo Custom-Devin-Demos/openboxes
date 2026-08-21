@@ -12,14 +12,62 @@ package org.pih.warehouse.api
 import grails.converters.JSON
 import grails.gorm.PagedResultList
 import org.pih.warehouse.core.Location
+import org.pih.warehouse.core.User
 import org.pih.warehouse.inventory.StockMovementStatusCode
+import org.pih.warehouse.order.Order
+import org.pih.warehouse.order.OrderTypeCode
 import org.pih.warehouse.product.Product
 import org.pih.warehouse.product.ProductSummary
+import org.pih.warehouse.requisition.Requisition
 import org.springframework.http.HttpStatus
 
 class MobileApiController {
 
+    def locationService
     def stockMovementService
+
+    def dashboard() {
+        Location location = Location.get(session.warehouse.id)
+        def productCount = ProductSummary.countByLocation(location)
+
+        def orderCount = Order.createCriteria().count {
+            eq("destination", location)
+            orderType {
+                eq("orderTypeCode", OrderTypeCode.PURCHASE_ORDER)
+            }
+        }
+
+        def requisitionCount = Requisition.createCriteria().count {
+            eq("origin", location)
+        }
+
+        render([data: [
+                [name: "Inventory Items", class: "fa fa-box", count: productCount, url: g.createLink(controller: "mobile", action: "productList")],
+                [name: "Purchase Orders", class: "fa fa-shopping-cart", count: orderCount, url: g.createLink(controller: "order", action: "list", params: ['origin.id': location.id])],
+                [name: "Replenishment Orders", class: "fa fa-truck", count: requisitionCount, url: g.createLink(controller: "mobile", action: "outboundList", params: ['origin.id': location.id])],
+        ]] as JSON)
+    }
+
+    def chooseLocationOptions() {
+        User user = User.get(session.user.id)
+        Location warehouse = session.warehouse ? Location.get(session.warehouse.id) : null
+        Map loginLocationsMap = locationService.getLoginLocationsMap(user, warehouse, true)
+        List savedLocations = user.warehouse && loginLocationsMap.containsValue(user.warehouse) ?
+                [[id: user.warehouse.id, name: user.warehouse.name]] : []
+        render([data: [
+                savedLocations   : savedLocations,
+                loginLocationsMap: loginLocationsMap.collect { entry ->
+                    [
+                            organization: entry.key,
+                            locations   : entry.value.collect { [id: it.id, name: it.name] }.sort { it.name },
+                    ]
+                },
+        ]] as JSON)
+    }
+
+    def errorDetails() {
+        render([data: session.mobileError ?: [:]] as JSON)
+    }
 
     def productSummaryList() {
         Location location = Location.get(session.warehouse.id)
