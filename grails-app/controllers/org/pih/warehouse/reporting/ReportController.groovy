@@ -232,7 +232,9 @@ class ReportController {
         return
     }
 
-    def showInventoryReport() {}
+    def showInventoryReport() {
+        render(view: "/common/react", params: params)
+    }
 
     def showInventorySamplingReport() {
 
@@ -314,11 +316,7 @@ class ReportController {
     }
 
     def showPaginatedPackingListReport(ChecklistReportCommand command) {
-        command.rootCategory = productService.getRootCategory()
-        if (!command?.hasErrors()) {
-            reportService.generateShippingReport(command)
-        }
-        [command: command]
+        render(view: "/common/react", params: params)
     }
 
     def printShippingReport(ChecklistReportCommand command) {
@@ -539,25 +537,27 @@ class ReportController {
                 response.setHeader("Content-disposition", "attachment; filename=\"Detailed-Order-Report-${new Date().format("MM/dd/yyyy")}.csv\"")
                 render(contentType: "text/csv", text: CSVUtils.prependBomToCsvString(sw.toString()), encoding: "UTF-8")
             }
+        } else {
+            render(view: "/common/react", params: params)
         }
     }
 
     def showInventoryByLocationReport(MultiLocationInventoryReportCommand command) {
 
         if (!command.validate()) {
-            render(view: 'showInventoryByLocationReport', model: [command: command])
+            render(view: "/common/react", params: params)
             return
         }
 
-        // Include subcategories by default. If user execute report and explicitly chooses
-        // to exclude subcategories, then only use the given categories.
-        if (command.includeSubcategories) {
-            command.categories = inventoryService.getExplodedCategories(command.categories)
-        }
-
-        command.entries = productAvailabilityService.getQuantityOnHandByProduct(command.locations, command.categories)
-
         if (command.isActionDownload) {
+            // Include subcategories by default. If user execute report and explicitly chooses
+            // to exclude subcategories, then only use the given categories.
+            if (command.includeSubcategories) {
+                command.categories = inventoryService.getExplodedCategories(command.categories)
+            }
+
+            command.entries = productAvailabilityService.getQuantityOnHandByProduct(command.locations, command.categories)
+
             def sw = new StringWriter()
 
             try {
@@ -614,13 +614,11 @@ class ReportController {
             return
         }
 
-        render(view: 'showInventoryByLocationReport', model: [command: command])
+        render(view: "/common/react", params: params)
     }
 
     def showRequestDetailReport() {
-        def origin = Location.get(session.warehouse.id)
-        params.origin = origin.id
-        render(view: 'showRequestDetailReport', params: params)
+        render(view: "/common/react", params: params)
     }
 
     def expirationHistoryReport() {

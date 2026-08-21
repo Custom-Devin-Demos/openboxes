@@ -641,6 +641,14 @@ const REPORT_URL = {
   refreshStockoutFact: () => `${REPORT_URL.base}/refreshStockoutFact`,
   refreshProductDemand: () => `${REPORT_URL.base}/refreshProductDemand`,
   refreshProductAvailability: () => `${REPORT_URL.base}/refreshProductAvailability`,
+  showInventoryByLocationReport: () => `${REPORT_URL.base}/showInventoryByLocationReport`,
+  showInventoryReport: () => `${REPORT_URL.base}/showInventoryReport`,
+  showOnOrderReport: () => `${REPORT_URL.base}/showOnOrderReport`,
+  showPaginatedPackingListReport: () => `${REPORT_URL.base}/showPaginatedPackingListReport`,
+  showRequestDetailReport: () => `${REPORT_URL.base}/showRequestDetailReport`,
+  showShippingReport: () => `${REPORT_URL.base}/showShippingReport`,
+  downloadShippingReport: () => `${REPORT_URL.base}/downloadShippingReport`,
+  exportInventoryReport: () => `${REPORT_URL.base}/exportInventoryReport`,
 };
 
 const QUARTZ_URL = {
