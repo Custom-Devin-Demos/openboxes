@@ -9,6 +9,7 @@ import org.pih.warehouse.DateUtil
 import org.pih.warehouse.PaginatedList
 import org.pih.warehouse.auth.AuthService
 import org.pih.warehouse.core.ActivityCode
+import org.pih.warehouse.core.Constants
 import org.pih.warehouse.core.DashboardService
 import org.pih.warehouse.core.Location
 import org.pih.warehouse.core.ReasonCode
@@ -39,6 +40,9 @@ import org.pih.warehouse.product.ProductCatalog
 import org.pih.warehouse.product.ProductType
 import org.pih.warehouse.report.InventoryReportCommand
 import org.pih.warehouse.core.Tag
+import org.pih.warehouse.importer.InventoryExcelImporter
+import org.springframework.web.multipart.MultipartFile
+import org.springframework.web.multipart.MultipartHttpServletRequest
 
 class InventoryApiController {
 
@@ -52,6 +56,7 @@ class InventoryApiController {
     def userService
     def locationService
     def categoryService
+    def uploadService
     def messageSource
 
     def importCsv() {
@@ -748,6 +753,250 @@ class InventoryApiController {
                             [getMessage("transactionEntry.label", "Transaction entry"), params.id] as Object[]),
             ] as JSON)
         }
+    }
+
+    /**
+     * Data provider for the React transaction list screen (replaces inventory/listTransactions.gsp model).
+     */
+    def listTransactions() {
+        Location location = Location.get(session.warehouse.id)
+        def currentInventory = location.inventory
+
+        Date transactionDateFrom = params.transactionDateFrom ? Date.parse("MM/dd/yyyy", params.transactionDateFrom) : null
+        Date transactionDateTo = params.transactionDateTo ? Date.parse("MM/dd/yyyy", params.transactionDateTo) : null
+
+        // we are only showing transactions for the inventory associated with the current warehouse
+        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.sort = params?.sort ?: "dateCreated"
+        params.order = params?.order ?: "desc"
+
+        def transactionType = TransactionType.get(params?.transactionType?.id)
+        def transactions = Transaction.createCriteria().list(params) {
+            and {
+                eq("inventory", currentInventory)
+                if (transactionType) {
+                    eq("transactionType", transactionType)
+                }
+                if (params.transactionNumber) {
+                    ilike("transactionNumber", "%" + params.transactionNumber + "%")
+                }
+                if (params.transactionDateFrom) {
+                    ge("transactionDate", transactionDateFrom)
+                }
+                if (params.transactionDateTo) {
+                    le("transactionDate", transactionDateTo)
+                }
+            }
+        }
+
+        render([
+                warehouseName          : location?.name,
+                transactionCount       : transactions.totalCount,
+                transactionTypeSelected: transactionType?.id,
+                transactionTypes       : TransactionType.list().collect { type ->
+                    [id: type.id, name: getLocalizedMetadata(type.name)]
+                },
+                isSuperuser            : userService.isSuperuser(User.get(session?.user?.id)),
+                max                    : params.max,
+                offset                 : params.int('offset') ?: 0,
+                transactions           : transactions.collect { transaction ->
+                    [
+                            id               : transaction.id,
+                            entryCount       : transaction.transactionEntries?.size() ?: 0,
+                            transactionNumber: transaction.transactionNumber ?: transaction.id,
+                            transactionDate  : transaction.transactionDate?.format("dd-MMM-yyyy hh:mm:ssa"),
+                            transactionType  : transaction.transactionType ?
+                                    getLocalizedMetadata(transaction.transactionType.name) : null,
+                            inventory        : transaction.inventory?.warehouse?.name,
+                            source           : transaction.source?.name,
+                            destination      : transaction.destination?.name,
+                            createdBy        : transaction.createdBy?.name,
+                            dateCreated      : transaction.dateCreated?.toString(),
+                    ]
+                },
+        ] as JSON)
+    }
+
+    /**
+     * Deletes a transaction from the React transaction list screen.
+     * Mirrors InventoryController.deleteTransaction with a JSON response.
+     */
+    @Transactional
+    def deleteTransaction() {
+        def transactionInstance = Transaction.get(params.id)
+        if (!transactionInstance) {
+            response.status = 404
+            render([
+                    success: false,
+                    message: getMessage("default.not.found.message", "Not found",
+                            [getMessage("transaction.label", "Transaction"), params.id] as Object[]),
+            ] as JSON)
+            return
+        }
+        try {
+            inventoryService.deleteTransaction(transactionInstance)
+            render([
+                    success: true,
+                    message: getMessage("default.deleted.message", "Deleted",
+                            [getMessage("transaction.label", "Transaction"), params.id] as Object[]),
+            ] as JSON)
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            response.status = 400
+            render([
+                    success: false,
+                    message: getMessage("default.not.deleted.message", "Could not delete",
+                            [getMessage("transaction.label", "Transaction"), params.id] as Object[]),
+            ] as JSON)
+        }
+    }
+
+    /**
+     * Data provider for the React show transaction screen (replaces inventory/showTransaction.gsp model).
+     */
+    def showTransaction() {
+        def transactionInstance = Transaction.get(params?.id)
+        if (!transactionInstance) {
+            response.status = 404
+            render([error: getMessage("inventory.noTransactionWithId.message", "Transaction not found", [params.id] as Object[])] as JSON)
+            return
+        }
+
+        render([
+                isSuperuser: userService.isSuperuser(User.get(session?.user?.id)),
+                transaction: [
+                        id               : transactionInstance.id,
+                        transactionNumber: transactionInstance.transactionNumber,
+                        transactionDate  : transactionInstance.transactionDate?.format(Constants.DEFAULT_DATE_TIME_FORMAT),
+                        transactionType  : transactionInstance.transactionType ? [
+                                id             : transactionInstance.transactionType.id,
+                                name           : getLocalizedMetadata(transactionInstance.transactionType.name),
+                                transactionCode: transactionInstance.transactionType.transactionCode?.name(),
+                        ] : null,
+                        source           : transactionInstance.source?.name,
+                        destination      : transactionInstance.destination?.name,
+                        inventory        : transactionInstance.inventory?.warehouse?.name,
+                        outgoingShipment : transactionInstance.outgoingShipment ? [
+                                id            : transactionInstance.outgoingShipment.id,
+                                shipmentNumber: transactionInstance.outgoingShipment.shipmentNumber,
+                        ] : null,
+                        incomingShipment : transactionInstance.incomingShipment ? [
+                                id            : transactionInstance.incomingShipment.id,
+                                shipmentNumber: transactionInstance.incomingShipment.shipmentNumber,
+                        ] : null,
+                        receipt          : transactionInstance.receipt ? [
+                                id           : transactionInstance.receipt.id,
+                                receiptNumber: transactionInstance.receipt.receiptNumber,
+                        ] : null,
+                        order            : transactionInstance.order ? [
+                                id  : transactionInstance.order.id,
+                                name: transactionInstance.order.name,
+                        ] : null,
+                        createdBy        : transactionInstance.createdBy?.name,
+                        updatedBy        : transactionInstance.updatedBy?.name,
+                        dateCreated      : transactionInstance.dateCreated?.format(Constants.DEFAULT_DATE_TIME_FORMAT),
+                        lastUpdated      : transactionInstance.lastUpdated?.format(Constants.DEFAULT_DATE_TIME_FORMAT),
+                        comment          : transactionInstance.comment,
+                        localTransfer    : transactionInstance.localTransfer ? [
+                                sourceTransaction     : serializeLocalTransferTransaction(transactionInstance.localTransfer.sourceTransaction),
+                                destinationTransaction: serializeLocalTransferTransaction(transactionInstance.localTransfer.destinationTransaction),
+                        ] : null,
+                        entries          : transactionInstance.transactionEntries.collect { entry ->
+                            [
+                                    id           : entry.id,
+                                    product      : serializeProduct(entry.inventoryItem?.product),
+                                    binLocation  : entry.binLocation?.name,
+                                    inventoryItem: serializeInventoryItem(entry.inventoryItem),
+                                    quantity     : entry.quantity,
+                            ]
+                        },
+                ],
+        ] as JSON)
+    }
+
+    /**
+     * Data provider for the React manage inventory screen (replaces inventory/binLocations JSON datatable source).
+     */
+    def listBinLocations() {
+        Location location = Location.load(session.warehouse.id)
+        List binLocations = productAvailabilityService.getQuantityOnHandByBinLocation(location)
+
+        render([
+                data: binLocations.collect {
+                    [
+                            productCode   : it?.inventoryItem?.product?.productCode,
+                            productName   : it?.inventoryItem?.product?.name,
+                            binLocation   : it?.binLocation?.name,
+                            lotNumber     : it?.inventoryItem?.lotNumber,
+                            expirationDate: it?.inventoryItem?.expirationDate ?
+                                    Constants.EXPIRATION_DATE_FORMATTER.format(it?.inventoryItem?.expirationDate) : null,
+                            quantity      : it?.quantity,
+                    ]
+                },
+        ] as JSON)
+    }
+
+    /**
+     * Data provider for the React show products screen (replaces inventory/showProducts.gsp model).
+     */
+    def showProducts() {
+        def products = inventoryService.findProductsWithoutEmptyLotNumber()
+        def productsByCategory = products.groupBy { it.category }
+
+        render([
+                categories: productsByCategory.collect { category, categoryProducts ->
+                    [
+                            name    : category?.name,
+                            products: categoryProducts.collect { product ->
+                                [
+                                        id         : product.id,
+                                        productCode: product.productCode,
+                                        name       : product.name,
+                                ]
+                            },
+                    ]
+                },
+        ] as JSON)
+    }
+
+    /**
+     * Parses an uploaded inventory file for the React upload inventory screen (replaces inventory/upload.gsp model).
+     */
+    def uploadInventory() {
+        def inventoryList = [:]
+        File localFile = null
+        MultipartHttpServletRequest mpr = (MultipartHttpServletRequest) request
+        MultipartFile uploadFile = mpr.getFile("file")
+        if (!uploadFile?.empty) {
+            try {
+                localFile = uploadService.createLocalFile(uploadFile.originalFilename)
+                uploadFile.transferTo(localFile)
+            } catch (Exception e) {
+                throw new RuntimeException(e)
+            }
+        }
+
+        if (!localFile) {
+            response.status = 400
+            render([error: getMessage("inventory.upload.noFile.message", "Please select a file to upload")] as JSON)
+            return
+        }
+
+        def excelImporter = new InventoryExcelImporter(localFile.absolutePath)
+        inventoryList = excelImporter.data
+
+        render([
+                inventoryList: inventoryList.collect { row ->
+                    row.collect { key, value -> [key: key?.toString(), value: value?.toString()] }
+                },
+        ] as JSON)
+    }
+
+    private Map serializeLocalTransferTransaction(Transaction transaction) {
+        if (!transaction) return null
+        [
+                id               : transaction.id,
+                transactionNumber: transaction.transactionNumber ?: transaction.transactionType?.name,
+        ]
     }
 
     private Map serializeProduct(Product product) {

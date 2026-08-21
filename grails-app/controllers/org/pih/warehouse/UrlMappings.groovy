@@ -1215,6 +1215,36 @@ class UrlMappings {
             action = [DELETE: "deleteTransactionEntry"]
         }
 
+        "/api/inventory/listTransactions" {
+            controller = { "inventoryApi" }
+            action = [GET: "listTransactions"]
+        }
+
+        "/api/inventory/showTransaction/$id" {
+            controller = { "inventoryApi" }
+            action = [GET: "showTransaction"]
+        }
+
+        "/api/inventory/deleteTransaction/$id" {
+            controller = { "inventoryApi" }
+            action = [DELETE: "deleteTransaction"]
+        }
+
+        "/api/inventory/listBinLocations" {
+            controller = { "inventoryApi" }
+            action = [GET: "listBinLocations"]
+        }
+
+        "/api/inventory/showProducts" {
+            controller = { "inventoryApi" }
+            action = [GET: "showProducts"]
+        }
+
+        "/api/inventory/uploadInventory" {
+            controller = { "inventoryApi" }
+            action = [POST: "uploadInventory"]
+        }
+
         /**
         * Purchase Orders API endpoints
         */

@@ -383,6 +383,31 @@ const AsyncEditBinLocation = Loadable({
   loading: Loading,
 });
 
+const AsyncTransactionList = Loadable({
+  loader: () => import('components/inventory/TransactionList'),
+  loading: Loading,
+});
+
+const AsyncManageInventory = Loadable({
+  loader: () => import('components/inventory/ManageInventory'),
+  loading: Loading,
+});
+
+const AsyncShowProducts = Loadable({
+  loader: () => import('components/inventory/ShowProducts'),
+  loading: Loading,
+});
+
+const AsyncShowTransaction = Loadable({
+  loader: () => import('components/inventory/ShowTransaction'),
+  loading: Loading,
+});
+
+const AsyncUploadInventory = Loadable({
+  loader: () => import('components/inventory/UploadInventory'),
+  loading: Loading,
+});
+
 const AsyncCreateTransaction = Loadable({
   loader: () => import('components/inventory/CreateTransaction'),
   loading: Loading,
@@ -672,6 +697,11 @@ const Router = () => {
             <MainLayoutRoute path="**/inventory/listLowStock" component={AsyncLowStockList} />
             <MainLayoutRoute path="**/inventory/listReorderStock" component={AsyncReorderStockList} />
             <MainLayoutRoute path="**/inventory/listDailyTransactions" component={AsyncDailyTransactions} />
+            <MainLayoutRoute path="**/inventory/listTransactions" component={AsyncTransactionList} />
+            <MainLayoutRoute path="**/inventory/manage" component={AsyncManageInventory} />
+            <MainLayoutRoute path="**/inventory/showProducts" component={AsyncShowProducts} />
+            <MainLayoutRoute path="**/inventory/showTransaction/:id" component={AsyncShowTransaction} />
+            <MainLayoutRoute path="**/inventory/upload" component={AsyncUploadInventory} />
             <MainLayoutRoute path="**/inventory/listExpiredStock" component={AsyncExpiredStockList} />
             <MainLayoutRoute path="**/inventory/listExpiringStock" component={AsyncExpiringStockList} />
             <MainLayoutRoute path="**/inventory/editBinLocation" component={AsyncEditBinLocation} />

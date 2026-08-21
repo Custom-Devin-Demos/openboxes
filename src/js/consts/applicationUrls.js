@@ -163,6 +163,12 @@ const INVENTORY_URL = {
   listDailyTransactions: () => `${INVENTORY_URL.base}/listDailyTransactions`,
   listExpiredStock: () => `${INVENTORY_URL.base}/listExpiredStock`,
   listExpiringStock: () => `${INVENTORY_URL.base}/listExpiringStock`,
+  deleteTransaction: (id) => `${INVENTORY_URL.base}/deleteTransaction/${id}`,
+  manage: () => `${INVENTORY_URL.base}/manage`,
+  editBinLocation: () => `${INVENTORY_URL.base}/editBinLocation`,
+  showProducts: () => `${INVENTORY_URL.base}/showProducts`,
+  createDefaultInventoryItems: () => `${INVENTORY_URL.base}/createDefaultInventoryItems`,
+  upload: () => `${INVENTORY_URL.base}/upload`,
 };
 
 const SHIPMENT_URL = {
@@ -342,6 +348,16 @@ const CYCLE_COUNT = {
   resolveStep: () => `${CYCLE_COUNT.base}/resolve`,
 };
 
+const RECEIPT_URL = {
+  base: `${CONTEXT_PATH}/receipt`,
+  show: (id) => `${RECEIPT_URL.base}/show/${id}`,
+};
+
+const TRANSACTION_ENTRY_URL = {
+  base: `${CONTEXT_PATH}/transactionEntry`,
+  edit: (id) => `${TRANSACTION_ENTRY_URL.base}/edit/${id}`,
+};
+
 const ADMIN_URL = {
   base: `${CONTEXT_PATH}/admin`,
   showSettings: () => `${ADMIN_URL.base}/showSettings`,
@@ -378,6 +394,7 @@ export {
   PRODUCT_URL,
   PURCHASE_ORDER_URL,
   PUTAWAY_URL,
+  RECEIPT_URL,
   REPLENISHMENT_URL,
   REQUISITION_TEMPLATE_URL,
   REQUISITION_URL,
@@ -387,4 +404,5 @@ export {
   STOCK_TRANSFER_URL,
   STOCKLIST_URL,
   SUPPLIER_URL,
+  TRANSACTION_ENTRY_URL,
 };
