@@ -31,7 +31,7 @@ const PartyList = () => {
     onFetchHandler,
     tableData,
   } = useTableData({
-    filterParams: {},
+    filterParams: { q: '' },
     url: PARTY_API,
     errorMessageId: 'react.party.error.partyList.label',
     defaultErrorMessage: 'Unable to fetch parties',
