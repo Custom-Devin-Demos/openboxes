@@ -160,6 +160,13 @@ export const LOCATION_CONTENTS = (id) => `${LOCATION_API}/${id}/contents`;
 export const LOCATION_LOGO = (id) => `${LOCATION_API}/${id}/logo`;
 export const LOCATION_SUPPORTED_ACTIVITIES = `${LOCATION_API}/supportedActivities`;
 
+// SUPPLIER
+export const SUPPLIER_API = `${API}/suppliers`;
+export const SUPPLIER_SEARCH = `${SUPPLIER_API}/search`;
+export const SUPPLIER_DETAILS = (id) => `${SUPPLIER_API}/${id}/details`;
+export const SUPPLIER_PRICE_HISTORY = '/supplier/getPriceHistory';
+export const SUPPLIER_PRICE_HISTORY_DOWNLOAD = `${CONTEXT_PATH}/supplier/getPriceHistory`;
+
 // PUTAWAY
 export const PUTAWAY_GENERATE_PDF = (id) => `/putAway/generatePdf/${id}`;
 

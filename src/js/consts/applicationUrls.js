@@ -41,6 +41,13 @@ const LOCATION_URL = {
   viewLogo: (id) => `${LOCATION_URL.base}/viewLogo/${id}`,
   exportBinLocations: (id) => `${LOCATION_URL.base}/exportBinLocations/${id}`,
   exportLocations: () => `${CONTEXT_PATH}/batch/downloadExcel?type=Location`,
+  show: (id) => `${LOCATION_URL.base}/show/${id}`,
+};
+
+const SUPPLIER_URL = {
+  base: `${CONTEXT_PATH}/supplier`,
+  list: () => `${SUPPLIER_URL.base}/list`,
+  show: (id) => `${SUPPLIER_URL.base}/show/${id}`,
 };
 
 const STOCK_MOVEMENT_URL = {
@@ -113,6 +120,7 @@ const ORDER_URL = {
 const DOCUMENT_URL = {
   base: `${CONTEXT_PATH}/document`,
   uploadDocument: () => `${DOCUMENT_URL.base}/uploadDocument`,
+  download: (id) => `${DOCUMENT_URL.base}/download/${id}`,
   saveDocument: () => `${DOCUMENT_URL.base}/saveDocument`,
 };
 
@@ -121,6 +129,10 @@ const PURCHASE_ORDER_URL = {
   create: () => `${PURCHASE_ORDER_URL.base}/create`,
   edit: (id) => `${PURCHASE_ORDER_URL.base}/edit/${id}`,
   addItems: (id) => `${PURCHASE_ORDER_URL.base}/addItems/${id}`,
+  list: (params = {}) => stringifyUrl({
+    url: `${PURCHASE_ORDER_URL.base}/list`,
+    query: { ...params },
+  }),
 };
 
 const INVENTORY_ITEM_URL = {
@@ -275,4 +287,5 @@ export {
   STOCK_MOVEMENT_URL,
   STOCK_TRANSFER_URL,
   STOCKLIST_URL,
+  SUPPLIER_URL,
 };
