@@ -107,6 +107,35 @@ class UrlMappings {
             action = [GET: "process"]
         }
 
+        "/api/requisitionTemplates"(parseRequest: true) {
+            controller = { "requisitionTemplateApi" }
+            action = [POST: "save"]
+        }
+        "/api/requisitionTemplates/createContext" {
+            controller = { "requisitionTemplateApi" }
+            action = [GET: "createContext"]
+        }
+        "/api/requisitionTemplates/$id/details" {
+            controller = { "requisitionTemplateApi" }
+            action = [GET: "details"]
+        }
+        "/api/requisitionTemplates/$id/header"(parseRequest: true) {
+            controller = { "requisitionTemplateApi" }
+            action = [POST: "updateHeader"]
+        }
+        "/api/requisitionTemplates/$id/importData" {
+            controller = { "requisitionTemplateApi" }
+            action = [POST: "importData"]
+        }
+        "/api/requisitionTemplates/$id/import" {
+            controller = { "requisitionTemplateApi" }
+            action = [POST: "doImport"]
+        }
+        "/api/requisitionTemplates/$id/addItems"(parseRequest: true) {
+            controller = { "requisitionTemplateApi" }
+            action = [POST: "addItems"]
+        }
+
         "/api/categories"(parseRequest: true) {
             controller = { "categoryApi" }
             action = [GET: "list", POST: "save"]

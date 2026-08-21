@@ -260,6 +260,11 @@ const REQUISITION_TEMPLATE_URL = {
   edit: (id) => `${REQUISITION_TEMPLATE_URL.base}/edit/${id}`,
   batch: (id) => `${REQUISITION_TEMPLATE_URL.base}/batch/${id}`,
   editHeader: (id) => `${REQUISITION_TEMPLATE_URL.base}/editHeader/${id}`,
+  list: () => `${REQUISITION_TEMPLATE_URL.base}/list`,
+  export: (id) => `${REQUISITION_TEMPLATE_URL.base}/export/${id}`,
+  publish: (id) => `${REQUISITION_TEMPLATE_URL.base}/publish/${id}`,
+  unpublish: (id) => `${REQUISITION_TEMPLATE_URL.base}/unpublish/${id}`,
+  sendMail: (id) => `${REQUISITION_TEMPLATE_URL.base}/sendMail/${id}`,
 };
 
 const REQUISITION_URL = {
@@ -287,6 +292,7 @@ const STOCKLIST_URL = {
   base: `${CONTEXT_PATH}/stocklist`,
   pdf: (id) => `${STOCKLIST_URL.base}/renderPdf/${id}`,
   csv: (id) => `${STOCKLIST_URL.base}/generateCsv/${id}`,
+  html: (id) => `${STOCKLIST_URL.base}/renderHtml/${id}`,
 };
 
 const REPLENISHMENT_URL = {
