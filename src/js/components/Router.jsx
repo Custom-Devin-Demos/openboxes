@@ -437,6 +437,31 @@ const AsyncRequisitionConfirm = Loadable({
   loading: Loading,
 });
 
+const AsyncAttributeList = Loadable({
+  loader: () => import('components/attribute/AttributeList'),
+  loading: Loading,
+});
+
+const AsyncAttributeForm = Loadable({
+  loader: () => import('components/attribute/AttributeForm'),
+  loading: Loading,
+});
+
+const AsyncAttributeShow = Loadable({
+  loader: () => import('components/attribute/AttributeShow'),
+  loading: Loading,
+});
+
+const AsyncCategoryForm = Loadable({
+  loader: () => import('components/category/CategoryForm'),
+  loading: Loading,
+});
+
+const AsyncCategoryTree = Loadable({
+  loader: () => import('components/category/CategoryTree'),
+  loading: Loading,
+});
+
 const Router = () => {
   useConnectionListener();
 
@@ -551,6 +576,13 @@ const Router = () => {
             <MainLayoutRoute path="**/admin" exact component={AsyncAdminIndex} />
             <MainLayoutRoute path="**/productSupplier/list" component={AsyncProductSupplierList} />
             <MainLayoutRoute path="**/productSupplier/create/:productSupplierId?" component={AsyncProductSupplierCreatePage} />
+            <MainLayoutRoute path="**/attribute/list" component={AsyncAttributeList} />
+            <MainLayoutRoute path="**/attribute/create" component={AsyncAttributeForm} />
+            <MainLayoutRoute path="**/attribute/edit/:id?" component={AsyncAttributeForm} />
+            <MainLayoutRoute path="**/attribute/show/:id" component={AsyncAttributeShow} />
+            <MainLayoutRoute path="**/category/create" component={AsyncCategoryForm} />
+            <MainLayoutRoute path="**/category/edit/:id?" component={AsyncCategoryForm} />
+            <MainLayoutRoute path="**/category/tree" component={AsyncCategoryTree} />
             <MainLayoutRoute path="**/dashboard/:configId?" component={Dashboard} />
             <MainLayoutRoute path="**/" component={Dashboard} />
           </Switch>

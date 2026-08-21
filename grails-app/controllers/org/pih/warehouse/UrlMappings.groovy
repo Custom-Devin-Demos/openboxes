@@ -71,9 +71,43 @@ class UrlMappings {
             controller = { "categoryApi" }
             action = [GET: "list", POST: "save"]
         }
+        "/api/categories/tree"(parseRequest: true) {
+            controller = { "categoryApi" }
+            action = [GET: "treeData"]
+        }
+        "/api/categories/move"(parseRequest: true) {
+            controller = { "categoryApi" }
+            action = [POST: "move"]
+        }
+        "/api/categories/saveCategory"(parseRequest: true) {
+            controller = { "categoryApi" }
+            action = [POST: "saveCategory"]
+        }
+        "/api/categories/updateAssigningParentToProduct"(parseRequest: true) {
+            controller = { "categoryApi" }
+            action = [POST: "updateAssigningParentToProduct"]
+        }
+        "/api/categories/$id/details"(parseRequest: true) {
+            controller = { "categoryApi" }
+            action = [GET: "details"]
+        }
+        "/api/categories/$id/deleteCategory"(parseRequest: true) {
+            controller = { "categoryApi" }
+            action = [DELETE: "deleteCategory"]
+        }
         "/api/categories/$id"(parseRequest: true) {
             controller = { "categoryApi" }
             action = [GET: "read", POST: "save", PUT: "save", DELETE: "delete"]
+        }
+        "/api/attributes/search"(parseRequest: true) {
+            controller = { "attributeApi" }
+            action = [GET: "search"]
+        }
+
+        // Unit of measure class options for the attribute edit page
+        "/api/unitOfMeasureClassOptions"(parseRequest: true) {
+            controller = { "selectOptionsApi" }
+            action = [GET: "unitOfMeasureClassOptions"]
         }
 
         // Category options for filters on  product list page
