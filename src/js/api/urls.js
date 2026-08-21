@@ -270,6 +270,12 @@ export const SHIPMENT_ITEM_API = `${API}/shipmentItems`;
 export const SHIPMENT_ITEM_BY_ID = (id) => `${SHIPMENT_ITEM_API}/${id}`;
 export const SHIPMENT_ITEM_OPTIONS = `${SHIPMENT_ITEM_API}/options`;
 export const SHIPMENT_ITEM_PICK = (id) => `${SHIPMENT_ITEM_API}/${id}/pick`;
+export const SHIPMENT_ITEM_SPLIT = (id) => `${SHIPMENT_ITEM_API}/${id}/split`;
+
+// SHIPMENT WORKFLOWS
+export const SHIPMENT_WORKFLOW_API = `${API}/shipmentWorkflows`;
+export const SHIPMENT_WORKFLOW_BY_ID = (id) => `${SHIPMENT_WORKFLOW_API}/${id}`;
+export const SHIPMENT_WORKFLOW_OPTIONS = `${SHIPMENT_WORKFLOW_API}/options`;
 
 // COMBINED SHIPMENT ITEMS
 export const COMBINED_SHIPMENT_ITEMS_API = `${API}/combinedShipmentItems`;

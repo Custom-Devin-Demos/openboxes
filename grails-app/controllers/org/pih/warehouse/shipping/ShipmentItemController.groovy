@@ -99,16 +99,7 @@ class ShipmentItemController {
     }
 
     def split() {
-        log.info "Split " + params
-        def shipmentItemInstance = ShipmentItem.get(params.id)
-        if (!shipmentItemInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'shipmentItem.label', default: 'ShipmentItem'), params.id])}"
-        } else {
-            Location location = Location.load(session.warehouse.id)
-            List binLocations = inventoryService.getProductQuantityByBinLocation(location, shipmentItemInstance.product)
-
-            [shipmentItemInstance: shipmentItemInstance, binLocations: binLocations]
-        }
+        render(view: "/common/react")
     }
 
 

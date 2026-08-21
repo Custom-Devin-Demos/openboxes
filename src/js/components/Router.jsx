@@ -438,6 +438,26 @@ const AsyncShipmentItemPick = Loadable({
   loading: Loading,
 });
 
+const AsyncShipmentItemSplit = Loadable({
+  loader: () => import('components/shipmentItem/ShipmentItemSplit'),
+  loading: Loading,
+});
+
+const AsyncShipmentWorkflowList = Loadable({
+  loader: () => import('components/shipmentWorkflow/ShipmentWorkflowList'),
+  loading: Loading,
+});
+
+const AsyncShipmentWorkflowForm = Loadable({
+  loader: () => import('components/shipmentWorkflow/ShipmentWorkflowForm'),
+  loading: Loading,
+});
+
+const AsyncShipmentWorkflowShow = Loadable({
+  loader: () => import('components/shipmentWorkflow/ShipmentWorkflowShow'),
+  loading: Loading,
+});
+
 const AsyncEventTypeList = Loadable({
   loader: () => import('components/eventType/EventTypeList'),
   loading: Loading,
@@ -1420,6 +1440,11 @@ const Router = () => {
             <MainLayoutRoute path="**/shipmentItem/edit/:shipmentItemId" component={AsyncShipmentItemForm} />
             <MainLayoutRoute path="**/shipmentItem/show/:id" component={AsyncShipmentItemShow} />
             <MainLayoutRoute path="**/shipmentItem/pick/:id" component={AsyncShipmentItemPick} />
+            <MainLayoutRoute path="**/shipmentItem/split/:id" component={AsyncShipmentItemSplit} />
+            <MainLayoutRoute path="**/shipmentWorkflow/list" component={AsyncShipmentWorkflowList} />
+            <MainLayoutRoute path="**/shipmentWorkflow/create" component={AsyncShipmentWorkflowForm} />
+            <MainLayoutRoute path="**/shipmentWorkflow/edit/:shipmentWorkflowId" component={AsyncShipmentWorkflowForm} />
+            <MainLayoutRoute path="**/shipmentWorkflow/show/:id" component={AsyncShipmentWorkflowShow} />
             <MainLayoutRoute path="**/organization/list" component={AsyncOrganizationList} />
             <MainLayoutRoute path="**/organization/create" component={AsyncOrganizationForm} />
             <MainLayoutRoute path="**/organization/edit/:organizationId" component={AsyncOrganizationForm} />

@@ -445,8 +445,28 @@ class UrlMappings {
             action = [GET: "pick", POST: "updatePick"]
         }
 
+        "/api/shipmentItems/$id/split"(parseRequest: true) {
+            controller = { "shipmentItemApi" }
+            action = [GET: "split", POST: "updateSplit"]
+        }
+
         "/api/shipmentItems/$id"(parseRequest: true) {
             controller = { "shipmentItemApi" }
+            action = [GET: "read", PUT: "update", DELETE: "delete"]
+        }
+
+        "/api/shipmentWorkflows/options"(parseRequest: true) {
+            controller = { "shipmentWorkflowApi" }
+            action = [GET: "options"]
+        }
+
+        "/api/shipmentWorkflows"(parseRequest: true) {
+            controller = { "shipmentWorkflowApi" }
+            action = [GET: "list", POST: "create"]
+        }
+
+        "/api/shipmentWorkflows/$id"(parseRequest: true) {
+            controller = { "shipmentWorkflowApi" }
             action = [GET: "read", PUT: "update", DELETE: "delete"]
         }
 
