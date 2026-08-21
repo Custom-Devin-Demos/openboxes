@@ -122,15 +122,17 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 
 | Batch | Scope | Status | Session | PR | Evidence |
 |---|---|---|---|---|---|
-| 2-admin-config-2 | admin-config-2 batch | IN_PROGRESS | [93544c12](https://app.devin.ai/sessions/93544c12022049bba4d745af4be3a9e7) | | |
-| 2-finance-config-4 | finance-config-4 batch | IN_PROGRESS | [e95185a4](https://app.devin.ai/sessions/e95185a43a55471f932ac34e418efff1) | | |
-| 2-inventory-3 | inventory-3 batch | IN_PROGRESS | [59a5118f](https://app.devin.ai/sessions/59a5118fa99b46f081233787beb7db51) | | |
+| 2-admin-config-2 | admin-config-2 batch | REBASING | [93544c12](https://app.devin.ai/sessions/93544c12022049bba4d745af4be3a9e7) | [#30](https://github.com/Custom-Devin-Demos/openboxes/pull/30) | 6 admin/batch/dataExport/jobs/localization screens; snapshots 122/122, Playwright 10/10, CI 4/4; conflicts after #29/#32 — rebase requested |
+| 2-finance-config-4 | finance-config-4 batch | REBASING | [e95185a4](https://app.devin.ai/sessions/e95185a43a55471f932ac34e418efff1) | [#27](https://github.com/Custom-Devin-Demos/openboxes/pull/27) | paymentTerm list + preferenceType list/create/edit; snapshots 122/122, Playwright 10/10, CI 4/4; conflicts — rebase requested |
+| 2-inventory-3 | inventory-3 batch | MERGED | [59a5118f](https://app.devin.ai/sessions/59a5118fa99b46f081233787beb7db51) | [#32](https://github.com/Custom-Devin-Demos/openboxes/pull/32) | 5 inventory screens (listTransactions/manage/showProducts/showTransaction/upload); snapshots 122/122, Playwright 10/10, CI 4/4 |
 | 2-locations-orgs-3 | locations-orgs-3 batch | IN_PROGRESS | [5b7a039a](https://app.devin.ai/sessions/5b7a039a2dbc40cc932bbb36940d4b3f) | | |
 | 2-orders-2 | orders-2 batch | IN_PROGRESS | [069bdfbe](https://app.devin.ai/sessions/069bdfbe6144460285dc6a0eefd16eed) | | |
-| 2-product-catalog-3 | product-catalog-3 batch | IN_PROGRESS | [1ee0331c](https://app.devin.ai/sessions/1ee0331c4eff4e2ba88d6db52887937c) | | |
+| 2-product-catalog-3 | product-catalog-3 batch | REBASING | [1ee0331c](https://app.devin.ai/sessions/1ee0331c4eff4e2ba88d6db52887937c) | [#28](https://github.com/Custom-Devin-Demos/openboxes/pull/28) | 6 product/productAssociation screens; snapshots 122/122, Playwright 10/10, CI 4/4; conflicts — rebase requested |
 | 2-requisitions-2 | requisitions-2 batch | IN_PROGRESS | [bc704178](https://app.devin.ai/sessions/bc704178b05d48cd9caf35b449b4bd67) | | |
 | 2-shipments-2 | shipments-2 batch | IN_PROGRESS | [fc279a04](https://app.devin.ai/sessions/fc279a04d2dd4c608c378f9fa6224f02) | | |
-| 2-stock-card-2 | stock-card-2 batch | IN_PROGRESS | [eaf21e00](https://app.devin.ai/sessions/eaf21e0024bb481abde71dd75ddea3ba) | | |
+| 2-stock-card-2 | stock-card-2 batch | MERGED | [eaf21e00](https://app.devin.ai/sessions/eaf21e0024bb481abde71dd75ddea3ba) | [#29](https://github.com/Custom-Devin-Demos/openboxes/pull/29) | transaction log + 4 inventoryLevel screens; snapshots 122/122, Playwright 10/10, CI 4/4 |
 | 2-users-security-2 | users-security-2 batch | IN_PROGRESS | [c7adc1fd](https://app.devin.ai/sessions/c7adc1fd5a45445ab4a0a35e3ff7b6a9) | | |
 - 2026-08-20: Phase 2 wave 3 spawned (10 batches). #25 finishing final rebase; P1.3 Grails 4->5 in progress.
 - 2026-08-20: PR #25 (finance-config-3) merged. PHASE 2 WAVE 2 COMPLETE (10/10 batches merged). Wave 3 running; P1.3 Grails 4->5 in progress.
+- 2026-08-20: PRs #29 (stock-card-2) and #32 (inventory-3) merged (authoritatively confirmed). PRs #27/#28/#30 conflict after those merges; rebases requested.
+- 2026-08-20: P1.3 Grails 4->5 PR #31 open (Grails 5.3.6 / Gradle 7.6.4 / Groovy 3.0.11 / Boot 2.7.9); mysql backend-test CI failing — under investigation. Hold merge until wave 3 fully merged, then rebase + re-verify.
