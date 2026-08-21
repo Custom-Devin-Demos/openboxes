@@ -395,6 +395,21 @@ class UrlMappings {
             action = [POST: "create"]
         }
 
+        "/api/mobile/productSummaries"(parseRequest: true) {
+            controller = { "mobileApi" }
+            action = [GET: "productSummaryList"]
+        }
+
+        "/api/mobile/productSummaries/$id"(parseRequest: true) {
+            controller = { "mobileApi" }
+            action = [GET: "productSummaryDetails"]
+        }
+
+        "/api/mobile/outboundItems"(parseRequest: true) {
+            controller = { "mobileApi" }
+            action = [GET: "outboundList"]
+        }
+
         "/api/partyTypes/partyTypeCodeOptions"(parseRequest: true) {
             controller = { "partyTypeApi" }
             action = [GET: "partyTypeCodeOptions"]

@@ -16,7 +16,7 @@
 </head>
 
 <body>
-    <g:include controller="mobile" action="menu"/>
+    <g:include controller="mobile" action="menuBar"/>
     <h1><g:layoutTitle/></h1>
     <g:layoutBody/>
     <script

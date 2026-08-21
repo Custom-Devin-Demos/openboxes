@@ -9,11 +9,7 @@
 **/
 package org.pih.warehouse
 
-import org.pih.warehouse.api.StockMovement
-import org.pih.warehouse.api.StockMovementDirection
 import org.pih.warehouse.core.Location
-import org.pih.warehouse.inventory.StockMovementStatusCode
-import org.pih.warehouse.product.Product
 import org.pih.warehouse.product.ProductSummary
 
 class MobileController {
@@ -42,11 +38,11 @@ class MobileController {
     }
 
     def menu() {
-        Map menuConfig = grailsApplication.config.openboxes.megamenu
-        //User user = User.get(session?.user?.id)
-        //Location location = Location.get(session.warehouse?.id)
-        //List translatedMenu = megamenuService.buildAndTranslateMenu(menuConfig, user, location)
-        [menuConfig:menuConfig]
+        render(view: "/common/react", params: params)
+    }
+
+    def menuBar() {
+        render(view: "/mobile/menu")
     }
 
     def chooseLocation() {
@@ -58,35 +54,15 @@ class MobileController {
     }
 
     def productList() {
-        Location location = Location.get(session.warehouse.id)
-        def terms = params?.q ? params?.q?.split(" ") : "".split(" ")
-        def productSummaries = ProductSummary.createCriteria().list(max: params.max ?: 10, offset: params.offset ?: 0) {
-            eq("location", location)
-            order("product", "asc")
-        }
-        [productSummaries:productSummaries]
+        render(view: "/common/react", params: params)
     }
 
     def productDetails() {
-        Product product = Product.findByIdOrProductCode(params.id, params.id)
-        Location location = Location.get(session.warehouse.id)
-        def productSummary = ProductSummary.findByProductAndLocation(product, location)
-        if (productSummary) {
-            [productSummary: productSummary]
-        }
-        else {
-            flash.message = "Product ${product.productCode} is not available in ${location.locationNumber}"
-            redirect(action: "productList")
-        }
+        render(view: "/common/react", params: params)
     }
 
     def outboundList() {
-        Location origin = Location.get(params.origin?params.origin.id:session.warehouse.id)
-        StockMovement stockMovement = new StockMovement(origin: origin, stockMovementDirection: StockMovementDirection.OUTBOUND, stockMovementStatusCode: StockMovementStatusCode.PENDING)
-        params.max = params.max ?: 10
-        params.offset = params.offset ?: 0
-        def stockMovements = stockMovementService.getStockMovements(stockMovement, params)
-        [stockMovements:stockMovements]
+        render(view: "/common/react", params: params)
     }
 
 }
