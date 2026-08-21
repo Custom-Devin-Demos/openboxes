@@ -69,7 +69,10 @@ const ShowInventoryReport = () => {
     setLoading(true);
     const searchParams = new URLSearchParams();
     searchParams.append('location.id', currentLocation?.id);
-    statuses.forEach((status) => searchParams.append('status', status));
+    if (statuses.length) {
+      // Legacy DataTables serialized the checked statuses as a comma-joined "status[]" param
+      searchParams.append('status[]', statuses.join(','));
+    }
     apiClient.get(`${INVENTORY_BROWSER_QOH_BY_PRODUCT_GROUP}?${searchParams.toString()}`)
       .then((response) => {
         setItems(response.data.aaData || []);
