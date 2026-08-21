@@ -16,7 +16,9 @@
         "data": {
           "id": "<uuid>",
           "name": "API Snapshot Scratch Location Group",
-          "address": null
+          "address": null,
+          "version": 0,
+          "locations": []
         }
       }
     },

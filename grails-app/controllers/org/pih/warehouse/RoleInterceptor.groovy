@@ -64,6 +64,7 @@ class RoleInterceptor {
         'user'                      : ['impersonate'],
         'productsConfigurationApi'  : ['downloadCategories', 'importCategories'],
         'locationType'              : ['create', 'edit', 'delete', 'update', 'save'],
+        'locationTypeApi'           : ['create', 'delete', 'update'],
         'quartz'                    : ['*'],
         'jobs'                      : ['*']
     ]

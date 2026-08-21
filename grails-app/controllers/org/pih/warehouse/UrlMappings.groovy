@@ -187,6 +187,26 @@ class UrlMappings {
             action = [GET: "read", PUT: "update", DELETE: "delete"]
         }
 
+        "/api/locationTypes/locationTypeCodeOptions"(parseRequest: true) {
+            controller = { "locationTypeApi" }
+            action = [GET: "locationTypeCodeOptions"]
+        }
+
+        "/api/locationTypes/supportedActivityOptions"(parseRequest: true) {
+            controller = { "locationTypeApi" }
+            action = [GET: "supportedActivityOptions"]
+        }
+
+        "/api/locationTypes"(parseRequest: true) {
+            controller = { "locationTypeApi" }
+            action = [POST: "create"]
+        }
+
+        "/api/locationTypes/$id"(parseRequest: true) {
+            controller = { "locationTypeApi" }
+            action = [GET: "read", PUT: "update", DELETE: "delete"]
+        }
+
         "/api/eventTypes/eventCodeOptions"(parseRequest: true) {
             controller = { "eventTypeApi" }
             action = [GET: "eventCodeOptions"]

@@ -258,6 +258,26 @@ const AsyncEventTypeForm = Loadable({
   loading: Loading,
 });
 
+const AsyncLocationGroupList = Loadable({
+  loader: () => import('components/locationGroup/LocationGroupList'),
+  loading: Loading,
+});
+
+const AsyncLocationGroupForm = Loadable({
+  loader: () => import('components/locationGroup/LocationGroupForm'),
+  loading: Loading,
+});
+
+const AsyncLocationGroupShow = Loadable({
+  loader: () => import('components/locationGroup/LocationGroupShow'),
+  loading: Loading,
+});
+
+const AsyncLocationTypeForm = Loadable({
+  loader: () => import('components/locationType/LocationTypeForm'),
+  loading: Loading,
+});
+
 const AsyncProductSupplierList = Loadable({
   loader: () => import('components/productSupplier/ProductSupplierList'),
   loading: Loading,
@@ -643,6 +663,12 @@ const Router = () => {
             <MainLayoutRoute path="**/budgetCode/edit/:budgetCodeId" component={AsyncBudgetCodeForm} />
             <MainLayoutRoute path="**/eventType/create" component={AsyncEventTypeForm} />
             <MainLayoutRoute path="**/eventType/edit/:eventTypeId" component={AsyncEventTypeForm} />
+            <MainLayoutRoute path="**/locationGroup/list" component={AsyncLocationGroupList} />
+            <MainLayoutRoute path="**/locationGroup/create" component={AsyncLocationGroupForm} />
+            <MainLayoutRoute path="**/locationGroup/edit/:locationGroupId" component={AsyncLocationGroupForm} />
+            <MainLayoutRoute path="**/locationGroup/show/:locationGroupId" component={AsyncLocationGroupShow} />
+            <MainLayoutRoute path="**/locationType/create" component={AsyncLocationTypeForm} />
+            <MainLayoutRoute path="**/locationType/edit/:locationTypeId" component={AsyncLocationTypeForm} />
             <MainLayoutRoute path="**/admin/controllerActions" component={AsyncControllerActions} />
             <MainLayoutRoute path="**/admin/plugins" component={AsyncAdminPlugins} />
             <MainLayoutRoute path="**/admin/cache" component={AsyncAdminCache} />

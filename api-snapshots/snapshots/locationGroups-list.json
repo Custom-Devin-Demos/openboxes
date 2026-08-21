@@ -8,6 +8,7 @@
   "status": 200,
   "contentType": "application/json",
   "body": {
-    "data": []
+    "data": [],
+    "totalCount": 0
   }
 }

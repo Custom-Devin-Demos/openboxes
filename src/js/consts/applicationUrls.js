@@ -271,6 +271,21 @@ const PARTY_ROLE_URL = {
   show: (id) => `${PARTY_ROLE_URL.base}/show/${id}`,
 };
 
+const LOCATION_GROUP_URL = {
+  base: `${CONTEXT_PATH}/locationGroup`,
+  list: () => `${LOCATION_GROUP_URL.base}/list`,
+  create: () => `${LOCATION_GROUP_URL.base}/create`,
+  edit: (id) => `${LOCATION_GROUP_URL.base}/edit/${id}`,
+  show: (id) => `${LOCATION_GROUP_URL.base}/show/${id}`,
+};
+
+const LOCATION_TYPE_URL = {
+  base: `${CONTEXT_PATH}/locationType`,
+  list: () => `${LOCATION_TYPE_URL.base}/list`,
+  create: () => `${LOCATION_TYPE_URL.base}/create`,
+  edit: (id) => `${LOCATION_TYPE_URL.base}/edit/${id}`,
+};
+
 const CYCLE_COUNT = {
   base: `${CONTEXT_PATH}/inventory/cycleCount`,
   list: (tab) => `${CYCLE_COUNT.base}?tab=${tab}`,
@@ -299,6 +314,8 @@ export {
   INVENTORY_URL,
   INVOICE_URL,
   LOCATION_CONFIGURATION_URL,
+  LOCATION_GROUP_URL,
+  LOCATION_TYPE_URL,
   LOCATION_URL,
   ORDER_URL,
   PARTY_ROLE_URL,
