@@ -13,4 +13,8 @@ class RoleController {
 
     static scaffold = Role
 
+    def create() {
+        render(view: "/common/react", params: params)
+    }
+
 }

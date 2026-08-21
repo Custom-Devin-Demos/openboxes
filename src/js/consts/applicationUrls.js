@@ -286,6 +286,23 @@ const LOCATION_TYPE_URL = {
   edit: (id) => `${LOCATION_TYPE_URL.base}/edit/${id}`,
 };
 
+const PERSON_URL = {
+  base: `${CONTEXT_PATH}/person`,
+  list: () => `${PERSON_URL.base}/list`,
+  create: () => `${PERSON_URL.base}/create`,
+  edit: (id) => `${PERSON_URL.base}/edit/${id}`,
+  show: (id) => `${PERSON_URL.base}/show/${id}`,
+  convertPersonToUser: (id) => `${PERSON_URL.base}/convertPersonToUser/${id}`,
+  convertUserToPerson: (id) => `${PERSON_URL.base}/convertUserToPerson/${id}`,
+};
+
+const ROLE_URL = {
+  base: `${CONTEXT_PATH}/role`,
+  index: () => `${ROLE_URL.base}/index`,
+  create: () => `${ROLE_URL.base}/create`,
+  show: (id) => `${ROLE_URL.base}/show/${id}`,
+};
+
 const CYCLE_COUNT = {
   base: `${CONTEXT_PATH}/inventory/cycleCount`,
   list: (tab) => `${CYCLE_COUNT.base}?tab=${tab}`,
@@ -320,6 +337,7 @@ export {
   ORDER_URL,
   PARTY_ROLE_URL,
   PARTY_URL,
+  PERSON_URL,
   PRODUCT_CONFIGURATION_URL,
   PRODUCT_SUPPLIER_URL,
   PRODUCT_URL,
@@ -328,6 +346,7 @@ export {
   REPLENISHMENT_URL,
   REQUISITION_TEMPLATE_URL,
   REQUISITION_URL,
+  ROLE_URL,
   SHIPMENT_URL,
   STOCK_MOVEMENT_URL,
   STOCK_TRANSFER_URL,

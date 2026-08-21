@@ -28,28 +28,11 @@ class PersonController {
 
 
     def list() {
-        def personInstanceList = []
-        def personInstanceTotal = 0
-
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-
-        if (params.q) {
-            String[] terms = ["%" + params.q + "%"]
-            personInstanceList = userService.findPersons(terms, params)
-            personInstanceTotal = personInstanceList.totalCount
-
-        } else {
-            personInstanceList = Person.list(params)
-            personInstanceTotal = Person.count()
-        }
-
-        [personInstanceList: personInstanceList, personInstanceTotal: personInstanceTotal]
+        render(view: "/common/react", params: params)
     }
 
     def create() {
-        def personInstance = new Person()
-        personInstance.properties = params
-        return [personInstance: personInstance]
+        render(view: "/common/react", params: params)
     }
 
     def save() {
@@ -64,25 +47,11 @@ class PersonController {
     }
 
     def show() {
-        def personInstance = Person.get(params.id)
-        if (!personInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'person.label', default: 'Person'), params.id])}"
-            redirect(action: "list")
-        }
-        else {
-            [personInstance: personInstance]
-        }
+        render(view: "/common/react", params: params)
     }
 
     def edit() {
-        def personInstance = Person.get(params.id)
-        if (!personInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'person.label', default: 'Person'), params.id])}"
-            redirect(action: "list")
-        }
-        else {
-            return [personInstance: personInstance]
-        }
+        render(view: "/common/react", params: params)
     }
 
     def update() {
