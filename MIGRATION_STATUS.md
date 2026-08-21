@@ -99,7 +99,7 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | 2-inventory-2 | inventory-2 batch | IN_PROGRESS | [5a57cc18](https://app.devin.ai/sessions/5a57cc18fc5949c9a4b5609b1ba11c20) | | |
 | 2-locations-orgs-2 | locations-orgs-2 batch | IN_PROGRESS | [48532479](https://app.devin.ai/sessions/48532479e78c4e79a20e038236265cfe) | | |
 | 2-locations-orgs-4 | locations-orgs-4 batch | IN_PROGRESS | [2f9179a2](https://app.devin.ai/sessions/2f9179a295ba4de785167901fcb932cd) | | |
-| 2-locations-orgs-6 | locations-orgs-6 batch | IN_PROGRESS | [705b3922](https://app.devin.ai/sessions/705b3922edf74221b462c43b7869e175) | | |
+| 2-locations-orgs-6 | locations-orgs-6 batch | MERGED | [705b3922](https://app.devin.ai/sessions/705b3922edf74221b462c43b7869e175) | [#17](https://github.com/Custom-Devin-Demos/openboxes/pull/17) | Playwright 10/10, snapshots green minus 2 pre-existing baseline issues, CI green |
 | 2-product-catalog-2 | product-catalog-2 batch | IN_PROGRESS | [41cafdc5](https://app.devin.ai/sessions/41cafdc5c6b04a6d84f833293e6c8bfc) | | |
 | 2-product-catalog-4 | product-catalog-4 batch | IN_PROGRESS | [4c343f82](https://app.devin.ai/sessions/4c343f82d52b48f5baffb49f8685c2cd) | | |
 | 2-users-security-1 | users-security-1 batch | IN_PROGRESS | [d9178c80](https://app.devin.ai/sessions/d9178c80e0fd49c8a30dd73299d9a7f9) | | |
@@ -107,3 +107,4 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 - 2026-08-20: Phase 2 wave 2 spawned (10 batches). P1.2 (#12) asked to rebase onto latest develop before merge.
 - 2026-08-20: P1.2 Grails 4.1.4 merged (PR #12) after rebase onto develop with all wave-1 Phase 2 batches. P1.3 (Grails 4→5) spawning next.
 - 2026-08-20: P1.3 Grails 4→5 child spawned (7d1a20b8).
+- 2026-08-20: locations-orgs-6 merged (PR #17). Baseline-repair child spawned (28646cc5) for stale api-getAppContext + dashboard date-window snapshots.
