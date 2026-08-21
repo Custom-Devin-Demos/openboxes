@@ -54,8 +54,10 @@ const SendMailRequisitionTemplatePage = ({ match }) => {
       includePdf,
       includeXls,
     }).then((response) => {
-      window.location.href = REQUISITION_TEMPLATE_URL.show(match.params.templateId);
       setMessage(response.data.message);
+      setTimeout(() => {
+        window.location.href = REQUISITION_TEMPLATE_URL.show(match.params.templateId);
+      }, 1500);
     }).catch((error) => {
       setSending(false);
       setErrors(error.response?.data?.errors || ['An error occurred']);

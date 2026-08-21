@@ -120,8 +120,8 @@ class StocklistApiController {
                     [
                             id             : inventoryLevel.id,
                             productName    : inventoryLevel.product?.toString(),
-                            minimumQuantity: inventoryLevel.minimumQuantity,
-                            maximumQuantity: inventoryLevel.maximumQuantity,
+                            minimumQuantity: inventoryLevel.minQuantity,
+                            maximumQuantity: inventoryLevel.maxQuantity,
                             reorderQuantity: inventoryLevel.reorderQuantity,
                     ]
                 },
