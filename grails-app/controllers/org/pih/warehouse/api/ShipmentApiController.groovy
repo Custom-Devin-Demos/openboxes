@@ -28,8 +28,11 @@ import org.pih.warehouse.core.RoleType
 import org.pih.warehouse.core.User
 import org.pih.warehouse.core.DocumentService
 import org.pih.warehouse.inventory.TransactionException
+import org.pih.warehouse.product.ProductService
 import org.pih.warehouse.receiving.Receipt
 import org.pih.warehouse.receiving.ReceiptItem
+import org.pih.warehouse.report.ChecklistReportCommand
+import org.pih.warehouse.report.ReportService
 import org.pih.warehouse.shipping.ItemListCommand
 import org.pih.warehouse.shipping.Shipment
 import org.pih.warehouse.shipping.ShipmentService
@@ -42,6 +45,8 @@ class ShipmentApiController {
 
     ShipmentService shipmentService
     DocumentService documentService
+    ReportService reportService
+    ProductService productService
     def inventoryService
     def userService
     def messageSource
@@ -397,6 +402,52 @@ class ShipmentApiController {
                         isPartialReceiveAllowed: shipment.isPartialReceiveAllowed(),
                         requisitionId         : shipment.requisition?.id,
                 ],
+        ]] as JSON)
+    }
+
+    def paginatedPackingList() {
+        Shipment shipment = Shipment.get(params.id)
+        if (!shipment) {
+            response.status = 404
+            render([errorCode: 404, errorMessage: "Shipment with ID ${params.id} not found"] as JSON)
+            return
+        }
+        ChecklistReportCommand command = new ChecklistReportCommand()
+        command.shipment = shipment
+        command.rootCategory = productService.getRootCategory()
+        reportService.generateShippingReport(command)
+
+        def packingListByContainer = command.checklistReportEntryList.groupBy { it?.shipmentItem?.container }
+        render([data: [
+                shipment  : [
+                        id                  : shipment.id,
+                        name                : shipment.name,
+                        shipmentNumber      : shipment.shipmentNumber,
+                        expectedShippingDate: formatDate(shipment.expectedShippingDate),
+                        expectedDeliveryDate: formatDate(shipment.expectedDeliveryDate),
+                        origin              : shipment.origin?.name,
+                        destination         : shipment.destination?.name,
+                ],
+                containers: packingListByContainer.collect { container, entries ->
+                    [
+                            container    : getContainerSummary(container),
+                            shipmentItems: entries.collect { entry ->
+                                def shipmentItem = entry.shipmentItem
+                                def product = shipmentItem?.inventoryItem?.product ?: shipmentItem?.product
+                                [
+                                        id            : shipmentItem?.id,
+                                        productCode   : product?.productCode,
+                                        productName   : product?.displayNameOrDefaultName,
+                                        lotNumber     : shipmentItem?.inventoryItem?.lotNumber ?: shipmentItem?.lotNumber,
+                                        expirationDate: formatDate(shipmentItem?.inventoryItem?.expirationDate ?: shipmentItem?.expirationDate),
+                                        recipientName : shipmentItem?.recipient?.name ?:
+                                                shipmentItem?.container?.recipient?.name ?:
+                                                        shipmentItem?.shipment?.recipient?.name,
+                                        quantity      : shipmentItem?.quantity,
+                                ]
+                            },
+                    ]
+                },
         ]] as JSON)
     }
 

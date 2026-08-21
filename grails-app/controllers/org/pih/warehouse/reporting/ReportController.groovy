@@ -336,16 +336,7 @@ class ReportController {
     }
 
     def printPaginatedPackingListReport(ChecklistReportCommand command) {
-        try {
-            command.rootCategory = productService.getRootCategory()
-            if (!command?.hasErrors()) {
-                reportService.generateShippingReport(command)
-            }
-        } catch (Exception e) {
-            log.error("error", e)
-            e.printStackTrace()
-        }
-        [command: command]
+        render(view: "/common/react", params: params)
     }
 
     def downloadShippingReport() {

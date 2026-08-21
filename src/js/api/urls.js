@@ -146,6 +146,12 @@ export const SHIPMENT_ADD_TO_SHIPMENT_FORM = `${SHIPMENT_API}/addToShipmentForm`
 export const SHIPMENT_LIST = `${SHIPMENT_API}/shipmentList`;
 export const SHIPMENT_SHOW_DETAILS = (id) => `${SHIPMENT_API}/${id}/showDetails`;
 export const SHIPMENT_PACKING_LIST = (id) => `${SHIPMENT_API}/${id}/packingList`;
+export const SHIPMENT_PAGINATED_PACKING_LIST = (id) => `${SHIPMENT_API}/${id}/paginatedPackingList`;
+
+// CONSUMPTION
+export const CONSUMPTION_AGGREGATE = `${API}/consumption/aggregate`;
+export const CONSUMPTION_SHOW = `${API}/consumption/show`;
+export const CONSUMPTION_DEPOTS = `${API}/consumption/depots`;
 export const SHIPMENT_SEND_FORM = (id) => `${SHIPMENT_API}/${id}/sendShipmentForm`;
 export const SHIPMENT_SEND = (id) => `${SHIPMENT_API}/${id}/sendShipment`;
 export const SHIPMENT_RECEIVE_FORM = (id) => `${SHIPMENT_API}/${id}/receiveShipmentForm`;
@@ -181,6 +187,7 @@ export const CATEGORIES_UPDATE_ASSIGNING_PARENT_TO_PRODUCT = `${CATEGORIES}/upda
 export const CATEGORY_DETAILS = (id) => `${CATEGORIES}/${id}/details`;
 export const CATEGORY_DELETE = (id) => `${CATEGORIES}/${id}/deleteCategory`;
 export const CATEGORY_OPTIONS = `${API}/categoryOptions`;
+export const TAG_OPTIONS = `${API}/tagOptions`;
 export const UNIT_OF_MEASURE_CLASS_OPTIONS = `${API}/unitOfMeasureClassOptions`;
 
 // PERSONS

@@ -463,6 +463,31 @@ const AsyncExpirationHistoryReport = Loadable({
   loading: Loading,
 });
 
+const AsyncConsumptionList = Loadable({
+  loader: () => import('components/reporting/consumption/ConsumptionList'),
+  loading: Loading,
+});
+
+const AsyncConsumptionPivot = Loadable({
+  loader: () => import('components/reporting/consumption/ConsumptionPivot'),
+  loading: Loading,
+});
+
+const AsyncConsumptionShow = Loadable({
+  loader: () => import('components/reporting/consumption/ConsumptionShow'),
+  loading: Loading,
+});
+
+const AsyncCreatePersonPage = Loadable({
+  loader: () => import('components/person/CreatePersonPage'),
+  loading: Loading,
+});
+
+const AsyncPaginatedPackingListReport = Loadable({
+  loader: () => import('components/reporting/PaginatedPackingListReport'),
+  loading: Loading,
+});
+
 const AsyncInventoryBrowser = Loadable({
   loader: () => import('components/inventory/InventoryBrowser'),
   loading: Loading,
@@ -1037,6 +1062,10 @@ const Router = () => {
             <MainLayoutRoute path="**/stockMovement/createOutbound/:stockMovementId?" component={AsyncStockMovement} />
             <MainLayoutRoute path="**/stockMovement/importOutboundStockMovement" component={AsyncOutboundImport} />
             <MainLayoutRoute path="**/report/expirationHistoryReport" component={AsyncExpirationHistoryReport} />
+            <MainLayoutRoute path="**/consumption/list" component={AsyncConsumptionList} />
+            <MainLayoutRoute path="**/consumption/pivot" component={AsyncConsumptionPivot} />
+            <MainLayoutRoute path="**/consumption/show" component={AsyncConsumptionShow} />
+            <MainLayoutRoute path="**/json/createPerson" component={AsyncCreatePersonPage} />
             <MainLayoutRoute path="**/inventory/reorderReport" component={AsyncReorderReport} />
             <MainLayoutRoute path="**/inventory/browse" component={AsyncInventoryBrowser} />
             <MainLayoutRoute path="**/inventory/list" component={AsyncInventoryList} />
@@ -1123,6 +1152,7 @@ const Router = () => {
             <MainLayoutRoute path="**/order/orderSummaryList" component={AsyncOrderSummaryList} />
             <MainLayoutRoute path="**/order/show/:id" component={AsyncOrderShow} />
             <Route path="**/order/print/:id" component={AsyncOrderPrint} />
+            <Route path="**/report/printPaginatedPackingListReport" component={AsyncPaginatedPackingListReport} />
             <MainLayoutRoute path="**/orderAdjustmentType/list" component={AsyncOrderAdjustmentTypeList} />
             <MainLayoutRoute path="**/orderAdjustmentType/create" component={AsyncOrderAdjustmentTypeForm} />
             <MainLayoutRoute path="**/orderAdjustmentType/edit/:orderAdjustmentTypeId" component={AsyncOrderAdjustmentTypeForm} />

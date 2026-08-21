@@ -730,6 +730,10 @@ class JsonController {
 
     def createPerson() {
         log.info("createPerson" + params)
+        if (!params.name) {
+            render(view: "/common/react", params: params)
+            return
+        }
         def data = [id: null, label: "Unable to create person with name " + params.name]
 
         def names = params.name.split(" ")
