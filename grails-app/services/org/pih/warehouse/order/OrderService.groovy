@@ -337,7 +337,11 @@ class OrderService {
                 shipmentItem.quantity = orderItemCommand.quantityReceived
                 shipmentItem.recipient = orderCommand?.recipient
                 shipmentItem.inventoryItem = inventoryItem
-                shipmentItem.addToOrderItems(orderItemCommand?.orderItem)
+                // Re-fetch the order item so it is attached to the current session
+                // (the session clear above detaches previously loaded instances)
+                OrderItem orderItem = OrderItem.get(orderItemCommand?.orderItem?.id)
+                shipmentItem.addToOrderItems(orderItem)
+                orderItem?.addToShipmentItems(shipmentItem)
                 shipmentInstance.addToShipmentItems(shipmentItem)
             }
         }
