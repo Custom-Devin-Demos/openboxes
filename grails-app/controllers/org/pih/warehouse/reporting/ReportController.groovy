@@ -12,15 +12,19 @@ package org.pih.warehouse.reporting
 import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 import grails.plugins.csv.CSVWriter
+import groovy.transform.CompileStatic
+import org.grails.datastore.gorm.GormEntity
 import grails.plugins.quartz.GrailsJobClassConstants
 import org.apache.commons.lang.StringEscapeUtils
 import org.pih.warehouse.api.StockMovement
 import org.pih.warehouse.api.StockMovementItem
+import org.hibernate.proxy.HibernateProxy
 import org.pih.warehouse.auth.AuthService
 import org.pih.warehouse.core.Constants
 import org.pih.warehouse.core.Location
 import org.pih.warehouse.importer.CSVUtils
 import org.pih.warehouse.inventory.BinLocationItem
+import org.pih.warehouse.inventory.InventoryItem
 import org.pih.warehouse.inventory.InventoryLevel
 import org.pih.warehouse.inventory.Transaction
 import org.pih.warehouse.order.OrderItem
@@ -318,21 +322,11 @@ class ReportController {
     }
 
     def printShippingReport(ChecklistReportCommand command) {
-        command.rootCategory = productService.getRootCategory()
-        if (!command?.hasErrors()) {
-            reportService.generateShippingReport(command)
-        }
-        [command: command]
+        render(view: "/common/react", params: params)
     }
 
     def printPickListReport(ChecklistReportCommand command) {
-
-        Map binLocations
-        if (!command?.hasErrors()) {
-            reportService.generateShippingReport(command)
-            binLocations = inventoryService.getBinLocations(command.shipment)
-        }
-        [command: command, binLocations: binLocations]
+        render(view: "/common/react", params: params)
     }
 
     def printPaginatedPackingListReport(ChecklistReportCommand command) {
@@ -460,12 +454,7 @@ class ReportController {
         }
 
         log.info("Show bin location report: " + (System.currentTimeMillis() - startTime) + " ms")
-        [
-                location   : location,
-                elapsedTime: (System.currentTimeMillis() - startTime),
-                statuses   : ["inStock", "outOfStock"]
-        ]
-
+        render(view: "/common/react", params: params)
     }
 
     def showOnOrderReport() {
@@ -638,7 +627,22 @@ class ReportController {
         render(view: "/common/react")
     }
 
+    @CompileStatic
+    private static Serializable identifierOf(Object entity) {
+        if (entity == null) {
+            return null
+        }
+        if (entity instanceof HibernateProxy) {
+            return ((HibernateProxy) entity).getHibernateLazyInitializer().getIdentifier()
+        }
+        return ((GormEntity) entity).ident()
+    }
+
     def showCycleCountReport() {
+        if (!params.print) {
+            render(view: "/common/react", params: params)
+            return
+        }
         Location location = Location.load(session.warehouse.id)
         List binLocations = inventoryService.getQuantityByBinLocation(location)
         log.info "Returned ${binLocations.size()} bin locations for location ${location}"
@@ -646,34 +650,37 @@ class ReportController {
         List rows = binLocations.collect { row ->
             // Required in order to avoid lazy initialization exception that occurs because all
             // of the querying / session work that was done above was executed in worker threads
-            Product product = Product.load(row?.product?.id)
+            Product product = Product.get(identifierOf(row?.product))
+            Category category = identifierOf(row?.category) ? Category.get(identifierOf(row?.category)) : null
+            InventoryItem inventoryItem = identifierOf(row?.inventoryItem) ? InventoryItem.get(identifierOf(row?.inventoryItem)) : null
+            Location binLocation = identifierOf(row?.binLocation) ? Location.get(identifierOf(row?.binLocation)) : null
 
-            def latestInventoryDate = row?.product?.latestInventoryDate(location.id) ?: row?.product.earliestReceivingDate(location.id)
+            def latestInventoryDate = product?.latestInventoryDate(location.id) ?: product?.earliestReceivingDate(location.id)
             Map dataRow = params.print ? [
-                            "Product code"        : StringEscapeUtils.escapeCsv(row?.product?.productCode),
+                            "Product code"        : StringEscapeUtils.escapeCsv(product?.productCode),
                             "Product name"        : product.displayNameWithLocaleCode,
-                            "Lot number"          : StringEscapeUtils.escapeCsv(row?.inventoryItem.lotNumber ?: ""),
-                            "Expiration date"     : row?.inventoryItem.expirationDate ? row?.inventoryItem.expirationDate.format(Constants.EXPIRATION_DATE_FORMAT) : "",
-                            "Bin location"        : StringEscapeUtils.escapeCsv(row?.binLocation?.name ?: ""),
+                            "Lot number"          : StringEscapeUtils.escapeCsv(inventoryItem?.lotNumber ?: ""),
+                            "Expiration date"     : inventoryItem?.expirationDate ? inventoryItem.expirationDate.format(Constants.EXPIRATION_DATE_FORMAT) : "",
+                            "Bin location"        : StringEscapeUtils.escapeCsv(binLocation?.name ?: ""),
                             "OB QOH"              : row?.quantity ?: 0,
                             "Physical QOH"        : "",
                             "Comment"             : "",
                             "Product family"      : product?.productFamily ?: "",
-                            "Category"            : StringEscapeUtils.escapeCsv(row?.category?.name ?: ""),
+                            "Category"            : StringEscapeUtils.escapeCsv(category?.name ?: ""),
                             "Formularies"         : product.productCatalogs.join(", ") ?: "",
-                            "ABC Classification"  : StringEscapeUtils.escapeCsv(row?.product.getAbcClassification(location.id) ?: ""),
+                            "ABC Classification"  : StringEscapeUtils.escapeCsv(product?.getAbcClassification(location.id) ?: ""),
                             "Status"              : g.message(code: "binLocationSummary.${row?.status}.label"),
                             "Last Inventory Date" : latestInventoryDate ? latestInventoryDate.format(Constants.EXPIRATION_DATE_FORMAT) : "",
                     ] : [
-                            productCode       : StringEscapeUtils.escapeCsv(row?.product?.productCode),
-                            productName       : row?.product.name ?: "",
+                            productCode       : StringEscapeUtils.escapeCsv(product?.productCode),
+                            productName       : product?.name ?: "",
                             productFamily     : product?.productFamily ?: "",
-                            category          : StringEscapeUtils.escapeCsv(row?.category?.name ?: ""),
+                            category          : StringEscapeUtils.escapeCsv(category?.name ?: ""),
                             formularies       : product.productCatalogs.join(", ") ?: "",
-                            lotNumber         : StringEscapeUtils.escapeCsv(row?.inventoryItem.lotNumber ?: ""),
-                            expirationDate    : row?.inventoryItem.expirationDate ? row?.inventoryItem.expirationDate.format(Constants.EXPIRATION_DATE_FORMAT) : "",
-                            abcClassification : StringEscapeUtils.escapeCsv(row?.product.getAbcClassification(location.id) ?: ""),
-                            binLocation       : StringEscapeUtils.escapeCsv(row?.binLocation?.name ?: ""),
+                            lotNumber         : StringEscapeUtils.escapeCsv(inventoryItem?.lotNumber ?: ""),
+                            expirationDate    : inventoryItem?.expirationDate ? inventoryItem.expirationDate.format(Constants.EXPIRATION_DATE_FORMAT) : "",
+                            abcClassification : StringEscapeUtils.escapeCsv(product?.getAbcClassification(location.id) ?: ""),
+                            binLocation       : StringEscapeUtils.escapeCsv(binLocation?.name ?: ""),
                             status            : g.message(code: "binLocationSummary.${row?.status}.label"),
                             lastInventoryDate : latestInventoryDate ? latestInventoryDate.format(Constants.EXPIRATION_DATE_FORMAT) : "",
                             quantityOnHand    : row?.quantity ?: 0,
@@ -682,15 +689,10 @@ class ReportController {
             return dataRow
         }
 
-        if (params.print) {
-            def filename = "CycleCountReport-${location.name}-${new Date().format("dd MMM yyyy hhmmss")}"
-            response.contentType = "application/vnd.ms-excel"
-            response.setHeader("Content-disposition", "attachment; filename=\"${filename}.xls\"")
-            documentService.generateInventoryTemplate(response.outputStream, rows)
-            return
-        }
-
-        render(view: "showCycleCountReport", model: [rows: rows])
+        def filename = "CycleCountReport-${location.name}-${new Date().format("dd MMM yyyy hhmmss")}"
+        response.contentType = "application/vnd.ms-excel"
+        response.setHeader("Content-disposition", "attachment; filename=\"${filename}.xls\"")
+        documentService.generateInventoryTemplate(response.outputStream, rows)
     }
 
     def showForecastReport() {
@@ -762,9 +764,10 @@ class ReportController {
                 log.info("Unable to generate forecast report due to lack of data")
                 flash.message = "Unable to generate forecast report due to lack of data"
             }
+            return
         }
 
-        render(view: 'showForecastReport', params: params)
+        render(view: "/common/react", params: params)
     }
 
     def amountOutstandingOnOrdersReport() {

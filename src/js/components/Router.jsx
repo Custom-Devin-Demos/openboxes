@@ -573,6 +573,31 @@ const AsyncPaginatedPackingListReport = Loadable({
   loading: Loading,
 });
 
+const AsyncPickListReport = Loadable({
+  loader: () => import('components/reporting/PickListReport'),
+  loading: Loading,
+});
+
+const AsyncShippingReport = Loadable({
+  loader: () => import('components/reporting/ShippingReport'),
+  loading: Loading,
+});
+
+const AsyncBinLocationReport = Loadable({
+  loader: () => import('components/reporting/BinLocationReport'),
+  loading: Loading,
+});
+
+const AsyncCycleCountReport = Loadable({
+  loader: () => import('components/reporting/CycleCountReport'),
+  loading: Loading,
+});
+
+const AsyncForecastReport = Loadable({
+  loader: () => import('components/reporting/ForecastReport'),
+  loading: Loading,
+});
+
 const AsyncInventoryBrowser = Loadable({
   loader: () => import('components/inventory/InventoryBrowser'),
   loading: Loading,
@@ -1336,6 +1361,11 @@ const Router = () => {
             <MainLayoutRoute path="**/order/show/:id" component={AsyncOrderShow} />
             <Route path="**/order/print/:id" component={AsyncOrderPrint} />
             <Route path="**/report/printPaginatedPackingListReport" component={AsyncPaginatedPackingListReport} />
+            <Route path="**/report/printPickListReport" component={AsyncPickListReport} />
+            <Route path="**/report/printShippingReport" component={AsyncShippingReport} />
+            <MainLayoutRoute path="**/report/showBinLocationReport" component={AsyncBinLocationReport} />
+            <MainLayoutRoute path="**/report/showCycleCountReport" component={AsyncCycleCountReport} />
+            <MainLayoutRoute path="**/report/showForecastReport" component={AsyncForecastReport} />
             <MainLayoutRoute path="**/orderAdjustmentType/list" component={AsyncOrderAdjustmentTypeList} />
             <MainLayoutRoute path="**/orderAdjustmentType/create" component={AsyncOrderAdjustmentTypeForm} />
             <MainLayoutRoute path="**/orderAdjustmentType/edit/:orderAdjustmentTypeId" component={AsyncOrderAdjustmentTypeForm} />

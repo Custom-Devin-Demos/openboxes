@@ -451,6 +451,95 @@ class ShipmentApiController {
         ]] as JSON)
     }
 
+    def pickListReport() {
+        Shipment shipment = Shipment.get(params.id)
+        if (!shipment) {
+            response.status = 404
+            render([errorCode: 404, errorMessage: "Shipment with ID ${params.id} not found"] as JSON)
+            return
+        }
+        ChecklistReportCommand command = new ChecklistReportCommand()
+        command.shipment = shipment
+        command.rootCategory = productService.getRootCategory()
+        reportService.generateShippingReport(command)
+        Map binLocations = inventoryService.getBinLocations(shipment)
+
+        SimpleDateFormat headerDateFormat = new SimpleDateFormat("MMM dd, yyyy hh:mma z")
+        def pickListByContainer = command.checklistReportEntryList.groupBy { it?.shipmentItem?.container }
+        render([data: [
+                shipment  : [
+                        id                  : shipment.id,
+                        name                : shipment.name,
+                        shipmentNumber      : shipment.shipmentNumber,
+                        expectedShippingDate: shipment.expectedShippingDate ? headerDateFormat.format(shipment.expectedShippingDate) : null,
+                        expectedDeliveryDate: shipment.expectedDeliveryDate ? headerDateFormat.format(shipment.expectedDeliveryDate) : null,
+                        origin              : shipment.origin?.name,
+                        destination         : shipment.destination?.name,
+                ],
+                printedBy : session?.user?.name,
+                printedOn : headerDateFormat.format(new Date()),
+                containers: pickListByContainer.collect { container, entries ->
+                    [
+                            container    : getContainerSummary(container),
+                            pickListItems: entries.collect { entry ->
+                                def shipmentItem = entry.shipmentItem
+                                def product = shipmentItem?.inventoryItem?.product ?: shipmentItem?.product
+                                [
+                                        id               : shipmentItem?.id,
+                                        productCode      : product?.productCode,
+                                        productName      : product?.displayNameOrDefaultName,
+                                        coldChain        : shipmentItem?.inventoryItem?.product?.coldChain ?: false,
+                                        lotNumber        : shipmentItem?.inventoryItem?.lotNumber ?: shipmentItem?.lotNumber,
+                                        expirationDate   : formatDate(shipmentItem?.inventoryItem?.expirationDate ?: shipmentItem?.expirationDate),
+                                        quantity         : shipmentItem?.quantity,
+                                        unitOfMeasure    : shipmentItem?.inventoryItem?.product?.unitOfMeasure ?: shipmentItem?.product?.unitOfMeasure,
+                                        bins             : (binLocations?.get(shipmentItem?.inventoryItem) ?: []).collect { bin ->
+                                            [binLocation: bin?.binLocation?.name, quantity: bin?.quantity]
+                                        },
+                                        binLocationPicked: shipmentItem?.binLocation?.name,
+                                ]
+                            },
+                    ]
+                },
+        ]] as JSON)
+    }
+
+    def shippingReport() {
+        Shipment shipment = Shipment.get(params.id)
+        if (!shipment) {
+            response.status = 404
+            render([errorCode: 404, errorMessage: "Shipment with ID ${params.id} not found"] as JSON)
+            return
+        }
+        ChecklistReportCommand command = new ChecklistReportCommand()
+        command.shipment = shipment
+        command.rootCategory = productService.getRootCategory()
+        reportService.generateShippingReport(command)
+
+        render([data: [
+                shipment          : [
+                        id            : shipment.id,
+                        name          : shipment.name,
+                        shipmentNumber: shipment.shipmentNumber,
+                        origin        : shipment.origin?.name,
+                        destination   : shipment.destination?.name,
+                ],
+                licensePlateNumber: shipment.getReferenceNumber('License Plate Number')?.identifier,
+                checklistItems    : command.checklistReportEntryList.collect { entry ->
+                    def shipmentItem = entry.shipmentItem
+                    [
+                            id            : shipmentItem?.id,
+                            container     : getContainerSummary(shipmentItem?.container),
+                            productCode   : shipmentItem?.inventoryItem?.product?.productCode,
+                            productName   : shipmentItem?.inventoryItem?.product?.displayNameOrDefaultName,
+                            lotNumber     : shipmentItem?.inventoryItem?.lotNumber,
+                            expirationDate: formatDate(shipmentItem?.inventoryItem?.expirationDate),
+                            quantity      : shipmentItem?.quantity,
+                    ]
+                },
+        ]] as JSON)
+    }
+
     def packingList() {
         Shipment shipment = Shipment.get(params.id)
         if (!shipment) {
