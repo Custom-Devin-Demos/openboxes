@@ -298,6 +298,21 @@ const AsyncGlAccountForm = Loadable({
   loading: Loading,
 });
 
+const AsyncGlAccountTypeList = Loadable({
+  loader: () => import('components/glAccountType/GlAccountTypeList'),
+  loading: Loading,
+});
+
+const AsyncGlAccountTypeForm = Loadable({
+  loader: () => import('components/glAccountType/GlAccountTypeForm'),
+  loading: Loading,
+});
+
+const AsyncPaymentTermForm = Loadable({
+  loader: () => import('components/paymentTerm/PaymentTermForm'),
+  loading: Loading,
+});
+
 const AsyncProductSupplierList = Loadable({
   loader: () => import('components/productSupplier/ProductSupplierList'),
   loading: Loading,
@@ -769,6 +784,11 @@ const Router = () => {
             <MainLayoutRoute path="**/glAccount/list" component={AsyncGlAccountList} />
             <MainLayoutRoute path="**/glAccount/create" component={AsyncGlAccountForm} />
             <MainLayoutRoute path="**/glAccount/edit/:glAccountId" component={AsyncGlAccountForm} />
+            <MainLayoutRoute path="**/glAccountType/list" component={AsyncGlAccountTypeList} />
+            <MainLayoutRoute path="**/glAccountType/create" component={AsyncGlAccountTypeForm} />
+            <MainLayoutRoute path="**/glAccountType/edit/:glAccountTypeId" component={AsyncGlAccountTypeForm} />
+            <MainLayoutRoute path="**/paymentTerm/create" component={AsyncPaymentTermForm} />
+            <MainLayoutRoute path="**/paymentTerm/edit/:paymentTermId" component={AsyncPaymentTermForm} />
             <MainLayoutRoute path="**/admin/controllerActions" component={AsyncControllerActions} />
             <MainLayoutRoute path="**/admin/plugins" component={AsyncAdminPlugins} />
             <MainLayoutRoute path="**/admin/cache" component={AsyncAdminCache} />

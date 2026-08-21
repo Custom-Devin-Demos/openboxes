@@ -188,6 +188,31 @@ class UrlMappings {
             action = [GET: "read", PUT: "update", DELETE: "delete"]
         }
 
+        "/api/glAccountTypes/glAccountTypeCodeOptions"(parseRequest: true) {
+            controller = { "glAccountTypeApi" }
+            action = [GET: "glAccountTypeCodeOptions"]
+        }
+
+        "/api/glAccountTypes"(parseRequest: true) {
+            controller = { "glAccountTypeApi" }
+            action = [GET: "list", POST: "create"]
+        }
+
+        "/api/glAccountTypes/$id"(parseRequest: true) {
+            controller = { "glAccountTypeApi" }
+            action = [GET: "read", PUT: "update", DELETE: "delete"]
+        }
+
+        "/api/paymentTerms"(parseRequest: true) {
+            controller = { "paymentTermApi" }
+            action = [POST: "create"]
+        }
+
+        "/api/paymentTerms/$id"(parseRequest: true) {
+            controller = { "paymentTermApi" }
+            action = [GET: "read", PUT: "update", DELETE: "delete"]
+        }
+
         "/api/budgetCodes"(parseRequest: true) {
             controller = { "budgetCodeApi" }
             action = [GET: "list", POST: "create"]

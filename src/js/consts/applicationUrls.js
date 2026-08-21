@@ -335,6 +335,20 @@ const ROLE_URL = {
   show: (id) => `${ROLE_URL.base}/show/${id}`,
 };
 
+const GL_ACCOUNT_TYPE_URL = {
+  base: `${CONTEXT_PATH}/glAccountType`,
+  list: () => `${GL_ACCOUNT_TYPE_URL.base}/list`,
+  create: () => `${GL_ACCOUNT_TYPE_URL.base}/create`,
+  edit: (id) => `${GL_ACCOUNT_TYPE_URL.base}/edit/${id}`,
+};
+
+const PAYMENT_TERM_URL = {
+  base: `${CONTEXT_PATH}/paymentTerm`,
+  list: () => `${PAYMENT_TERM_URL.base}/list`,
+  create: () => `${PAYMENT_TERM_URL.base}/create`,
+  edit: (id) => `${PAYMENT_TERM_URL.base}/edit/${id}`,
+};
+
 const CYCLE_COUNT = {
   base: `${CONTEXT_PATH}/inventory/cycleCount`,
   list: (tab) => `${CYCLE_COUNT.base}?tab=${tab}`,
@@ -359,6 +373,7 @@ export {
   DASHBOARD_URL,
   DOCUMENT_URL,
   EVENT_TYPE_URL,
+  GL_ACCOUNT_TYPE_URL,
   GL_ACCOUNT_URL,
   INVENTORY_ITEM_URL,
   INVENTORY_URL,
@@ -370,6 +385,7 @@ export {
   ORDER_URL,
   PARTY_ROLE_URL,
   PARTY_URL,
+  PAYMENT_TERM_URL,
   PERSON_URL,
   PRODUCT_ASSOCIATION_URL,
   PRODUCT_CATALOG_URL,
