@@ -147,3 +147,19 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 - 2026-08-20: PR #36 (shipments-2) merged (authoritatively confirmed, CI 4/4, post-rebase 122/122 + 10/10). Wave 3: 9/10 merged; locations-orgs-3 remaining.
 - 2026-08-20: PR #37 (locations-orgs-3) open; conflicts after #35/#36 merges (localizations-list.json); rebase requested — last wave-3 batch.
 - 2026-08-20: PR #37 (locations-orgs-3) merged after rebase (authoritatively confirmed, CI 4/4, post-rebase 122/122 + 10/10). PHASE 2 WAVE 3 COMPLETE (10/10 batches merged). P1.3 child signaled for final rebase of PR #31.
+
+## Phase 2 — Wave 4 (spawned 2026-08-20)
+
+| Batch | Scope | Status | Session | PR | Evidence |
+|---|---|---|---|---|---|
+| 2-admin-config-3 | admin-config-3 batch | IN_PROGRESS | [ffbf2f28](https://app.devin.ai/sessions/ffbf2f28bca84576a6f819d2a86236bd) | | |
+| 2-inventory-4 | inventory-4 batch | IN_PROGRESS | [368aac74](https://app.devin.ai/sessions/368aac744aa84ffc8bc3aa826e8f186f) | | |
+| 2-locations-orgs-5 | locations-orgs-5 batch | IN_PROGRESS | [3f0943a8](https://app.devin.ai/sessions/3f0943a8d94b436fa5a75ada4ecc72a0) | | |
+| 2-print-documents-1 | print-documents-1 batch | IN_PROGRESS | [5ceccbad](https://app.devin.ai/sessions/5ceccbadf1384574ac260dacbdfa9766) | | |
+| 2-product-catalog-5 | product-catalog-5 batch | IN_PROGRESS | [9ebf1ea3](https://app.devin.ai/sessions/9ebf1ea32cb14502bbef64c3dccfb9c4) | | |
+| 2-reporting-1 | reporting-1 batch | IN_PROGRESS | [a21481c1](https://app.devin.ai/sessions/a21481c174704fbc9a6894baec940bdb) | | |
+| 2-requisitions-3 | requisitions-3 batch | IN_PROGRESS | [f1f8813c](https://app.devin.ai/sessions/f1f8813c57e5486d89417f0605a04c94) | | |
+| 2-shipments-3 | shipments-3 batch | IN_PROGRESS | [362dc951](https://app.devin.ai/sessions/362dc95100fd44989c3a701907b71e1a) | | |
+| 2-stocklists-1 | stocklists-1 batch | IN_PROGRESS | [4c56a395](https://app.devin.ai/sessions/4c56a395ee15486595dea4441e32315c) | | |
+| 2-users-security-3 | users-security-3 batch | IN_PROGRESS | [4ec20085](https://app.devin.ai/sessions/4ec2008545fe4f3d938f00b940906626) | | |
+- 2026-08-20: Phase 2 wave 4 spawned (10 batches). Remaining after wave 4: 19 batches (admin-config-4, dashboard-auth, errors-misc, mobile-1/2, picking, print-documents-2, product-catalog-6/7/8, receiving, reporting-2/3/4, shipment-workflow, shipments-4, stock-movements, stock-transfers, stocklists-2).
