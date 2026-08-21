@@ -698,3 +698,21 @@ export const RECEIVE_ORDER_BY_ID = (id) => `${API}/receiveOrder/${id}`;
 export const RECEIVE_ORDER_VALIDATE_SHIPMENT_DETAILS = (id) => `${API}/receiveOrder/${id}/validateShipmentDetails`;
 export const RECEIVE_ORDER_VALIDATE_ORDER_ITEMS = (id) => `${API}/receiveOrder/${id}/validateOrderItems`;
 export const RECEIVE_ORDER_SUBMIT = (id) => `${API}/receiveOrder/${id}/submit`;
+
+// CREATE SHIPMENT WORKFLOW
+export const CREATE_SHIPMENT_API = `${API}/createShipment`;
+export const CREATE_SHIPMENT_READ = (id) => (id ? `${CREATE_SHIPMENT_API}/${id}` : CREATE_SHIPMENT_API);
+export const CREATE_SHIPMENT_SAVE_DETAILS = (id) => (id ? `${CREATE_SHIPMENT_API}/${id}` : CREATE_SHIPMENT_API);
+export const CREATE_SHIPMENT_SAVE_TRACKING = (id) => `${CREATE_SHIPMENT_API}/${id}/tracking`;
+export const CREATE_SHIPMENT_ADD_CONTAINERS = (id) => `${CREATE_SHIPMENT_API}/${id}/containers`;
+export const CREATE_SHIPMENT_DELETE_CONTAINERS = (id) => `${CREATE_SHIPMENT_API}/${id}/deleteContainers`;
+export const CREATE_SHIPMENT_DELETE_ALL_CONTAINERS = (id) => `${CREATE_SHIPMENT_API}/${id}/deleteAllContainers`;
+export const CREATE_SHIPMENT_ADD_ITEM = (id) => `${CREATE_SHIPMENT_API}/${id}/items`;
+export const CREATE_SHIPMENT_DELETE_ITEM = (id) => `${CREATE_SHIPMENT_API}/${id}/deleteItem`;
+export const CREATE_SHIPMENT_MOVE_ITEM = (id) => `${CREATE_SHIPMENT_API}/${id}/moveItem`;
+export const CREATE_SHIPMENT_BIN_LOCATIONS = (id, itemId) => `${CREATE_SHIPMENT_API}/${id}/binLocations?itemId=${itemId}`;
+export const CREATE_SHIPMENT_PICK_ITEM = (id) => `${CREATE_SHIPMENT_API}/${id}/pickItem`;
+export const CREATE_SHIPMENT_SPLIT_ITEM = (id) => `${CREATE_SHIPMENT_API}/${id}/splitItem`;
+export const CREATE_SHIPMENT_VALIDATE_PICKLIST = (id) => `${CREATE_SHIPMENT_API}/${id}/validatePicklist`;
+export const CREATE_SHIPMENT_CLEAR_PICKLIST = (id) => `${CREATE_SHIPMENT_API}/${id}/clearPicklist`;
+export const CREATE_SHIPMENT_SEND = (id) => `${CREATE_SHIPMENT_API}/${id}/send`;

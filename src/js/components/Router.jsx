@@ -787,6 +787,11 @@ const AsyncEditTransaction = Loadable({
   loading: Loading,
 });
 
+const AsyncCreateShipmentPage = Loadable({
+  loader: () => import('components/create-shipment/CreateShipmentPage'),
+  loading: Loading,
+});
+
 const AsyncShipmentAddComment = Loadable({
   loader: () => import('components/shipment/AddComment'),
   loading: Loading,
@@ -1537,6 +1542,8 @@ const Router = () => {
             <Route path="**/resettingInstanceInfo/index">
               <AsyncResetInstancePage />
             </Route>
+            <MainLayoutRoute path="**/createShipmentWorkflow/createShipment/:shipmentId" component={AsyncCreateShipmentPage} />
+            <MainLayoutRoute path="**/createShipmentWorkflow/createShipment" component={AsyncCreateShipmentPage} />
             <MainLayoutRoute path="**/shipment/addComment/:shipmentId" component={AsyncShipmentAddComment} />
             <MainLayoutRoute path="**/shipment/addDocument/:shipmentId" component={AsyncShipmentAddDocument} />
             <MainLayoutRoute path="**/shipment/editDocument" component={AsyncShipmentAddDocument} />

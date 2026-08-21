@@ -710,6 +710,13 @@ const RECEIVE_ORDER_WORKFLOW_URL = {
   receiveOrder: (id) => `${RECEIVE_ORDER_WORKFLOW_URL.base}/receiveOrder?id=${id}`,
 };
 
+const CREATE_SHIPMENT_WORKFLOW_URL = {
+  base: `${CONTEXT_PATH}/createShipmentWorkflow`,
+  createShipment: (id) => (id
+    ? `${CREATE_SHIPMENT_WORKFLOW_URL.base}/createShipment/${id}`
+    : `${CREATE_SHIPMENT_WORKFLOW_URL.base}/createShipment`),
+};
+
 export {
   ADMIN_URL,
   ATTRIBUTE_URL,
@@ -717,6 +724,7 @@ export {
   BATCH_URL,
   BUDGET_CODE_URL,
   CATEGORY_URL,
+  CREATE_SHIPMENT_WORKFLOW_URL,
   CYCLE_COUNT,
   DASHBOARD_URL,
   DATA_EXPORT_URL,

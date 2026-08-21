@@ -1305,6 +1305,83 @@ class UrlMappings {
             action = [POST: "submit"]
         }
 
+        // Create Shipment Workflow API
+
+        "/api/createShipment"(parseRequest: true) {
+            controller = "createShipmentApi"
+            action = [GET: "read", POST: "saveDetails"]
+        }
+
+        "/api/createShipment/$id"(parseRequest: true) {
+            controller = "createShipmentApi"
+            action = [GET: "read", POST: "saveDetails"]
+        }
+
+        "/api/createShipment/$id/tracking"(parseRequest: true) {
+            controller = "createShipmentApi"
+            action = [POST: "saveTracking"]
+        }
+
+        "/api/createShipment/$id/containers"(parseRequest: true) {
+            controller = "createShipmentApi"
+            action = [POST: "addContainers"]
+        }
+
+        "/api/createShipment/$id/deleteContainers"(parseRequest: true) {
+            controller = "createShipmentApi"
+            action = [POST: "deleteContainers"]
+        }
+
+        "/api/createShipment/$id/deleteAllContainers"(parseRequest: true) {
+            controller = "createShipmentApi"
+            action = [POST: "deleteAllContainers"]
+        }
+
+        "/api/createShipment/$id/items"(parseRequest: true) {
+            controller = "createShipmentApi"
+            action = [POST: "addItem"]
+        }
+
+        "/api/createShipment/$id/deleteItem"(parseRequest: true) {
+            controller = "createShipmentApi"
+            action = [POST: "deleteItem"]
+        }
+
+        "/api/createShipment/$id/moveItem"(parseRequest: true) {
+            controller = "createShipmentApi"
+            action = [POST: "moveItem"]
+        }
+
+        "/api/createShipment/$id/binLocations"(parseRequest: true) {
+            controller = "createShipmentApi"
+            action = [GET: "binLocations"]
+        }
+
+        "/api/createShipment/$id/pickItem"(parseRequest: true) {
+            controller = "createShipmentApi"
+            action = [POST: "pickItem"]
+        }
+
+        "/api/createShipment/$id/splitItem"(parseRequest: true) {
+            controller = "createShipmentApi"
+            action = [POST: "splitItem"]
+        }
+
+        "/api/createShipment/$id/validatePicklist"(parseRequest: true) {
+            controller = "createShipmentApi"
+            action = [POST: "validatePicklist"]
+        }
+
+        "/api/createShipment/$id/clearPicklist"(parseRequest: true) {
+            controller = "createShipmentApi"
+            action = [POST: "clearPicklist"]
+        }
+
+        "/api/createShipment/$id/send"(parseRequest: true) {
+            controller = "createShipmentApi"
+            action = [POST: "send"]
+        }
+
         // Internal Locations API
 
         "/api/internalLocations/receiving"(parseRequest: true) {
