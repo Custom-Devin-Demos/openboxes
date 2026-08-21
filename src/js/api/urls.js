@@ -277,6 +277,15 @@ export const LOCATION_TYPE_BY_ID = (id) => `${LOCATION_TYPE_API}/${id}`;
 export const LOCATION_TYPE_CODE_OPTIONS = `${LOCATION_TYPE_API}/locationTypeCodeOptions`;
 export const LOCATION_TYPE_SUPPORTED_ACTIVITY_OPTIONS = `${LOCATION_TYPE_API}/supportedActivityOptions`;
 
+// GL ACCOUNT TYPE
+export const GL_ACCOUNT_TYPE_API = `${API}/glAccountTypes`;
+export const GL_ACCOUNT_TYPE_BY_ID = (id) => `${GL_ACCOUNT_TYPE_API}/${id}`;
+export const GL_ACCOUNT_TYPE_CODE_OPTIONS = `${GL_ACCOUNT_TYPE_API}/glAccountTypeCodeOptions`;
+
+// PAYMENT TERM
+export const PAYMENT_TERM_API = `${API}/paymentTerms`;
+export const PAYMENT_TERM_BY_ID = (id) => `${PAYMENT_TERM_API}/${id}`;
+
 // EVENT TYPE
 export const EVENT_TYPE_API = `${API}/eventTypes`;
 export const EVENT_TYPE_BY_ID = (id) => `${EVENT_TYPE_API}/${id}`;
