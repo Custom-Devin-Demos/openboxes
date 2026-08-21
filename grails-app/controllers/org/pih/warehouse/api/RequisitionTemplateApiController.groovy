@@ -2,11 +2,13 @@ package org.pih.warehouse.api
 
 import grails.converters.JSON
 import grails.gorm.transactions.Transactional
+import grails.util.Holders
 import org.pih.warehouse.auth.AuthService
 import org.pih.warehouse.core.Location
 import org.pih.warehouse.core.Person
 import org.pih.warehouse.core.User
 import org.pih.warehouse.core.UserService
+import org.pih.warehouse.inventory.StocklistService
 import org.pih.warehouse.product.Product
 import org.pih.warehouse.requisition.ReplenishmentTypeCode
 import org.pih.warehouse.requisition.Requisition
@@ -21,6 +23,7 @@ class RequisitionTemplateApiController {
 
     UserService userService
     RequisitionTemplateService requisitionTemplateService
+    StocklistService stocklistService
 
     private static final String DATE_FORMAT = "MM/dd/yyyy hh:mm a"
 
@@ -89,6 +92,56 @@ class RequisitionTemplateApiController {
                 updatedByName        : requisition.updatedBy?.name,
                 lastUpdated          : lastUpdated?.format(DATE_FORMAT),
         ] + optionsData() + permissionsData()] as JSON)
+    }
+
+    def sendMailContext() {
+        Requisition requisition = Requisition.get(params.id)
+        if (!requisition) {
+            response.status = 404
+            render([errorMessage: "Could not find requisition with ID ${params.id}"] as JSON)
+            return
+        }
+        render([data: [
+                recipients          : Person.findAllByEmailIsNotNull().findAll { it.active }.sort { it.firstName }.collect {
+                    [email: it.email, name: it.name]
+                },
+                requestedByEmail    : requisition.requestedBy?.email,
+                defaultSubject      : warehouse.message(code: 'stockList.emailSubject.label'),
+                defaultMessage      : warehouse.message(code: 'stockList.emailMessage.label'),
+                noManagerMessage    : requisition.requestedBy ? null :
+                        warehouse.message(code: 'stockList.noManagerAssociated.label'),
+        ]] as JSON)
+    }
+
+    def sendMail() {
+        Requisition requisition = Requisition.get(params.id)
+        if (!requisition) {
+            response.status = 404
+            render([errorMessage: "Could not find requisition with ID ${params.id}"] as JSON)
+            return
+        }
+        def jsonRequest = request.JSON
+        List recipients = jsonRequest.recipients ?: []
+        if (!recipients || !params.id || !jsonRequest.body || !jsonRequest.subject) {
+            response.status = 400
+            render([success: false, errors: [warehouse.message(code: 'email.noParams.message')]] as JSON)
+            return
+        }
+        if (!recipients.contains(requisition.requestedBy?.email)) {
+            response.status = 400
+            render([success: false, errors: [warehouse.message(code: 'stockList.noManagerSelected.label')]] as JSON)
+            return
+        }
+        String emailBody = jsonRequest.body + "\n\n" + "Sent by " + session.user.name
+        String message
+        if (Holders.config.grails.mail.enabled) {
+            stocklistService.sendMail(params.id, jsonRequest.subject as String, emailBody,
+                    recipients, Boolean.valueOf(jsonRequest.includePdf), Boolean.valueOf(jsonRequest.includeXls))
+            message = warehouse.message(code: 'email.sent.message')
+        } else {
+            message = warehouse.message(code: 'email.disabled.message')
+        }
+        render([success: true, message: message] as JSON)
     }
 
     def save() {
