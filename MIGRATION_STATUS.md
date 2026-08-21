@@ -95,7 +95,7 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | Batch | Scope | Status | Session | PR | Evidence |
 |---|---|---|---|---|---|
 | 2-finance-config-2 | finance-config-2 batch | MERGED | [232ad85c](https://app.devin.ai/sessions/232ad85cf6d544f6bb868eb7f1b2a681) | [#16](https://github.com/Custom-Devin-Demos/openboxes/pull/16) | 5 eventType/glAccount screens; post-rebase snapshots 122/122, Playwright 10/10, CI 4/4 |
-| 2-finance-config-3 | finance-config-3 batch | REBASING | [99e5aab4](https://app.devin.ai/sessions/99e5aab429d946a0ac15a681fb92b18e) | [#25](https://github.com/Custom-Devin-Demos/openboxes/pull/25) | Verified green; conflicts after wave-2 merges; rebase requested |
+| 2-finance-config-3 | finance-config-3 batch | MERGED | [99e5aab4](https://app.devin.ai/sessions/99e5aab429d946a0ac15a681fb92b18e) | [#25](https://github.com/Custom-Devin-Demos/openboxes/pull/25) | 5 glAccountType/paymentTerm screens; post-rebase snapshots 122/122, Playwright 10/10, CI 4/4 |
 | 2-inventory-2 | inventory-2 batch | MERGED | [5a57cc18](https://app.devin.ai/sessions/5a57cc18fc5949c9a4b5609b1ba11c20) | [#24](https://github.com/Custom-Devin-Demos/openboxes/pull/24) | 5 inventory report screens; post-rebase snapshots 122/122, Playwright 10/10, CI 4/4 |
 | 2-locations-orgs-2 | locations-orgs-2 batch | MERGED | [48532479](https://app.devin.ai/sessions/48532479e78c4e79a20e038236265cfe) | [#20](https://github.com/Custom-Devin-Demos/openboxes/pull/20) | 6 locationGroup/locationType screens; post-rebase snapshots 122/122, Playwright 10/10, CI 4/4 |
 | 2-locations-orgs-4 | locations-orgs-4 batch | MERGED | [2f9179a2](https://app.devin.ai/sessions/2f9179a295ba4de785167901fcb932cd) | [#18](https://github.com/Custom-Devin-Demos/openboxes/pull/18) | 6 party/partyRole screens; post-rebase snapshots 122/122, Playwright 10/10, CI 4/4 |
@@ -133,3 +133,4 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | 2-stock-card-2 | stock-card-2 batch | IN_PROGRESS | [eaf21e00](https://app.devin.ai/sessions/eaf21e0024bb481abde71dd75ddea3ba) | | |
 | 2-users-security-2 | users-security-2 batch | IN_PROGRESS | [c7adc1fd](https://app.devin.ai/sessions/c7adc1fd5a45445ab4a0a35e3ff7b6a9) | | |
 - 2026-08-20: Phase 2 wave 3 spawned (10 batches). #25 finishing final rebase; P1.3 Grails 4->5 in progress.
+- 2026-08-20: PR #25 (finance-config-3) merged. PHASE 2 WAVE 2 COMPLETE (10/10 batches merged). Wave 3 running; P1.3 Grails 4->5 in progress.
