@@ -476,7 +476,7 @@ class ProductController {
         println "export products: " + params
         def productIds = params.list('product.id')
         println "Product IDs: " + productIds
-        def products = productService.getProducts(productIds.toArray())
+        def products = productService.getProducts(productIds as String[])
         if (products) {
             def date = new Date()
             def csv = productService.exportProducts(products)

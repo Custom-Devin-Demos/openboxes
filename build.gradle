@@ -183,8 +183,7 @@ configurations {
         // use com.github.librepdf:openpdf instead
         exclude group: 'com.lowagie', module: 'itext'
 
-        // these API's have moved to jakarta.activation:jakarta.activation-api
-        exclude group: 'com.sun.activation', module: 'jakarta.activation'
+        // superseded by com.sun.activation:jakarta.activation (runtime impl of jakarta.activation-api)
         exclude group: 'javax.activation', module: 'activation'
 
         // superseded by com.sun.mail:jakarta.mail
@@ -554,6 +553,9 @@ dependencies {
     implementation 'com.newrelic.agent.java:newrelic-api:8.2.0'
 
     implementation 'com.sun.mail:jakarta.mail:1.6.7'
+    // JAF runtime implementation (com.sun.activation.registries.*) required by jakarta.mail;
+    // no longer provided by the JDK on Java 11+
+    implementation 'com.sun.activation:jakarta.activation:1.2.2'
 
     implementation 'commons-beanutils:commons-beanutils:1.9.4'
 
@@ -721,7 +723,7 @@ dependencies {
     implementation 'org.grails.plugins:excel-import:3.0.2'
 
     // load config via files listed in application.yml::grails.config.locations
-    implementation 'org.grails.plugins:external-config:2.0.0'
+    implementation 'dk.glasius:external-config:4.0.0'
 
     // enable `import geb.*`
     testImplementation 'org.grails.plugins:geb'

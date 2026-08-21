@@ -26,7 +26,6 @@ grails:
             # be overwritten by any file following it that sets the same config
             # key. The *last* config file has the final word (highest priority).
             #
-            - classpath:META-INF/grails.build.info
             - file:${catalina.base}/.grails/openboxes-config.properties
             - file:${catalina.base}/.grails/openboxes-config.groovy
             - file:${catalina.base}/.grails/openboxes.yml
