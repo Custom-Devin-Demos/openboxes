@@ -57,7 +57,7 @@ const SignupPage = () => {
           <div className="dialog">
             <div id="signupForm">
               {pageContext.flashMessage && (
-                <div className="message" role="status" aria-label="message">{pageContext.flashMessage}</div>
+                <div className="message" role="status" aria-label="message" dangerouslySetInnerHTML={{ __html: pageContext.flashMessage }} />
               )}
 
               {pageContext.errors && pageContext.errors.length > 0 && (

@@ -72,7 +72,7 @@ const LoginPage = () => {
           <div id="loginContainer" className="dialog">
             <div id="loginForm">
               {pageContext.flashMessage && (
-                <div className="message" role="status" aria-label="message">{pageContext.flashMessage}</div>
+                <div className="message" role="status" aria-label="message" dangerouslySetInnerHTML={{ __html: pageContext.flashMessage }} />
               )}
 
               {pageContext.errors && pageContext.errors.length > 0 && (
