@@ -18,8 +18,7 @@ class UnitOfMeasureConversionController {
     }
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [unitOfMeasureConversions: UnitOfMeasureConversion.list(params), unitOfMeasureConversionsTotal: UnitOfMeasureConversion.count()]
+        render(view: "/common/react", params: params)
     }
 
     def create() {
@@ -27,8 +26,7 @@ class UnitOfMeasureConversionController {
     }
 
     def edit() {
-        UnitOfMeasureConversion unitOfMeasureConversion = unitOfMeasureConversionDataService.get(params.id)
-        return [unitOfMeasureConversion: unitOfMeasureConversion]
+        render(view: "/common/react", params: params)
     }
 
     def save() {

@@ -648,6 +648,31 @@ const AsyncRequestDetailReport = Loadable({
   loading: Loading,
 });
 
+const AsyncShowTransactionReport = Loadable({
+  loader: () => import('components/reporting/ShowTransactionReport'),
+  loading: Loading,
+});
+
+const AsyncTransactionEntryList = Loadable({
+  loader: () => import('components/transaction-entry/TransactionEntryList'),
+  loading: Loading,
+});
+
+const AsyncTransactionEntryShow = Loadable({
+  loader: () => import('components/transaction-entry/TransactionEntryShow'),
+  loading: Loading,
+});
+
+const AsyncTransactionEntryCreate = Loadable({
+  loader: () => import('components/transaction-entry/TransactionEntryCreate'),
+  loading: Loading,
+});
+
+const AsyncTransactionEntryEdit = Loadable({
+  loader: () => import('components/transaction-entry/TransactionEntryEdit'),
+  loading: Loading,
+});
+
 const AsyncShowPaginatedPackingListReport = Loadable({
   loader: () => import('components/reporting/ShowPaginatedPackingListReport'),
   loading: Loading,
@@ -814,6 +839,21 @@ const StockMovementList = (props) => {
 
 const AsyncStockTransferList = Loadable({
   loader: () => import('components/stock-transfer/list/StockTransferList'),
+  loading: Loading,
+});
+
+const AsyncStockTransferShow = Loadable({
+  loader: () => import('components/stock-transfer/show/StockTransferShow'),
+  loading: Loading,
+});
+
+const AsyncStockTransferPrint = Loadable({
+  loader: () => import('components/stock-transfer/print/StockTransferPrint'),
+  loading: Loading,
+});
+
+const AsyncReturnsShow = Loadable({
+  loader: () => import('components/returns/show/ReturnsShow'),
   loading: Loading,
 });
 
@@ -1262,6 +1302,16 @@ const AsyncMobileOutboundList = Loadable({
   loading: Loading,
 });
 
+const AsyncUnitOfMeasureConversionList = Loadable({
+  loader: () => import('components/unitOfMeasureConversion/UnitOfMeasureConversionList'),
+  loading: Loading,
+});
+
+const AsyncUnitOfMeasureConversionEdit = Loadable({
+  loader: () => import('components/unitOfMeasureConversion/UnitOfMeasureConversionEdit'),
+  loading: Loading,
+});
+
 const AsyncPersonList = Loadable({
   loader: () => import('components/person/PersonList'),
   loading: Loading,
@@ -1381,6 +1431,7 @@ const Router = () => {
             <MainLayoutRoute path="**/report/showInventoryByLocationReport" component={AsyncInventoryByLocationReport} />
             <MainLayoutRoute path="**/report/showOnOrderReport" component={AsyncOnOrderReport} />
             <MainLayoutRoute path="**/report/showRequestDetailReport" component={AsyncRequestDetailReport} />
+            <MainLayoutRoute path="**/report/showTransactionReport" component={AsyncShowTransactionReport} />
             <MainLayoutRoute path="**/report/showPaginatedPackingListReport" component={AsyncShowPaginatedPackingListReport} />
             <MainLayoutRoute path="**/consumption/list" component={AsyncConsumptionList} />
             <MainLayoutRoute path="**/consumption/pivot" component={AsyncConsumptionPivot} />
@@ -1521,6 +1572,8 @@ const Router = () => {
             <MainLayoutRoute path="**/product/batchEdit" component={AsyncProductBatchEditPage} />
             <MainLayoutRoute path="**/product/batchEditProperties" component={AsyncProductBatchEditPropertiesPage} />
             <MainLayoutRoute path="**/stockTransfer/list" component={AsyncStockTransferList} />
+            <MainLayoutRoute path="**/stockTransfer/show/:stockTransferId" component={AsyncStockTransferShow} />
+            <MainLayoutRoute path="**/stockMovement/show/:id" component={AsyncReturnsShow} />
             <MainLayoutRoute path="**/budgetCode/list" component={AsyncBudgetCodeList} />
             <MainLayoutRoute path="**/budgetCode/create" component={AsyncBudgetCodeForm} />
             <MainLayoutRoute path="**/budgetCode/edit/:budgetCodeId" component={AsyncBudgetCodeForm} />
@@ -1552,6 +1605,7 @@ const Router = () => {
             <MainLayoutRoute path="**/organization/show/:id" component={AsyncOrganizationShow} />
             <Route path="**/deliveryNote/print/:id" component={AsyncDeliveryNotePrint} />
             <Route path="**/deliveryNote/printOutboundReturn/:id" component={AsyncOutboundReturnPrint} />
+            <Route path="**/stockTransfer/print/:id" component={AsyncStockTransferPrint} />
             <Route path="**/picklist/print/:id" component={AsyncPicklistPrint} />
             <Route path="**/picklist/returnPrint/:id" component={AsyncReturnPicklistPrint} />
             <Route path="**/replenishment/print/:id" component={AsyncReplenishmentPrint} />
@@ -1644,6 +1698,10 @@ const Router = () => {
             <MainLayoutRoute path="**/partyType/create" component={AsyncPartyTypeForm} />
             <MainLayoutRoute path="**/partyType/edit/:id?" component={AsyncPartyTypeForm} />
             <MainLayoutRoute path="**/productType/show/:id" component={AsyncProductTypeShow} />
+            <MainLayoutRoute path="**/transactionEntry/list" component={AsyncTransactionEntryList} />
+            <MainLayoutRoute path="**/transactionEntry/show/:id" component={AsyncTransactionEntryShow} />
+            <MainLayoutRoute path="**/transactionEntry/create" component={AsyncTransactionEntryCreate} />
+            <MainLayoutRoute path="**/transactionEntry/edit/:id?" component={AsyncTransactionEntryEdit} />
             <MainLayoutRoute path="**/tag/list" component={AsyncTagList} />
             <MainLayoutRoute path="**/tag/show/:id" component={AsyncTagShow} />
             <MainLayoutRoute path="**/tag/create" component={AsyncTagForm} />
@@ -1658,6 +1716,8 @@ const Router = () => {
             <Route path="**/mobile/error" component={AsyncMobileError} />
             <Route path="**/mobile/index" component={AsyncMobileDashboard} />
             <Route path="**/mobile" component={AsyncMobileDashboard} />
+            <MainLayoutRoute path="**/unitOfMeasureConversion/list" component={AsyncUnitOfMeasureConversionList} />
+            <MainLayoutRoute path="**/unitOfMeasureConversion/edit/:id?" component={AsyncUnitOfMeasureConversionEdit} />
             <MainLayoutRoute path="**/person/list" component={AsyncPersonList} />
             <MainLayoutRoute path="**/person/create" component={AsyncPersonForm} />
             <MainLayoutRoute path="**/person/edit/:id?" component={AsyncPersonForm} />

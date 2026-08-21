@@ -67,14 +67,12 @@ class StockTransferController {
             flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'inventory.stockTransfer.label', default: 'Stock Transfer'), params.id])}"
             redirect(action: "list")
         } else {
-            [orderInstance: orderInstance]
+            render(view: "/common/react")
         }
     }
 
     def print() {
-        Order stockTransfer = Order.get(params.id)
-
-        [stockTransfer: stockTransfer]
+        render(view: "/common/react")
     }
 
     def eraseStockTransfer() {

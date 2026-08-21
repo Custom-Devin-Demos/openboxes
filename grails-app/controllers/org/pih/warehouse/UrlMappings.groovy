@@ -385,6 +385,36 @@ class UrlMappings {
             action = [POST: "removeProducts"]
         }
 
+        "/api/transactionEntries/inventoryItemOptions"(parseRequest: true) {
+            controller = { "transactionEntryApi" }
+            action = [GET: "inventoryItemOptions"]
+        }
+
+        "/api/transactionEntries/transactionOptions"(parseRequest: true) {
+            controller = { "transactionEntryApi" }
+            action = [GET: "transactionOptions"]
+        }
+
+        "/api/transactionEntries/binLocationOptions"(parseRequest: true) {
+            controller = { "transactionEntryApi" }
+            action = [GET: "binLocationOptions"]
+        }
+
+        "/api/transactionEntries"(parseRequest: true) {
+            controller = { "transactionEntryApi" }
+            action = [GET: "list", POST: "create"]
+        }
+
+        "/api/transactionEntries/$id"(parseRequest: true) {
+            controller = { "transactionEntryApi" }
+            action = [GET: "read", PUT: "update", DELETE: "delete"]
+        }
+
+        "/api/reports/transactionReportMetadata"(parseRequest: true) {
+            controller = { "reportApi" }
+            action = [GET: "transactionReportMetadata"]
+        }
+
         "/api/unitOfMeasureConversions/unitOfMeasureOptions"(parseRequest: true) {
             controller = { "unitOfMeasureConversionApi" }
             action = [GET: "unitOfMeasureOptions"]
@@ -392,7 +422,12 @@ class UrlMappings {
 
         "/api/unitOfMeasureConversions"(parseRequest: true) {
             controller = { "unitOfMeasureConversionApi" }
-            action = [POST: "create"]
+            action = [GET: "list", POST: "create"]
+        }
+
+        "/api/unitOfMeasureConversions/$id"(parseRequest: true) {
+            controller = { "unitOfMeasureConversionApi" }
+            action = [GET: "read", PUT: "update", DELETE: "delete"]
         }
 
         "/api/mobile/productSummaries"(parseRequest: true) {
@@ -1161,6 +1196,11 @@ class UrlMappings {
             action = [GET: "downloadPackingListTemplate"]
         }
 
+        "/api/stockMovements/$id/returnShowDetails" {
+            controller = "stockMovementApi"
+            action = [GET: "returnShowDetails"]
+        }
+
         "/api/stockMovements/$id/documents" {
             controller = "stockMovementApi"
             action = [GET: "getDocuments"]
@@ -1427,6 +1467,16 @@ class UrlMappings {
         "/api/stockTransferItems/$id/"(parseRequest: true) {
             controller = { "stockTransferApi" }
             action = [DELETE: "removeItem"]
+        }
+
+        "/api/stockTransfers/$id/showDetails" {
+            controller = { "stockTransferApi" }
+            action = [GET: "showDetails"]
+        }
+
+        "/api/stockTransfers/$id/printData" {
+            controller = { "stockTransferApi" }
+            action = [GET: "printData"]
         }
 
         "/api/stockTransfers/$id/sendShipment"(parseRequest: true) {

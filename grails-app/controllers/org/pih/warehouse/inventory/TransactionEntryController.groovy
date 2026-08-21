@@ -16,6 +16,26 @@ class TransactionEntryController {
 
     static scaffold = TransactionEntry
 
+    def index() {
+        redirect(action: "list", params: params)
+    }
+
+    def list() {
+        render(view: "/common/react", params: params)
+    }
+
+    def create() {
+        render(view: "/common/react", params: params)
+    }
+
+    def show() {
+        render(view: "/common/react", params: params)
+    }
+
+    def edit() {
+        render(view: "/common/react", params: params)
+    }
+
     def delete() {
         def transactionEntryInstance = TransactionEntry.get(params.id)
         if (!transactionEntryInstance) {

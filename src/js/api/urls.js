@@ -76,6 +76,9 @@ export const STOCK_TRANSFER_API = `${API}/stockTransfers`;
 export const STOCK_TRANSFER_BY_ID = (id) => `${STOCK_TRANSFER_API}/${id}`;
 export const STOCK_TRANSFER_REMOVE_ALL_ITEMS = (id) => `${STOCK_TRANSFER_BY_ID(id)}/removeAllItems`;
 export const STOCK_TRANSFER_CANDIDATES = `${STOCK_TRANSFER_API}/candidates`;
+export const STOCK_TRANSFER_SHOW_DETAILS = (id) => `${STOCK_TRANSFER_BY_ID(id)}/showDetails`;
+export const STOCK_TRANSFER_PRINT_DATA = (id) => `${STOCK_TRANSFER_BY_ID(id)}/printData`;
+export const STOCK_MOVEMENT_RETURN_SHOW_DETAILS = (id) => `${STOCK_MOVEMENT_API}/${id}/returnShowDetails`;
 
 // STOCK TRANSFER ITEMS
 export const STOCK_TRANSFER_ITEM_API = `${API}/stockTransferItems`;
@@ -407,6 +410,7 @@ export const TAG_REMOVE_PRODUCTS = (id) => `${TAG_API}/${id}/removeProducts`;
 // UNIT OF MEASURE CONVERSION
 export const UNIT_OF_MEASURE_CONVERSION_API = `${API}/unitOfMeasureConversions`;
 export const UNIT_OF_MEASURE_CONVERSION_UOM_OPTIONS = `${UNIT_OF_MEASURE_CONVERSION_API}/unitOfMeasureOptions`;
+export const UNIT_OF_MEASURE_CONVERSION_BY_ID = (id) => `${UNIT_OF_MEASURE_CONVERSION_API}/${id}`;
 
 // GL ACCOUNT
 export const GL_ACCOUNT_API = `${API}/glAccounts`;
@@ -541,6 +545,16 @@ export const REPORT_ON_ORDER_SUMMARY = '/json/getSummaryOrderReport';
 export const REPORT_ON_ORDER_DETAILED = '/json/getDetailedOrderReport';
 export const REPORT_REQUEST_DETAIL = '/json/getRequestDetailReport';
 export const REPORT_PRODUCT_AUTOSUGGEST = '/json/findProductByName';
+export const REPORT_TRANSACTION = '/json/getTransactionReport';
+export const REPORT_TRANSACTION_DETAILS = '/json/getTransactionReportDetails';
+export const REPORT_TRANSACTION_METADATA = `${API}/reports/transactionReportMetadata`;
+
+// TRANSACTION ENTRY (legacy transactionEntry screens migration)
+export const TRANSACTION_ENTRY_API = `${API}/transactionEntries`;
+export const TRANSACTION_ENTRY_BY_ID = (id) => `${TRANSACTION_ENTRY_API}/${id}`;
+export const TRANSACTION_ENTRY_INVENTORY_ITEM_OPTIONS = `${TRANSACTION_ENTRY_API}/inventoryItemOptions`;
+export const TRANSACTION_ENTRY_TRANSACTION_OPTIONS = `${TRANSACTION_ENTRY_API}/transactionOptions`;
+export const TRANSACTION_ENTRY_BIN_LOCATION_OPTIONS = `${TRANSACTION_ENTRY_API}/binLocationOptions`;
 export const SHIPMENT_SELECT_OPTIONS = `${API}/shipmentOptions`;
 export const REQUEST_REASON_CODE_OPTIONS = `${API}/requestReasonCodeOptions`;
 

@@ -170,7 +170,7 @@ class StockMovementController {
         stockMovement.documents = stockMovementService.getDocuments(stockMovement)
 
         if (stockMovement?.order) {
-            render(view: "/returns/show", model: [stockMovement: stockMovement, currentLocation: currentLocation])
+            render(view: "/common/react")
         } else {
             render(view: "show", model: [
                     stockMovement: stockMovement,
