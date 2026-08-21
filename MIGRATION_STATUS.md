@@ -117,3 +117,19 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 - 2026-08-20: PR #26 (product-catalog-4) merged; #16/#25 doing final rebases; #24 re-verifying.
 - 2026-08-20: PR #16 (finance-config-2) merged after final rebase through #23/#26.
 - 2026-08-20: PR #24 (inventory-2) merged after rebase re-verification.
+
+## Phase 2 — Wave 3 (spawned 2026-08-20)
+
+| Batch | Scope | Status | Session | PR | Evidence |
+|---|---|---|---|---|---|
+| 2-admin-config-2 | admin-config-2 batch | IN_PROGRESS | [93544c12](https://app.devin.ai/sessions/93544c12022049bba4d745af4be3a9e7) | | |
+| 2-finance-config-4 | finance-config-4 batch | IN_PROGRESS | [e95185a4](https://app.devin.ai/sessions/e95185a43a55471f932ac34e418efff1) | | |
+| 2-inventory-3 | inventory-3 batch | IN_PROGRESS | [59a5118f](https://app.devin.ai/sessions/59a5118fa99b46f081233787beb7db51) | | |
+| 2-locations-orgs-3 | locations-orgs-3 batch | IN_PROGRESS | [5b7a039a](https://app.devin.ai/sessions/5b7a039a2dbc40cc932bbb36940d4b3f) | | |
+| 2-orders-2 | orders-2 batch | IN_PROGRESS | [069bdfbe](https://app.devin.ai/sessions/069bdfbe6144460285dc6a0eefd16eed) | | |
+| 2-product-catalog-3 | product-catalog-3 batch | IN_PROGRESS | [1ee0331c](https://app.devin.ai/sessions/1ee0331c4eff4e2ba88d6db52887937c) | | |
+| 2-requisitions-2 | requisitions-2 batch | IN_PROGRESS | [bc704178](https://app.devin.ai/sessions/bc704178b05d48cd9caf35b449b4bd67) | | |
+| 2-shipments-2 | shipments-2 batch | IN_PROGRESS | [fc279a04](https://app.devin.ai/sessions/fc279a04d2dd4c608c378f9fa6224f02) | | |
+| 2-stock-card-2 | stock-card-2 batch | IN_PROGRESS | [eaf21e00](https://app.devin.ai/sessions/eaf21e0024bb481abde71dd75ddea3ba) | | |
+| 2-users-security-2 | users-security-2 batch | IN_PROGRESS | [c7adc1fd](https://app.devin.ai/sessions/c7adc1fd5a45445ab4a0a35e3ff7b6a9) | | |
+- 2026-08-20: Phase 2 wave 3 spawned (10 batches). #25 finishing final rebase; P1.3 Grails 4->5 in progress.
