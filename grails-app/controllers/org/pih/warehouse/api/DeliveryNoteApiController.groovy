@@ -19,6 +19,8 @@ import org.pih.warehouse.shipping.Shipment
 import org.pih.warehouse.shipping.ShipmentItem
 
 import java.text.SimpleDateFormat
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 class DeliveryNoteApiController {
 
@@ -26,6 +28,15 @@ class DeliveryNoteApiController {
 
     private static String formatDate(Date date, String pattern) {
         return date ? new SimpleDateFormat(pattern).format(date) : null
+    }
+
+    // Matches <g:formatDate format="d MMMMM yyyy  hh:mma"/> which renders the narrow month form
+    private static String formatHeaderDate(Date date) {
+        if (!date) {
+            return null
+        }
+        return DateTimeFormatter.ofPattern(HEADER_DATE_FORMAT)
+                .format(date.toInstant().atZone(ZoneId.systemDefault()))
     }
 
     private static Map addressJson(Address address) {
@@ -237,9 +248,9 @@ class DeliveryNoteApiController {
                 origin             : locationJson(requisition.origin),
                 destination        : locationJson(requisition.destination),
                 requestedBy        : requisition?.requestedBy?.name,
-                dateRequested      : formatDate(requisition?.dateRequested, HEADER_DATE_FORMAT),
-                shipDate           : formatDate(shipment?.expectedShippingDate, HEADER_DATE_FORMAT),
-                receivedDate       : formatDate(shipment?.receipt?.actualDeliveryDate, HEADER_DATE_FORMAT),
+                dateRequested      : formatHeaderDate(requisition?.dateRequested),
+                shipDate           : formatHeaderDate(shipment?.expectedShippingDate),
+                receivedDate       : formatHeaderDate(shipment?.receipt?.actualDeliveryDate),
                 barcodeUrl         : requisition.requestNumber ? g.createLink(controller: 'product', action: 'barcode',
                         params: [data: requisition.requestNumber, height: 30, format: 'CODE_128']) : null,
                 showPackLevel1Header: shipment?.shipmentItems?.any { it.container } as boolean,
@@ -314,8 +325,8 @@ class DeliveryNoteApiController {
                 documentName  : shipment.name,
                 origin        : locationJson(shipment.origin),
                 destination   : locationJson(shipment.destination),
-                shipDate      : formatDate(shipment.expectedShippingDate, HEADER_DATE_FORMAT),
-                receivedDate  : formatDate(shipment?.receipts ? shipment.receipts.last()?.actualDeliveryDate : null, HEADER_DATE_FORMAT),
+                shipDate      : formatHeaderDate(shipment.expectedShippingDate),
+                receivedDate  : formatHeaderDate(shipment?.receipts ? shipment.receipts.last()?.actualDeliveryDate : null),
                 barcodeUrl    : shipment.shipmentNumber ? g.createLink(controller: 'product', action: 'barcode',
                         params: [data: shipment.shipmentNumber, height: 30, format: 'CODE_128']) : null,
                 rows          : rows,

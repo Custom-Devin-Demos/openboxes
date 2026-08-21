@@ -209,7 +209,7 @@ const DocumentEdit = ({ match }) => {
               </h1>
               <div className="mb-3">
                 <TextInput
-                  title={{ id: 'react.document.name.label', defaultMessage: 'Name' }}
+                  title={{ id: 'react.document.name.label', defaultMessage: 'Document name' }}
                   name="name"
                   value={values.name}
                   onChange={(e) => setValue('name')(e.target.value)}
@@ -234,7 +234,7 @@ const DocumentEdit = ({ match }) => {
               </div>
               <div className="mb-3">
                 <TextInput
-                  title={{ id: 'react.document.contentType.label', defaultMessage: 'Content Type' }}
+                  title={{ id: 'react.document.contentType.label', defaultMessage: 'Content type' }}
                   name="contentType"
                   value={values.contentType}
                   onChange={(e) => setValue('contentType')(e.target.value)}
