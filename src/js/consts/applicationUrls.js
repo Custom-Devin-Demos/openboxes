@@ -231,6 +231,25 @@ const ATTRIBUTE_URL = {
   show: (id) => `${ATTRIBUTE_URL.base}/show/${id}`,
 };
 
+const PRODUCT_ASSOCIATION_URL = {
+  base: `${CONTEXT_PATH}/productAssociation`,
+  list: () => `${PRODUCT_ASSOCIATION_URL.base}/list`,
+  create: () => `${PRODUCT_ASSOCIATION_URL.base}/create`,
+  edit: (id) => `${PRODUCT_ASSOCIATION_URL.base}/edit/${id}`,
+  show: (id) => `${PRODUCT_ASSOCIATION_URL.base}/show/${id}`,
+  export: () => `${CONTEXT_PATH}/batch/downloadExcel?type=ProductAssociation`,
+  import: () => `${CONTEXT_PATH}/batch/importData?type=productAssociation`,
+};
+
+const PRODUCT_CATALOG_URL = {
+  base: `${CONTEXT_PATH}/productCatalog`,
+  list: () => `${PRODUCT_CATALOG_URL.base}/list`,
+  create: () => `${PRODUCT_CATALOG_URL.base}/create`,
+  edit: (id) => `${PRODUCT_CATALOG_URL.base}/edit/${id}`,
+  show: (id) => `${PRODUCT_CATALOG_URL.base}/show/${id}`,
+  export: (id) => `${PRODUCT_CATALOG_URL.base}/exportProductCatalog/${id}`,
+};
+
 const PRODUCT_SUPPLIER_URL = {
   base: `${CONTEXT_PATH}/productSupplier`,
   list: () => `${PRODUCT_SUPPLIER_URL.base}/list`,
@@ -338,6 +357,8 @@ export {
   PARTY_ROLE_URL,
   PARTY_URL,
   PERSON_URL,
+  PRODUCT_ASSOCIATION_URL,
+  PRODUCT_CATALOG_URL,
   PRODUCT_CONFIGURATION_URL,
   PRODUCT_SUPPLIER_URL,
   PRODUCT_URL,

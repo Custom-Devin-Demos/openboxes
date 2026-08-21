@@ -103,6 +103,52 @@ class UrlMappings {
             controller = { "attributeApi" }
             action = [GET: "search"]
         }
+        "/api/productAssociations/search"(parseRequest: true) {
+            controller = { "productAssociationApi" }
+            action = [GET: "search"]
+        }
+        "/api/productAssociations/$id/details"(parseRequest: true) {
+            controller = { "productAssociationApi" }
+            action = [GET: "details"]
+        }
+        "/api/productAssociations/$id/deleteAssociation"(parseRequest: true) {
+            controller = { "productAssociationApi" }
+            action = [DELETE: "delete"]
+        }
+        "/api/productCatalogs/search"(parseRequest: true) {
+            controller = { "productCatalogApi" }
+            action = [GET: "search"]
+        }
+        "/api/productCatalogs/saveCatalog"(parseRequest: true) {
+            controller = { "productCatalogApi" }
+            action = [POST: "saveCatalog"]
+        }
+        "/api/productCatalogs/addItem"(parseRequest: true) {
+            controller = { "productCatalogApi" }
+            action = [POST: "addItem"]
+        }
+        "/api/productCatalogs/items/$id"(parseRequest: true) {
+            controller = { "productCatalogApi" }
+            action = [DELETE: "removeItem"]
+        }
+        "/api/productCatalogs/$id/details"(parseRequest: true) {
+            controller = { "productCatalogApi" }
+            action = [GET: "details"]
+        }
+        "/api/productCatalogs/$id/deleteCatalog"(parseRequest: true) {
+            controller = { "productCatalogApi" }
+            action = [DELETE: "deleteCatalog"]
+        }
+        "/api/productCatalogs/$id/importItems" {
+            controller = { "productCatalogApi" }
+            action = [POST: "importItems"]
+        }
+
+        // Product association type code options for the product association list filters
+        "/api/productAssociationTypeCodeOptions"(parseRequest: true) {
+            controller = { "selectOptionsApi" }
+            action = [GET: "productAssociationTypeCodeOptions"]
+        }
 
         "/api/suppliers/search" {
             controller = { "supplierApi" }

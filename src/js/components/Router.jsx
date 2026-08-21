@@ -517,6 +517,31 @@ const AsyncAttributeShow = Loadable({
   loading: Loading,
 });
 
+const AsyncProductAssociationList = Loadable({
+  loader: () => import('components/productAssociation/ProductAssociationList'),
+  loading: Loading,
+});
+
+const AsyncProductAssociationShow = Loadable({
+  loader: () => import('components/productAssociation/ProductAssociationShow'),
+  loading: Loading,
+});
+
+const AsyncProductCatalogList = Loadable({
+  loader: () => import('components/productCatalog/ProductCatalogList'),
+  loading: Loading,
+});
+
+const AsyncProductCatalogForm = Loadable({
+  loader: () => import('components/productCatalog/ProductCatalogForm'),
+  loading: Loading,
+});
+
+const AsyncProductCatalogShow = Loadable({
+  loader: () => import('components/productCatalog/ProductCatalogShow'),
+  loading: Loading,
+});
+
 const AsyncCategoryForm = Loadable({
   loader: () => import('components/category/CategoryForm'),
   loading: Loading,
@@ -702,6 +727,12 @@ const Router = () => {
             <MainLayoutRoute path="**/attribute/create" component={AsyncAttributeForm} />
             <MainLayoutRoute path="**/attribute/edit/:id?" component={AsyncAttributeForm} />
             <MainLayoutRoute path="**/attribute/show/:id" component={AsyncAttributeShow} />
+            <MainLayoutRoute path="**/productAssociation/list" component={AsyncProductAssociationList} />
+            <MainLayoutRoute path="**/productAssociation/show/:id" component={AsyncProductAssociationShow} />
+            <MainLayoutRoute path="**/productCatalog/list" component={AsyncProductCatalogList} />
+            <MainLayoutRoute path="**/productCatalog/create" component={AsyncProductCatalogForm} />
+            <MainLayoutRoute path="**/productCatalog/edit/:id?" component={AsyncProductCatalogForm} />
+            <MainLayoutRoute path="**/productCatalog/show/:id" component={AsyncProductCatalogShow} />
             <MainLayoutRoute path="**/category/create" component={AsyncCategoryForm} />
             <MainLayoutRoute path="**/category/edit/:id?" component={AsyncCategoryForm} />
             <MainLayoutRoute path="**/category/tree" component={AsyncCategoryTree} />

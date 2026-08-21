@@ -25,6 +25,11 @@ class ProductAssociationController {
     }
 
     def list() {
+        if (!params.format) {
+            render(view: "/common/react", params: params)
+            return
+        }
+
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
 
         def terms = params.q ? params?.q?.split(" ") : null
@@ -113,13 +118,7 @@ class ProductAssociationController {
     }
 
     def show() {
-        def productAssociationInstance = ProductAssociation.get(params.id)
-        if (!productAssociationInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'productAssociation.label', default: 'ProductAssociation'), params.id])}"
-            redirect(action: "list")
-        } else {
-            [productAssociationInstance: productAssociationInstance]
-        }
+        render(view: "/common/react", params: params)
     }
 
     def edit() {

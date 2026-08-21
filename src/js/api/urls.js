@@ -159,6 +159,23 @@ export const PERSON_BY_ID = (id) => `${PERSONS}/${id}`;
 export const ROLES = `${API}/roles`;
 export const ROLE_TYPE_OPTIONS = `${API}/roleTypeOptions`;
 
+// PRODUCT ASSOCIATIONS
+export const PRODUCT_ASSOCIATIONS = `${API}/productAssociations`;
+export const PRODUCT_ASSOCIATIONS_SEARCH = `${PRODUCT_ASSOCIATIONS}/search`;
+export const PRODUCT_ASSOCIATION_DETAILS = (id) => `${PRODUCT_ASSOCIATIONS}/${id}/details`;
+export const PRODUCT_ASSOCIATION_DELETE = (id) => `${PRODUCT_ASSOCIATIONS}/${id}/deleteAssociation`;
+export const PRODUCT_ASSOCIATION_TYPE_CODE_OPTIONS = `${API}/productAssociationTypeCodeOptions`;
+
+// PRODUCT CATALOGS
+export const PRODUCT_CATALOGS = `${API}/productCatalogs`;
+export const PRODUCT_CATALOGS_SEARCH = `${PRODUCT_CATALOGS}/search`;
+export const PRODUCT_CATALOGS_SAVE = `${PRODUCT_CATALOGS}/saveCatalog`;
+export const PRODUCT_CATALOGS_ADD_ITEM = `${PRODUCT_CATALOGS}/addItem`;
+export const PRODUCT_CATALOG_ITEM_DELETE = (id) => `${PRODUCT_CATALOGS}/items/${id}`;
+export const PRODUCT_CATALOG_DETAILS = (id) => `${PRODUCT_CATALOGS}/${id}/details`;
+export const PRODUCT_CATALOG_DELETE = (id) => `${PRODUCT_CATALOGS}/${id}/deleteCatalog`;
+export const PRODUCT_CATALOG_IMPORT_ITEMS = (id) => `${PRODUCT_CATALOGS}/${id}/importItems`;
+
 // LOCATIONS
 export const LOCATION_API = `${API}/locations`;
 export const LOCATION_TYPES = `${LOCATION_API}/locationTypes`;

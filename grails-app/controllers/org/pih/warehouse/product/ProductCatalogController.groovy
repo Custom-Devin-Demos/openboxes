@@ -30,14 +30,11 @@ class ProductCatalogController {
     }
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [productCatalogInstanceList: ProductCatalog.list(params), productCatalogInstanceTotal: ProductCatalog.count()]
+        render(view: "/common/react", params: params)
     }
 
     def create() {
-        def productCatalogInstance = new ProductCatalog()
-        productCatalogInstance.properties = params
-        return [productCatalogInstance: productCatalogInstance]
+        render(view: "/common/react", params: params)
     }
 
     //  @CacheFlush("selectCatalogsCache")
@@ -52,23 +49,11 @@ class ProductCatalogController {
     }
 
     def show() {
-        def productCatalogInstance = ProductCatalog.get(params.id)
-        if (!productCatalogInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'productCatalog.label', default: 'ProductCatalog'), params.id])}"
-            redirect(action: "list")
-        } else {
-            [productCatalogInstance: productCatalogInstance]
-        }
+        render(view: "/common/react", params: params)
     }
 
     def edit() {
-        def productCatalogInstance = ProductCatalog.get(params.id)
-        if (!productCatalogInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'productCatalog.label', default: 'ProductCatalog'), params.id])}"
-            redirect(action: "list")
-        } else {
-            return [productCatalogInstance: productCatalogInstance]
-        }
+        render(view: "/common/react", params: params)
     }
 
     //  @CacheFlush("selectCatalogsCache")
