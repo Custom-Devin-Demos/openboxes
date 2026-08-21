@@ -103,10 +103,11 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | 2-product-catalog-2 | product-catalog-2 batch | MERGED | [41cafdc5](https://app.devin.ai/sessions/41cafdc5c6b04a6d84f833293e6c8bfc) | [#19](https://github.com/Custom-Devin-Demos/openboxes/pull/19) | 6 product screens; Playwright 9/10 (flow-3 flake passes solo); snapshots at baseline; CI 4/4 |
 | 2-product-catalog-4 | product-catalog-4 batch | IN_PROGRESS | [4c343f82](https://app.devin.ai/sessions/4c343f82d52b48f5baffb49f8685c2cd) | | |
 | 2-users-security-1 | users-security-1 batch | IN_PROGRESS | [d9178c80](https://app.devin.ai/sessions/d9178c80e0fd49c8a30dd73299d9a7f9) | | |
-| 2-invoicing | invoicing batch | REBASING | [11c5c78a](https://app.devin.ai/sessions/11c5c78a6b534ffe928ef5f028d189cf) | [#21](https://github.com/Custom-Devin-Demos/openboxes/pull/21) | Verified green; conflicts after #22/#19/#18 merges; rebase requested |
+| 2-invoicing | invoicing batch | MERGED | [11c5c78a](https://app.devin.ai/sessions/11c5c78a6b534ffe928ef5f028d189cf) | [#21](https://github.com/Custom-Devin-Demos/openboxes/pull/21) | invoice show/addDocument/editDocument; post-rebase snapshots 122/122, Playwright 10/10, CI 4/4 |
 - 2026-08-20: Phase 2 wave 2 spawned (10 batches). P1.2 (#12) asked to rebase onto latest develop before merge.
 - 2026-08-20: P1.2 Grails 4.1.4 merged (PR #12) after rebase onto develop with all wave-1 Phase 2 batches. P1.3 (Grails 4→5) spawning next.
 - 2026-08-20: P1.3 Grails 4→5 child spawned (7d1a20b8).
 - 2026-08-20: locations-orgs-6 merged (PR #17). Baseline-repair child spawned (28646cc5) for stale api-getAppContext + dashboard date-window snapshots.
 - 2026-08-21: PR #22 (baseline repair) and PR #19 (product-catalog-2) merged (authoritatively confirmed). PRs #18/#20 conflict with #22; rebases requested. Snapshot baseline now 122/122 on develop.
 - 2026-08-21: PR #18 merged. PR #21 (invoicing) conflicts after wave-2 merges; rebase requested. PR #20 still rebasing.
+- 2026-08-21: PR #21 (invoicing) merged after rebase (authoritatively confirmed).
