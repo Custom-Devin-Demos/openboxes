@@ -20,10 +20,12 @@ import org.pih.warehouse.core.Location
 import org.pih.warehouse.inventory.InventoryItem
 import org.pih.warehouse.product.Category
 import org.pih.warehouse.product.Product
+import org.pih.warehouse.report.MultiLocationInventoryReportCommand
 
 class ReportApiController {
 
     def inventoryService
+    def productAvailabilityService
 
     @CompileStatic
     private static Serializable identifierOf(Object entity) {
@@ -68,5 +70,39 @@ class ReportApiController {
         }
 
         render([data: rows] as JSON)
+    }
+
+    def inventoryByLocationReport(MultiLocationInventoryReportCommand command) {
+        if (!command.validate()) {
+            response.status = 400
+            render([errorCode: 400, errorMessages: command.errors.allErrors.collect { message(error: it) }] as JSON)
+            return
+        }
+
+        if (command.includeSubcategories) {
+            command.categories = inventoryService.getExplodedCategories(command.categories)
+        }
+
+        command.entries = productAvailabilityService.getQuantityOnHandByProduct(command.locations, command.categories)
+
+        def locations = command.locations?.findAll { it?.id }
+        render([data: [
+                locations: locations?.collect { [id: it.id, name: it.name] },
+                entries  : command.entries.collect { product, row ->
+                    [
+                            productCode                    : product?.productCode,
+                            productName                    : product?.name,
+                            productFamily                  : product?.productFamily?.name,
+                            category                       : product?.category?.name,
+                            formularies                    : product?.getProductCatalogs()?.collect { it.name }?.join(","),
+                            tags                           : product?.tagsToString(),
+                            quantityOnHandByLocation       : locations?.collectEntries { location ->
+                                [(location.id): row[location.id]?.quantityOnHand]
+                            },
+                            totalQuantityOnHand            : row?.values()?.quantityOnHand?.sum(),
+                            totalQuantityAvailableToPromise: row?.values()?.quantityAvailableToPromise?.sum(),
+                    ]
+                },
+        ]] as JSON)
     }
 }

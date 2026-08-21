@@ -11,9 +11,11 @@ package org.pih.warehouse.api
 
 import grails.converters.JSON
 import org.pih.warehouse.core.GlAccount
+import org.pih.warehouse.core.Location
 import org.pih.warehouse.core.PaymentTerm
 import org.pih.warehouse.core.PreferenceType
 import org.pih.warehouse.core.RatingTypeCode
+import org.pih.warehouse.core.ReasonCode
 import org.pih.warehouse.core.Tag
 import org.pih.warehouse.core.UnitOfMeasureClass
 import org.pih.warehouse.core.User
@@ -153,6 +155,23 @@ class SelectOptionsApiController {
             [id: it.name, value: it.name, label: g.message(code: "enum.RatingTypeCode.$it.name", default: it.name)]
         }
         render([data: ratingTypeCodeOptions] as JSON)
+    }
+
+    def shipmentOptions() {
+        Location currentLocation = Location.get(session?.warehouse?.id)
+        def shipments = shipmentService.getShipmentsByLocation(null, currentLocation, null).sort {
+            it?.name?.toLowerCase()
+        }.collect {
+            [id: it.id, label: it.shipmentNumber + " " + it.name + " - " + it.shipmentItemCount + " items" + " (" + it.origin.name + " to " + it.destination.name + ")"]
+        }
+        render([data: shipments] as JSON)
+    }
+
+    def requestReasonCodeOptions() {
+        List options = ReasonCode.listRequestReasonCodes().collect {
+            [id: it.name(), value: it.name(), label: message(code: "enum.ReasonCode.${it.name()}", default: it.name())]
+        }
+        render([data: options] as JSON)
     }
 
     def shipmentStatusCodesOptions() {

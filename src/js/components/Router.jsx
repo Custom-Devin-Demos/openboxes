@@ -603,6 +603,31 @@ const AsyncInventoryBrowser = Loadable({
   loading: Loading,
 });
 
+const AsyncShowInventoryReport = Loadable({
+  loader: () => import('components/reporting/ShowInventoryReport'),
+  loading: Loading,
+});
+
+const AsyncInventoryByLocationReport = Loadable({
+  loader: () => import('components/reporting/InventoryByLocationReport'),
+  loading: Loading,
+});
+
+const AsyncOnOrderReport = Loadable({
+  loader: () => import('components/reporting/OnOrderReport'),
+  loading: Loading,
+});
+
+const AsyncRequestDetailReport = Loadable({
+  loader: () => import('components/reporting/RequestDetailReport'),
+  loading: Loading,
+});
+
+const AsyncShowPaginatedPackingListReport = Loadable({
+  loader: () => import('components/reporting/ShowPaginatedPackingListReport'),
+  loading: Loading,
+});
+
 const AsyncInventoryBrowserList = Loadable({
   loader: () => import('components/inventory-browser/InventoryBrowserList'),
   loading: Loading,
@@ -1262,6 +1287,11 @@ const Router = () => {
             <MainLayoutRoute path="**/stockMovement/createOutbound/:stockMovementId?" component={AsyncStockMovement} />
             <MainLayoutRoute path="**/stockMovement/importOutboundStockMovement" component={AsyncOutboundImport} />
             <MainLayoutRoute path="**/report/expirationHistoryReport" component={AsyncExpirationHistoryReport} />
+            <MainLayoutRoute path="**/report/showInventoryReport" component={AsyncShowInventoryReport} />
+            <MainLayoutRoute path="**/report/showInventoryByLocationReport" component={AsyncInventoryByLocationReport} />
+            <MainLayoutRoute path="**/report/showOnOrderReport" component={AsyncOnOrderReport} />
+            <MainLayoutRoute path="**/report/showRequestDetailReport" component={AsyncRequestDetailReport} />
+            <MainLayoutRoute path="**/report/showPaginatedPackingListReport" component={AsyncShowPaginatedPackingListReport} />
             <MainLayoutRoute path="**/consumption/list" component={AsyncConsumptionList} />
             <MainLayoutRoute path="**/consumption/pivot" component={AsyncConsumptionPivot} />
             <MainLayoutRoute path="**/consumption/show" component={AsyncConsumptionShow} />

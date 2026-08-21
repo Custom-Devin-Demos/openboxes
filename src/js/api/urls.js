@@ -513,6 +513,15 @@ export const INVENTORY_BROWSER_SUMMARY_BY_PRODUCT_GROUP = '/json/getSummaryByPro
 export const INVENTORY_SNAPSHOT_FIND_BY_DATE_AND_LOCATION = '/inventorySnapshot/findByDateAndLocation';
 export const INVENTORY_SNAPSHOT_REFRESH = '/inventorySnapshot/refresh';
 
+// REPORTING (legacy report screens migration)
+export const REPORT_INVENTORY_BY_LOCATION = `${API}/reports/inventoryByLocationReport`;
+export const REPORT_ON_ORDER_SUMMARY = '/json/getSummaryOrderReport';
+export const REPORT_ON_ORDER_DETAILED = '/json/getDetailedOrderReport';
+export const REPORT_REQUEST_DETAIL = '/json/getRequestDetailReport';
+export const REPORT_PRODUCT_AUTOSUGGEST = '/json/findProductByName';
+export const SHIPMENT_SELECT_OPTIONS = `${API}/shipmentOptions`;
+export const REQUEST_REASON_CODE_OPTIONS = `${API}/requestReasonCodeOptions`;
+
 // ADMIN
 export const ADMIN_API = `${API}/admin`;
 export const ADMIN_CONTROLLERS = `${ADMIN_API}/controllers`;

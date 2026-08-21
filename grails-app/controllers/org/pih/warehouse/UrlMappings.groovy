@@ -673,6 +673,16 @@ class UrlMappings {
             action = [GET: "shipmentStatusCodesOptions"]
         }
 
+        "/api/shipmentOptions"(parseRequest: true) {
+            controller = { "selectOptionsApi" }
+            action = [GET: "shipmentOptions"]
+        }
+
+        "/api/requestReasonCodeOptions"(parseRequest: true) {
+            controller = { "selectOptionsApi" }
+            action = [GET: "requestReasonCodeOptions"]
+        }
+
         "/api/shipments/commentForm" {
             controller = { "shipmentApi" }
             action = [GET: "commentForm"]
@@ -2267,6 +2277,11 @@ class UrlMappings {
         "/api/facilities/$facility/cycle-counts/$cycleCountId/refresh" {
             controller = "cycleCountApi"
             action = [POST: "refreshCycleCount"]
+        }
+
+        "/api/reports/inventoryByLocationReport" {
+            controller = "reportApi"
+            action = [GET: "inventoryByLocationReport"]
         }
 
         "/api/reports/cycle-count-details" {
