@@ -182,7 +182,10 @@ const TagForm = ({ match }) => {
               title={{ id: 'react.tag.tag.label', defaultMessage: 'Tag' }}
               name="tag"
               value={values.tag}
-              onChange={(e) => setValues((prev) => ({ ...prev, tag: e.target.value }))}
+              onChange={(e) => {
+                const { value } = e.target;
+                setValues((prev) => ({ ...prev, tag: value }));
+              }}
             />
           </div>
           {isEdit && (
@@ -191,7 +194,10 @@ const TagForm = ({ match }) => {
                 title={{ id: 'react.tag.isActive.label', defaultMessage: 'Is active?' }}
                 name="isActive"
                 value={values.isActive}
-                onChange={(e) => setValues((prev) => ({ ...prev, isActive: e.target.checked }))}
+                onChange={(e) => {
+                  const { checked } = e.target;
+                  setValues((prev) => ({ ...prev, isActive: checked }));
+                }}
               />
             </div>
           )}
