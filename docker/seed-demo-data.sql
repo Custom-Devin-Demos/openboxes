@@ -74,3 +74,11 @@ VALUES
   ('seed-txnentry-06', 0, 'seed-txn-baseline', 'seed-invitem-06', 'seed-product-06', 1000, 5),
   ('seed-txnentry-07', 0, 'seed-txn-baseline', 'seed-invitem-07', 'seed-product-07', 600, 6),
   ('seed-txnentry-08', 0, 'seed-txn-baseline', 'seed-invitem-08', 'seed-product-08', 200, 7);
+
+-- ============================ GL account types ============================
+-- Needed so the GL Account create/edit screens have GL Account Type options.
+INSERT IGNORE INTO gl_account_type (id, date_created, last_updated, code, name, gl_account_type_code)
+VALUES
+  ('seed-glaccttype-01', NOW(), NOW(), 'ASSET', 'Asset', 'ASSET'),
+  ('seed-glaccttype-02', NOW(), NOW(), 'EXPENSE', 'Expense', 'EXPENSE'),
+  ('seed-glaccttype-03', NOW(), NOW(), 'REVENUE', 'Revenue', 'REVENUE');

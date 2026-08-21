@@ -18,20 +18,15 @@ class GlAccountController {
     }
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [glAccounts: GlAccount.list(params), glAccountsTotal: GlAccount.count()]
+        render(view: "/common/react")
     }
 
     def create() {
-        def glAccount = new GlAccount()
-        glAccount.properties = params
-        return [glAccount: glAccount]
+        render(view: "/common/react")
     }
 
     def edit() {
-        def glAccount = GlAccount.get(params.id)
-        def glAccountType = glAccount?.glAccountType ? GlAccountType.get(glAccount.glAccountType.id) : null
-        return [glAccount: glAccount, glAccountTypeId: glAccountType?.id]
+        render(view: "/common/react")
     }
 
     @Transactional

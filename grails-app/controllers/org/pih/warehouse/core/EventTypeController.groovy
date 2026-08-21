@@ -21,8 +21,7 @@ class EventTypeController {
     }
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [eventTypeInstanceList: EventType.list(params), eventTypeInstanceTotal: EventType.count()]
+        render(view: "/common/react")
     }
 
     def create() {
@@ -40,13 +39,7 @@ class EventTypeController {
     }
 
     def show() {
-        def eventTypeInstance = EventType.get(params.id)
-        if (!eventTypeInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'eventType.label', default: 'EventType'), params.id])}"
-            redirect(action: "list")
-        } else {
-            [eventTypeInstance: eventTypeInstance]
-        }
+        render(view: "/common/react")
     }
 
     def edit() {

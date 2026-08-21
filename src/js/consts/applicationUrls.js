@@ -270,6 +270,14 @@ const EVENT_TYPE_URL = {
   list: () => `${EVENT_TYPE_URL.base}/list`,
   create: () => `${EVENT_TYPE_URL.base}/create`,
   edit: (id) => `${EVENT_TYPE_URL.base}/edit/${id}`,
+  show: (id) => `${EVENT_TYPE_URL.base}/show/${id}`,
+};
+
+const GL_ACCOUNT_URL = {
+  base: `${CONTEXT_PATH}/glAccount`,
+  list: () => `${GL_ACCOUNT_URL.base}/list`,
+  create: () => `${GL_ACCOUNT_URL.base}/create`,
+  edit: (id) => `${GL_ACCOUNT_URL.base}/edit/${id}`,
 };
 
 const PARTY_URL = {
@@ -346,6 +354,7 @@ export {
   DASHBOARD_URL,
   DOCUMENT_URL,
   EVENT_TYPE_URL,
+  GL_ACCOUNT_URL,
   INVENTORY_ITEM_URL,
   INVENTORY_URL,
   INVOICE_URL,
