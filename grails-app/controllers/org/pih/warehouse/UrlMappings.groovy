@@ -318,7 +318,12 @@ class UrlMappings {
 
         "/api/locationTypes"(parseRequest: true) {
             controller = { "locationTypeApi" }
-            action = [POST: "create"]
+            action = [GET: "list", POST: "create"]
+        }
+
+        "/api/organizations/$id/details"(parseRequest: true) {
+            controller = { "organizationApi" }
+            action = [GET: "details"]
         }
 
         "/api/locationTypes/$id"(parseRequest: true) {

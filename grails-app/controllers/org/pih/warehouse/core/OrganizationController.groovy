@@ -24,8 +24,7 @@ class OrganizationController {
     }
 
     def search() {
-        def organizationInstanceList = organizationService.getOrganizations(params)
-        render(view: "list", model: [organizationInstanceList:organizationInstanceList, organizationInstanceTotal:organizationInstanceList.totalCount])
+        redirect(action: "list", params: params)
     }
 
     def download() {
@@ -54,14 +53,11 @@ class OrganizationController {
     }
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [organizationInstanceList: Organization.list(params), organizationInstanceTotal: Organization.count()]
+        render(view: "/common/react")
     }
 
     def create() {
-        def organizationInstance = new Organization()
-        organizationInstance.properties = params
-        return [organizationInstance: organizationInstance]
+        render(view: "/common/react")
     }
 
     def save() {
@@ -115,25 +111,11 @@ class OrganizationController {
 
 
     def show() {
-        def organizationInstance = Organization.get(params.id)
-        if (!organizationInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'organization.label', default: 'Organization'), params.id])}"
-            redirect(action: "list")
-        }
-        else {
-            [organizationInstance: organizationInstance]
-        }
+        render(view: "/common/react")
     }
 
     def edit() {
-        def organizationInstance = Organization.get(params.id)
-        if (!organizationInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'organization.label', default: 'Organization'), params.id])}"
-            redirect(action: "list")
-        }
-        else {
-            return [organizationInstance: organizationInstance]
-        }
+        render(view: "/common/react")
     }
 
     def delete() {

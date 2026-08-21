@@ -405,6 +405,21 @@ const LOCATION_TYPE_URL = {
   list: () => `${LOCATION_TYPE_URL.base}/list`,
   create: () => `${LOCATION_TYPE_URL.base}/create`,
   edit: (id) => `${LOCATION_TYPE_URL.base}/edit/${id}`,
+  show: (id) => `${LOCATION_TYPE_URL.base}/show/${id}`,
+};
+
+const ORGANIZATION_URL = {
+  base: `${CONTEXT_PATH}/organization`,
+  list: () => `${ORGANIZATION_URL.base}/list`,
+  create: () => `${ORGANIZATION_URL.base}/create`,
+  edit: (id) => `${ORGANIZATION_URL.base}/edit/${id}`,
+  show: (id) => `${ORGANIZATION_URL.base}/show/${id}`,
+  download: () => `${ORGANIZATION_URL.base}/download`,
+};
+
+const PARTY_TYPE_URL = {
+  base: `${CONTEXT_PATH}/partyType`,
+  show: (id) => `${PARTY_TYPE_URL.base}/show/${id}`,
 };
 
 const PERSON_URL = {
@@ -522,7 +537,9 @@ export {
   LOCATION_URL,
   ORDER_ADJUSTMENT_TYPE_URL,
   ORDER_URL,
+  ORGANIZATION_URL,
   PARTY_ROLE_URL,
+  PARTY_TYPE_URL,
   PARTY_URL,
   PAYMENT_TERM_URL,
   PERSON_URL,

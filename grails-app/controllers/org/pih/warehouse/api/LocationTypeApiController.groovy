@@ -20,6 +20,11 @@ import org.springframework.http.HttpStatus
 
 class LocationTypeApiController {
 
+    def list() {
+        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        render([data: LocationType.list(params).collect { toJson(it) }, totalCount: LocationType.count()] as JSON)
+    }
+
     def read() {
         LocationType locationType = LocationType.get(params.id)
         if (!locationType) {
@@ -100,6 +105,8 @@ class LocationTypeApiController {
             locationTypeCode   : locationType.locationTypeCode?.name(),
             supportedActivities: locationType.supportedActivities?.collect { it } ?: [],
             sortOrder          : locationType.sortOrder,
+            dateCreated        : locationType.dateCreated,
+            lastUpdated        : locationType.lastUpdated,
             version            : locationType.version,
         ]
     }
