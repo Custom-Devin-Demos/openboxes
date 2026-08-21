@@ -10,6 +10,7 @@
 package org.pih.warehouse.shipping
 
 import au.com.bytecode.opencsv.CSVWriter
+import grails.converters.JSON
 import com.google.zxing.BarcodeFormat
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
@@ -875,7 +876,7 @@ class ShipmentController {
         } else {
             flash.message = "${warehouse.message(code: 'shipping.couldNotRemoveDocumentFromShipment.message', args: [params.id])}"
         }
-        redirect(controller: "stockMovement", action: "show", id: params.shipmentId)
+        redirect(controller: "stockMovement", action: "show", id: params.shipmentId, params: [flash: flash as JSON])
     }
 
     def deleteEvent() {

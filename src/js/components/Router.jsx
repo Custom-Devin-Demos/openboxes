@@ -221,6 +221,21 @@ const AsyncOrderAddDocumentPage = Loadable({
   loading: Loading,
 });
 
+const AsyncStockMovementAddCommentPage = Loadable({
+  loader: () => import('components/stock-movement/StockMovementAddCommentPage'),
+  loading: Loading,
+});
+
+const AsyncStockMovementAddDocumentPage = Loadable({
+  loader: () => import('components/stock-movement/StockMovementAddDocumentPage'),
+  loading: Loading,
+});
+
+const AsyncStockMovementShow = Loadable({
+  loader: () => import('components/stock-movement/show/StockMovementShow'),
+  loading: Loading,
+});
+
 const AsyncOrderEditAdjustmentPage = Loadable({
   loader: () => import('components/order/OrderEditAdjustmentPage'),
   loading: Loading,
@@ -1479,6 +1494,11 @@ const Router = () => {
             <MainLayoutRoute path="**/stockMovement/createRequest/:stockMovementId?" component={AsyncStockMovementRequest} />
             <MainLayoutRoute path="**/stockMovement/verifyRequest/:stockMovementId?" component={AsyncStockMovementVerifyRequest} />
             <MainLayoutRoute path="**/stockMovement/create/:stockMovementId?" component={AsyncStockMovement} />
+            <MainLayoutRoute path="**/stockMovement/addComment/:id" component={AsyncStockMovementAddCommentPage} />
+            <MainLayoutRoute path="**/stockMovement/editComment/:id" component={AsyncStockMovementAddCommentPage} />
+            <MainLayoutRoute path="**/stockRequest/reject/:id" component={AsyncStockMovementAddCommentPage} />
+            <MainLayoutRoute path="**/stockMovement/addDocument/:id" component={AsyncStockMovementAddDocumentPage} />
+            <MainLayoutRoute path="**/stockMovement/show/:id" component={AsyncStockMovementShow} />
             <MainLayoutRoute path="**/partialReceiving/create/:shipmentId" component={AsyncReceivingPage} />
             <MainLayoutRoute path="**/stocklistManagement/index/:productId?" component={AsyncManagement} />
             <MainLayoutRoute path="**/invoice/create/:invoiceId?" component={AsyncInvoice} />

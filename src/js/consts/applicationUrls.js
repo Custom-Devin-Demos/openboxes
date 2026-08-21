@@ -84,6 +84,30 @@ const STOCK_MOVEMENT_URL = {
   importCsv: (id) => `${STOCK_MOVEMENT_URL.base}/importCsv/${id}`,
   exportCsv: (id) => `${STOCK_MOVEMENT_URL.base}/exportCsv/${id}`,
   uploadDocuments: (id) => `${STOCK_MOVEMENT_URL.base}/uploadDocuments/${id}`,
+  create: () => `${STOCK_MOVEMENT_URL.base}/create`,
+  addComment: (id) => `${STOCK_MOVEMENT_URL.base}/addComment/${id}`,
+  editComment: (commentId, stockMovementId) => `${STOCK_MOVEMENT_URL.base}/editComment/${commentId}?stockMovementId=${stockMovementId}`,
+  deleteComment: (commentId, stockMovementId) => `${STOCK_MOVEMENT_URL.base}/deleteComment/${commentId}?stockMovementId=${stockMovementId}`,
+  saveComment: () => `${STOCK_MOVEMENT_URL.base}/saveComment`,
+  updateComment: () => `${STOCK_MOVEMENT_URL.base}/updateComment`,
+  updateStatus: () => `${STOCK_MOVEMENT_URL.base}/updateStatus`,
+  addDocument: (id) => `${STOCK_MOVEMENT_URL.base}/addDocument/${id}`,
+  rollback: (id) => `${STOCK_MOVEMENT_URL.base}/rollback/${id}`,
+  remove: (id) => `${STOCK_MOVEMENT_URL.base}/remove/${id}?show=true`,
+  synchronizeDialog: (id) => `${STOCK_MOVEMENT_URL.base}/synchronizeDialog/${id}`,
+};
+
+const STOCK_REQUEST_URL = {
+  base: `${CONTEXT_PATH}/stockRequest`,
+  remove: (id) => `${STOCK_REQUEST_URL.base}/remove/${id}?show=true`,
+  reject: (id) => `${STOCK_REQUEST_URL.base}/reject/${id}`,
+  rollbackApproval: (id) => `${STOCK_REQUEST_URL.base}/rollbackApproval/${id}`,
+};
+
+const PARTIAL_RECEIVING_URL = {
+  base: `${CONTEXT_PATH}/partialReceiving`,
+  create: (id) => `${PARTIAL_RECEIVING_URL.base}/create/${id}`,
+  rollbackLastReceipt: (id) => `${PARTIAL_RECEIVING_URL.base}/rollbackLastReceipt/${id}`,
 };
 
 const INVOICE_URL = {
@@ -717,6 +741,7 @@ export {
   ORDER_ADJUSTMENT_TYPE_URL,
   ORDER_URL,
   ORGANIZATION_URL,
+  PARTIAL_RECEIVING_URL,
   PARTY_ROLE_URL,
   PARTY_TYPE_URL,
   PARTY_URL,
@@ -746,6 +771,7 @@ export {
   SHIPMENT_URL,
   SHIPMENT_WORKFLOW_URL,
   STOCK_MOVEMENT_URL,
+  STOCK_REQUEST_URL,
   STOCK_TRANSFER_URL,
   STOCKLIST_URL,
   SUPPLIER_URL,

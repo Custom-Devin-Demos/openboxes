@@ -154,29 +154,19 @@ class StockMovementController {
 
     def show() {
         Location currentLocation = Location.get(session?.warehouse?.id)
-        HistoryItem latestHistoryItem = null
 
         // Pull Outbound Stock movement (Requisition based) or Outbound or Inbound Return (Order based)
         def stockMovement = outboundStockMovementService.getStockMovement(params.id)
-        if (stockMovement) {
-            latestHistoryItem = outboundStockMovementService.getLatestHistoryItem(stockMovement)
-        }
 
         // For inbound stockMovement only
         if (!stockMovement) {
             stockMovement =  stockMovementService.getStockMovement(params.id)
-            latestHistoryItem = stockMovementService.getLatestHistoryItem(stockMovement)
         }
-        stockMovement.documents = stockMovementService.getDocuments(stockMovement)
 
         if (stockMovement?.order) {
-            render(view: "/common/react")
+            render(view: "/common/react", params: params)
         } else {
-            render(view: "show", model: [
-                    stockMovement: stockMovement,
-                    currentLocation: currentLocation,
-                    latestHistoryItem: latestHistoryItem,
-            ])
+            render(view: "/common/react", params: params)
         }
     }
 
@@ -200,7 +190,7 @@ class StockMovementController {
             flash.error = "You are not able to rollback shipment from your location."
         }
 
-        redirect(action: "show", id: params.id)
+        redirect(action: "show", id: params.id, params: [flash: flash as JSON])
     }
 
     def synchronizeDialog() {
@@ -243,7 +233,7 @@ class StockMovementController {
             flash.error = "You are not authorized to synchronize this stock movement."
         }
 
-        redirect(action: "show", id: params.id)
+        redirect(action: "show", id: params.id, params: [flash: flash as JSON])
     }
 
     def remove() {
@@ -329,7 +319,7 @@ class StockMovementController {
         }
 
         if (stockMovement.requisition?.status == RequisitionStatus.REJECTED) {
-            redirect(action: "show", params: params)
+            redirect(action: "show", params: params + [flash: flash as JSON])
             return
         }
 
@@ -356,7 +346,7 @@ class StockMovementController {
                     args: [e.message]
             )
         }
-        redirect(action: "show", id: stockMovementId)
+        redirect(action: "show", id: stockMovementId, params: [flash: flash as JSON])
     }
 
     def documents() {
@@ -371,19 +361,11 @@ class StockMovementController {
     }
 
     def addComment() {
-        def stockMovement = outboundStockMovementService.getStockMovement(params.id)
-        if (!stockMovement) {
-            stockMovement = stockMovementService.getStockMovement(params.id)
-        }
-        [stockMovement: stockMovement, comment: new Comment()]
+        render(view: "/common/react", params: params)
     }
 
     def reject() {
-        Requisition requisition = Requisition.get(params.id)
-        StockMovement stockMovement = StockMovement.createFromRequisition(requisition)
-        flash.message = g.message(code: "request.rejectReason.message") + ": ${stockMovement.identifier}"
-        Comment comment = new Comment(recipient: requisition.requestedBy)
-        render(view: "addComment", model: [stockMovement: stockMovement, comment: comment, approvalStatus: StockMovementStatusCode.REJECTED])
+        render(view: "/common/react", params: params)
     }
 
     def editComment() {
@@ -394,16 +376,16 @@ class StockMovementController {
 
         Comment comment = Comment.get(params?.id)
         if (!comment) {
-            flash.message = "${g.message(code: 'default.not.found.message', args: [g.message(code: 'comment.label', default: 'Comment'), comment.id])}"
-            redirect(action: "show", id: stockMovement?.id)
+            flash.message = "${g.message(code: 'default.not.found.message', args: [g.message(code: 'comment.label', default: 'Comment'), params.id])}"
+            redirect(action: "show", id: stockMovement?.id, params: [flash: flash as JSON])
             return
         }
         if (comment.sender.id != session.user.id) {
             flash.message = "${g.message(code: 'auth.notAuthorized.message')}"
-            redirect(action: "show", id: stockMovement?.id)
+            redirect(action: "show", id: stockMovement?.id, params: [flash: flash as JSON])
             return
         }
-        render(view: "addComment", model: [stockMovement: stockMovement, comment: comment])
+        render(view: "/common/react", params: params)
     }
 
     def deleteComment() {
@@ -420,7 +402,7 @@ class StockMovementController {
         }
         stockMovementService.deleteComment(comment, stockMovement)
         flash.message = "${g.message(code: 'default.deleted.message', args: [g.message(code: 'comment.label', default: 'Comment'), comment.id])}"
-        redirect(action: "show", id: stockMovement.id)
+        redirect(action: "show", id: stockMovement.id, params: [flash: flash as JSON])
     }
 
     def saveComment() {
@@ -430,10 +412,11 @@ class StockMovementController {
         if (comment.validate()) {
             stockMovementService.saveComment(comment, stockMovement)
             flash.message = "${g.message(code: 'default.created.message', args: [g.message(code: 'comment.label', default: 'Comment'), comment.id])}"
-            redirect(action: "show", id: stockMovement.id)
+            redirect(action: "show", id: stockMovement.id, params: [flash: flash as JSON])
             return
          }
-        render(view: "addComment", model: [stockMovement: stockMovement, comment: comment])
+        flash.error = comment.errors.allErrors.collect { g.message(error: it) }.join("; ")
+        redirect(action: "addComment", id: stockMovement.id, params: [flash: flash as JSON])
     }
 
     def updateComment() {
@@ -447,10 +430,11 @@ class StockMovementController {
         if (comment.validate()) {
             stockMovementService.saveComment(comment, stockMovement)
             flash.message = "${g.message(code: 'default.updated.message', args: [g.message(code: 'comment.label', default: 'Comment'), comment.id])}"
-            redirect(action: "show", id: stockMovement.id)
+            redirect(action: "show", id: stockMovement.id, params: [flash: flash as JSON])
             return
         }
-        render(view: "addComment", model: [stockMovement: stockMovement, comment: comment])
+        flash.error = comment.errors.allErrors.collect { g.message(error: it) }.join("; ")
+        redirect(action: "editComment", id: comment.id, params: [stockMovementId: stockMovement.id, flash: flash as JSON])
     }
 
 
@@ -510,23 +494,12 @@ class StockMovementController {
         if (!stockMovement) {
             stockMovement =  stockMovementService.getStockMovement(params.id)
         }
-        List<DocumentType> documentTypes = documentService.getNonTemplateDocumentTypes()
-
-        Shipment shipmentInstance = stockMovement.shipment
-        def documentInstance = Document.get(params?.document?.id)
-        if (!documentInstance) {
-            documentInstance = new Document()
-        }
-        if (!shipmentInstance) {
+        if (!stockMovement?.shipment) {
             flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'shipment.label', default: 'Shipment'), params.id])}"
-            redirect(action: "list")
+            redirect(action: "list", params: [flash: flash as JSON])
+            return
         }
-        render(view: "addDocument", model: [
-                shipmentInstance: shipmentInstance,
-                documentInstance: documentInstance,
-                stockMovementInstance: stockMovement,
-                documentTypes: documentTypes
-        ])
+        render(view: "/common/react", params: params)
     }
 
     def exportCsv() {
