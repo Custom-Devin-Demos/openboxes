@@ -24,6 +24,7 @@ import org.pih.warehouse.inventory.StockHistoryPageModel
 import org.pih.warehouse.inventory.StockHistoryResult
 import org.pih.warehouse.inventory.StockHistoryRowDto
 import org.pih.warehouse.inventory.Transaction
+import org.pih.warehouse.inventory.TransactionType
 import org.pih.warehouse.inventory.TransferStockCommand
 import org.pih.warehouse.order.OrderItem
 import org.pih.warehouse.order.OrderItemStatusCode
@@ -595,6 +596,63 @@ class StockCardApiController {
         ] as JSON)
     }
 
+    /**
+     * Data provider for the React transaction log screen (replaces inventoryItem/showTransactionLog.gsp model).
+     */
+    def transactionLog() {
+        StockCardCommand cmd = new StockCardCommand()
+        cmd.warehouse = Location.get(session?.warehouse?.id)
+        cmd.transactionType = params['transactionType.id'] && params['transactionType.id'] != '0' ?
+                TransactionType.get(params['transactionType.id']) : null
+        StockCardCommand commandInstance
+        try {
+            commandInstance = inventoryService.getStockCardCommand(cmd, params)
+        } catch (ProductException e) {
+            response.status = 404
+            render([errorMessage: e.message] as JSON)
+            return
+        }
+
+        Boolean enableFilter = !params.disableFilter
+        Map transactionMap = commandInstance.getTransactionLogMap(enableFilter)
+        List<Transaction> transactions = transactionMap?.keySet()?.sort { it.transactionDate }?.reverse() ?: []
+
+        render([
+                product         : [
+                        id         : commandInstance.product.id,
+                        productCode: commandInstance.product.productCode,
+                        name       : commandInstance.product.name,
+                        displayName: commandInstance.product.displayNameOrDefaultName,
+                ],
+                startDate       : params.startDate,
+                endDate         : params.endDate,
+                transactionTypeId: commandInstance.transactionType?.id,
+                transactionTypes: TransactionType.list().collect {
+                    [id: it.id, name: getLocalizedMetadata(it.name)]
+                },
+                transactions    : transactions.collect { Transaction transaction ->
+                    def quantityChange = transaction.transactionEntries.findAll {
+                        it?.inventoryItem?.product == commandInstance.product
+                    }.quantity?.sum()
+                    def shipment = transaction.incomingShipment ?: transaction.outgoingShipment
+                    [
+                            id             : transaction.id,
+                            transactionDate: transaction.transactionDate,
+                            transactionType: [
+                                    name           : getLocalizedMetadata(transaction.transactionType?.name),
+                                    transactionCode: transaction.transactionType?.transactionCode?.name()?.toLowerCase(),
+                            ],
+                            shipment       : shipment ? [id: shipment.id, name: shipment.name] : null,
+                            source         : transaction.source?.name,
+                            destination    : transaction.destination?.name,
+                            quantityChange : quantityChange,
+                    ]
+                },
+                shownCount      : transactionMap?.keySet()?.size() ?: 0,
+                totalCount      : commandInstance.allTransactionLogMap?.keySet()?.size() ?: 0,
+        ] as JSON)
+    }
+
     def recordInventory(RecordInventoryCommand commandInstance) {
         Location locationInstance = Location.get(session?.warehouse?.id)
         if (!commandInstance.inventory) {
@@ -886,6 +944,11 @@ class StockCardApiController {
      */
     private static void flushSession() {
         InventoryItem.withSession { session -> session.flush() }
+    }
+
+    private String getLocalizedMetadata(String name) {
+        // TransactionType names use pipe-delimited localized values (see LocalizationUtil)
+        org.pih.warehouse.LocalizationUtil.getLocalizedString(name, request?.locale ?: Locale.default)
     }
 
     private String getMessage(String code, String defaultMessage, Object[] args = null) {

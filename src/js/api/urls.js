@@ -350,7 +350,17 @@ export const STOCK_CARD_ACTION_CONTEXT = `${STOCK_CARD_API}/actionContext`;
 export const STOCK_CARD_BIN_LOCATIONS = `${STOCK_CARD_API}/binLocations`;
 export const STOCK_CARD_RECORD_INVENTORY = `${STOCK_CARD_API}/recordInventory`;
 export const STOCK_CARD_INVENTORY_LEVEL = `${STOCK_CARD_API}/inventoryLevel`;
+export const STOCK_CARD_TRANSACTION_LOG = (id) => `${STOCK_CARD_API}/${id}/transactionLog`;
 export const STOCK_CARD_TRANSFER_STOCK = `${STOCK_CARD_API}/transferStock`;
+
+// INVENTORY LEVELS
+export const INVENTORY_LEVELS_API = `${API}/inventoryLevels`;
+export const INVENTORY_LEVELS_SEARCH = `${INVENTORY_LEVELS_API}/search`;
+export const INVENTORY_LEVELS_FORM_CONTEXT = `${INVENTORY_LEVELS_API}/formContext`;
+export const INVENTORY_LEVELS_FORM_CONTEXT_BY_ID = (id) => `${INVENTORY_LEVELS_API}/${id}/formContext`;
+export const INVENTORY_LEVELS_DETAILS = (id) => `${INVENTORY_LEVELS_API}/${id}/details`;
+export const INVENTORY_LEVELS_SAVE = INVENTORY_LEVELS_API;
+export const INVENTORY_LEVELS_BY_ID = (id) => `${INVENTORY_LEVELS_API}/${id}`;
 export const STOCK_CARD_UPDATE_INVENTORY_ITEM = `${STOCK_CARD_API}/updateInventoryItem`;
 export const STOCK_CARD_ADD_TO_SHIPMENT = `${STOCK_CARD_API}/addToShipment`;
 

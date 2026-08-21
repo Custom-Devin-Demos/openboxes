@@ -497,6 +497,26 @@ const AsyncInventoryLevelPage = Loadable({
   loading: Loading,
 });
 
+const AsyncTransactionLogPage = Loadable({
+  loader: () => import('components/stock-card/TransactionLogPage'),
+  loading: Loading,
+});
+
+const AsyncInventoryLevelList = Loadable({
+  loader: () => import('components/inventory-level/InventoryLevelList'),
+  loading: Loading,
+});
+
+const AsyncInventoryLevelShow = Loadable({
+  loader: () => import('components/inventory-level/InventoryLevelShow'),
+  loading: Loading,
+});
+
+const AsyncInventoryLevelForm = Loadable({
+  loader: () => import('components/inventory-level/InventoryLevelForm'),
+  loading: Loading,
+});
+
 const AsyncProductEditPage = Loadable({
   loader: () => import('components/product-screens/ProductEditPage'),
   loading: Loading,
@@ -662,6 +682,12 @@ const Router = () => {
             <MainLayoutRoute path="**/inventoryItem/showGraph/:id?" component={AsyncGraphPage} />
             <MainLayoutRoute path="**/inventoryItem/showRecordInventory/:id?" component={AsyncRecordInventoryPage} />
             <MainLayoutRoute path="**/inventoryItem/editInventoryLevel" component={AsyncInventoryLevelPage} />
+            <MainLayoutRoute path="**/inventoryItem/showTransactionLog/:id?" component={AsyncTransactionLogPage} />
+            <MainLayoutRoute path="**/inventoryLevel/list" component={AsyncInventoryLevelList} />
+            <MainLayoutRoute path="**/inventoryLevel/index" component={AsyncInventoryLevelList} />
+            <MainLayoutRoute path="**/inventoryLevel/show/:id" component={AsyncInventoryLevelShow} />
+            <MainLayoutRoute path="**/inventoryLevel/create" component={AsyncInventoryLevelForm} />
+            <MainLayoutRoute path="**/inventoryLevel/edit/:id?" component={AsyncInventoryLevelForm} />
             <MainLayoutRoute path="**/stockMovement/list" component={StockMovementList} />
             <MainLayoutRoute path="**/stockMovement/createOutbound/:stockMovementId?" component={AsyncStockMovement} />
             <MainLayoutRoute path="**/stockMovement/importOutboundStockMovement" component={AsyncOutboundImport} />

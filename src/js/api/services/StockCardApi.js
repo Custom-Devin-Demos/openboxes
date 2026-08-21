@@ -16,6 +16,7 @@ import {
   STOCK_CARD_SNAPSHOT,
   STOCK_CARD_STOCK_HISTORY,
   STOCK_CARD_SUPPLIERS,
+  STOCK_CARD_TRANSACTION_LOG,
   STOCK_CARD_TRANSFER_STOCK,
   STOCK_CARD_UPDATE_INVENTORY_ITEM,
 } from 'api/urls';
@@ -34,6 +35,7 @@ export default {
   getSnapshot: (id, config) => apiClient.get(STOCK_CARD_SNAPSHOT(id), config),
   getDocuments: (id, config) => apiClient.get(STOCK_CARD_DOCUMENTS(id), config),
   getLotNumbers: (id, config) => apiClient.get(STOCK_CARD_LOT_NUMBERS(id), config),
+  getTransactionLog: (id, config) => apiClient.get(STOCK_CARD_TRANSACTION_LOG(id), config),
   getActionContext: (config) => apiClient.get(STOCK_CARD_ACTION_CONTEXT, config),
   getBinLocations: (config) => apiClient.get(STOCK_CARD_BIN_LOCATIONS, config),
   getRecordInventory: (config) => apiClient.get(STOCK_CARD_RECORD_INVENTORY, config),
