@@ -50,7 +50,10 @@ const ConsumptionShow = () => {
   const runReport = () => {
     setLoading(true);
     setErrorMessage('');
-    apiClient.get(CONSUMPTION_SHOW, { params: buildParams() })
+    apiClient.get(CONSUMPTION_SHOW, {
+      params: buildParams(),
+      paramsSerializer: (parameters) => queryString.stringify(parameters),
+    })
       .then((response) => setRows(response.data.data))
       .catch((error) => {
         const message = error?.response?.data?.errorMessages?.join('; ')
