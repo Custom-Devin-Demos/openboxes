@@ -30,6 +30,11 @@ const PRODUCT_URL = {
   addDocument: (id) => `${PRODUCT_URL.base}/addDocument/${id}`,
   batchEdit: () => `${PRODUCT_URL.base}/batchEdit`,
   batchEditProperties: () => `${PRODUCT_URL.base}/batchEditProperties`,
+  search: () => `${PRODUCT_URL.base}/search`,
+  show: (id) => `${PRODUCT_URL.base}/show${id ? `/${id}` : ''}`,
+  mergeLogs: () => `${PRODUCT_URL.base}/productMergeLogs`,
+  upnDatabase: () => `${PRODUCT_URL.base}/upnDatabase`,
+  barcode: (data) => `${PRODUCT_URL.base}/barcode?data=${encodeURIComponent(data)}&width=100&height=10&format=CODE_128`,
 };
 
 const LOCATION_URL = {

@@ -7,7 +7,9 @@ import {
   PRODUCT_SCREENS_IMPORT_CONFIRM,
   PRODUCT_SCREENS_IMPORT_UPLOAD,
   PRODUCT_SCREENS_SAVE_DETAILS,
+  PRODUCT_SCREENS_SEARCH_RESULTS,
   PRODUCT_SCREENS_UPLOAD_DOCUMENT,
+  PRODUCT_SCREENS_UPN_DATABASE,
 } from 'api/urls';
 import apiClient from 'utils/apiClient';
 
@@ -24,4 +26,6 @@ export default {
   uploadDocument: (id, data, config) =>
     apiClient.post(PRODUCT_SCREENS_UPLOAD_DOCUMENT(id), data, config),
   addSynonym: (id, data, config) => apiClient.post(PRODUCT_SCREENS_ADD_SYNONYM(id), data, config),
+  getSearchResults: (config) => apiClient.get(PRODUCT_SCREENS_SEARCH_RESULTS, config),
+  getUpnDatabase: (config) => apiClient.get(PRODUCT_SCREENS_UPN_DATABASE, config),
 };

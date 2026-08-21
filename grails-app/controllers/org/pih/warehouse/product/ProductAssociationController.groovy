@@ -83,9 +83,7 @@ class ProductAssociationController {
     }
 
     def create() {
-        def productAssociationInstance = new ProductAssociation()
-        productAssociationInstance.properties = params
-        return [productAssociationInstance: productAssociationInstance]
+        render(view: "/common/react", params: params)
     }
 
     def save() {
@@ -122,13 +120,7 @@ class ProductAssociationController {
     }
 
     def edit() {
-        def productAssociationInstance = ProductAssociation.get(params.id)
-        if (!productAssociationInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'productAssociation.label', default: 'ProductAssociation'), params.id])}"
-            redirect(action: "list")
-        } else {
-            return [productAssociationInstance: productAssociationInstance, isFromProductEditPage: params.isFromProductEditPage]
-        }
+        render(view: "/common/react", params: params)
     }
 
     def update() {
