@@ -547,6 +547,26 @@ const AsyncPartyRoleForm = Loadable({
   loading: Loading,
 });
 
+const AsyncPersonList = Loadable({
+  loader: () => import('components/person/PersonList'),
+  loading: Loading,
+});
+
+const AsyncPersonForm = Loadable({
+  loader: () => import('components/person/PersonForm'),
+  loading: Loading,
+});
+
+const AsyncPersonShow = Loadable({
+  loader: () => import('components/person/PersonShow'),
+  loading: Loading,
+});
+
+const AsyncRoleForm = Loadable({
+  loader: () => import('components/role/RoleForm'),
+  loading: Loading,
+});
+
 const Router = () => {
   useConnectionListener();
 
@@ -691,6 +711,11 @@ const Router = () => {
             <MainLayoutRoute path="**/party/show/:id" component={AsyncPartyShow} />
             <MainLayoutRoute path="**/partyRole/create" component={AsyncPartyRoleForm} />
             <MainLayoutRoute path="**/partyRole/edit/:id?" component={AsyncPartyRoleForm} />
+            <MainLayoutRoute path="**/person/list" component={AsyncPersonList} />
+            <MainLayoutRoute path="**/person/create" component={AsyncPersonForm} />
+            <MainLayoutRoute path="**/person/edit/:id?" component={AsyncPersonForm} />
+            <MainLayoutRoute path="**/person/show/:id" component={AsyncPersonShow} />
+            <MainLayoutRoute path="**/role/create" component={AsyncRoleForm} />
             <MainLayoutRoute path="**/dashboard/:configId?" component={Dashboard} />
             <MainLayoutRoute path="**/" component={Dashboard} />
           </Switch>

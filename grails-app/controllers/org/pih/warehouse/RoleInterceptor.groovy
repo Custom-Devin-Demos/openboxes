@@ -45,6 +45,7 @@ class RoleInterceptor {
     def static adminActions = [
         'product'        : ['create'],
         'person'         : ['list'],
+        'personApi'      : ['search'],
         'user'           : ['list'],
         'location'       : ['edit'],
         'shipper'        : ['create'],

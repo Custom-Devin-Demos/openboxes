@@ -150,6 +150,15 @@ export const CATEGORY_DELETE = (id) => `${CATEGORIES}/${id}/deleteCategory`;
 export const CATEGORY_OPTIONS = `${API}/categoryOptions`;
 export const UNIT_OF_MEASURE_CLASS_OPTIONS = `${API}/unitOfMeasureClassOptions`;
 
+// PERSONS
+export const PERSONS = `${API}/persons`;
+export const PERSONS_SEARCH = `${PERSONS}/search`;
+export const PERSON_BY_ID = (id) => `${PERSONS}/${id}`;
+
+// ROLES
+export const ROLES = `${API}/roles`;
+export const ROLE_TYPE_OPTIONS = `${API}/roleTypeOptions`;
+
 // LOCATIONS
 export const LOCATION_API = `${API}/locations`;
 export const LOCATION_TYPES = `${LOCATION_API}/locationTypes`;

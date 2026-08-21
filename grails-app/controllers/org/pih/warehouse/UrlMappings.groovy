@@ -222,6 +222,21 @@ class UrlMappings {
             action = [GET: "read", PUT: "update", DELETE: "delete"]
         }
 
+        "/api/persons/search"(parseRequest: true) {
+            controller = { "personApi" }
+            action = [GET: "search"]
+        }
+
+        "/api/roleTypeOptions"(parseRequest: true) {
+            controller = { "roleApi" }
+            action = [GET: "roleTypeOptions"]
+        }
+
+        "/api/roles"(parseRequest: true) {
+            controller = { "roleApi" }
+            action = [POST: "create"]
+        }
+
         // Product Group options for filters on  product list page
         "/api/productGroupOptions"(parseRequest: true) {
             controller = { "selectOptionsApi" }
