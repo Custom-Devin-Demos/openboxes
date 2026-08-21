@@ -51,7 +51,7 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | 2-orders-1 | orders-1 batch | MERGED | [aa39b608](https://app.devin.ai/sessions/aa39b60838c740ca8afa03ca9fad7a76) | [#14](https://github.com/Custom-Devin-Demos/openboxes/pull/14) | Snapshots 121/122, Playwright 8/10 (failures pre-existing on develop), CI green |
 | 2-admin-config-1 | admin-config-1 batch | MERGED | [2bec6bb2](https://app.devin.ai/sessions/2bec6bb2245a4cb68c7e48ad754fb467) | [#10](https://github.com/Custom-Devin-Demos/openboxes/pull/10) | UI 10/10, snapshots 117/122 (5 pre-existing dirty baselines), CI green. Fixed Hibernate5 evictQueries bug |
 | 2-finance-config-1 | finance-config-1 batch | MERGED | [b4493527](https://app.devin.ai/sessions/b449352701744466b15efb5dd64533c4) | [#9](https://github.com/Custom-Devin-Demos/openboxes/pull/9) | Playwright 10/10, snapshots 122/122, CI green |
-| 2-stock-card-1 | stock-card-1 batch | IN_PROGRESS | [7ba30033](https://app.devin.ai/sessions/7ba3003323244216bdb4bed9ab92ce27) | | |
+| 2-stock-card-1 | stock-card-1 batch | MERGED | [7ba30033](https://app.devin.ai/sessions/7ba3003323244216bdb4bed9ab92ce27) | [#15](https://github.com/Custom-Devin-Demos/openboxes/pull/15) | Snapshots 122/122, Playwright 10/10, integrationTest green, CI green |
 | 2-(remaining) | 48 remaining batches (see live-screen-inventory.md) | PENDING | | | Spawn in subsequent waves |
 | 2.R | React 16.8→18 + Redux/router modernization of existing SPA | PENDING | | | |
 
@@ -87,3 +87,4 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 - 2026-08-20: requisitions-1 merged (PR #8), orders-1 merged (PR #14).
 - 2026-08-20: locations-orgs-1 merged (PR #6). product-catalog-1 (#11) and shipments-1 (#13) rebasing after conflicts; stock-card-1 still in progress.
 - 2026-08-20: shipments-1 merged (PR #13). Pre-existing defect noted: deleteShipment 500s on FK constraints for shipments with events (legacy parity).
+- 2026-08-20: stock-card-1 merged (PR #15). product-catalog-1 (#11) still pending final rebase/CI.
