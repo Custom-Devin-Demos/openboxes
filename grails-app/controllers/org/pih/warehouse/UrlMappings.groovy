@@ -104,6 +104,16 @@ class UrlMappings {
             action = [GET: "search"]
         }
 
+        "/api/suppliers/search" {
+            controller = { "supplierApi" }
+            action = [GET: "search"]
+        }
+
+        "/api/suppliers/$id/details" {
+            controller = { "supplierApi" }
+            action = [GET: "details"]
+        }
+
         // Unit of measure class options for the attribute edit page
         "/api/unitOfMeasureClassOptions"(parseRequest: true) {
             controller = { "selectOptionsApi" }

@@ -153,6 +153,16 @@ const AsyncLocationUploadLogo = Loadable({
   loading: Loading,
 });
 
+const AsyncSupplierList = Loadable({
+  loader: () => import('components/supplier/SupplierList'),
+  loading: Loading,
+});
+
+const AsyncSupplierShow = Loadable({
+  loader: () => import('components/supplier/SupplierShow'),
+  loading: Loading,
+});
+
 const AsyncWelcomePage = Loadable({
   loader: () => import('components/locations-configuration/WelcomePage'),
   loading: Loading,
@@ -528,6 +538,8 @@ const Router = () => {
             <MainLayoutRoute path="**/location/showZoneLocations/:locationId" component={AsyncLocationZoneLocations} />
             <MainLayoutRoute path="**/location/showContents/:locationId" component={AsyncLocationContents} />
             <MainLayoutRoute path="**/location/uploadLogo/:locationId" component={AsyncLocationUploadLogo} />
+            <MainLayoutRoute path="**/supplier/list" component={AsyncSupplierList} />
+            <MainLayoutRoute path="**/supplier/show/:id" component={AsyncSupplierShow} />
             <MainLayoutRoute path="**/locationsConfiguration/upload" component={AsyncImportLocations} />
             <Route path="**/locationsConfiguration/index">
               <AsyncWelcomePage />
