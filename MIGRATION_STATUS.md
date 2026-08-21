@@ -123,7 +123,7 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | Batch | Scope | Status | Session | PR | Evidence |
 |---|---|---|---|---|---|
 | 2-admin-config-2 | admin-config-2 batch | MERGED | [93544c12](https://app.devin.ai/sessions/93544c12022049bba4d745af4be3a9e7) | [#30](https://github.com/Custom-Devin-Demos/openboxes/pull/30) | 6 admin/batch/dataExport/jobs/localization screens; post-rebase snapshots 122/122, Playwright 10/10, CI 4/4 |
-| 2-finance-config-4 | finance-config-4 batch | REBASING | [e95185a4](https://app.devin.ai/sessions/e95185a43a55471f932ac34e418efff1) | [#27](https://github.com/Custom-Devin-Demos/openboxes/pull/27) | paymentTerm list + preferenceType list/create/edit; snapshots 122/122, Playwright 10/10, CI 4/4; conflicts — rebase requested |
+| 2-finance-config-4 | finance-config-4 batch | MERGED | [e95185a4](https://app.devin.ai/sessions/e95185a43a55471f932ac34e418efff1) | [#27](https://github.com/Custom-Devin-Demos/openboxes/pull/27) | paymentTerm list + preferenceType list/create/edit; post-rebase snapshots 122/122, Playwright 10/10, CI 4/4 |
 | 2-inventory-3 | inventory-3 batch | MERGED | [59a5118f](https://app.devin.ai/sessions/59a5118fa99b46f081233787beb7db51) | [#32](https://github.com/Custom-Devin-Demos/openboxes/pull/32) | 5 inventory screens (listTransactions/manage/showProducts/showTransaction/upload); snapshots 122/122, Playwright 10/10, CI 4/4 |
 | 2-locations-orgs-3 | locations-orgs-3 batch | IN_PROGRESS | [5b7a039a](https://app.devin.ai/sessions/5b7a039a2dbc40cc932bbb36940d4b3f) | | |
 | 2-orders-2 | orders-2 batch | IN_PROGRESS | [069bdfbe](https://app.devin.ai/sessions/069bdfbe6144460285dc6a0eefd16eed) | | |
@@ -137,3 +137,4 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 - 2026-08-20: PRs #29 (stock-card-2) and #32 (inventory-3) merged (authoritatively confirmed). PRs #27/#28/#30 conflict after those merges; rebases requested.
 - 2026-08-20: P1.3 Grails 4->5 PR #31 open (Grails 5.3.6 / Gradle 7.6.4 / Groovy 3.0.11 / Boot 2.7.9); mysql backend-test CI failing — under investigation. Hold merge until wave 3 fully merged, then rebase + re-verify.
 - 2026-08-20: PR #30 (admin-config-2) merged after rebase (authoritatively confirmed). #27/#28 still rebasing; may need to pick up #30 too.
+- 2026-08-20: PR #27 (finance-config-4) merged after rebase (authoritatively confirmed).
