@@ -69,7 +69,7 @@ const SignupPage = () => {
               )}
               <div id="loginBox" className="box">
                 <h2>
-                  <img src={`${contextPath}/images/icons/silk/lock.png`} alt="" className="middle" />
+                  <img src={`${contextPath}/static/images/icons/silk/lock.png`} alt="" className="middle" />
                   {' '}
                   Signup for an account
                 </h2>
@@ -197,7 +197,7 @@ const SignupPage = () => {
                             data-callback="validateRecaptchaToken"
                             data-action="submit"
                           >
-                            <img src={`${contextPath}/images/icons/silk/accept.png`} alt="" className="middle" />
+                            <img src={`${contextPath}/static/images/icons/silk/accept.png`} alt="" className="middle" />
                             {' '}
                             {labels.signupButton}
                           </button>

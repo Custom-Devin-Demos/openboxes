@@ -42,6 +42,9 @@ class MainRouter extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (PRE_SESSION_ROUTES.test(window.location.pathname)) {
+      return;
+    }
     if (this.props.locale !== nextProps.locale) {
       this.props.setActiveLanguage(nextProps.locale);
 

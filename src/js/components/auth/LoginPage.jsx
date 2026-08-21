@@ -85,7 +85,7 @@ const LoginPage = () => {
 
               <div id="loginBox" className="box">
                 <h2>
-                  <img src={`${contextPath}/images/icons/silk/lock.png`} alt="" className="middle" />
+                  <img src={`${contextPath}/static/images/icons/silk/lock.png`} alt="" className="middle" />
                   {labels.login}
                 </h2>
 
