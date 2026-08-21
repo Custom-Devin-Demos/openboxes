@@ -26,9 +26,7 @@ class PartyRoleController {
     }
 
     def create() {
-        def partyRoleInstance = new PartyRole()
-        partyRoleInstance.properties = params
-        return [partyRoleInstance: partyRoleInstance]
+        render(view: "/common/react", params: params)
     }
 
     def save() {
@@ -52,13 +50,7 @@ class PartyRoleController {
     }
 
     def edit() {
-        def partyRoleInstance = PartyRole.get(params.id)
-        if (!partyRoleInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'partyRole.label', default: 'PartyRole'), params.id])}"
-            redirect(action: "list")
-        } else {
-            return [partyRoleInstance: partyRoleInstance]
-        }
+        render(view: "/common/react", params: params)
     }
 
     def update() {

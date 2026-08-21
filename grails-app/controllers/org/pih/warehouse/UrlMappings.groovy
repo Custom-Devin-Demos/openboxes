@@ -152,6 +152,41 @@ class UrlMappings {
             action = [GET: "read", PUT: "update", DELETE: "delete"]
         }
 
+        "/api/parties/partyTypeOptions"(parseRequest: true) {
+            controller = { "partyApi" }
+            action = [GET: "partyTypeOptions"]
+        }
+
+        "/api/parties/partyOptions"(parseRequest: true) {
+            controller = { "partyApi" }
+            action = [GET: "partyOptions"]
+        }
+
+        "/api/parties"(parseRequest: true) {
+            controller = { "partyApi" }
+            action = [GET: "list", POST: "create"]
+        }
+
+        "/api/parties/$id"(parseRequest: true) {
+            controller = { "partyApi" }
+            action = [GET: "read", PUT: "update", DELETE: "delete"]
+        }
+
+        "/api/partyRoles/roleTypeOptions"(parseRequest: true) {
+            controller = { "partyRoleApi" }
+            action = [GET: "roleTypeOptions"]
+        }
+
+        "/api/partyRoles"(parseRequest: true) {
+            controller = { "partyRoleApi" }
+            action = [POST: "create"]
+        }
+
+        "/api/partyRoles/$id"(parseRequest: true) {
+            controller = { "partyRoleApi" }
+            action = [GET: "read", PUT: "update", DELETE: "delete"]
+        }
+
         "/api/eventTypes/eventCodeOptions"(parseRequest: true) {
             controller = { "eventTypeApi" }
             action = [GET: "eventCodeOptions"]
