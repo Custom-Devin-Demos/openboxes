@@ -293,6 +293,18 @@ export const STOCK_CARD_TRANSFER_STOCK = `${STOCK_CARD_API}/transferStock`;
 export const STOCK_CARD_UPDATE_INVENTORY_ITEM = `${STOCK_CARD_API}/updateInventoryItem`;
 export const STOCK_CARD_ADD_TO_SHIPMENT = `${STOCK_CARD_API}/addToShipment`;
 
+// PRODUCT SCREENS (edit/create, batch edit, CSV import, add document)
+export const PRODUCT_SCREENS_API = `${API}/productScreens`;
+export const PRODUCT_SCREENS_CREATE_DATA = `${PRODUCT_SCREENS_API}/editData`;
+export const PRODUCT_SCREENS_EDIT_DATA = (id) => `${PRODUCT_SCREENS_API}/${id}/editData`;
+export const PRODUCT_SCREENS_SAVE_DETAILS = `${PRODUCT_SCREENS_API}/saveDetails`;
+export const PRODUCT_SCREENS_BATCH_EDIT = `${PRODUCT_SCREENS_API}/batchEdit`;
+export const PRODUCT_SCREENS_IMPORT_UPLOAD = `${PRODUCT_SCREENS_API}/importUpload`;
+export const PRODUCT_SCREENS_IMPORT_CONFIRM = `${PRODUCT_SCREENS_API}/importConfirm`;
+export const PRODUCT_SCREENS_ADD_DOCUMENT_CONTEXT = (id) => `${PRODUCT_SCREENS_API}/${id}/addDocumentContext`;
+export const PRODUCT_SCREENS_UPLOAD_DOCUMENT = (id) => `${PRODUCT_SCREENS_API}/${id}/documents`;
+export const PRODUCT_SCREENS_ADD_SYNONYM = (id) => `${PRODUCT_SCREENS_API}/${id}/synonyms`;
+
 // INVENTORY
 export const INVENTORY_API = (id) => `${API}/facilities/${id}/inventories`;
 export const REORDER_REPORT = (id) => `${INVENTORY_API(id)}/reorderReport`;

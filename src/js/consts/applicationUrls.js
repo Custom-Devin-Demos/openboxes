@@ -27,6 +27,9 @@ const PRODUCT_URL = {
   create: () => `${PRODUCT_URL.base}/create`,
   edit: (id) => `${PRODUCT_URL.base}/edit/${id}`,
   importCSV: () => `${PRODUCT_URL.base}/importAsCsv`,
+  addDocument: (id) => `${PRODUCT_URL.base}/addDocument/${id}`,
+  batchEdit: () => `${PRODUCT_URL.base}/batchEdit`,
+  batchEditProperties: () => `${PRODUCT_URL.base}/batchEditProperties`,
 };
 
 const LOCATION_URL = {
