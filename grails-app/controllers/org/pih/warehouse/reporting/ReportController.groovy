@@ -21,6 +21,7 @@ import org.pih.warehouse.core.Constants
 import org.pih.warehouse.core.Location
 import org.pih.warehouse.importer.CSVUtils
 import org.pih.warehouse.inventory.BinLocationItem
+import org.pih.warehouse.inventory.InventoryItem
 import org.pih.warehouse.inventory.InventoryLevel
 import org.pih.warehouse.inventory.Transaction
 import org.pih.warehouse.order.OrderItem
@@ -635,34 +636,37 @@ class ReportController {
         List rows = binLocations.collect { row ->
             // Required in order to avoid lazy initialization exception that occurs because all
             // of the querying / session work that was done above was executed in worker threads
-            Product product = Product.load(row?.product?.id)
+            Product product = Product.get(row?.product?.id)
+            Category category = row?.category?.id ? Category.get(row?.category?.id) : null
+            InventoryItem inventoryItem = row?.inventoryItem?.id ? InventoryItem.get(row?.inventoryItem?.id) : null
+            Location binLocation = row?.binLocation?.id ? Location.get(row?.binLocation?.id) : null
 
-            def latestInventoryDate = row?.product?.latestInventoryDate(location.id) ?: row?.product.earliestReceivingDate(location.id)
+            def latestInventoryDate = product?.latestInventoryDate(location.id) ?: product?.earliestReceivingDate(location.id)
             Map dataRow = params.print ? [
-                            "Product code"        : StringEscapeUtils.escapeCsv(row?.product?.productCode),
+                            "Product code"        : StringEscapeUtils.escapeCsv(product?.productCode),
                             "Product name"        : product.displayNameWithLocaleCode,
-                            "Lot number"          : StringEscapeUtils.escapeCsv(row?.inventoryItem.lotNumber ?: ""),
-                            "Expiration date"     : row?.inventoryItem.expirationDate ? row?.inventoryItem.expirationDate.format(Constants.EXPIRATION_DATE_FORMAT) : "",
-                            "Bin location"        : StringEscapeUtils.escapeCsv(row?.binLocation?.name ?: ""),
+                            "Lot number"          : StringEscapeUtils.escapeCsv(inventoryItem?.lotNumber ?: ""),
+                            "Expiration date"     : inventoryItem?.expirationDate ? inventoryItem.expirationDate.format(Constants.EXPIRATION_DATE_FORMAT) : "",
+                            "Bin location"        : StringEscapeUtils.escapeCsv(binLocation?.name ?: ""),
                             "OB QOH"              : row?.quantity ?: 0,
                             "Physical QOH"        : "",
                             "Comment"             : "",
                             "Product family"      : product?.productFamily ?: "",
-                            "Category"            : StringEscapeUtils.escapeCsv(row?.category?.name ?: ""),
+                            "Category"            : StringEscapeUtils.escapeCsv(category?.name ?: ""),
                             "Formularies"         : product.productCatalogs.join(", ") ?: "",
-                            "ABC Classification"  : StringEscapeUtils.escapeCsv(row?.product.getAbcClassification(location.id) ?: ""),
+                            "ABC Classification"  : StringEscapeUtils.escapeCsv(product?.getAbcClassification(location.id) ?: ""),
                             "Status"              : g.message(code: "binLocationSummary.${row?.status}.label"),
                             "Last Inventory Date" : latestInventoryDate ? latestInventoryDate.format(Constants.EXPIRATION_DATE_FORMAT) : "",
                     ] : [
-                            productCode       : StringEscapeUtils.escapeCsv(row?.product?.productCode),
-                            productName       : row?.product.name ?: "",
+                            productCode       : StringEscapeUtils.escapeCsv(product?.productCode),
+                            productName       : product?.name ?: "",
                             productFamily     : product?.productFamily ?: "",
-                            category          : StringEscapeUtils.escapeCsv(row?.category?.name ?: ""),
+                            category          : StringEscapeUtils.escapeCsv(category?.name ?: ""),
                             formularies       : product.productCatalogs.join(", ") ?: "",
-                            lotNumber         : StringEscapeUtils.escapeCsv(row?.inventoryItem.lotNumber ?: ""),
-                            expirationDate    : row?.inventoryItem.expirationDate ? row?.inventoryItem.expirationDate.format(Constants.EXPIRATION_DATE_FORMAT) : "",
-                            abcClassification : StringEscapeUtils.escapeCsv(row?.product.getAbcClassification(location.id) ?: ""),
-                            binLocation       : StringEscapeUtils.escapeCsv(row?.binLocation?.name ?: ""),
+                            lotNumber         : StringEscapeUtils.escapeCsv(inventoryItem?.lotNumber ?: ""),
+                            expirationDate    : inventoryItem?.expirationDate ? inventoryItem.expirationDate.format(Constants.EXPIRATION_DATE_FORMAT) : "",
+                            abcClassification : StringEscapeUtils.escapeCsv(product?.getAbcClassification(location.id) ?: ""),
+                            binLocation       : StringEscapeUtils.escapeCsv(binLocation?.name ?: ""),
                             status            : g.message(code: "binLocationSummary.${row?.status}.label"),
                             lastInventoryDate : latestInventoryDate ? latestInventoryDate.format(Constants.EXPIRATION_DATE_FORMAT) : "",
                             quantityOnHand    : row?.quantity ?: 0,

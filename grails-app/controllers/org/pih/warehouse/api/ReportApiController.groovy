@@ -10,15 +10,19 @@
 package org.pih.warehouse.api
 
 import grails.converters.JSON
+import grails.gorm.transactions.Transactional
 import org.apache.commons.lang.StringEscapeUtils
 import org.pih.warehouse.core.Constants
 import org.pih.warehouse.core.Location
+import org.pih.warehouse.inventory.InventoryItem
+import org.pih.warehouse.product.Category
 import org.pih.warehouse.product.Product
 
 class ReportApiController {
 
     def inventoryService
 
+    @Transactional(readOnly = true)
     def cycleCountReport() {
         Location location = Location.load(session.warehouse.id)
         List binLocations = inventoryService.getQuantityByBinLocation(location)
@@ -27,19 +31,22 @@ class ReportApiController {
         List rows = binLocations.collect { row ->
             // Required in order to avoid lazy initialization exception that occurs because all
             // of the querying / session work that was done above was executed in worker threads
-            Product product = Product.load(row?.product?.id)
+            Product product = Product.get(row?.product?.id)
+            Category category = row?.category?.id ? Category.get(row?.category?.id) : null
+            InventoryItem inventoryItem = row?.inventoryItem?.id ? InventoryItem.get(row?.inventoryItem?.id) : null
+            Location binLocation = row?.binLocation?.id ? Location.get(row?.binLocation?.id) : null
 
-            def latestInventoryDate = row?.product?.latestInventoryDate(location.id) ?: row?.product.earliestReceivingDate(location.id)
+            def latestInventoryDate = product?.latestInventoryDate(location.id) ?: product?.earliestReceivingDate(location.id)
             [
-                    productCode      : StringEscapeUtils.escapeCsv(row?.product?.productCode),
-                    productName      : row?.product.name ?: "",
+                    productCode      : StringEscapeUtils.escapeCsv(product?.productCode),
+                    productName      : product?.name ?: "",
                     productFamily    : product?.productFamily?.toString() ?: "",
-                    category         : StringEscapeUtils.escapeCsv(row?.category?.name ?: ""),
-                    formularies      : product.productCatalogs.join(", ") ?: "",
-                    lotNumber        : StringEscapeUtils.escapeCsv(row?.inventoryItem.lotNumber ?: ""),
-                    expirationDate   : row?.inventoryItem.expirationDate ? row?.inventoryItem.expirationDate.format(Constants.EXPIRATION_DATE_FORMAT) : "",
-                    abcClassification: StringEscapeUtils.escapeCsv(row?.product.getAbcClassification(location.id) ?: ""),
-                    binLocation      : StringEscapeUtils.escapeCsv(row?.binLocation?.name ?: ""),
+                    category         : StringEscapeUtils.escapeCsv(category?.name ?: ""),
+                    formularies      : product?.productCatalogs?.join(", ") ?: "",
+                    lotNumber        : StringEscapeUtils.escapeCsv(inventoryItem?.lotNumber ?: ""),
+                    expirationDate   : inventoryItem?.expirationDate ? inventoryItem.expirationDate.format(Constants.EXPIRATION_DATE_FORMAT) : "",
+                    abcClassification: StringEscapeUtils.escapeCsv(product?.getAbcClassification(location.id) ?: ""),
+                    binLocation      : StringEscapeUtils.escapeCsv(binLocation?.name ?: ""),
                     status           : g.message(code: "binLocationSummary.${row?.status}.label"),
                     lastInventoryDate: latestInventoryDate ? latestInventoryDate.format(Constants.EXPIRATION_DATE_FORMAT) : "",
                     quantityOnHand   : row?.quantity ?: 0,
