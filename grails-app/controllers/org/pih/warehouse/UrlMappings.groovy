@@ -477,7 +477,12 @@ class UrlMappings {
 
         "/api/documents" {
             controller = { "documentApi" }
-            action = [POST: "create"]
+            action = [POST: "create", GET: "list"]
+        }
+
+        "/api/goodsReceiptNotes/$id/printData"(parseRequest: true) {
+            controller = { "goodsReceiptNoteApi" }
+            action = [GET: "printData"]
         }
 
         "/api/eventTypes/eventCodeOptions"(parseRequest: true) {

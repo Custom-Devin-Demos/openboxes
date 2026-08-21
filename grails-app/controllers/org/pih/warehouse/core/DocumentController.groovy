@@ -53,12 +53,7 @@ class DocumentController {
     }
 
     def list(DocumentFilterCommand command) {
-
-        log.info "params: " + params
-
-        PagedResultList<Document> documentInstanceList = documentService.getDocuments(command)
-
-        [documentInstanceList: documentInstanceList, documentInstanceTotal: documentInstanceList.totalCount]
+        render(view: "/common/react")
     }
 
     def create() {
@@ -94,13 +89,7 @@ class DocumentController {
     }
 
     def show() {
-        def documentInstance = Document.get(params.id)
-        if (!documentInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'document.label', default: 'Document'), params.id])}"
-            redirect(action: "list")
-        } else {
-            [documentInstance: documentInstance]
-        }
+        render(view: "/common/react")
     }
 
     def edit() {
@@ -308,6 +297,11 @@ class DocumentController {
     def upload() {
 
         log.info "Upload " + params
+
+        if (request.method == "GET") {
+            render(view: "/common/react")
+            return
+        }
 
         def documentInstance = Document.get(params.id)
         if (documentInstance) {
