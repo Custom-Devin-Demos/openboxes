@@ -94,7 +94,7 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 
 | Batch | Scope | Status | Session | PR | Evidence |
 |---|---|---|---|---|---|
-| 2-finance-config-2 | finance-config-2 batch | IN_PROGRESS | [232ad85c](https://app.devin.ai/sessions/232ad85cf6d544f6bb868eb7f1b2a681) | | |
+| 2-finance-config-2 | finance-config-2 batch | REBASING | [232ad85c](https://app.devin.ai/sessions/232ad85cf6d544f6bb868eb7f1b2a681) | [#16](https://github.com/Custom-Devin-Demos/openboxes/pull/16) | Verified green; conflicts after wave-2 merges; rebase requested |
 | 2-finance-config-3 | finance-config-3 batch | REBASING | [99e5aab4](https://app.devin.ai/sessions/99e5aab429d946a0ac15a681fb92b18e) | [#25](https://github.com/Custom-Devin-Demos/openboxes/pull/25) | Verified green; conflicts after wave-2 merges; rebase requested |
 | 2-inventory-2 | inventory-2 batch | IN_PROGRESS | [5a57cc18](https://app.devin.ai/sessions/5a57cc18fc5949c9a4b5609b1ba11c20) | | |
 | 2-locations-orgs-2 | locations-orgs-2 batch | MERGED | [48532479](https://app.devin.ai/sessions/48532479e78c4e79a20e038236265cfe) | [#20](https://github.com/Custom-Devin-Demos/openboxes/pull/20) | 6 locationGroup/locationType screens; post-rebase snapshots 122/122, Playwright 10/10, CI 4/4 |
@@ -102,7 +102,7 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | 2-locations-orgs-6 | locations-orgs-6 batch | MERGED | [705b3922](https://app.devin.ai/sessions/705b3922edf74221b462c43b7869e175) | [#17](https://github.com/Custom-Devin-Demos/openboxes/pull/17) | Playwright 10/10, snapshots green minus 2 pre-existing baseline issues, CI green |
 | 2-product-catalog-2 | product-catalog-2 batch | MERGED | [41cafdc5](https://app.devin.ai/sessions/41cafdc5c6b04a6d84f833293e6c8bfc) | [#19](https://github.com/Custom-Devin-Demos/openboxes/pull/19) | 6 product screens; Playwright 9/10 (flow-3 flake passes solo); snapshots at baseline; CI 4/4 |
 | 2-product-catalog-4 | product-catalog-4 batch | IN_PROGRESS | [4c343f82](https://app.devin.ai/sessions/4c343f82d52b48f5baffb49f8685c2cd) | | |
-| 2-users-security-1 | users-security-1 batch | IN_PROGRESS | [d9178c80](https://app.devin.ai/sessions/d9178c80e0fd49c8a30dd73299d9a7f9) | [#23](https://github.com/Custom-Devin-Demos/openboxes/pull/23) | PR created; child watching CI |
+| 2-users-security-1 | users-security-1 batch | REBASING | [d9178c80](https://app.devin.ai/sessions/d9178c80e0fd49c8a30dd73299d9a7f9) | [#23](https://github.com/Custom-Devin-Demos/openboxes/pull/23) | Verified green; conflicts after wave-2 merges; rebase requested |
 | 2-invoicing | invoicing batch | MERGED | [11c5c78a](https://app.devin.ai/sessions/11c5c78a6b534ffe928ef5f028d189cf) | [#21](https://github.com/Custom-Devin-Demos/openboxes/pull/21) | invoice show/addDocument/editDocument; post-rebase snapshots 122/122, Playwright 10/10, CI 4/4 |
 - 2026-08-20: Phase 2 wave 2 spawned (10 batches). P1.2 (#12) asked to rebase onto latest develop before merge.
 - 2026-08-20: P1.2 Grails 4.1.4 merged (PR #12) after rebase onto develop with all wave-1 Phase 2 batches. P1.3 (Grails 4→5) spawning next.
@@ -112,3 +112,4 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 - 2026-08-21: PR #18 merged. PR #21 (invoicing) conflicts after wave-2 merges; rebase requested. PR #20 still rebasing.
 - 2026-08-21: PR #21 (invoicing) merged after rebase (authoritatively confirmed).
 - 2026-08-21: PR #20 (locations-orgs-2) merged after rebase. PR #25 (finance-config-3) conflicts; rebase requested. PR #23 (users-security-1) created.
+- 2026-08-21: PRs #16 (finance-config-2) and #23 (users-security-1) conflict after wave-2 merges; rebases requested.
