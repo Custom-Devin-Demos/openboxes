@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { useHistory } from 'react-router-dom';
 
@@ -19,6 +19,8 @@ const TransactionEntryList = () => {
   useTranslation('transactionEntry', 'default');
   const history = useHistory();
 
+  const [filterParams] = useState({ transactionEntry: '' });
+
   const getParams = ({ offset, state, sortingParams }) => ({
     offset: `${offset}`,
     max: `${state.pageSize}`,
@@ -31,7 +33,7 @@ const TransactionEntryList = () => {
     onFetchHandler,
     tableData,
   } = useTableData({
-    filterParams: {},
+    filterParams,
     url: TRANSACTION_ENTRY_API,
     errorMessageId: 'react.transactionEntry.error.transactionEntryList.label',
     defaultErrorMessage: 'Unable to fetch transaction entries',
