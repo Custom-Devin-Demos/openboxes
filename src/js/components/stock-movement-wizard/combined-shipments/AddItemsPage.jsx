@@ -796,8 +796,8 @@ class AddItemsPage extends Component {
     // 2. Removing exp date (existing lot)
     // 3. Creating exp date for existing lot (previously had none)
     // 4. Never show for new lots that don't exist in the system
-    const expirationDateChanged = lineItem?.lotNumber && lotExists &&
-      (isExpirationDateRemoved || (isExpirationDateEntered && areExpirationDatesDifferent));
+    const expirationDateChanged = lineItem?.lotNumber && lotExists
+      && (isExpirationDateRemoved || (isExpirationDateEntered && areExpirationDatesDifferent));
 
     if (expirationDateChanged) {
       // Despite we have only one item here, we are place it in an array
@@ -810,8 +810,9 @@ class AddItemsPage extends Component {
         newExpiry: lineItem?.expirationDate,
       }];
 
-      const shouldUpdateExpirationDate =
-        await this.confirmExpirationDateSave(itemsWithMismatchedExpiry);
+      const shouldUpdateExpirationDate = await this.confirmExpirationDateSave(
+        itemsWithMismatchedExpiry,
+      );
       if (!shouldUpdateExpirationDate) {
         this.cancelSavingRequisitionItem(lineItems, rowIndex);
         return Promise.reject();

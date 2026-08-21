@@ -686,8 +686,9 @@ class AddItemsPage extends Component {
             }));
 
           if (itemsWithMismatchedExpiry.length > 0) {
-            const shouldUpdateExpirationDate =
-              await this.confirmExpirationDateSave(itemsWithMismatchedExpiry);
+            const shouldUpdateExpirationDate = await this.confirmExpirationDateSave(
+              itemsWithMismatchedExpiry,
+            );
             if (!shouldUpdateExpirationDate) {
               return Promise.reject();
             }
