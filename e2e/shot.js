@@ -5,25 +5,15 @@ const { chromium } = require('@playwright/test');
 
 const BASE = 'http://localhost:8080/openboxes';
 const outDir = process.argv[2] || '/tmp/shots/before';
-const shipmentItemId = process.env.SHIPMENT_ITEM_ID;
-const partyRoleId = process.env.PARTY_ROLE_ID;
-const partyTypeId = process.env.PARTY_TYPE_ID;
+const productTypeId = process.env.PRODUCT_TYPE_ID || 'DEFAULT';
+const tagId = process.env.TAG_ID || 'seed-tag-01';
 const urls = [
-  ['shipmentItem-list', '/shipmentItem/list'],
-  ['shipmentItem-create', '/shipmentItem/create'],
-  ['shipmentItem-edit', `/shipmentItem/edit/${shipmentItemId}`],
-  ['shipmentItem-show', `/shipmentItem/show/${shipmentItemId}`],
-  ['shipmentItem-pick', `/shipmentItem/pick/${shipmentItemId}`],
-  ['deliveryNote-print', '/deliveryNote/print/ff808081a024cf3201a024cfd2a40000'],
-  ['deliveryNote-printOutboundReturn', '/deliveryNote/printOutboundReturn/ff808081a024cf3201a024cfd2e40001'],
-  ['document-create', '/document/create'],
-  ['document-edit', '/document/edit/ff808081a024cf3201a024d136a00010'],
-  ['partyRole-list', '/partyRole/list'],
-  ['partyRole-show', `/partyRole/show/${partyRoleId}`],
-  ['partyType-list', '/partyType/list'],
-  ['partyType-show', `/partyType/show/${partyTypeId}`],
-  ['partyType-create', '/partyType/create'],
-  ['partyType-edit', `/partyType/edit/${partyTypeId}`],
+  ['productType-show', `/productType/show/${productTypeId}`],
+  ['tag-list', '/tag/list'],
+  ['tag-create', '/tag/create'],
+  ['tag-edit', `/tag/edit/${tagId}`],
+  ['tag-show', `/tag/show/${tagId}`],
+  ['unitOfMeasureConversion-create', '/unitOfMeasureConversion/create'],
 ];
 
 (async () => {

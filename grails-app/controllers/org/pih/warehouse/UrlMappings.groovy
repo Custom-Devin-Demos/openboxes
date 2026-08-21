@@ -365,6 +365,36 @@ class UrlMappings {
             action = [GET: "read", PUT: "update", DELETE: "delete"]
         }
 
+        "/api/tags"(parseRequest: true) {
+            controller = { "tagApi" }
+            action = [GET: "list", POST: "create"]
+        }
+
+        "/api/tags/$id"(parseRequest: true) {
+            controller = { "tagApi" }
+            action = [GET: "read", PUT: "update", DELETE: "delete"]
+        }
+
+        "/api/tags/$id/addProducts"(parseRequest: true) {
+            controller = { "tagApi" }
+            action = [POST: "addProducts"]
+        }
+
+        "/api/tags/$id/removeProducts"(parseRequest: true) {
+            controller = { "tagApi" }
+            action = [POST: "removeProducts"]
+        }
+
+        "/api/unitOfMeasureConversions/unitOfMeasureOptions"(parseRequest: true) {
+            controller = { "unitOfMeasureConversionApi" }
+            action = [GET: "unitOfMeasureOptions"]
+        }
+
+        "/api/unitOfMeasureConversions"(parseRequest: true) {
+            controller = { "unitOfMeasureConversionApi" }
+            action = [POST: "create"]
+        }
+
         "/api/partyTypes/partyTypeCodeOptions"(parseRequest: true) {
             controller = { "partyTypeApi" }
             action = [GET: "partyTypeCodeOptions"]

@@ -1187,6 +1187,31 @@ const AsyncPartyRoleForm = Loadable({
   loading: Loading,
 });
 
+const AsyncProductTypeShow = Loadable({
+  loader: () => import('components/productType/ProductTypeShow'),
+  loading: Loading,
+});
+
+const AsyncTagList = Loadable({
+  loader: () => import('components/tag/TagList'),
+  loading: Loading,
+});
+
+const AsyncTagShow = Loadable({
+  loader: () => import('components/tag/TagShow'),
+  loading: Loading,
+});
+
+const AsyncTagForm = Loadable({
+  loader: () => import('components/tag/TagForm'),
+  loading: Loading,
+});
+
+const AsyncUnitOfMeasureConversionCreate = Loadable({
+  loader: () => import('components/unitOfMeasureConversion/UnitOfMeasureConversionCreate'),
+  loading: Loading,
+});
+
 const AsyncPersonList = Loadable({
   loader: () => import('components/person/PersonList'),
   loading: Loading,
@@ -1542,6 +1567,12 @@ const Router = () => {
             <MainLayoutRoute path="**/partyType/show/:id" component={AsyncPartyTypeShow} />
             <MainLayoutRoute path="**/partyType/create" component={AsyncPartyTypeForm} />
             <MainLayoutRoute path="**/partyType/edit/:id?" component={AsyncPartyTypeForm} />
+            <MainLayoutRoute path="**/productType/show/:id" component={AsyncProductTypeShow} />
+            <MainLayoutRoute path="**/tag/list" component={AsyncTagList} />
+            <MainLayoutRoute path="**/tag/show/:id" component={AsyncTagShow} />
+            <MainLayoutRoute path="**/tag/create" component={AsyncTagForm} />
+            <MainLayoutRoute path="**/tag/edit/:id?" component={AsyncTagForm} />
+            <MainLayoutRoute path="**/unitOfMeasureConversion/create" component={AsyncUnitOfMeasureConversionCreate} />
             <MainLayoutRoute path="**/person/list" component={AsyncPersonList} />
             <MainLayoutRoute path="**/person/create" component={AsyncPersonForm} />
             <MainLayoutRoute path="**/person/edit/:id?" component={AsyncPersonForm} />
