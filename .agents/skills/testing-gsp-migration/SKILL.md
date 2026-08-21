@@ -12,6 +12,7 @@ description: How to verify GSP→React screen-migration batches in OpenBoxes (be
 - Wait for the literal `Grails application running` line in the boot log before seeding — HTTP 200 on /auth/login is NOT a reliable migrations-complete signal; seeding mid-migration breaks later FK changesets (e.g. `user_role.role_id → role.id`). The Liquibase changelog table is uppercase `DATABASECHANGELOG` post-upgrade.
 - The seed can silently insert 0 rows if run immediately after boot: verify `select count(*) from product` = 8 and re-run the script once if 0 (it is insert-only and idempotent against duplicates).
 - To kill the app reliably: `pkill -f GradleWrapperMain; pkill -f GradleDaemon` then verify with `pgrep -fa java` (a plain `pkill -f gradle` can kill your own shell and leave GradleDaemon alive holding port 8080).
+- Before relaunching bootRun, verify ports 5005/8080 are free (`ss -tln | grep -E '5005|8080'`) — a leftover JVM causes a JDWP "Address already in use" bind failure and a silent BUILD FAILED.
 
 ## BEFORE/AFTER screenshots
 - Save the branch's `e2e/shot.js` (it holds the batch's URL list), `git checkout develop`, boot, run it; then checkout the branch, reboot, run again.
