@@ -425,6 +425,46 @@ class UrlMappings {
             action = [GET: "read", PUT: "update", DELETE: "delete"]
         }
 
+        "/api/deliveryNotes/$id/printData"(parseRequest: true) {
+            controller = { "deliveryNoteApi" }
+            action = [GET: "printData"]
+        }
+
+        "/api/deliveryNotes/$id/printOutboundReturnData"(parseRequest: true) {
+            controller = { "deliveryNoteApi" }
+            action = [GET: "printOutboundReturnData"]
+        }
+
+        "/api/documents/documentTypeOptions"(parseRequest: true) {
+            controller = { "documentApi" }
+            action = [GET: "documentTypeOptions"]
+        }
+
+        "/api/documents/$id/details"(parseRequest: true) {
+            controller = { "documentApi" }
+            action = [GET: "details"]
+        }
+
+        "/api/documents/$id/upload" {
+            controller = { "documentApi" }
+            action = [POST: "upload"]
+        }
+
+        "/api/documents/$id/update" {
+            controller = { "documentApi" }
+            action = [POST: "update"]
+        }
+
+        "/api/documents/$id"(parseRequest: true) {
+            controller = { "documentApi" }
+            action = [DELETE: "delete"]
+        }
+
+        "/api/documents" {
+            controller = { "documentApi" }
+            action = [POST: "create"]
+        }
+
         "/api/eventTypes/eventCodeOptions"(parseRequest: true) {
             controller = { "eventTypeApi" }
             action = [GET: "eventCodeOptions"]

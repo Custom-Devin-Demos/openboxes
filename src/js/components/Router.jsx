@@ -238,6 +238,26 @@ const AsyncOrderPrint = Loadable({
   loading: Loading,
 });
 
+const AsyncDeliveryNotePrint = Loadable({
+  loader: () => import('components/deliveryNote/DeliveryNotePrint'),
+  loading: Loading,
+});
+
+const AsyncOutboundReturnPrint = Loadable({
+  loader: () => import('components/deliveryNote/OutboundReturnPrint'),
+  loading: Loading,
+});
+
+const AsyncDocumentCreate = Loadable({
+  loader: () => import('components/document/DocumentCreate'),
+  loading: Loading,
+});
+
+const AsyncDocumentEdit = Loadable({
+  loader: () => import('components/document/DocumentEdit'),
+  loading: Loading,
+});
+
 const AsyncOrderAdjustmentTypeList = Loadable({
   loader: () => import('components/orderAdjustmentType/OrderAdjustmentTypeList'),
   loading: Loading,
@@ -1228,6 +1248,10 @@ const Router = () => {
             <MainLayoutRoute path="**/organization/create" component={AsyncOrganizationForm} />
             <MainLayoutRoute path="**/organization/edit/:organizationId" component={AsyncOrganizationForm} />
             <MainLayoutRoute path="**/organization/show/:id" component={AsyncOrganizationShow} />
+            <Route path="**/deliveryNote/print/:id" component={AsyncDeliveryNotePrint} />
+            <Route path="**/deliveryNote/printOutboundReturn/:id" component={AsyncOutboundReturnPrint} />
+            <MainLayoutRoute path="**/document/create" component={AsyncDocumentCreate} />
+            <MainLayoutRoute path="**/document/edit/:documentId" component={AsyncDocumentEdit} />
             <MainLayoutRoute path="**/glAccount/list" component={AsyncGlAccountList} />
             <MainLayoutRoute path="**/glAccount/create" component={AsyncGlAccountForm} />
             <MainLayoutRoute path="**/glAccount/edit/:glAccountId" component={AsyncGlAccountForm} />

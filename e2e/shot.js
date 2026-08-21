@@ -12,6 +12,10 @@ const urls = [
   ['shipmentItem-edit', `/shipmentItem/edit/${shipmentItemId}`],
   ['shipmentItem-show', `/shipmentItem/show/${shipmentItemId}`],
   ['shipmentItem-pick', `/shipmentItem/pick/${shipmentItemId}`],
+  ['deliveryNote-print', '/deliveryNote/print/ff808081a024cf3201a024cfd2a40000'],
+  ['deliveryNote-printOutboundReturn', '/deliveryNote/printOutboundReturn/ff808081a024cf3201a024cfd2e40001'],
+  ['document-create', '/document/create'],
+  ['document-edit', '/document/edit/ff808081a024cf3201a024d136a00010'],
 ];
 
 (async () => {

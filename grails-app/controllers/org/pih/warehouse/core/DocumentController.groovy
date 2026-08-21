@@ -62,9 +62,7 @@ class DocumentController {
     }
 
     def create() {
-        def documentInstance = new Document()
-        documentInstance.properties = params
-        return [documentInstance: documentInstance]
+        render(view: "/common/react")
     }
 
     def save() {
@@ -106,13 +104,7 @@ class DocumentController {
     }
 
     def edit() {
-        def documentInstance = Document.get(params.id)
-        if (!documentInstance) {
-            flash.message = "${warehouse.message(code: 'default.not.found.message', args: [warehouse.message(code: 'document.label', default: 'Document'), params.id])}"
-            redirect(action: "list")
-        } else {
-            return [documentInstance: documentInstance]
-        }
+        render(view: "/common/react")
     }
 
     def update() {

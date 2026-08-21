@@ -152,6 +152,10 @@ const DOCUMENT_URL = {
   uploadDocument: () => `${DOCUMENT_URL.base}/uploadDocument`,
   download: (id) => `${DOCUMENT_URL.base}/download/${id}`,
   saveDocument: () => `${DOCUMENT_URL.base}/saveDocument`,
+  list: () => `${DOCUMENT_URL.base}/list`,
+  create: () => `${DOCUMENT_URL.base}/create`,
+  edit: (id) => `${DOCUMENT_URL.base}/edit/${id}`,
+  preview: (id) => `${DOCUMENT_URL.base}/preview/${id}`,
 };
 
 const PURCHASE_ORDER_URL = {
