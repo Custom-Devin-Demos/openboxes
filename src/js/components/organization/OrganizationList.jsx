@@ -29,10 +29,17 @@ const ORGANIZATION_ROLE_TYPES = [
   'ROLE_REQUESTOR',
 ];
 
+const formatRoleType = (roleType) => {
+  const words = roleType.replace(/^ROLE_/, '').toLowerCase().split('_');
+  return words
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
 const roleTypeOptions = ORGANIZATION_ROLE_TYPES.map((roleType) => ({
   id: roleType,
   value: roleType,
-  label: roleType,
+  label: formatRoleType(roleType),
 }));
 
 const OrganizationList = () => {
@@ -132,7 +139,9 @@ const OrganizationList = () => {
       Cell: (row) => (
         <TableCell
           {...row}
-          value={(row.original.roles || []).map((role) => role.roleType || role.name || role).join(',')}
+          value={(row.original.roles || [])
+            .map((role) => formatRoleType(String(role.roleType || role.name || role)))
+            .join(', ')}
         />
       ),
     },
