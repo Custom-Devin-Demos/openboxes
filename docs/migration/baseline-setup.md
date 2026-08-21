@@ -5,7 +5,7 @@ application, frontend) on this fork.
 
 ## Prerequisites
 
-- Java 11 (e.g. `/usr/lib/jvm/java-11-openjdk-amd64` on Ubuntu; install with `apt install openjdk-11-jdk-headless`)
+- Java 21 (e.g. `/usr/lib/jvm/java-21-openjdk-amd64` on Ubuntu; install with `apt install openjdk-21-jdk-headless`)
 - Node 14 (via [nvm](https://github.com/nvm-sh/nvm): `nvm install 14`)
 - Docker + Docker Compose (for the database)
 
@@ -82,7 +82,7 @@ docker compose -f docker/docker-compose-dev.yml up -d
 ## 4. Run the application
 
 ```bash
-JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 ./gradlew bootRun
+JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64 ./gradlew bootRun
 ```
 
 - First boot runs all Liquibase migrations (~5–10 minutes). Later boots are much faster.
@@ -107,9 +107,9 @@ npm run watch      # hot-reload rebuild during development
 npm test           # React/Jest tests
 npm run eslint     # lint
 
-# Backend (Java 11; integration tests start their own DB via Testcontainers)
-JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 ./gradlew test
-JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 ./gradlew integrationTest
+# Backend (Java 21; integration tests start their own DB via Testcontainers)
+JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64 ./gradlew test
+JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64 ./gradlew integrationTest
 ```
 
 ## CI on this fork
@@ -125,4 +125,23 @@ every pull request (`test-pull-request.yml`) and on pushes to main branches
 
 Test execution itself (frontend Jest tests, backend unit + integration tests against
 MySQL 8 and MariaDB 10.3) runs fully on this fork. All workflows build with
-Temurin (Adoptium) Java 11.
+Temurin (Adoptium) Java 21.
+
+## Toolchain (Grails 6)
+
+As of the Grails 6 migration (Phase 1.4), the app builds and runs on:
+
+| Component            | Version |
+|----------------------|---------|
+| Grails               | 6.2.3   |
+| grails-gradle-plugin | 6.2.4   |
+| Gradle (wrapper)     | 8.11.1  |
+| Groovy               | 3.0.23 (Grails 6 stays on Groovy 3; Groovy 4 arrives with Grails 7) |
+| GORM                 | 8.1.2 (hibernate5 plugin 8.1.1) |
+| Spring Boot          | 2.7.18  |
+| Spring Framework     | 5.3.39  |
+| Hibernate            | 5.6.15.Final |
+| Java (build+runtime) | 21 (bytecode target 17) |
+
+Grails 6 remains on the `javax.*` servlet stack (Spring Boot 2.7 / Tomcat 9 /
+Servlet 4); the jakarta namespace migration comes with Grails 7 / Spring Boot 3.
