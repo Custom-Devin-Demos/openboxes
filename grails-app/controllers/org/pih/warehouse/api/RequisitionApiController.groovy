@@ -808,6 +808,9 @@ class RequisitionApiController {
             render([success: false, errors: requisitionItem.errors.allErrors.collect { g.message(error: it) }] as JSON)
             return
         }
+        requisitionItem.markDirty('quantityCanceled')
+        requisitionItem.markDirty('cancelReasonCode')
+        requisitionItem.markDirty('cancelComments')
         requisitionItem.save(flush: true)
         render([success: true, requisitionId: requisitionItem.requisition?.id] as JSON)
     }
