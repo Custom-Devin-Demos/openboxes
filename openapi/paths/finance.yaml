@@ -1,0 +1,577 @@
+# Finance reference-data API: GL accounts, GL account types, budget codes,
+# payment terms (GlAccountApiController, GlAccountTypeApiController,
+# BudgetCodeApiController, PaymentTermApiController).
+
+/api/glAccounts:
+  get:
+    tags: [finance]
+    summary: List GL accounts (paginated, max capped at 100, default 10)
+    operationId: listGlAccounts
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: Paginated GL accounts.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GlAccountList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [finance]
+    summary: Create a GL account
+    operationId: createGlAccount
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GlAccountInput'
+          example:
+            code: '99999'
+            name: Scratch GL account
+            active: true
+    responses:
+      '201':
+        description: Created GL account.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GlAccountResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20001
+                code: '99999'
+                name: Scratch GL account
+                description: null
+                active: true
+                glAccountType: null
+                dateCreated: '2026-01-01T00:00:00Z'
+                lastUpdated: '2026-01-01T00:00:00Z'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/glAccounts/glAccountTypeOptions:
+  get:
+    tags: [finance]
+    summary: List GL account type options (id + code label)
+    operationId: listGlAccountTypeOptions
+    responses:
+      '200':
+        description: GL account type select options.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdLabelOptionList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/glAccounts/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [finance]
+    summary: Read a GL account by id
+    operationId: readGlAccount
+    x-contract-tests:
+      - name: unknown id returns 404
+        params:
+          id: no-such-gl-account
+        status: 404
+    responses:
+      '200':
+        description: The GL account.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GlAccountResponse'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [finance]
+    summary: Update a GL account
+    operationId: updateGlAccount
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GlAccountInput'
+          example:
+            name: Renamed GL account
+            active: true
+    responses:
+      '200':
+        description: Updated GL account.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GlAccountResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20001
+                code: '99999'
+                name: Renamed GL account
+                description: null
+                active: true
+                glAccountType: null
+                dateCreated: '2026-01-01T00:00:00Z'
+                lastUpdated: '2026-01-01T00:00:00Z'
+      '400':
+        description: |
+          Validation error (shared ErrorResponse shape), or the non-standard
+          `{errorMessage}`-only body rendered when deactivating a GL account
+          that is linked to a product.
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/ErrorResponse'
+                - $ref: '#/components/schemas/GlAccountDeactivationError'
+            example:
+              errorMessage: This GL account is linked to an active product and cannot be deactivated.
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [finance]
+    summary: Delete a GL account
+    operationId: deleteGlAccount
+    x-contract-tests:
+      - name: unknown id returns 404
+        params:
+          id: no-such-gl-account
+        status: 404
+    responses:
+      '204':
+        description: Deleted (no content).
+      '404':
+        $ref: '#/components/responses/NotFound'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/glAccountTypes:
+  get:
+    tags: [finance]
+    summary: List GL account types (paginated, max capped at 100, default 10)
+    operationId: listGlAccountTypes
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: Paginated GL account types.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GlAccountTypeList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [finance]
+    summary: Create a GL account type
+    operationId: createGlAccountType
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GlAccountTypeInput'
+          example:
+            name: Scratch type
+            glAccountTypeCode: ASSET
+    responses:
+      '201':
+        description: Created GL account type.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GlAccountTypeResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20002
+                code: null
+                name: Scratch type
+                glAccountTypeCode: ASSET
+                dateCreated: '2026-01-01T00:00:00Z'
+                lastUpdated: '2026-01-01T00:00:00Z'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/glAccountTypes/glAccountTypeCodeOptions:
+  get:
+    tags: [finance]
+    summary: List GL account type code enum options
+    operationId: listGlAccountTypeCodeOptions
+    responses:
+      '200':
+        description: GlAccountTypeCode enum select options (id = label = enum name).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdLabelOptionList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/glAccountTypes/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [finance]
+    summary: Read a GL account type by id
+    operationId: readGlAccountType
+    x-contract-tests:
+      - name: unknown id returns 404
+        params:
+          id: no-such-gl-account-type
+        status: 404
+    responses:
+      '200':
+        description: The GL account type.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GlAccountTypeResponse'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [finance]
+    summary: Update a GL account type
+    operationId: updateGlAccountType
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GlAccountTypeInput'
+          example:
+            name: Renamed type
+    responses:
+      '200':
+        description: Updated GL account type.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GlAccountTypeResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20002
+                code: null
+                name: Renamed type
+                glAccountTypeCode: ASSET
+                dateCreated: '2026-01-01T00:00:00Z'
+                lastUpdated: '2026-01-01T00:00:00Z'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [finance]
+    summary: Delete a GL account type
+    operationId: deleteGlAccountType
+    x-contract-tests:
+      - name: unknown id returns 404
+        params:
+          id: no-such-gl-account-type
+        status: 404
+    responses:
+      '204':
+        description: Deleted (no content).
+      '404':
+        $ref: '#/components/responses/NotFound'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/budgetCodes:
+  get:
+    tags: [finance]
+    summary: List budget codes (filterable, paginated)
+    operationId: listBudgetCodes
+    parameters:
+      - name: q
+        in: query
+        required: false
+        description: Search term matched against code/name.
+        schema:
+          type: string
+      - name: active
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: budgetCodeIds
+        in: query
+        required: false
+        description: Restrict to specific budget code ids (repeatable).
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: Paginated budget codes.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BudgetCodeList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [finance]
+    summary: Create a budget code
+    operationId: createBudgetCode
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BudgetCodeInput'
+          example:
+            code: SCRATCH
+            name: Scratch budget code
+            active: true
+    responses:
+      '201':
+        description: Created budget code.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BudgetCodeResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20003
+                code: SCRATCH
+                name: Scratch budget code
+                description: null
+                active: true
+                organization: null
+                dateCreated: '2026-01-01T00:00:00Z'
+                lastUpdated: '2026-01-01T00:00:00Z'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/budgetCodes/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [finance]
+    summary: Read a budget code by id
+    operationId: readBudgetCode
+    x-contract-tests:
+      - name: unknown id returns 404
+        params:
+          id: no-such-budget-code
+        status: 404
+    responses:
+      '200':
+        description: The budget code.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BudgetCodeResponse'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [finance]
+    summary: Update a budget code
+    operationId: updateBudgetCode
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BudgetCodeInput'
+          example:
+            name: Renamed budget code
+    responses:
+      '200':
+        description: Updated budget code.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BudgetCodeResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20003
+                code: SCRATCH
+                name: Renamed budget code
+                description: null
+                active: true
+                organization: null
+                dateCreated: '2026-01-01T00:00:00Z'
+                lastUpdated: '2026-01-01T00:00:00Z'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [finance]
+    summary: Delete a budget code
+    operationId: deleteBudgetCode
+    x-contract-tests:
+      - name: unknown id returns 404
+        params:
+          id: no-such-budget-code
+        status: 404
+    responses:
+      '204':
+        description: Deleted (no content).
+      '404':
+        $ref: '#/components/responses/NotFound'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/paymentTerms:
+  get:
+    tags: [finance]
+    summary: List payment terms (paginated, max capped at 100, default 10)
+    operationId: listPaymentTerms
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: Paginated payment terms.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentTermList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [finance]
+    summary: Create a payment term
+    operationId: createPaymentTerm
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PaymentTermInput'
+          example:
+            name: Net 45
+            daysToPayment: 45
+    responses:
+      '201':
+        description: Created payment term.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentTermResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20004
+                code: null
+                name: Net 45
+                description: null
+                prepaymentPercent: null
+                daysToPayment: 45
+                dateCreated: '2026-01-01T00:00:00Z'
+                lastUpdated: '2026-01-01T00:00:00Z'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/paymentTerms/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [finance]
+    summary: Read a payment term by id
+    operationId: readPaymentTerm
+    x-contract-tests:
+      - name: unknown id returns 404
+        params:
+          id: no-such-payment-term
+        status: 404
+    responses:
+      '200':
+        description: The payment term.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentTermResponse'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [finance]
+    summary: Update a payment term
+    operationId: updatePaymentTerm
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PaymentTermInput'
+          example:
+            name: Net 60
+            daysToPayment: 60
+    responses:
+      '200':
+        description: Updated payment term.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentTermResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20004
+                code: null
+                name: Net 60
+                description: null
+                prepaymentPercent: null
+                daysToPayment: 60
+                dateCreated: '2026-01-01T00:00:00Z'
+                lastUpdated: '2026-01-01T00:00:00Z'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [finance]
+    summary: Delete a payment term
+    operationId: deletePaymentTerm
+    x-contract-tests:
+      - name: unknown id returns 404
+        params:
+          id: no-such-payment-term
+        status: 404
+    responses:
+      '204':
+        description: Deleted (no content).
+      '404':
+        $ref: '#/components/responses/NotFound'
+      '500':
+        $ref: '#/components/responses/ServerError'

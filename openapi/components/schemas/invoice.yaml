@@ -1,0 +1,562 @@
+# Invoicing schemas (InvoiceApiController, PrepaymentInvoiceApiController,
+# PrepaymentInvoiceItemApiController).
+
+Invoice:
+  type: object
+  description: Invoice as serialized by Invoice.toJson().
+  properties:
+    id:
+      type: string
+    invoiceNumber:
+      type: string
+      nullable: true
+    vendorInvoiceNumber:
+      type: string
+      nullable: true
+    name:
+      type: string
+      nullable: true
+    description:
+      type: string
+      nullable: true
+    partyFrom:
+      type: object
+      nullable: true
+      description: Buyer organization, serialized with the default Grails JSON converter.
+      additionalProperties: true
+    dateInvoiced:
+      type: string
+      nullable: true
+      description: Formatted MM/dd/yyyy.
+    dateSubmitted:
+      type: string
+      nullable: true
+    datePosted:
+      type: string
+      nullable: true
+    dateDue:
+      type: string
+      nullable: true
+    datePaid:
+      type: string
+      nullable: true
+    currencyUom:
+      type: object
+      nullable: true
+      description: Currency unit of measure domain object (default converter).
+      additionalProperties: true
+    vendor:
+      type: string
+      nullable: true
+      description: Vendor organization id.
+    vendorName:
+      type: string
+      nullable: true
+      description: Concatenated vendor code + name.
+    totalCount:
+      type: integer
+      nullable: true
+      description: Number of invoice items on the invoice.
+    totalValue:
+      type: number
+      nullable: true
+    invoiceType:
+      type: string
+      nullable: true
+      description: InvoiceTypeCode enum name (INVOICE, PREPAYMENT_INVOICE).
+    hasPrepaymentInvoice:
+      type: boolean
+      nullable: true
+    isPrepaymentInvoice:
+      type: boolean
+      nullable: true
+    status:
+      type: string
+      nullable: true
+      description: InvoiceStatus enum name.
+    documents:
+      type: array
+      nullable: true
+      items:
+        type: object
+        additionalProperties: true
+
+InvoiceResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      $ref: '#/components/schemas/Invoice'
+
+InvoiceInput:
+  type: object
+  description: |
+    Request body bound onto an Invoice with bindData(); `vendor` is resolved
+    to an Organization id and `vendorInvoiceNumber` creates/updates a
+    reference number. invoiceNumber, invoiceType and partyFrom default when
+    omitted.
+  properties:
+    invoiceNumber:
+      type: string
+      nullable: true
+    name:
+      type: string
+      nullable: true
+    description:
+      type: string
+      nullable: true
+    vendor:
+      type: string
+      description: Vendor organization id.
+    vendorInvoiceNumber:
+      type: string
+      nullable: true
+    dateInvoiced:
+      type: string
+      nullable: true
+    currencyUom:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+
+InvoiceListEntry:
+  type: object
+  description: |
+    Row of GET /api/invoices - an InvoiceList view entity serialized with the
+    default Grails JSON converter (includes the nested full invoice).
+  additionalProperties: true
+  properties:
+    invoiceNumber:
+      type: string
+      nullable: true
+    vendorInvoiceNumber:
+      type: string
+      nullable: true
+    partyFromId:
+      type: string
+      nullable: true
+    partyId:
+      type: string
+      nullable: true
+    partyCode:
+      type: string
+      nullable: true
+    partyName:
+      type: string
+      nullable: true
+    invoiceTypeCode:
+      description: InvoiceTypeCode enum (serialized as string or object; null when unset).
+    status:
+      description: InvoiceStatus enum (serialized as string or object; null when unset).
+    currency:
+      type: string
+      nullable: true
+    itemCount:
+      description: Item count (string column; null when unset).
+    dateInvoiced:
+      type: string
+      nullable: true
+    dateCreated:
+      type: string
+      nullable: true
+    createdById:
+      type: string
+      nullable: true
+    createdByName:
+      type: string
+      nullable: true
+    invoice:
+      type: object
+      nullable: true
+      additionalProperties: true
+
+InvoiceListResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/components/schemas/InvoiceListEntry'
+    totalCount:
+      type: integer
+      nullable: true
+
+InvoiceItem:
+  type: object
+  description: Invoice item as serialized by InvoiceItem.toJson().
+  properties:
+    id:
+      type: string
+    orderNumber:
+      type: string
+      nullable: true
+    orderId:
+      type: string
+      nullable: true
+    shipmentNumber:
+      type: string
+      nullable: true
+    shipmentId:
+      type: string
+      nullable: true
+    budgetCode:
+      type: string
+      nullable: true
+    glCode:
+      type: string
+      nullable: true
+    productCode:
+      type: string
+      nullable: true
+    description:
+      type: string
+      nullable: true
+    quantity:
+      type: number
+      nullable: true
+    uom:
+      type: string
+      nullable: true
+    amount:
+      type: number
+      nullable: true
+    unitPrice:
+      type: number
+      nullable: true
+    orderAdjustment:
+      type: object
+      nullable: true
+      additionalProperties: true
+    productName:
+      type: string
+      nullable: true
+    displayNames:
+      type: object
+      nullable: true
+      additionalProperties: true
+    inverse:
+      type: boolean
+      nullable: true
+    isCanceled:
+      type: boolean
+      nullable: true
+    quantityAvailableToInvoice:
+      type: number
+      nullable: true
+    unitPriceAvailableToInvoice:
+      type: number
+      nullable: true
+    totalAmount:
+      type: number
+      nullable: true
+    totalPrepaymentAmount:
+      type: number
+      nullable: true
+
+InvoiceItemList:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/components/schemas/InvoiceItem'
+    totalCount:
+      type: integer
+      nullable: true
+
+InvoiceItemCandidate:
+  type: object
+  description: Invoice item candidate as serialized by InvoiceItemCandidate.toJson().
+  properties:
+    id:
+      type: string
+    orderNumber:
+      type: string
+      nullable: true
+    orderId:
+      type: string
+      nullable: true
+    shipmentNumber:
+      type: string
+      nullable: true
+    shipmentId:
+      type: string
+      nullable: true
+    budgetCode:
+      type: string
+      nullable: true
+    glCode:
+      type: string
+      nullable: true
+    productCode:
+      type: string
+      nullable: true
+    supplierCode:
+      type: string
+      nullable: true
+    description:
+      type: string
+      nullable: true
+    quantity:
+      type: number
+      nullable: true
+    quantityToInvoice:
+      type: number
+      nullable: true
+    uom:
+      type: string
+      nullable: true
+    unitPrice:
+      type: number
+      nullable: true
+    isAdjustment:
+      type: boolean
+      nullable: true
+    productName:
+      type: string
+      nullable: true
+    displayNames:
+      type: object
+      nullable: true
+      additionalProperties: true
+
+InvoiceItemCandidatesResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/components/schemas/InvoiceItemCandidate'
+
+InvoiceItemCandidatesRequest:
+  type: object
+  description: Filters for computing invoice item candidates.
+  properties:
+    orderNumbers:
+      type: array
+      items:
+        type: string
+    shipmentNumbers:
+      type: array
+      items:
+        type: string
+
+InvoiceNumbersResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: array
+      description: Distinct order or shipment numbers among invoice item candidates.
+      items:
+        type: string
+        nullable: true
+
+InvoiceDetails:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: object
+      properties:
+        id:
+          type: string
+        invoiceNumber:
+          type: string
+          nullable: true
+        vendorInvoiceNumber:
+          type: string
+          nullable: true
+        vendorName:
+          type: string
+          nullable: true
+        partyFromName:
+          type: string
+          nullable: true
+        createdByName:
+          type: string
+          nullable: true
+        updatedByName:
+          type: string
+          nullable: true
+        dateCreated:
+          type: string
+          nullable: true
+          description: Formatted dd/MMM/yyyy.
+        lastUpdated:
+          type: string
+          nullable: true
+        dateInvoiced:
+          type: string
+          nullable: true
+        datePosted:
+          type: string
+          nullable: true
+        isPosted:
+          type: boolean
+        currencyName:
+          type: string
+          nullable: true
+        currencyCode:
+          type: string
+          nullable: true
+        invoiceTypeName:
+          type: string
+          nullable: true
+        totalValue:
+          type: number
+          nullable: true
+        totalValueNormalized:
+          type: number
+          nullable: true
+        defaultCurrencyCode:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        statusLabel:
+          type: string
+          nullable: true
+        orders:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              orderNumber:
+                type: string
+                nullable: true
+        shipments:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              shipmentNumber:
+                type: string
+                nullable: true
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        documents:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        orderDocuments:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+
+InvoiceDocumentFormData:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: object
+      properties:
+        id:
+          type: string
+        invoiceNumber:
+          type: string
+          nullable: true
+        isPosted:
+          type: boolean
+        vendorName:
+          type: string
+          nullable: true
+        vendorInvoiceNumber:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        statusLabel:
+          type: string
+          nullable: true
+        documentTypes:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+                nullable: true
+        document:
+          type: object
+          nullable: true
+          additionalProperties: true
+
+InvoiceOptionsList:
+  type: object
+  description: Invoice status / type code select options.
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          value:
+            type: string
+          label:
+            type: string
+            nullable: true
+          variant:
+            type: string
+            nullable: true
+
+InvoiceItemsUpdateRequest:
+  type: object
+  description: Bulk invoice item update payload for POST /api/invoices/{id}/items.
+  properties:
+    invoiceItems:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+
+InvoiceItemValidationRequest:
+  type: object
+  description: Invoice item fields bound onto an InvoiceItem for validation.
+  additionalProperties: true
+  properties:
+    quantity:
+      type: number
+    unitPrice:
+      type: number
+
+PrepaymentInvoiceItemsUpdateRequest:
+  type: array
+  description: Bulk quantity edit of prepaid invoice items (array of item patches).
+  items:
+    type: object
+    additionalProperties: true
+    properties:
+      id:
+        type: string
+      quantity:
+        type: number
+
+PrepaymentInvoiceItemUpdateRequest:
+  type: object
+  description: Single prepaid invoice item patch.
+  additionalProperties: true
+  properties:
+    quantity:
+      type: number

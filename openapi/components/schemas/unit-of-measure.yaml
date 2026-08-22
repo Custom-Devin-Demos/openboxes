@@ -1,0 +1,117 @@
+# Unit of measure API schemas (UnitOfMeasureApiController,
+# UnitOfMeasureConversionApiController).
+
+UnitOfMeasure:
+  type: object
+  description: |
+    Unit of measure as rendered by the default Grails JSON converter
+    (list/read/currencies responses). Association fields are id-only
+    references.
+  required: [id, name, code]
+  properties:
+    id:
+      type: string
+      example: USD
+    code:
+      type: string
+      example: USD
+    name:
+      type: string
+      example: US Dollar
+    description:
+      type: string
+      nullable: true
+    uomClass:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+          example: CURRENCY
+    createdBy:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+    updatedBy:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+    dateCreated:
+      type: string
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+
+UomOption:
+  type: object
+  description: Unit of measure select option ({id, value, label}).
+  required: [id, value, label]
+  properties:
+    id:
+      type: string
+    value:
+      type: string
+    label:
+      type: string
+
+UnitOfMeasureConversion:
+  type: object
+  description: Unit of measure conversion as rendered by UnitOfMeasureConversionApiController.toJson.
+  required: [id, active]
+  properties:
+    id:
+      type: string
+    fromUnitOfMeasure:
+      type: object
+      nullable: true
+      required: [id, name]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    toUnitOfMeasure:
+      type: object
+      nullable: true
+      required: [id, name]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    conversionRate:
+      type: number
+      nullable: true
+    active:
+      type: boolean
+    dateCreated:
+      type: string
+      nullable: true
+      example: '2024-01-01T00:00:00Z'
+    lastUpdated:
+      type: string
+      nullable: true
+      example: '2024-01-01T00:00:00Z'
+
+UnitOfMeasureConversionInput:
+  type: object
+  description: Request body for POST /api/unitOfMeasureConversions and PUT /api/unitOfMeasureConversions/{id}.
+  properties:
+    fromUnitOfMeasureId:
+      type: string
+      nullable: true
+    toUnitOfMeasureId:
+      type: string
+      nullable: true
+    conversionRate:
+      type: number
+      nullable: true
+    active:
+      type: boolean
+      nullable: true
+      description: Defaults to true when omitted.

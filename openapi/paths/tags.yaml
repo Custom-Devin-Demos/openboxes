@@ -1,0 +1,263 @@
+# Tag API (TagApiController). Explicit mappings in UrlMappings.groovy.
+
+/api/tags:
+  get:
+    tags: [tags]
+    summary: List tags
+    operationId: listTags
+    parameters:
+      - name: tag
+        in: query
+        required: false
+        description: Case-insensitive substring filter on the tag name.
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    responses:
+      '200':
+        description: Tags with totalCount.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Tag'
+                totalCount:
+                  type: integer
+  post:
+    tags: [tags]
+    summary: Create a tag
+    operationId: createTag
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TagInput'
+          example:
+            tag: scratch-tag
+            isActive: true
+    responses:
+      '201':
+        description: The created tag.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/TagDetails'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20003
+                tag: scratch-tag
+                isActive: true
+                productsCount: 0
+                updatedBy: null
+                createdBy: null
+                dateCreated: '2024-01-01T00:00:00Z'
+                lastUpdated: '2024-01-01T00:00:00Z'
+                version: 0
+                updatedById: null
+                createdById: null
+                products: []
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/tags/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Tag id.
+      schema:
+        type: string
+  get:
+    tags: [tags]
+    summary: Read a tag by id
+    operationId: readTag
+    x-contract-tests:
+      - name: missing id returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The tag with its products.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/TagDetails'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [tags]
+    summary: Update a tag
+    operationId: updateTag
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TagInput'
+          example:
+            tag: renamed-tag
+            isActive: true
+            version: 0
+    responses:
+      '200':
+        description: The updated tag.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/TagDetails'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20003
+                tag: renamed-tag
+                isActive: true
+                productsCount: 0
+                updatedBy: null
+                createdBy: null
+                dateCreated: '2024-01-01T00:00:00Z'
+                lastUpdated: '2024-01-02T00:00:00Z'
+                version: 1
+                updatedById: null
+                createdById: null
+                products: []
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [tags]
+    summary: Delete a tag (detaches all products first)
+    operationId: deleteTag
+    responses:
+      '204':
+        description: Deleted (no content).
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/tags/{id}/addProducts:
+  post:
+    tags: [tags]
+    summary: Attach products to a tag by product code
+    operationId: addProductsToTag
+    description: Unknown or already-attached product codes are silently ignored.
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              productCodes:
+                type: array
+                items:
+                  type: string
+          example:
+            productCodes: [AB12, CD34]
+    responses:
+      '200':
+        description: The tag with its updated products.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/TagDetails'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20003
+                tag: scratch-tag
+                isActive: true
+                productsCount: 1
+                updatedBy: null
+                createdBy: null
+                dateCreated: '2024-01-01T00:00:00Z'
+                lastUpdated: '2024-01-01T00:00:00Z'
+                version: 1
+                updatedById: null
+                createdById: null
+                products:
+                  - id: ff8081817f0e3f80017f0e40a1b20004
+                    productCode: AB12
+                    name: Ibuprofen 200mg
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/tags/{id}/removeProducts:
+  post:
+    tags: [tags]
+    summary: Detach products from a tag by product id
+    operationId: removeProductsFromTag
+    description: Unknown product ids are silently ignored.
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              productIds:
+                type: array
+                items:
+                  type: string
+          example:
+            productIds: [ff8081817f0e3f80017f0e40a1b20004]
+    responses:
+      '200':
+        description: The tag with its updated products.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/TagDetails'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20003
+                tag: scratch-tag
+                isActive: true
+                productsCount: 0
+                updatedBy: null
+                createdBy: null
+                dateCreated: '2024-01-01T00:00:00Z'
+                lastUpdated: '2024-01-01T00:00:00Z'
+                version: 2
+                updatedById: null
+                createdById: null
+                products: []
+      '404':
+        $ref: '#/components/responses/NotFound'
