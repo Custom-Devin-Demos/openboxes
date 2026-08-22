@@ -1,0 +1,2481 @@
+{
+  "total": 618,
+  "removable_count": 298,
+  "retained_count": 320,
+  "removable": [
+    {
+      "path": "admin/cache.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "admin/controllerActions.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "admin/index.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "admin/plugins.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "admin/sendMail.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "admin/showSettings.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "admin/showUpgrade.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "admin/status.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "api/index.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "attribute/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "attribute/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "budgetCode/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "common/_breadcrumb.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "common/_header.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "common/_menu.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "common/_navbar.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "common/_personAutocomplete.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "consumption/pivot.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "container/_summary.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "country/list.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/_addIncomingItem.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/_addItem.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/_addLocation.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/_addPerson.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/_addShipper.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/_containerButtons.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/_containerFields.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/_containerMenuItems.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/_editBox.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/_editContainer.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/_editItem.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/_flowHeader.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/_itemFields.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/_itemFoundFields.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/_itemMenuItems.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/_itemTableRow.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/_moveContainer.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/_moveDraggableItem.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/_moveItem.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/_shipmentButtons.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/_shipmentMenuItems.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/createShipment/enterContainerDetails.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/createShipment/enterShipmentDetails.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/createShipment/enterTrackingDetails.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/createShipment/pickShipmentItems.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "createShipmentWorkflow/createShipment/sendShipment.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "dashboard/_activitySummary.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "dashboard/_alertSummary.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "dashboard/_binLocationSummary.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "dashboard/_catalogsSummary.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "dashboard/_expiringSummary.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "dashboard/_genericProductSummary.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "dashboard/_indicatorSummary.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "dashboard/_newsSummary.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "dashboard/_orderSummary.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "dashboard/_productSummary.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "dashboard/_receiptSummary.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "dashboard/_requisitionItemSummary.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "dashboard/_requisitionSummary.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "dashboard/_shipmentSummary.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "dashboard/_tagSummary.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "dashboard/_valueSummary.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "dashboard/old.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "dataExport/index.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "deliveryNote/_addressSection.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "deliveryNote/_notesSection.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "deliveryNote/_printHeader.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "deliveryNote/_printOutboundReturnTable.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "deliveryNote/_printPage.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "deliveryNote/_printToolbar.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "deliveryNote/_signaturesSection.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "deliveryNote/_styles.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "deliveryNote/print.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "deliveryNote/printOutboundReturn.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "doc4j/download.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "document/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "document/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "email/_emailTemplate.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "email/_footer.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "email/_userAccountChanged.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "email/_userAccountPending.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "eventType/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "eventType/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "exception.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "glAccount/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "glAccountType/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "goodsReceiptNote/_body.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "goodsReceiptNote/_header.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "goodsReceiptNote/_signature.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "goodsReceiptNote/print.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "index.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "inventory/_actions.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "inventory/_browseProduct.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "inventory/_browseProductGroup.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "inventory/_categoryActions.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "inventory/_filters.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "inventory/_inventoryDamaged.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "inventory/_inventoryExpired.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "inventory/_summary.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "inventory/browse.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "inventory/editBinLocation.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "inventory/editTransaction.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "inventory/listDailyTransactions.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "inventory/listLowStock.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "inventory/listReorderStock.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "inventory/manage.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "inventory/showProducts.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "inventory/showTransaction.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "inventory/upload.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "inventoryBrowser/_sidebar.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "inventoryBrowser/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "inventoryItem/editInventoryLevel.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "inventoryItem/recordInventory.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "inventoryItem/showGraph.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "inventoryItem/showLotNumbers.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "inventoryItem/showRecordInventory.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "inventoryItem/showStockCard.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "inventoryItem/showTransactionLog.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "inventoryLevel/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "inventorySnapshot/_sidebar.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "inventorySnapshot/edit.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "inventorySnapshot/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "inventorySnapshot/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "invoice/_filters.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "invoice/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "jobs/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "json/_searchResults.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "layouts/analytics.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "layouts/bootstrap.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "layouts/main.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "layouts/mobile.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "layouts/stockCard.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "localization/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "localization/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "location/_form.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "location/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "location/showBinLocations.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "location/showContents.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "location/showZoneLocations.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "location/uploadLogo.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "locationGroup/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "locationGroup/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "locationRole/create.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "locationRole/edit.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "locationRole/list.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "locationRole/show.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "locationType/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "locationType/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "migration/dataMigration.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "migration/dataQuality.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "migration/dimensionTables.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "migration/factTables.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "migration/index.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "migration/materializedViews.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "migration/productAvailability.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "mobile/chooseLocation.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "mobile/error.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "mobile/index.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "mobile/login.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "mobile/outboundList.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "mobile/productDetails.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "mobile/productList.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "order/_orderItemSummaryFilters.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "order/_orderStatusFilters.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "order/listOrderItems.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "order/orderItemSummaryList.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "order/orderSummaryList.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "orderAdjustmentType/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "organization/_filters.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "organization/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "organization/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "party/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "party/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "partyRole/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "partyRole/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "partyType/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "partyType/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "paymentTerm/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "person/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "person/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "preferenceType/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "product/addDocument.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "product/batchEditProperties.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "product/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "product/productMergeLogs.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "product/search.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "product/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "product/upnDatabase.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "productAssociation/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "productCatalog/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "productCatalog/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "productComponent/index.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "productGroup/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "productGroup/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "productSupplier/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "productSupplier/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "productType/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "productType/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "purchaseOrder/handleError.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "purchaseOrder/placeOrder.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "receiveOrderWorkflow/_progressBar.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "receiveOrderWorkflow/receiveOrder/confirmOrderReceipt.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "receiveOrderWorkflow/receiveOrder/enterShipmentDetails.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "receiveOrderWorkflow/receiveOrder/handleError.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "receiveOrderWorkflow/receiveOrder/processOrderItems.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "referenceNumberType/_local.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "replenishment/_printPage.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "replenishment/print.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "report/_showTransactionReportMetadata.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "report/printPaginatedPackingListReport.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "report/printPickListReport.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "report/printShippingReport.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "report/showForecastReport.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "report/showInventoryReport.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "report/showPaginatedPackingListReport.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "report/showRequestDetailReport.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "report/showTransactionReport.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "requisition/_buttons.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "requisition/_cancelQuantity.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "requisition/_changePackageSize.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "requisition/_changeQuantity.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "requisition/_chooseSubstitute.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "requisition/_flowHeader.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "requisition/_list.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "requisition/_menu.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "requisition/_modifyRequisitionItem.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "requisition/_pickRequisitionItem.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "requisition/_requisitionItems.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "requisition/_reviewRequisitionItem.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "requisition/_supplementProduct.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "requisition/addComment.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "requisition/addDocument.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "requisition/chooseTemplate.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "requisition/confirm.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "requisition/create.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "requisition/edit.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "requisition/fulfill.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "requisition/fulfillItem.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "requisition/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "requisition/pick.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "requisition/printDraft.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "requisition/process.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "requisition/review.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "requisition/showPicklist.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "requisition/substitute.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "requisitionItem/_actions.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "returns/show.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "role/create.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "role/edit.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "role/index.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "role/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "shipment/_filters.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "shipment/_list.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "shipment/_listShippingMenuItems.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "shipment/_sidebar.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "shipment/addComment.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "shipment/addDocument.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "shipment/deleteShipment.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "shipment/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "shipment/receiveShipment.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "shipmentItem/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "shipmentItem/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "shipmentItem/split.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "shipmentWorkflow/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "shipmentWorkflow/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "stockMovement/_actions.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "stockMovement/_list.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "stockMovement/addComment.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "stockMovement/addDocument.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "stockMovement/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "stockTransfer/_filters.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "stockTransfer/_printPage.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "stockTransfer/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "stockTransfer/print.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "stocklist/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "supplier/_documents.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "supplier/_priceHistory.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "supplier/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "supplier/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "tag/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "tag/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "taglib/_createLocation.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "taglib/_selectCategories.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "taglib/_selectPerson.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "taglib/_selectProducts.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "transaction/_actions.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "transaction/_details.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "transaction/_entries.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "transaction/_summary.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "transactionEntry/create.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "transactionEntry/edit.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "transactionEntry/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "transactionEntry/show.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "unitOfMeasureConversion/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "unsupported.gsp",
+      "why": "no static references"
+    },
+    {
+      "path": "user/cropPhoto.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "user/list.gsp",
+      "why": "react-host action"
+    },
+    {
+      "path": "user/show.gsp",
+      "why": "react-host action"
+    }
+  ],
+  "retained": [
+    {
+      "path": "attribute/_renderFormList.gsp",
+      "why": "included by productSupplier/_dialog.gsp; included by productSupplier/create.gsp; included by productSupplier/edit.gsp"
+    },
+    {
+      "path": "attribute/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/product/AttributeController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/product/AttributeController.groovy"
+    },
+    {
+      "path": "auth/login.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/user/AuthController.groovy::login (implicit)"
+    },
+    {
+      "path": "auth/signup.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/user/AuthController.groovy::signup (implicit)"
+    },
+    {
+      "path": "batch/_uploadFileForm.gsp",
+      "why": "included by batch/importData.gsp"
+    },
+    {
+      "path": "batch/importData.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/batch/BatchController.groovy::importData (implicit); render(view:'importData') in grails-app/controllers/org/pih/warehouse/batch/BatchController.groovy"
+    },
+    {
+      "path": "budgetCode/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/BudgetCodeController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/core/BudgetCodeController.groovy"
+    },
+    {
+      "path": "budgetCode/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/BudgetCodeController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/BudgetCodeController.groovy"
+    },
+    {
+      "path": "category/_selectOptions.gsp",
+      "why": "render(template:'../category/selectOptions') in grails-app/taglib/org/pih/warehouse/CategorySelectTagLib.groovy; included by category/_selectOptions.gsp"
+    },
+    {
+      "path": "category/_tree.gsp",
+      "why": "included by category/tree.gsp; included by category/_tree.gsp"
+    },
+    {
+      "path": "category/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/product/CategoryController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/product/CategoryController.groovy"
+    },
+    {
+      "path": "category/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/product/CategoryController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/product/CategoryController.groovy"
+    },
+    {
+      "path": "category/tree.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/product/CategoryController.groovy::tree renders /common/react only; render(view:'tree') in grails-app/controllers/org/pih/warehouse/product/CategoryController.groovy"
+    },
+    {
+      "path": "common/_customCss.gsp",
+      "why": "included by layouts/custom.gsp; included by layouts/print.gsp"
+    },
+    {
+      "path": "common/_customVariables.gsp",
+      "why": "included by layouts/custom.gsp"
+    },
+    {
+      "path": "common/_dataTable.gsp",
+      "why": "render(template:'/common/dataTable') in grails-app/controllers/org/pih/warehouse/data/MigrationController.groovy; view path string '/common/dataTable' in grails-app/controllers/org/pih/warehouse/data/MigrationController.groovy; included by stockMovement/_synchronizeDialog.gsp"
+    },
+    {
+      "path": "common/_footer.gsp",
+      "why": "render(template:'/common/footer') in grails-app/controllers/org/pih/warehouse/user/DashboardController.groovy; view path string '/common/footer' in grails-app/controllers/org/pih/warehouse/user/DashboardController.groovy; included by layouts/email.gsp"
+    },
+    {
+      "path": "common/_fullstory.gsp",
+      "why": "included by layouts/custom.gsp"
+    },
+    {
+      "path": "common/_hotjar.gsp",
+      "why": "included by layouts/custom.gsp; included by layouts/react.gsp"
+    },
+    {
+      "path": "common/_localization.gsp",
+      "why": "included by layouts/custom.gsp"
+    },
+    {
+      "path": "common/_menuicons.gsp",
+      "why": "included by dashboard/megamenu.gsp"
+    },
+    {
+      "path": "common/react.gsp",
+      "why": "view path string '/common/react' in grails-app/controllers/org/pih/warehouse/JsonController.groovy; view path string '/common/react' in grails-app/controllers/org/pih/warehouse/MobileController.groovy; view path string '/common/react' in grails-app/controllers/org/pih/warehouse/putaway/PutAwayController.groovy"
+    },
+    {
+      "path": "consumption/_filters.gsp",
+      "why": "included by consumption/show.gsp"
+    },
+    {
+      "path": "consumption/_product.gsp",
+      "why": "render(template:'product') in grails-app/controllers/org/pih/warehouse/reporting/ConsumptionController.groovy"
+    },
+    {
+      "path": "consumption/list.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/reporting/ConsumptionController.groovy::list (implicit)"
+    },
+    {
+      "path": "consumption/show.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/reporting/ConsumptionController.groovy::show (implicit); render(view:'show') in grails-app/controllers/org/pih/warehouse/reporting/ConsumptionController.groovy"
+    },
+    {
+      "path": "cycleCount/_printCount.gsp",
+      "why": "view path string '/cycleCount/printCount' in grails-app/controllers/org/pih/warehouse/api/CycleCountApiController.groovy"
+    },
+    {
+      "path": "cycleCount/_printRecount.gsp",
+      "why": "view path string '/cycleCount/printRecount' in grails-app/controllers/org/pih/warehouse/api/CycleCountApiController.groovy"
+    },
+    {
+      "path": "dashboard/_loginLocations.gsp",
+      "why": "render(template:'loginLocations') in grails-app/controllers/org/pih/warehouse/user/DashboardController.groovy; included by dashboard/chooseLocation.gsp"
+    },
+    {
+      "path": "dashboard/chooseLocation.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/user/DashboardController.groovy::chooseLocation (implicit)"
+    },
+    {
+      "path": "dashboard/megamenu.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/user/DashboardController.groovy::megamenu (implicit); g:include from layouts/custom.gsp"
+    },
+    {
+      "path": "document/_preview.gsp",
+      "why": "render(template:'preview') in grails-app/controllers/org/pih/warehouse/core/DocumentController.groovy"
+    },
+    {
+      "path": "document/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/DocumentController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/core/DocumentController.groovy"
+    },
+    {
+      "path": "document/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/DocumentController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/DocumentController.groovy"
+    },
+    {
+      "path": "document/upload.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/core/DocumentController.groovy::upload (implicit)"
+    },
+    {
+      "path": "email/_applicationError.gsp",
+      "why": "view path string '/email/applicationError' in grails-app/services/org/pih/warehouse/report/NotificationService.groovy"
+    },
+    {
+      "path": "email/_approvalsAlert.gsp",
+      "why": "view path string '/email/approvalsAlert' in grails-app/services/org/pih/warehouse/report/NotificationService.groovy"
+    },
+    {
+      "path": "email/_approvalsStatusChanged.gsp",
+      "why": "view path string '/email/approvalsStatusChanged' in grails-app/services/org/pih/warehouse/report/NotificationService.groovy"
+    },
+    {
+      "path": "email/_errorReport.gsp",
+      "why": "render(template:'/email/errorReport') in grails-app/controllers/org/pih/warehouse/core/ErrorsController.groovy; view path string '/email/errorReport' in grails-app/controllers/org/pih/warehouse/core/ErrorsController.groovy"
+    },
+    {
+      "path": "email/_expiryAlerts.gsp",
+      "why": "view path string '/email/expiryAlerts' in grails-app/services/org/pih/warehouse/report/NotificationService.groovy"
+    },
+    {
+      "path": "email/_fulfillmentAlert.gsp",
+      "why": "view path string '/email/fulfillmentAlert' in grails-app/services/org/pih/warehouse/report/NotificationService.groovy"
+    },
+    {
+      "path": "email/_goodsDeliveryNote.gsp",
+      "why": "view path string '/email/goodsDeliveryNote' in grails-app/services/org/pih/warehouse/report/NotificationService.groovy"
+    },
+    {
+      "path": "email/_header.gsp",
+      "why": "included by email/_fulfillmentAlert.gsp; included by email/_approvalsStatusChanged.gsp; included by email/_approvalsAlert.gsp"
+    },
+    {
+      "path": "email/_inventoryItemTable.gsp",
+      "why": "included by email/_expiryAlerts.gsp"
+    },
+    {
+      "path": "email/_productCreated.gsp",
+      "why": "render(template:'/email/productCreated') in grails-app/controllers/org/pih/warehouse/api/ProductScreenApiController.groovy; render(template:'/email/productCreated') in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy; view path string '/email/productCreated' in grails-app/controllers/org/pih/warehouse/api/ProductScreenApiController.groovy"
+    },
+    {
+      "path": "email/_productTable.gsp",
+      "why": "included by email/_stockAlerts.gsp"
+    },
+    {
+      "path": "email/_shipmentItemReceived.gsp",
+      "why": "render(template:'/email/shipmentItemReceived') in grails-app/services/org/pih/warehouse/report/NotificationService.groovy; view path string '/email/shipmentItemReceived' in grails-app/services/org/pih/warehouse/report/NotificationService.groovy"
+    },
+    {
+      "path": "email/_shipmentItemShipped.gsp",
+      "why": "render(template:'/email/shipmentItemShipped') in grails-app/services/org/pih/warehouse/report/NotificationService.groovy; view path string '/email/shipmentItemShipped' in grails-app/services/org/pih/warehouse/report/NotificationService.groovy"
+    },
+    {
+      "path": "email/_shipmentReceived.gsp",
+      "why": "render(template:'/email/shipmentReceived') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy; view path string '/email/shipmentReceived' in grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy; view path string '/email/shipmentReceived' in grails-app/services/org/pih/warehouse/report/NotificationService.groovy"
+    },
+    {
+      "path": "email/_shipmentShipped.gsp",
+      "why": "render(template:'/email/shipmentShipped') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy; render(template:'/email/shipmentShipped') in grails-app/controllers/org/pih/warehouse/api/CreateShipmentApiController.groovy; view path string '/email/shipmentShipped' in grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy"
+    },
+    {
+      "path": "email/_stockAlerts.gsp",
+      "why": "view path string '/email/stockAlerts' in grails-app/services/org/pih/warehouse/report/NotificationService.groovy"
+    },
+    {
+      "path": "email/_userAccountActivated.gsp",
+      "why": "render(template:'/email/userAccountActivated') in grails-app/controllers/org/pih/warehouse/user/UserController.groovy; render(template:'/email/userAccountActivated') in grails-app/controllers/org/pih/warehouse/api/UserApiController.groovy; view path string '/email/userAccountActivated' in grails-app/controllers/org/pih/warehouse/user/UserController.groovy"
+    },
+    {
+      "path": "email/_userAccountConfirmed.gsp",
+      "why": "render(template:'/email/userAccountConfirmed') in grails-app/controllers/org/pih/warehouse/user/AuthController.groovy; view path string '/email/userAccountConfirmed' in grails-app/controllers/org/pih/warehouse/user/AuthController.groovy; view path string '/email/userAccountConfirmed' in grails-app/services/org/pih/warehouse/report/NotificationService.groovy"
+    },
+    {
+      "path": "email/_userAccountCreated.gsp",
+      "why": "render(template:'/email/userAccountCreated') in grails-app/controllers/org/pih/warehouse/user/AuthController.groovy; view path string '/email/userAccountCreated' in grails-app/controllers/org/pih/warehouse/user/AuthController.groovy; view path string '/email/userAccountCreated' in grails-app/services/org/pih/warehouse/report/NotificationService.groovy"
+    },
+    {
+      "path": "email/_userCanReceiveEmail.gsp",
+      "why": "render(template:'/email/userCanReceiveEmail') in grails-app/controllers/org/pih/warehouse/user/UserController.groovy; render(template:'/email/userCanReceiveEmail') in grails-app/controllers/org/pih/warehouse/api/UserApiController.groovy; view path string '/email/userCanReceiveEmail' in grails-app/controllers/org/pih/warehouse/user/UserController.groovy"
+    },
+    {
+      "path": "email/_userPhotoChanged.gsp",
+      "why": "render(template:'/email/userPhotoChanged') in grails-app/controllers/org/pih/warehouse/user/UserController.groovy; render(template:'/email/userPhotoChanged') in grails-app/controllers/org/pih/warehouse/api/UserApiController.groovy; view path string '/email/userPhotoChanged' in grails-app/controllers/org/pih/warehouse/user/UserController.groovy"
+    },
+    {
+      "path": "error.gsp",
+      "why": "view path string '/error' in grails-app/controllers/org/pih/warehouse/core/ErrorsController.groovy"
+    },
+    {
+      "path": "errors/accessDenied.gsp",
+      "why": "view path string '/errors/accessDenied' in grails-app/controllers/org/pih/warehouse/core/ErrorsController.groovy"
+    },
+    {
+      "path": "errors/dataAccess.gsp",
+      "why": "view path string '/errors/dataAccess' in grails-app/controllers/org/pih/warehouse/core/ErrorsController.groovy"
+    },
+    {
+      "path": "errors/methodNotAllowed.gsp",
+      "why": "view path string '/errors/methodNotAllowed' in grails-app/controllers/org/pih/warehouse/core/ErrorsController.groovy"
+    },
+    {
+      "path": "errors/notFound.gsp",
+      "why": "view path string '/errors/notFound' in grails-app/controllers/org/pih/warehouse/core/ErrorsController.groovy"
+    },
+    {
+      "path": "eventType/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/EventTypeController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/core/EventTypeController.groovy"
+    },
+    {
+      "path": "eventType/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/EventTypeController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/EventTypeController.groovy"
+    },
+    {
+      "path": "glAccount/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/GlAccountController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/core/GlAccountController.groovy"
+    },
+    {
+      "path": "glAccount/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/GlAccountController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/GlAccountController.groovy"
+    },
+    {
+      "path": "glAccountType/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/GlAccountTypeController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/core/GlAccountTypeController.groovy"
+    },
+    {
+      "path": "glAccountType/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/GlAccountTypeController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/GlAccountTypeController.groovy"
+    },
+    {
+      "path": "inventory/_incomingTransfer.gsp",
+      "why": "included by inventory/createTransaction.gsp"
+    },
+    {
+      "path": "inventory/_inventoryAdjustment.gsp",
+      "why": "included by inventory/createTransaction.gsp"
+    },
+    {
+      "path": "inventory/_inventoryConsumed.gsp",
+      "why": "included by inventory/createTransaction.gsp"
+    },
+    {
+      "path": "inventory/_outgoingTransfer.gsp",
+      "why": "included by inventory/createTransaction.gsp"
+    },
+    {
+      "path": "inventory/createTransaction.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy::createTransaction renders /common/react only; render(view:'createTransaction') in grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy"
+    },
+    {
+      "path": "inventory/list.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy::list renders /common/react only; render(view:'list') in grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy"
+    },
+    {
+      "path": "inventory/listExpiredStock.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy::listExpiredStock (implicit)"
+    },
+    {
+      "path": "inventory/listExpiringStock.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy::listExpiringStock (implicit)"
+    },
+    {
+      "path": "inventory/listTransactions.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy::listTransactions renders /common/react only; render(view:'listTransactions') in grails-app/controllers/org/pih/warehouse/inventory/InventoryController.groovy"
+    },
+    {
+      "path": "inventoryItem/_actions.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_actionsCurrentStock.gsp",
+      "why": "included by inventoryItem/_showCurrentStock.gsp"
+    },
+    {
+      "path": "inventoryItem/_addToShipment.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_adjustStock.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_editItemDialog.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_printStockHistory.gsp",
+      "why": "render(template:'printStockHistory') in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_productDetails.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_returnStock.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_showCurrentStock.gsp",
+      "why": "render(template:'showCurrentStock') in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_showCurrentStockAllLocations.gsp",
+      "why": "render(template:'showCurrentStockAllLocations') in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_showDemand.gsp",
+      "why": "render(template:'showDemand') in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_showDocuments.gsp",
+      "why": "render(template:'showDocuments') in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_showGraph.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_showInventorySnapshot.gsp",
+      "why": "render(template:'showInventorySnapshot') in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_showLotNumbers.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_showPendingInboundStock.gsp",
+      "why": "render(template:'showPendingInboundStock') in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_showPendingOutboundStock.gsp",
+      "why": "render(template:'showPendingOutboundStock') in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_showProductAssociations.gsp",
+      "why": "render(template:'showProductAssociations') in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_showProductDemand.gsp",
+      "why": "render(template:'showProductDemand') in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_showRecordInventory.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_showRecordInventory2.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_showStockCard.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_showStockCardMenuItems.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_showStockHistory.gsp",
+      "why": "render(template:'showStockHistory') in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_showStockHistoryPrintable.gsp",
+      "why": "included by inventoryItem/_printStockHistory.gsp"
+    },
+    {
+      "path": "inventoryItem/_showSuppliers.gsp",
+      "why": "render(template:'showSuppliers') in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_showTransactionLog.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryItem/_transferStock.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/inventory/InventoryItemController.groovy"
+    },
+    {
+      "path": "inventoryLevel/_form.gsp",
+      "why": "render(template:'form') in grails-app/controllers/org/pih/warehouse/inventory/InventoryLevelController.groovy; included by inventoryLevel/edit.gsp; included by inventoryLevel/create.gsp"
+    },
+    {
+      "path": "inventoryLevel/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/inventory/InventoryLevelController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/inventory/InventoryLevelController.groovy"
+    },
+    {
+      "path": "inventoryLevel/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/inventory/InventoryLevelController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/inventory/InventoryLevelController.groovy"
+    },
+    {
+      "path": "inventoryLevel/list.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/inventory/InventoryLevelController.groovy::list (implicit)"
+    },
+    {
+      "path": "invoice/_actions.gsp",
+      "why": "included by invoice/_summary.gsp"
+    },
+    {
+      "path": "invoice/_documents.gsp",
+      "why": "included by invoice/show.gsp"
+    },
+    {
+      "path": "invoice/_invoiceItems.gsp",
+      "why": "included by invoice/show.gsp"
+    },
+    {
+      "path": "invoice/_summary.gsp",
+      "why": "included by invoice/show.gsp; included by invoice/addDocument.gsp"
+    },
+    {
+      "path": "invoice/addDocument.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/invoice/InvoiceController.groovy::addDocument (implicit)"
+    },
+    {
+      "path": "invoice/show.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/invoice/InvoiceController.groovy::show (implicit); render(view:'show') in grails-app/controllers/org/pih/warehouse/invoice/InvoiceController.groovy"
+    },
+    {
+      "path": "json/createPerson.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/JsonController.groovy::createPerson (implicit)"
+    },
+    {
+      "path": "layouts/custom.gsp",
+      "why": "layout used by errors/methodNotAllowed.gsp; layout used by errors/dataAccess.gsp; layout used by errors/accessDenied.gsp"
+    },
+    {
+      "path": "layouts/email.gsp",
+      "why": "layout used by email/_productCreated.gsp; layout used by email/_userAccountConfirmed.gsp; layout used by email/_userAccountCreated.gsp"
+    },
+    {
+      "path": "layouts/print.gsp",
+      "why": "layout used by picklist/returnPrint.gsp; layout used by picklist/print.gsp; layout used by order/print.gsp"
+    },
+    {
+      "path": "layouts/react.gsp",
+      "why": "layout used by common/react.gsp; layout used by partialReceiving/create.gsp"
+    },
+    {
+      "path": "localization/_crowdin.gsp",
+      "why": "included by layouts/custom.gsp; included by layouts/react.gsp"
+    },
+    {
+      "path": "localization/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/LocalizationController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/core/LocalizationController.groovy"
+    },
+    {
+      "path": "localization/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/LocalizationController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/LocalizationController.groovy"
+    },
+    {
+      "path": "location/_actions.gsp",
+      "why": "included by location/_summary.gsp"
+    },
+    {
+      "path": "location/_summary.gsp",
+      "why": "included by location/edit.gsp"
+    },
+    {
+      "path": "location/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/LocationController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/LocationController.groovy"
+    },
+    {
+      "path": "locationGroup/_summary.gsp",
+      "why": "included by locationGroup/edit.gsp; included by locationGroup/create.gsp"
+    },
+    {
+      "path": "locationGroup/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/LocationGroupController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/core/LocationGroupController.groovy"
+    },
+    {
+      "path": "locationGroup/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/LocationGroupController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/LocationGroupController.groovy"
+    },
+    {
+      "path": "locationRole/_form.gsp",
+      "why": "render(template:'/locationRole/form') in grails-app/controllers/org/pih/warehouse/user/UserController.groovy; view path string '/locationRole/form' in grails-app/controllers/org/pih/warehouse/user/UserController.groovy"
+    },
+    {
+      "path": "locationType/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/LocationTypeController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/core/LocationTypeController.groovy"
+    },
+    {
+      "path": "locationType/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/LocationTypeController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/LocationTypeController.groovy"
+    },
+    {
+      "path": "migration/_status.gsp",
+      "why": "render(template:'status') in grails-app/controllers/org/pih/warehouse/data/MigrationController.groovy"
+    },
+    {
+      "path": "mobile/menu.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/MobileController.groovy::menu renders /common/react only; render(view:'/mobile/menu') in grails-app/controllers/org/pih/warehouse/MobileController.groovy; view path string '/mobile/menu' in grails-app/controllers/org/pih/warehouse/MobileController.groovy"
+    },
+    {
+      "path": "order/_actions.gsp",
+      "why": "included by order/_summary.gsp; included by order/list.gsp"
+    },
+    {
+      "path": "order/_filters.gsp",
+      "why": "included by order/list.gsp"
+    },
+    {
+      "path": "order/_itemDetails.gsp",
+      "why": "render(template:'itemDetails') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy"
+    },
+    {
+      "path": "order/_itemStatus.gsp",
+      "why": "render(template:'itemStatus') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy"
+    },
+    {
+      "path": "order/_orderAdjustments.gsp",
+      "why": "render(template:'orderAdjustments') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy"
+    },
+    {
+      "path": "order/_orderComments.gsp",
+      "why": "render(template:'orderComments') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy"
+    },
+    {
+      "path": "order/_orderDocuments.gsp",
+      "why": "render(template:'orderDocuments') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy"
+    },
+    {
+      "path": "order/_orderInvoices.gsp",
+      "why": "render(template:'orderInvoices') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy"
+    },
+    {
+      "path": "order/_orderItemForm.gsp",
+      "why": "included by purchaseOrder/_showOrderItems.gsp"
+    },
+    {
+      "path": "order/_orderItemFormDialog.gsp",
+      "why": "render(template:'orderItemFormDialog') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy"
+    },
+    {
+      "path": "order/_orderShipments.gsp",
+      "why": "render(template:'orderShipments') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy"
+    },
+    {
+      "path": "order/_orderSummary.gsp",
+      "why": "render(template:'orderSummary') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy"
+    },
+    {
+      "path": "order/_productSourceFormDialog.gsp",
+      "why": "render(template:'productSourceFormDialog') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy"
+    },
+    {
+      "path": "order/_summary.gsp",
+      "why": "included by purchaseOrder/_showOrderItems.gsp; included by purchaseOrder/_enterOrderDetails.gsp; included by order/editAdjustment.gsp"
+    },
+    {
+      "path": "order/addComment.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/order/OrderController.groovy::addComment (implicit); render(view:'addComment') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy"
+    },
+    {
+      "path": "order/addDocument.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/order/OrderController.groovy::addDocument (implicit)"
+    },
+    {
+      "path": "order/editAdjustment.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/order/OrderController.groovy::editAdjustment (implicit); render(view:'editAdjustment') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy"
+    },
+    {
+      "path": "order/list.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/order/OrderController.groovy::list (implicit)"
+    },
+    {
+      "path": "order/print.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/order/OrderController.groovy::print (implicit)"
+    },
+    {
+      "path": "order/show.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/order/OrderController.groovy::show (implicit); render(view:'show') in grails-app/controllers/org/pih/warehouse/order/OrderController.groovy"
+    },
+    {
+      "path": "orderAdjustmentType/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/order/OrderAdjustmentTypeController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/order/OrderAdjustmentTypeController.groovy"
+    },
+    {
+      "path": "orderAdjustmentType/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/order/OrderAdjustmentTypeController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/order/OrderAdjustmentTypeController.groovy"
+    },
+    {
+      "path": "organization/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/OrganizationController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/core/OrganizationController.groovy"
+    },
+    {
+      "path": "organization/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/OrganizationController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/OrganizationController.groovy"
+    },
+    {
+      "path": "partialReceiving/create.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/receiving/PartialReceivingController.groovy::create (implicit); render(view:'/partialReceiving/create') in grails-app/controllers/org/pih/warehouse/receiving/PartialReceivingController.groovy; view path string '/partialReceiving/create' in grails-app/controllers/org/pih/warehouse/receiving/PartialReceivingController.groovy"
+    },
+    {
+      "path": "party/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/PartyController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/core/PartyController.groovy"
+    },
+    {
+      "path": "party/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/PartyController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/PartyController.groovy"
+    },
+    {
+      "path": "partyRole/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/PartyRoleController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/core/PartyRoleController.groovy"
+    },
+    {
+      "path": "partyRole/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/PartyRoleController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/PartyRoleController.groovy"
+    },
+    {
+      "path": "partyType/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/PartyTypeController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/core/PartyTypeController.groovy"
+    },
+    {
+      "path": "partyType/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/PartyTypeController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/PartyTypeController.groovy"
+    },
+    {
+      "path": "paymentTerm/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/PaymentTermController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/core/PaymentTermController.groovy"
+    },
+    {
+      "path": "paymentTerm/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/PaymentTermController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/PaymentTermController.groovy"
+    },
+    {
+      "path": "person/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/PersonController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/core/PersonController.groovy"
+    },
+    {
+      "path": "person/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/PersonController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/PersonController.groovy"
+    },
+    {
+      "path": "picklist/_page.gsp",
+      "why": "included by picklist/_print.gsp"
+    },
+    {
+      "path": "picklist/_print.gsp",
+      "why": "render(template:'/picklist/print') in grails-app/controllers/org/pih/warehouse/picklist/PicklistController.groovy; view path string '/picklist/print' in grails-app/controllers/org/pih/warehouse/picklist/PicklistController.groovy"
+    },
+    {
+      "path": "picklist/_printPage.gsp",
+      "why": "included by picklist/print.gsp"
+    },
+    {
+      "path": "picklist/_returnPage.gsp",
+      "why": "included by picklist/_returnPrint.gsp"
+    },
+    {
+      "path": "picklist/_returnPrint.gsp",
+      "why": "render(template:'/picklist/returnPrint') in grails-app/controllers/org/pih/warehouse/picklist/PicklistController.groovy; view path string '/picklist/returnPrint' in grails-app/controllers/org/pih/warehouse/picklist/PicklistController.groovy"
+    },
+    {
+      "path": "picklist/_returnPrintPage.gsp",
+      "why": "included by picklist/returnPrint.gsp"
+    },
+    {
+      "path": "picklist/print.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/picklist/PicklistController.groovy::print renders /common/react only; view path string '/picklist/print' in grails-app/controllers/org/pih/warehouse/picklist/PicklistController.groovy"
+    },
+    {
+      "path": "picklist/returnPrint.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/picklist/PicklistController.groovy::returnPrint renders /common/react only; view path string '/picklist/returnPrint' in grails-app/controllers/org/pih/warehouse/picklist/PicklistController.groovy"
+    },
+    {
+      "path": "preferenceType/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/PreferenceTypeController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/core/PreferenceTypeController.groovy"
+    },
+    {
+      "path": "preferenceType/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/PreferenceTypeController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/PreferenceTypeController.groovy"
+    },
+    {
+      "path": "product/_actions.gsp",
+      "why": "included by product/_summary.gsp"
+    },
+    {
+      "path": "product/_actionsBatch.gsp",
+      "why": "included by product/batchEdit.gsp"
+    },
+    {
+      "path": "product/_attributes.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/_categories.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/_category.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/_documents.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/_inventoryLevels.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/_manufacturers.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/_mergeProductConfirmationDialog.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/_mergeProducts.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/_productAssociations.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/_productCatalogs.gsp",
+      "why": "render(template:'productCatalogs') in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/_productComponents.gsp",
+      "why": "render(template:'productComponents') in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/_productDetails.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/_productGroups.gsp",
+      "why": "render(template:'productGroups') in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/_productMergeLogsFilters.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/_productPackageDialog.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/_productPackages.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/_productSuppliers.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/_productSynonyms.gsp",
+      "why": "render(template:'productSynonyms') in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/_productSynonymsEdit.gsp",
+      "why": "render(template:'productSynonymsEdit') in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/_status.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/_summary.gsp",
+      "why": "included by consumption/_product.gsp; included by product/edit.gsp"
+    },
+    {
+      "path": "product/_summaryDialog.gsp",
+      "why": "included by inventoryLevel/_form.gsp"
+    },
+    {
+      "path": "product/_tags.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/_uomClassDialog.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/_uomDialog.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/_uploadFile.gsp",
+      "why": "UNCERTAIN: dynamic render(template: <expr>) in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/batchEdit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/product/ProductController.groovy::batchEdit renders /common/react only; render(view:'batchEdit') in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/product/ProductController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "product/importAsCsv.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/product/ProductController.groovy::importAsCsv renders /common/react only; render(view:'importAsCsv') in grails-app/controllers/org/pih/warehouse/product/ProductController.groovy"
+    },
+    {
+      "path": "productAssociation/_dialog.gsp",
+      "why": "render(template:'dialog') in grails-app/controllers/org/pih/warehouse/product/ProductAssociationController.groovy"
+    },
+    {
+      "path": "productAssociation/_productAssociationDeleteDialog.gsp",
+      "why": "included by productAssociation/edit.gsp"
+    },
+    {
+      "path": "productAssociation/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/product/ProductAssociationController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/product/ProductAssociationController.groovy"
+    },
+    {
+      "path": "productAssociation/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/product/ProductAssociationController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/product/ProductAssociationController.groovy"
+    },
+    {
+      "path": "productAssociation/list.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/product/ProductAssociationController.groovy::list (implicit)"
+    },
+    {
+      "path": "productCatalog/_productCatalogItems.gsp",
+      "why": "render(template:'productCatalogItems') in grails-app/controllers/org/pih/warehouse/product/ProductCatalogController.groovy; included by productCatalog/edit.gsp"
+    },
+    {
+      "path": "productCatalog/_summary.gsp",
+      "why": "included by productCatalog/edit.gsp"
+    },
+    {
+      "path": "productCatalog/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/product/ProductCatalogController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/product/ProductCatalogController.groovy"
+    },
+    {
+      "path": "productCatalog/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/product/ProductCatalogController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/product/ProductCatalogController.groovy"
+    },
+    {
+      "path": "productGroup/_products.gsp",
+      "why": "render(template:'products') in grails-app/controllers/org/pih/warehouse/product/ProductGroupController.groovy; included by productGroup/edit.gsp"
+    },
+    {
+      "path": "productGroup/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/product/ProductGroupController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/product/ProductGroupController.groovy"
+    },
+    {
+      "path": "productGroup/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/product/ProductGroupController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/product/ProductGroupController.groovy"
+    },
+    {
+      "path": "productSupplier/_dialog.gsp",
+      "why": "render(template:'dialog') in grails-app/controllers/org/pih/warehouse/product/ProductSupplierController.groovy"
+    },
+    {
+      "path": "productSupplier/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/product/ProductSupplierController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/product/ProductSupplierController.groovy"
+    },
+    {
+      "path": "productSupplier/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/product/ProductSupplierController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/product/ProductSupplierController.groovy"
+    },
+    {
+      "path": "productType/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/product/ProductTypeController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/product/ProductTypeController.groovy"
+    },
+    {
+      "path": "productType/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/product/ProductTypeController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/product/ProductTypeController.groovy"
+    },
+    {
+      "path": "purchaseOrder/_enterOrderDetails.gsp",
+      "why": "render(template:'enterOrderDetails') in grails-app/controllers/org/pih/warehouse/order/PurchaseOrderController.groovy"
+    },
+    {
+      "path": "purchaseOrder/_showOrderItems.gsp",
+      "why": "render(template:'showOrderItems') in grails-app/controllers/org/pih/warehouse/order/PurchaseOrderController.groovy"
+    },
+    {
+      "path": "putAway/_print.gsp",
+      "why": "render(template:'/putAway/print') in grails-app/controllers/org/pih/warehouse/putaway/PutAwayController.groovy; view path string '/putAway/print' in grails-app/controllers/org/pih/warehouse/putaway/PutAwayController.groovy"
+    },
+    {
+      "path": "quartz/list.gsp",
+      "why": "view path string '/quartz/list' in grails-app/controllers/org/pih/warehouse/UrlMappings.groovy"
+    },
+    {
+      "path": "report/_dataTableDialog.gsp",
+      "why": "render(template:'dataTableDialog') in grails-app/controllers/org/pih/warehouse/reporting/ReportController.groovy"
+    },
+    {
+      "path": "report/showBinLocationReport.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/reporting/ReportController.groovy::showBinLocationReport (implicit)"
+    },
+    {
+      "path": "report/showCycleCountReport.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/reporting/ReportController.groovy::showCycleCountReport (implicit)"
+    },
+    {
+      "path": "report/showInventoryByLocationReport.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/reporting/ReportController.groovy::showInventoryByLocationReport (implicit)"
+    },
+    {
+      "path": "report/showOnOrderReport.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/reporting/ReportController.groovy::showOnOrderReport (implicit)"
+    },
+    {
+      "path": "requisition/_actions.gsp",
+      "why": "included by requisition/_summary.gsp"
+    },
+    {
+      "path": "requisition/_editRequisitionItem.gsp",
+      "why": "render(template:'editRequisitionItem') in grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy"
+    },
+    {
+      "path": "requisition/_header.gsp",
+      "why": "included by requisition/show.gsp; included by requisition/editHeader.gsp; included by requisitionItem/change.gsp"
+    },
+    {
+      "path": "requisition/_picklistItems.gsp",
+      "why": "render(template:'picklistItems') in grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy"
+    },
+    {
+      "path": "requisition/_requisitionItems2.gsp",
+      "why": "render(template:'requisitionItems2') in grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy"
+    },
+    {
+      "path": "requisition/_showRequisitionItem.gsp",
+      "why": "included by stockMovement/_requisition.gsp; included by requisition/show.gsp"
+    },
+    {
+      "path": "requisition/_summary.gsp",
+      "why": "included by requisition/show.gsp; included by requisition/createNonStock.gsp; included by requisition/editHeader.gsp"
+    },
+    {
+      "path": "requisition/createNonStock.gsp",
+      "why": "render(view:'createNonStock') in grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy"
+    },
+    {
+      "path": "requisition/createStock.gsp",
+      "why": "render(view:'createStock') in grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy"
+    },
+    {
+      "path": "requisition/editHeader.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy::editHeader renders /common/react only; render(view:'editHeader') in grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy"
+    },
+    {
+      "path": "requisition/show.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy::show (implicit)"
+    },
+    {
+      "path": "requisition/transfer.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy::transfer renders /common/react only; render(view:'transfer') in grails-app/controllers/org/pih/warehouse/requisition/RequisitionController.groovy"
+    },
+    {
+      "path": "requisitionItem/change.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionItemController.groovy::change (implicit)"
+    },
+    {
+      "path": "requisitionItem/list.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/requisition/RequisitionItemController.groovy::list renders /common/react only; render(view:'list') in grails-app/controllers/org/pih/warehouse/requisition/RequisitionItemController.groovy"
+    },
+    {
+      "path": "requisitionTemplate/_actions.gsp",
+      "why": "included by requisitionTemplate/_summary.gsp"
+    },
+    {
+      "path": "requisitionTemplate/_header.gsp",
+      "why": "included by requisitionTemplate/editHeader.gsp; included by requisitionTemplate/edit.gsp; included by requisitionTemplate/sendMail.gsp"
+    },
+    {
+      "path": "requisitionTemplate/_list.gsp",
+      "why": "UNCERTAIN: dynamic render(view: <expr>) in grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy"
+    },
+    {
+      "path": "requisitionTemplate/_printPage.gsp",
+      "why": "UNCERTAIN: dynamic render(view: <expr>) in grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy"
+    },
+    {
+      "path": "requisitionTemplate/_summary.gsp",
+      "why": "included by requisitionTemplate/editHeader.gsp; included by requisitionTemplate/create.gsp; included by requisitionTemplate/edit.gsp"
+    },
+    {
+      "path": "requisitionTemplate/batch.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy::batch (implicit); render(view:'batch') in grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy"
+    },
+    {
+      "path": "requisitionTemplate/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy"
+    },
+    {
+      "path": "requisitionTemplate/edit.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy::edit (implicit); render(view:'edit') in grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy"
+    },
+    {
+      "path": "requisitionTemplate/editHeader.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy::editHeader (implicit)"
+    },
+    {
+      "path": "requisitionTemplate/list.gsp",
+      "why": "UNCERTAIN: dynamic render(view: <expr>) in grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy"
+    },
+    {
+      "path": "requisitionTemplate/print.gsp",
+      "why": "UNCERTAIN: dynamic render(view: <expr>) in grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy"
+    },
+    {
+      "path": "requisitionTemplate/sendMail.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy::sendMail (implicit)"
+    },
+    {
+      "path": "requisitionTemplate/show.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/requisition/RequisitionTemplateController.groovy::show (implicit)"
+    },
+    {
+      "path": "shipment/_actions.gsp",
+      "why": "included by shipment/showDetails.gsp; included by shipment/_summary.gsp"
+    },
+    {
+      "path": "shipment/_barcodeLabel.gsp",
+      "why": "render(template:'barcodeLabel') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy"
+    },
+    {
+      "path": "shipment/_buttons.gsp",
+      "why": "included by shipment/showDetails.gsp"
+    },
+    {
+      "path": "shipment/_container.gsp",
+      "why": "included by shipment/showDetails.gsp"
+    },
+    {
+      "path": "shipment/_showPutawayLocations.gsp",
+      "why": "render(template:'showPutawayLocations') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy"
+    },
+    {
+      "path": "shipment/_showTracking.gsp",
+      "why": "render(template:'showTracking') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy"
+    },
+    {
+      "path": "shipment/_showTransactions.gsp",
+      "why": "render(template:'showTransactions') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy"
+    },
+    {
+      "path": "shipment/_summary.gsp",
+      "why": "included by shipment/showDetails.gsp; included by shipment/showPackingList.gsp; included by shipment/sendShipment.gsp"
+    },
+    {
+      "path": "shipment/addToShipment.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy::addToShipment renders /common/react only; render(view:'addToShipment') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy"
+    },
+    {
+      "path": "shipment/editEvent.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy::editEvent renders /common/react only; render(view:'editEvent') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy"
+    },
+    {
+      "path": "shipment/sendShipment.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy::sendShipment (implicit)"
+    },
+    {
+      "path": "shipment/showDetails.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy::showDetails (implicit)"
+    },
+    {
+      "path": "shipment/showPackingList.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/shipping/ShipmentController.groovy::showPackingList (implicit)"
+    },
+    {
+      "path": "shipmentItem/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/shipping/ShipmentItemController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentItemController.groovy"
+    },
+    {
+      "path": "shipmentItem/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/shipping/ShipmentItemController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentItemController.groovy"
+    },
+    {
+      "path": "shipmentItem/pick.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/shipping/ShipmentItemController.groovy::pick renders /common/react only; render(view:'pick') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentItemController.groovy"
+    },
+    {
+      "path": "shipmentWorkflow/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/shipping/ShipmentWorkflowController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentWorkflowController.groovy"
+    },
+    {
+      "path": "shipmentWorkflow/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/shipping/ShipmentWorkflowController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/shipping/ShipmentWorkflowController.groovy"
+    },
+    {
+      "path": "stockMovement/_comments.gsp",
+      "why": "render(template:'comments') in grails-app/controllers/org/pih/warehouse/inventory/StockMovementController.groovy"
+    },
+    {
+      "path": "stockMovement/_documents.gsp",
+      "why": "render(template:'documents') in grails-app/controllers/org/pih/warehouse/inventory/StockMovementController.groovy"
+    },
+    {
+      "path": "stockMovement/_events.gsp",
+      "why": "render(template:'events') in grails-app/controllers/org/pih/warehouse/inventory/StockMovementController.groovy"
+    },
+    {
+      "path": "stockMovement/_packingList.gsp",
+      "why": "render(template:'packingList') in grails-app/controllers/org/pih/warehouse/inventory/StockMovementController.groovy"
+    },
+    {
+      "path": "stockMovement/_receipts.gsp",
+      "why": "render(template:'receipts') in grails-app/controllers/org/pih/warehouse/inventory/StockMovementController.groovy"
+    },
+    {
+      "path": "stockMovement/_requisition.gsp",
+      "why": "render(template:'requisition') in grails-app/controllers/org/pih/warehouse/inventory/StockMovementController.groovy"
+    },
+    {
+      "path": "stockMovement/_summary.gsp",
+      "why": "included by stockMovement/show.gsp"
+    },
+    {
+      "path": "stockMovement/_synchronizeDialog.gsp",
+      "why": "render(template:'synchronizeDialog') in grails-app/controllers/org/pih/warehouse/inventory/StockMovementController.groovy"
+    },
+    {
+      "path": "stockMovement/show.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/inventory/StockMovementController.groovy::show (implicit)"
+    },
+    {
+      "path": "stockTransfer/_orderSummary.gsp",
+      "why": "included by stockTransfer/show.gsp"
+    },
+    {
+      "path": "stockTransfer/_summary.gsp",
+      "why": "included by stockTransfer/show.gsp"
+    },
+    {
+      "path": "stockTransfer/show.gsp",
+      "why": "controller action grails-app/controllers/org/pih/warehouse/inventory/StockTransferController.groovy::show (implicit)"
+    },
+    {
+      "path": "stocklist/_itemList.gsp",
+      "why": "included by stocklist/_print.gsp"
+    },
+    {
+      "path": "stocklist/_print.gsp",
+      "why": "render(template:'/stocklist/print') in grails-app/controllers/org/pih/warehouse/stocklist/StocklistController.groovy; render(template:'/stocklist/print') in grails-app/services/org/pih/warehouse/inventory/StocklistService.groovy; view path string '/stocklist/print' in grails-app/controllers/org/pih/warehouse/stocklist/StocklistController.groovy"
+    },
+    {
+      "path": "tag/_summary.gsp",
+      "why": "included by tag/create.gsp; included by tag/edit.gsp"
+    },
+    {
+      "path": "tag/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/TagController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/core/TagController.groovy"
+    },
+    {
+      "path": "tag/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/TagController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/TagController.groovy"
+    },
+    {
+      "path": "taglib/_autoSuggest.gsp",
+      "why": "render(template:'/taglib/autoSuggest') in grails-app/taglib/org/pih/warehouse/AutoSuggestTagLib.groovy; view path string '/taglib/autoSuggest' in grails-app/taglib/org/pih/warehouse/AutoSuggestTagLib.groovy"
+    },
+    {
+      "path": "taglib/_autoSuggestSearchable.gsp",
+      "why": "render(template:'/taglib/autoSuggestSearchable') in grails-app/taglib/org/pih/warehouse/AutoSuggestSearchableTagLib.groovy; view path string '/taglib/autoSuggestSearchable' in grails-app/taglib/org/pih/warehouse/AutoSuggestSearchableTagLib.groovy"
+    },
+    {
+      "path": "taglib/_autoSuggestString.gsp",
+      "why": "render(template:'/taglib/autoSuggestString') in grails-app/taglib/org/pih/warehouse/AutoSuggestStringTagLib.groovy; view path string '/taglib/autoSuggestString' in grails-app/taglib/org/pih/warehouse/AutoSuggestStringTagLib.groovy"
+    },
+    {
+      "path": "taglib/_chooseSubstitute.gsp",
+      "why": "render(template:'/taglib/chooseSubstitute') in grails-app/taglib/org/pih/warehouse/AutoSuggestTagLib.groovy; view path string '/taglib/chooseSubstitute' in grails-app/taglib/org/pih/warehouse/AutoSuggestTagLib.groovy"
+    },
+    {
+      "path": "taglib/_comboBox.gsp",
+      "why": "render(template:'/taglib/comboBox') in grails-app/taglib/org/pih/warehouse/ComboBoxTagLib.groovy; view path string '/taglib/comboBox' in grails-app/taglib/org/pih/warehouse/ComboBoxTagLib.groovy"
+    },
+    {
+      "path": "taglib/_decimalFormatField.gsp",
+      "why": "render(template:'/taglib/decimalFormatField') in grails-app/taglib/org/pih/warehouse/DecimalNumberFieldTagLib.groovy; view path string '/taglib/decimalFormatField' in grails-app/taglib/org/pih/warehouse/DecimalNumberFieldTagLib.groovy"
+    },
+    {
+      "path": "taglib/_displayBarcode.gsp",
+      "why": "render(template:'/taglib/displayBarcode') in grails-app/taglib/org/pih/warehouse/ImageTagLib.groovy; view path string '/taglib/displayBarcode' in grails-app/taglib/org/pih/warehouse/ImageTagLib.groovy"
+    },
+    {
+      "path": "taglib/_displayLogo.gsp",
+      "why": "render(template:'/taglib/displayLogo') in grails-app/taglib/org/pih/warehouse/ImageTagLib.groovy; view path string '/taglib/displayLogo' in grails-app/taglib/org/pih/warehouse/ImageTagLib.groovy"
+    },
+    {
+      "path": "taglib/_expirationDate.gsp",
+      "why": "render(template:'/taglib/expirationDate') in grails-app/taglib/org/pih/warehouse/DateTagLib.groovy; view path string '/taglib/expirationDate' in grails-app/taglib/org/pih/warehouse/DateTagLib.groovy"
+    },
+    {
+      "path": "taglib/_globalSearch.gsp",
+      "why": "render(template:'/taglib/globalSearch') in grails-app/taglib/org/pih/warehouse/GlobalSearchTagLib.groovy; view path string '/taglib/globalSearch' in grails-app/taglib/org/pih/warehouse/GlobalSearchTagLib.groovy"
+    },
+    {
+      "path": "taglib/_globalSearchStatic.gsp",
+      "why": "render(template:'/taglib/globalSearchStatic') in grails-app/taglib/org/pih/warehouse/GlobalSearchTagLib.groovy; view path string '/taglib/globalSearchStatic' in grails-app/taglib/org/pih/warehouse/GlobalSearchTagLib.groovy"
+    },
+    {
+      "path": "taglib/_productDisplayName.gsp",
+      "why": "render(template:'/taglib/productDisplayName') in grails-app/taglib/org/pih/warehouse/FormatTagLib.groovy; view path string '/taglib/productDisplayName' in grails-app/taglib/org/pih/warehouse/FormatTagLib.groovy"
+    },
+    {
+      "path": "taglib/_productStatus.gsp",
+      "why": "render(template:'/taglib/productStatus') in grails-app/taglib/org/pih/warehouse/InventoryTagLib.groovy; view path string '/taglib/productStatus' in grails-app/taglib/org/pih/warehouse/InventoryTagLib.groovy"
+    },
+    {
+      "path": "taglib/_searchProduct.gsp",
+      "why": "render(template:'../taglib/searchProduct') in grails-app/taglib/org/pih/warehouse/SearchProductTagLib.groovy"
+    },
+    {
+      "path": "taglib/_selectContainer.gsp",
+      "why": "render(template:'/taglib/selectContainer') in grails-app/taglib/org/pih/warehouse/SelectTagLib.groovy; view path string '/taglib/selectContainer' in grails-app/taglib/org/pih/warehouse/SelectTagLib.groovy"
+    },
+    {
+      "path": "taglib/_userPhoto.gsp",
+      "why": "render(template:'/taglib/userPhoto') in grails-app/taglib/org/pih/warehouse/AuthTagLib.groovy; view path string '/taglib/userPhoto' in grails-app/taglib/org/pih/warehouse/AuthTagLib.groovy"
+    },
+    {
+      "path": "unitOfMeasureConversion/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/UnitOfMeasureConversionController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/core/UnitOfMeasureConversionController.groovy"
+    },
+    {
+      "path": "unitOfMeasureConversion/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/core/UnitOfMeasureConversionController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/core/UnitOfMeasureConversionController.groovy"
+    },
+    {
+      "path": "user/_actions.gsp",
+      "why": "included by user/_summary.gsp"
+    },
+    {
+      "path": "user/_summary.gsp",
+      "why": "included by user/edit.gsp; included by user/changePhoto.gsp"
+    },
+    {
+      "path": "user/changePhoto.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/user/UserController.groovy::changePhoto renders /common/react only; render(view:'changePhoto') in grails-app/controllers/org/pih/warehouse/user/UserController.groovy"
+    },
+    {
+      "path": "user/create.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/user/UserController.groovy::create renders /common/react only; render(view:'create') in grails-app/controllers/org/pih/warehouse/user/UserController.groovy"
+    },
+    {
+      "path": "user/edit.gsp",
+      "why": "action grails-app/controllers/org/pih/warehouse/user/UserController.groovy::edit renders /common/react only; render(view:'edit') in grails-app/controllers/org/pih/warehouse/user/UserController.groovy"
+    }
+  ]
+}
