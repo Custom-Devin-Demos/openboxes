@@ -81,11 +81,15 @@ jobs:
         run: |
           ./gradlew bootRun > bootrun.log 2>&1 &
           echo $! > bootrun.pid
-          # Wait up to 40 minutes for the app to answer.
+          # Wait up to 40 minutes for the app to be READY, not just answering:
+          # the app serves redirects while Liquibase migrations are still
+          # running, so probe an API login (the admin user only exists once
+          # the install changelogs have completed).
           for i in $(seq 1 240); do
-            code=$(curl -s -o /dev/null -w '%{http_code}' http://localhost:8080/openboxes/ || true)
-            if [ "$code" != "000" ] && [ "$code" != "" ]; then
-              echo "App is up (HTTP $code)"; break
+            code=$(curl -s -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' \
+              -d '{"username":"admin","password":"password"}' http://localhost:8080/openboxes/api/login || true)
+            if [ "$code" = "200" ]; then
+              echo "App is ready (login HTTP $code)"; break
             fi
             sleep 10
           done
@@ -94,14 +98,26 @@ jobs:
       - name: Seed demo data and restart app
         run: |
           mysql -h127.0.0.1 -uopenboxes -popenboxes openboxes < docker/seed-demo-data.sql
-          # Restart so caches reflect the seeded data.
+          # Restart so caches reflect the seeded data. Kill the whole app
+          # process tree (killing only the gradle wrapper leaves the forked
+          # app JVM running) and wait for port 8080 to free up.
           kill "$(cat bootrun.pid)" || true
-          sleep 15
+          pkill -f 'org.pih.warehouse' || true
+          pkill -f 'bootRun' || true
+          for i in $(seq 1 30); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' http://localhost:8080/openboxes/ || true)
+            if [ "$code" = "000" ] || [ -z "$code" ]; then
+              echo "Port 8080 freed"; break
+            fi
+            sleep 5
+          done
+          sleep 10
           ./gradlew bootRun > bootrun2.log 2>&1 &
           for i in $(seq 1 120); do
-            code=$(curl -s -o /dev/null -w '%{http_code}' http://localhost:8080/openboxes/ || true)
-            if [ "$code" != "000" ] && [ "$code" != "" ]; then
-              echo "App is up (HTTP $code)"; break
+            code=$(curl -s -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' \
+              -d '{"username":"admin","password":"password"}' http://localhost:8080/openboxes/api/login || true)
+            if [ "$code" = "200" ]; then
+              echo "App is ready (login HTTP $code)"; break
             fi
             sleep 10
           done
