@@ -19,7 +19,7 @@ import org.pih.warehouse.inventory.StockMovementService
 import org.pih.warehouse.order.Order
 import org.pih.warehouse.requisition.Requisition
 
-class PicklistController {
+class PicklistController implements grails.plugins.rendering.RenderingSupport {
 
     PicklistService picklistService
     StockMovementService stockMovementService
@@ -52,7 +52,7 @@ class PicklistController {
         def picklist = Picklist.findByRequisition(requisition)
         def location = Location.get(session.warehouse.id)
 
-        renderPdf(
+        renderPdfDocument(
                 template: "/picklist/print",
                 model: [requisition: requisition, picklist: picklist, location: location, sorted: params.sorted],
                 filename: "Picklist - ${requisition.requestNumber}"
@@ -64,7 +64,7 @@ class PicklistController {
         def order = Order.get(params.id)
         def picklist = Picklist.findByOrder(order)
         def location = Location.get(session.warehouse.id)
-        renderPdf(
+        renderPdfDocument(
             template: "/picklist/returnPrint",
             model: [order: order, picklist: picklist, location: location, sorted: params.sorted],
             filename: "Return Picklist - ${order.orderNumber}"

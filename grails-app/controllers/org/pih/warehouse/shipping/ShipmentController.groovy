@@ -35,7 +35,7 @@ import org.pih.warehouse.receiving.Receipt
 import org.pih.warehouse.receiving.ReceiptItem
 
 @Transactional
-class ShipmentController {
+class ShipmentController implements grails.plugins.rendering.RenderingSupport {
 
     static scaffold = Shipment
     def shipmentService
@@ -410,7 +410,7 @@ class ShipmentController {
                     lotNumberBytes  : lotNumberBarcode.toByteArray(),
                     productCodeBytes: productCodeBarcode.toByteArray()]
         }
-        renderPdf(template: 'barcodeLabel', model: [shipmentInstance: shipmentInstance, shipmentItems: shipmentItems, shipmentNumberBytes: shipmentNumberBarcode.toByteArray()])
+        renderPdfDocument(template: 'barcodeLabel', model: [shipmentInstance: shipmentInstance, shipmentItems: shipmentItems, shipmentNumberBytes: shipmentNumberBarcode.toByteArray()])
     }
 
     def showPutawayLocations() {

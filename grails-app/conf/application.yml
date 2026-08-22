@@ -249,9 +249,6 @@ hibernate:
     allow_update_outside_transaction: false
     cache:
         queries: false
-        provider_class: org.hibernate.cache.EhCacheProvider
-        region:
-            factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
         use_query_cache: false
         use_second_level_cache: false
 
