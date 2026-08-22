@@ -112,6 +112,17 @@ JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64 ./gradlew test
 JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64 ./gradlew integrationTest
 ```
 
+Note: `~/.grails/openboxes-config.properties` (section 2) is also loaded in the
+`test` environment, and its `dataSource.url` overrides the Testcontainers
+datasource used by `integrationTest`. Temporarily move the file aside when
+running integration tests locally:
+
+```bash
+mv ~/.grails/openboxes-config.properties{,.bak}
+JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64 ./gradlew integrationTest
+mv ~/.grails/openboxes-config.properties{.bak,}
+```
+
 ## CI on this fork
 
 GitHub Actions workflows in `.github/workflows/` run frontend and backend tests on
