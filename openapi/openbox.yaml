@@ -42,6 +42,8 @@ tags:
     description: Reports and KPI indicators (ReportApiController, IndicatorApiController)
   - name: shipments
     description: Shipments, shipment items/workflows, create-shipment workflow, combined shipments, pack lists, delivery/receipt notes, putaways
+  - name: stock-requisitions
+    description: Stock movements, stock transfers, picklists, replenishments, requisitions, stocklists and mobile APIs (StockMovement/StockMovementItem/StockTransfer/Picklist/Replenishment/Requisition/RequisitionTemplate/Stocklist/StocklistItem/Mobile ApiControllers)
   - name: supplier
     description: Supplier search and details (SupplierApiController)
   - name: tags
@@ -63,6 +65,7 @@ x-fragments:
   - paths/reason-codes.yaml
   - paths/report.yaml
   - paths/shipments.yaml
+  - paths/stock-requisitions.yaml
   - paths/supplier.yaml
   - paths/tags.yaml
   - paths/unit-of-measure.yaml
