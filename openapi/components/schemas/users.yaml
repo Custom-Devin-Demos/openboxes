@@ -1,0 +1,195 @@
+# Schemas for the User API (UserApiController).
+
+UserListItem:
+  type: object
+  description: List item rendered by UserApiController.list.
+  required: [id]
+  properties:
+    id:
+      type: string
+    active:
+      type: boolean
+    username:
+      type: string
+      nullable: true
+    name:
+      type: string
+      nullable: true
+    email:
+      type: string
+      nullable: true
+    locale:
+      type: string
+      nullable: true
+      description: Locale display name.
+      example: English
+    roles:
+      type: string
+      description: Comma-separated default role names (empty string when none).
+      example: Superuser
+    lastLoginDate:
+      type: string
+      nullable: true
+
+UserDetails:
+  type: object
+  description: Detailed user shape rendered by UserApiController.toJson.
+  required: [id]
+  properties:
+    id:
+      type: string
+    version:
+      type: integer
+    username:
+      type: string
+      nullable: true
+    firstName:
+      type: string
+      nullable: true
+    lastName:
+      type: string
+      nullable: true
+    name:
+      type: string
+      nullable: true
+    email:
+      type: string
+      nullable: true
+    locale:
+      type: string
+      nullable: true
+      description: Locale code (e.g. en).
+      example: en
+    localeDisplayName:
+      type: string
+      nullable: true
+      example: English
+    timezone:
+      type: string
+      nullable: true
+    active:
+      type: boolean
+    hasPhoto:
+      type: boolean
+    rememberLastLocation:
+      type: boolean
+      nullable: true
+    defaultLocation:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          nullable: true
+    roles:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+            nullable: true
+    locationRoles:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          location:
+            type: string
+            nullable: true
+          role:
+            type: string
+            nullable: true
+          inactive:
+            type: boolean
+    locationRolesDescription:
+      type: string
+      nullable: true
+    lastLoginDate:
+      type: string
+      nullable: true
+    dateCreated:
+      type: string
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+
+UserCreateInput:
+  type: object
+  description: >
+    Request body for POST /api/users/create. The created user always starts
+    inactive regardless of input.
+  properties:
+    username:
+      type: string
+    firstName:
+      type: string
+    lastName:
+      type: string
+    email:
+      type: string
+      nullable: true
+    locale:
+      type: string
+      nullable: true
+      example: en
+    password:
+      type: string
+      nullable: true
+
+UserUpdateInput:
+  type: object
+  description: Request body for PUT /api/users/{id}.
+  properties:
+    username:
+      type: string
+    firstName:
+      type: string
+    lastName:
+      type: string
+    email:
+      type: string
+      nullable: true
+    timezone:
+      type: string
+      nullable: true
+    locale:
+      type: string
+      nullable: true
+    active:
+      type: boolean
+    rememberLastLocation:
+      type: boolean
+    warehouse:
+      type: string
+      nullable: true
+      description: Default location id.
+    roles:
+      type: array
+      nullable: true
+      description: Default role ids to assign.
+      items:
+        type: string
+    version:
+      type: integer
+      nullable: true
+      description: Optimistic-locking version.
+
+UserErrorMessage:
+  type: object
+  description: >
+    Error body rendered directly by several UserApiController actions
+    (delete/changePassword/sendTestEmail/locationRoles/photo). NOTE - contains
+    only `errorMessage`, without the standard `errorCode` field.
+  required: [errorMessage]
+  properties:
+    errorMessage:
+      type: string
+      nullable: true

@@ -1,0 +1,158 @@
+# Schemas for the Party, PartyRole and PartyType APIs
+# (PartyApiController, PartyRoleApiController, PartyTypeApiController).
+
+Party:
+  type: object
+  description: Shape rendered by PartyApiController.toJson.
+  required: [id]
+  properties:
+    id:
+      type: string
+    version:
+      type: integer
+    partyType:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          nullable: true
+    roles:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+            nullable: true
+
+PartyInput:
+  type: object
+  description: Request body bound by PartyApiController.bindPartyType.
+  properties:
+    partyType:
+      description: PartyType id as a string, or an object with an `id` key.
+      oneOf:
+        - type: string
+        - type: object
+    version:
+      type: integer
+      nullable: true
+      description: Optimistic-locking version (update only).
+
+PartyRole:
+  type: object
+  description: Shape rendered by PartyRoleApiController.toJson.
+  required: [id]
+  properties:
+    id:
+      type: string
+    version:
+      type: integer
+    party:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          nullable: true
+    roleType:
+      type: string
+      nullable: true
+      example: ROLE_SUPPLIER
+    startDate:
+      type: string
+      nullable: true
+      description: ISO-8601 instant string.
+      example: '2024-01-01T00:00:00Z'
+    endDate:
+      type: string
+      nullable: true
+
+PartyRoleInput:
+  type: object
+  description: >
+    Request body bound by PartyRoleApiController.bindPartyRole. Dates must be
+    ISO-8601 instants parseable by java.time.Instant.parse.
+  properties:
+    party:
+      description: Party id as a string, or an object with an `id` key.
+      oneOf:
+        - type: string
+        - type: object
+    roleType:
+      type: string
+      nullable: true
+      description: RoleType enum name.
+      example: ROLE_SUPPLIER
+    startDate:
+      type: string
+      nullable: true
+      example: '2024-01-01T00:00:00Z'
+    endDate:
+      type: string
+      nullable: true
+    version:
+      type: integer
+      nullable: true
+      description: Optimistic-locking version (update only).
+
+PartyType:
+  type: object
+  description: Shape rendered by PartyTypeApiController.toJson.
+  required: [id]
+  properties:
+    id:
+      type: string
+    code:
+      type: string
+      nullable: true
+      example: ORG
+    name:
+      type: string
+      nullable: true
+      example: Organization
+    description:
+      type: string
+      nullable: true
+    partyTypeCode:
+      type: string
+      nullable: true
+      example: ORGANIZATION
+    dateCreated:
+      type: string
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+    version:
+      type: integer
+
+PartyTypeInput:
+  type: object
+  description: >
+    Request body bound by PartyTypeApiController.bindPartyTypeData (Grails
+    databinding excluding `version`).
+  properties:
+    code:
+      type: string
+      nullable: true
+    name:
+      type: string
+    description:
+      type: string
+      nullable: true
+    partyTypeCode:
+      type: string
+      nullable: true
+      example: ORGANIZATION
+    version:
+      type: integer
+      nullable: true
+      description: Optimistic-locking version (update only).

@@ -1,0 +1,60 @@
+# Schemas for the Role API (RoleApiController).
+
+Role:
+  type: object
+  description: Shape rendered by RoleApiController.toJson.
+  required: [id]
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+      nullable: true
+      example: Manager
+    roleType:
+      type: string
+      nullable: true
+      example: ROLE_MANAGER
+    description:
+      type: string
+      nullable: true
+    version:
+      type: integer
+
+RoleCreateResponse:
+  type: object
+  description: >
+    Response of POST /api/roles. NOTE - rendered WITHOUT a `data` wrapper and
+    without `version` (unlike read/update, which return `{data: Role}`).
+  required: [id]
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+      nullable: true
+    roleType:
+      type: string
+      nullable: true
+    description:
+      type: string
+      nullable: true
+
+RoleInput:
+  type: object
+  description: Request body handled by RoleApiController create/update.
+  properties:
+    name:
+      type: string
+    roleType:
+      type: string
+      nullable: true
+      description: RoleType enum name.
+      example: ROLE_MANAGER
+    description:
+      type: string
+      nullable: true
+    version:
+      type: integer
+      nullable: true
+      description: Optimistic-locking version (update only).

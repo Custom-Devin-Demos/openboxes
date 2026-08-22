@@ -1,0 +1,64 @@
+# Schemas for the LocationType API (LocationTypeApiController).
+
+LocationType:
+  type: object
+  description: Shape rendered by LocationTypeApiController.toJson.
+  required: [id]
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+      nullable: true
+      example: Depot
+    description:
+      type: string
+      nullable: true
+    locationTypeCode:
+      type: string
+      nullable: true
+      example: DEPOT
+    supportedActivities:
+      type: array
+      items:
+        type: string
+    sortOrder:
+      type: integer
+      nullable: true
+    dateCreated:
+      type: string
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+    version:
+      type: integer
+
+LocationTypeInput:
+  type: object
+  description: >
+    Request body bound by LocationTypeApiController.bindLocationTypeData
+    (Grails databinding excluding `version`; `supportedActivities` replaces
+    the whole set when present).
+  properties:
+    name:
+      type: string
+    description:
+      type: string
+      nullable: true
+    locationTypeCode:
+      type: string
+      nullable: true
+      example: DEPOT
+    sortOrder:
+      type: integer
+      nullable: true
+    supportedActivities:
+      type: array
+      nullable: true
+      items:
+        type: string
+    version:
+      type: integer
+      nullable: true
+      description: Optimistic-locking version (update only).

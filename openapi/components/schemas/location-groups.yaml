@@ -1,0 +1,98 @@
+# Schemas for the LocationGroup API (LocationGroupApiController).
+
+LocationGroupSummary:
+  type: object
+  description: List item rendered by LocationGroupApiController.list.
+  required: [id]
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+      nullable: true
+    address:
+      type: object
+      nullable: true
+      allOf:
+        - $ref: '#/components/schemas/LocationGroupAddress'
+    locationsCount:
+      type: integer
+
+LocationGroupDetails:
+  type: object
+  description: Shape rendered by LocationGroupApiController.read.
+  required: [id]
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+      nullable: true
+    address:
+      type: object
+      nullable: true
+      allOf:
+        - $ref: '#/components/schemas/LocationGroupAddress'
+    version:
+      type: integer
+    locations:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+            nullable: true
+
+LocationGroupAddress:
+  description: Address shape rendered by LocationGroupApiController.toAddressJson.
+  properties:
+    id:
+      type: string
+      nullable: true
+    address:
+      type: string
+      nullable: true
+    address2:
+      type: string
+      nullable: true
+    city:
+      type: string
+      nullable: true
+    stateOrProvince:
+      type: string
+      nullable: true
+    postalCode:
+      type: string
+      nullable: true
+    country:
+      type: string
+      nullable: true
+    description:
+      type: string
+      nullable: true
+
+LocationGroupInput:
+  type: object
+  description: LocationGroupCommand request body.
+  properties:
+    name:
+      type: string
+    address:
+      type: object
+      nullable: true
+      description: Address to attach (update only; create ignores it).
+      additionalProperties: {}
+    version:
+      type: integer
+      nullable: true
+      description: Optimistic-locking version (update only).
+
+LocationGroupMarshalled:
+  type: object
+  description: >
+    LocationGroup rendered by the default Grails JSON converter
+    (returned by PUT /api/locationGroups/{id}).
+  additionalProperties: {}

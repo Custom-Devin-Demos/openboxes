@@ -1,0 +1,149 @@
+# LocationGroup API (LocationGroupApiController).
+
+/api/locationGroups:
+  get:
+    tags: [locationGroups]
+    summary: List location groups (paginated)
+    operationId: listLocationGroups
+    parameters:
+      - name: q
+        in: query
+        required: false
+        description: Prefix match on id or name.
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: Location groups.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/LocationGroupSummary'
+                totalCount:
+                  type: integer
+  post:
+    tags: [locationGroups]
+    summary: Create a location group
+    operationId: createLocationGroup
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LocationGroupInput'
+          example:
+            name: Scratch Group
+    responses:
+      '200':
+        description: Id of the created location group (200, not 201).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  required: [id]
+                  properties:
+                    id:
+                      type: string
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20002
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/locationGroups/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [locationGroups]
+    summary: Read a location group by id
+    operationId: readLocationGroup
+    x-contract-tests:
+      - name: unknown id
+        params:
+          id: does-not-exist
+        status: 404
+      - name: seeded location group
+        skip: The seeded demo dataset contains no location groups.
+    responses:
+      '200':
+        description: The location group.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/LocationGroupDetails'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [locationGroups]
+    summary: Update a location group
+    operationId: updateLocationGroup
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LocationGroupInput'
+          example:
+            name: Renamed Group
+            version: 0
+    responses:
+      '200':
+        description: The updated location group (default Grails JSON converter output).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/LocationGroupMarshalled'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20002
+                name: Renamed Group
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  delete:
+    tags: [locationGroups]
+    summary: Delete a location group
+    operationId: deleteLocationGroup
+    responses:
+      '204':
+        description: Deleted (no content).
+      '404':
+        $ref: '#/components/responses/NotFound'
+      '500':
+        description: Group still assigned to locations (IllegalStateException) surfaces as 500.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+            example: {errorCode: 500, errorMessage: 'Cannot delete location group that is assigned to locations'}

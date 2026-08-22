@@ -1,0 +1,529 @@
+# Party, PartyRole and PartyType APIs
+# (PartyApiController, PartyRoleApiController, PartyTypeApiController).
+
+/api/parties:
+  get:
+    tags: [parties]
+    summary: List parties (paginated)
+    operationId: listParties
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: Parties (max is capped at 100, default 10).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Party'
+                totalCount:
+                  type: integer
+  post:
+    tags: [parties]
+    summary: Create a party
+    operationId: createParty
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PartyInput'
+          example:
+            partyType: '1'
+    responses:
+      '201':
+        description: The created party.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/Party'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20005
+                version: 0
+                partyType: {id: '1', name: Organization}
+                roles: []
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/parties/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [parties]
+    summary: Read a party by id
+    operationId: readParty
+    x-contract-tests:
+      - name: seeded organization party
+        params:
+          id: '{organizationId}'
+        status: 200
+      - name: unknown id
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The party.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/Party'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [parties]
+    summary: Update a party
+    operationId: updateParty
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PartyInput'
+          example:
+            partyType: {id: '1'}
+            version: 0
+    responses:
+      '200':
+        description: The updated party.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/Party'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20005
+                version: 1
+                partyType: {id: '1', name: Organization}
+                roles: []
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [parties]
+    summary: Delete a party
+    operationId: deleteParty
+    responses:
+      '204':
+        description: Deleted (no content).
+      '400':
+        description: Party is still referenced (data integrity violation).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+            example: {errorCode: 400, errorMessage: 'Party 1 could not be deleted'}
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/parties/partyTypeOptions:
+  get:
+    tags: [parties]
+    summary: List party types as select options
+    operationId: partyTypeOptions
+    responses:
+      '200':
+        description: Party type options.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required: [id, label]
+                    properties:
+                      id:
+                        type: string
+                      label:
+                        type: string
+                        example: Organization
+
+/api/parties/partyOptions:
+  get:
+    tags: [parties]
+    summary: List parties as select options
+    operationId: partyOptions
+    responses:
+      '200':
+        description: Party options.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required: [id, label]
+                    properties:
+                      id:
+                        type: string
+                      label:
+                        type: string
+
+/api/partyRoles:
+  get:
+    tags: [parties]
+    summary: List party roles (paginated)
+    operationId: listPartyRoles
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: Party roles (max is capped at 100, default 10).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PartyRole'
+                totalCount:
+                  type: integer
+  post:
+    tags: [parties]
+    summary: Create a party role
+    operationId: createPartyRole
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PartyRoleInput'
+          example:
+            party: '1'
+            roleType: ROLE_SUPPLIER
+    responses:
+      '201':
+        description: The created party role.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/PartyRole'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20006
+                version: 0
+                party: {id: '1', name: Main Organization}
+                roleType: ROLE_SUPPLIER
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '500':
+        description: An invalid roleType enum name surfaces as 500 (IllegalArgumentException).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+            example: {errorCode: 500, errorMessage: 'No enum constant org.pih.warehouse.core.RoleType.BOGUS', cause: java.lang.IllegalArgumentException}
+
+/api/partyRoles/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [parties]
+    summary: Read a party role by id
+    operationId: readPartyRole
+    x-contract-tests:
+      - name: seeded party role
+        params:
+          id: '1'
+        status: 200
+      - name: unknown id
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The party role.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/PartyRole'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [parties]
+    summary: Update a party role
+    operationId: updatePartyRole
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PartyRoleInput'
+          example:
+            roleType: ROLE_SUPPLIER
+            version: 0
+    responses:
+      '200':
+        description: The updated party role.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/PartyRole'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20006
+                version: 1
+                roleType: ROLE_SUPPLIER
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [parties]
+    summary: Delete a party role
+    operationId: deletePartyRole
+    responses:
+      '204':
+        description: Deleted (no content).
+      '404':
+        $ref: '#/components/responses/NotFound'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/partyRoles/roleTypeOptions:
+  get:
+    tags: [parties]
+    summary: List role types as select options
+    operationId: partyRoleTypeOptions
+    responses:
+      '200':
+        description: Role type options (all RoleType enum values).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required: [id, label]
+                    properties:
+                      id:
+                        type: string
+                        example: ROLE_SUPPLIER
+                      label:
+                        type: string
+                        example: ROLE_SUPPLIER
+
+/api/partyTypes:
+  get:
+    tags: [parties]
+    summary: List party types (paginated)
+    operationId: listPartyTypes
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: Party types (max is capped at 100, default 10).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PartyType'
+                totalCount:
+                  type: integer
+  post:
+    tags: [parties]
+    summary: Create a party type
+    operationId: createPartyType
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PartyTypeInput'
+          example:
+            name: Scratch Party Type
+            code: SPT
+            partyTypeCode: ORGANIZATION
+    responses:
+      '201':
+        description: The created party type.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/PartyType'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20007
+                code: SPT
+                name: Scratch Party Type
+                partyTypeCode: ORGANIZATION
+                version: 0
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/partyTypes/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [parties]
+    summary: Read a party type by id
+    operationId: readPartyType
+    x-contract-tests:
+      - name: seeded party type
+        params:
+          id: '1'
+        status: 200
+      - name: unknown id
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The party type.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/PartyType'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [parties]
+    summary: Update a party type
+    operationId: updatePartyType
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PartyTypeInput'
+          example:
+            name: Renamed Party Type
+            version: 0
+    responses:
+      '200':
+        description: The updated party type.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/PartyType'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20007
+                name: Renamed Party Type
+                version: 1
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [parties]
+    summary: Delete a party type
+    operationId: deletePartyType
+    responses:
+      '204':
+        description: Deleted (no content).
+      '404':
+        $ref: '#/components/responses/NotFound'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/partyTypes/partyTypeCodeOptions:
+  get:
+    tags: [parties]
+    summary: List party type codes as select options
+    operationId: partyTypeCodeOptions
+    responses:
+      '200':
+        description: Party type code options (all PartyTypeCode enum values).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required: [id, label]
+                    properties:
+                      id:
+                        type: string
+                        example: ORGANIZATION
+                      label:
+                        type: string
+                        example: ORGANIZATION

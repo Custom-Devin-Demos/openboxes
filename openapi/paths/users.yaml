@@ -1,0 +1,553 @@
+# User API (UserApiController).
+# NOTE: GET /api/users is mapped to SelectOptionsApiController.usersOptions
+# (not UserApiController) and is therefore not part of this fragment.
+
+/api/users/list:
+  get:
+    tags: [users]
+    summary: List users (paginated)
+    operationId: listUsers
+    parameters:
+      - name: q
+        in: query
+        required: false
+        description: Substring match on user fields.
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: >
+          Users (max is capped at 100, default 10). Unknown sort properties are
+          silently ignored.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/UserListItem'
+                totalCount:
+                  type: integer
+
+/api/users/create:
+  post:
+    tags: [users]
+    summary: Create a user (created inactive)
+    operationId: createUser
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserCreateInput'
+          example:
+            username: scratchuser
+            firstName: Scratch
+            lastName: User
+            email: scratch@example.com
+            password: secret
+    responses:
+      '201':
+        description: The created user (always inactive).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/UserDetails'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b2000a
+                username: scratchuser
+                name: Scratch User
+                active: false
+                hasPhoto: false
+                roles: []
+                locationRoles: []
+                version: 0
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/users/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [users]
+    summary: Read a user by id
+    operationId: readUser
+    x-contract-tests:
+      - name: seeded admin user
+        params:
+          id: '1'
+        status: 200
+      - name: unknown id
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The user.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/UserDetails'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [users]
+    summary: Update a user
+    operationId: updateUser
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserUpdateInput'
+          example:
+            firstName: Renamed
+            lastName: User
+            version: 0
+    responses:
+      '200':
+        description: The updated user.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/UserDetails'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b2000a
+                name: Renamed User
+                active: false
+                hasPhoto: false
+                roles: []
+                locationRoles: []
+                version: 1
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [users]
+    summary: Delete a user
+    operationId: deleteUser
+    responses:
+      '204':
+        description: Deleted (no content).
+      '400':
+        description: >
+          Deleting your own account, or a referenced user (data integrity
+          violation). NOTE - body has only `errorMessage` (no `errorCode`).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserErrorMessage'
+            example: {errorMessage: 'User 1 could not be deleted'}
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/users/{id}/changePassword:
+  post:
+    tags: [users]
+    summary: Change a user's password
+    operationId: changeUserPassword
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              password:
+                type: string
+              passwordConfirm:
+                type: string
+          example:
+            password: newSecret
+            passwordConfirm: newSecret
+    responses:
+      '200':
+        description: Password changed; returns the user.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/UserDetails'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b2000a
+                name: Scratch User
+                active: false
+                hasPhoto: false
+                roles: []
+                locationRoles: []
+      '403':
+        description: >
+          Password validation failed. NOTE - body has only `errorMessage`
+          (no `errorCode`).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserErrorMessage'
+            example: {errorMessage: 'Passwords do not match'}
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/users/{id}/toggleActivation:
+  post:
+    tags: [users]
+    summary: Toggle a user's active flag
+    operationId: toggleUserActivation
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: The user after toggling (notification emails attempted).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/UserDetails'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b2000a
+                name: Scratch User
+                active: true
+                hasPhoto: false
+                roles: []
+                locationRoles: []
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/users/{id}/sendTestEmail:
+  post:
+    tags: [users]
+    summary: Send a test email to a user
+    operationId: sendUserTestEmail
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Email sent.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: string
+            example:
+              data: Email successfully sent to scratch@example.com
+      '400':
+        description: >
+          Email sending failed (e.g. mail disabled or no address). NOTE - body
+          has only `errorMessage` (no `errorCode`).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserErrorMessage'
+            example: {errorMessage: 'Error sending email ...'}
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/users/{id}/locationRoles:
+  post:
+    tags: [users]
+    summary: Add location roles to a user
+    operationId: saveUserLocationRole
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              location:
+                type: string
+                nullable: true
+                description: Location id.
+              roles:
+                type: array
+                nullable: true
+                description: Role ids.
+                items:
+                  type: string
+          example:
+            location: '1'
+            roles: ['3']
+    responses:
+      '200':
+        description: The user with updated location roles.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/UserDetails'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b2000a
+                name: Scratch User
+                active: false
+                hasPhoto: false
+                roles: []
+                locationRoles: [{id: lr1, location: Main Warehouse, role: Manager, inactive: false}]
+      '400':
+        description: >
+          Validation failure. NOTE - body has only `errorMessage`
+          (no `errorCode`).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserErrorMessage'
+            example: {errorMessage: 'Invalid location role'}
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/users/{id}/locationRoles/{locationRoleId}:
+  delete:
+    tags: [users]
+    summary: Remove a location role from a user
+    operationId: deleteUserLocationRole
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: locationRoleId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '204':
+        description: Removed (no content).
+      '400':
+        description: >
+          Validation failure. NOTE - body has only `errorMessage`
+          (no `errorCode`).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserErrorMessage'
+            example: {errorMessage: 'Invalid location role'}
+      '404':
+        description: Unknown locationRoleId.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+            example: {errorCode: 404, errorMessage: 'Resource not found'}
+
+/api/users/{id}/photo:
+  post:
+    tags: [users]
+    summary: Upload a user photo
+    operationId: uploadUserPhoto
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              photo:
+                type: string
+                description: PNG/JPEG/GIF image under 1 MB.
+          example:
+            photo: '<binary image content>'
+    responses:
+      '200':
+        description: The user after saving the photo.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/UserDetails'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b2000a
+                name: Scratch User
+                active: false
+                hasPhoto: true
+                roles: []
+                locationRoles: []
+      '400':
+        description: >
+          Wrong content type or file too large. NOTE - body has only
+          `errorMessage` (no `errorCode`).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserErrorMessage'
+            example: {errorMessage: 'Photo must be one of: [image/png, image/jpeg, image/gif]'}
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/users/localeOptions:
+  get:
+    tags: [users]
+    summary: List supported locales as select options
+    operationId: userLocaleOptions
+    responses:
+      '200':
+        description: Supported locale options.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required: [id, label]
+                    properties:
+                      id:
+                        type: string
+                        example: en
+                      label:
+                        type: string
+                        example: English
+
+/api/users/loginLocationOptions:
+  get:
+    tags: [users]
+    summary: List login locations for the session location as select options
+    operationId: userLoginLocationOptions
+    responses:
+      '200':
+        description: Login location options.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required: [id, label]
+                    properties:
+                      id:
+                        type: string
+                      label:
+                        type: string
+                        example: Main Warehouse
+
+/api/users/timezoneOptions:
+  get:
+    tags: [users]
+    summary: List available timezones as select options
+    operationId: userTimezoneOptions
+    responses:
+      '200':
+        description: Timezone options.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required: [id, label]
+                    properties:
+                      id:
+                        type: string
+                        example: America/New_York
+                      label:
+                        type: string
+                        example: America/New_York
+
+/api/users/roleOptions:
+  get:
+    tags: [users]
+    summary: List roles as select options
+    operationId: userRoleOptions
+    responses:
+      '200':
+        description: Role options.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required: [id, label]
+                    properties:
+                      id:
+                        type: string
+                      label:
+                        type: string
+                        example: Manager
