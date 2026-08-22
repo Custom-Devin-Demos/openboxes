@@ -75,7 +75,7 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | # | Task | Status | Session | PR | Notes |
 |---|------|--------|---------|----|-------|
 | 4.1 | Full Playwright regression vs Phase 0 baseline | IN_PROGRESS | [7486f04f](https://app.devin.ai/sessions/7486f04f2ae24a2cbbe95b6957d49975) | — | |
-| 4.2 | Liquibase dry-run on production-shaped data | IN_PROGRESS | [af9a1ad0](https://app.devin.ai/sessions/af9a1ad01d804258922afda916d56b29) | — | |
+| 4.2 | Liquibase dry-run on production-shaped data | MERGED | [af9a1ad0](https://app.devin.ai/sessions/af9a1ad01d804258922afda916d56b29) | [#82](https://github.com/Custom-Devin-Demos/openboxes/pull/82) | GO: fresh install 983 changesets clean; upgrade from baseline 1cb3d4eb4 runs only 52 runAlways view rebuilds, zero checksum errors; idempotent; snapshots 122/122 on upgraded DB; CI 4/4. Caveat: dev MariaDB 10.11 — repeat upgrade boot on MySQL 8 at cutover rehearsal |
 | 4.3 | Performance smoke | MERGED | [acbb06a1](https://app.devin.ai/sessions/acbb06a17a6f4305918d29173e1db357) | [#80](https://github.com/Custom-Devin-Demos/openboxes/pull/80) | develop vs baseline 54993e2d8: startup ~2–3.7x faster, API latency parity (≤31ms median), TTI 21–40% faster on 5/6 pages, RSS −23%; no cutover blockers; CI 4/4 |
 | 4.4 | Remove GSP layer + dead code | IN_PROGRESS | [b317e68e](https://app.devin.ai/sessions/b317e68ebc7347eea1a0783c00733974) | — | |
 
@@ -226,4 +226,5 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 - 2026-08-22: PHASE 3 COMPLETE. All 9 spec children merged (#71–#79): 45 fragments, 599 paths, 758 operations bundle; contracts:lint valid on develop (58 warnings, all documented as inherent to characterized behavior). Coordinator resolved additive openbox.yaml x-fragments/tags conflicts on #72/#73/#74/#75/#76/#78/#79 and one duplicate schema name on #79 (ProductReference→InventoryProductReference). Flaky ApiSpec-setup integrationTest 500s observed on #72/#77 and on develop itself (run 32548187459); all green on re-run. Next: Phase 4 validation & cutover.
 - 2026-08-22: Phase 4 spawned (4 children): 4.1 full regression, 4.2 Liquibase dry-run, 4.3 perf smoke, 4.4 GSP removal.
 - 2026-08-22: 4.3 perf smoke merged (#80). No performance blockers for cutover.
+- 2026-08-22: 4.2 Liquibase dry-run merged (#82). GO recommendation; MySQL 8 rehearsal caveat noted.
 - 2026-08-20: Wave 5 COMPLETE (10/10 merged): PR #59 (receiving) merged post-rebase (CI 4/4, clean merge, localization union 30 added/0 removed/0 changed).
