@@ -1,0 +1,36 @@
+import {
+  CREATE_SHIPMENT_ADD_CONTAINERS,
+  CREATE_SHIPMENT_ADD_ITEM,
+  CREATE_SHIPMENT_BIN_LOCATIONS,
+  CREATE_SHIPMENT_CLEAR_PICKLIST,
+  CREATE_SHIPMENT_DELETE_ALL_CONTAINERS,
+  CREATE_SHIPMENT_DELETE_CONTAINERS,
+  CREATE_SHIPMENT_DELETE_ITEM,
+  CREATE_SHIPMENT_MOVE_ITEM,
+  CREATE_SHIPMENT_PICK_ITEM,
+  CREATE_SHIPMENT_READ,
+  CREATE_SHIPMENT_SAVE_DETAILS,
+  CREATE_SHIPMENT_SAVE_TRACKING,
+  CREATE_SHIPMENT_SEND,
+  CREATE_SHIPMENT_SPLIT_ITEM,
+  CREATE_SHIPMENT_VALIDATE_PICKLIST,
+} from 'api/urls';
+import apiClient from 'utils/apiClient';
+
+export default {
+  read: (id) => apiClient.get(CREATE_SHIPMENT_READ(id)),
+  saveDetails: (id, payload) => apiClient.post(CREATE_SHIPMENT_SAVE_DETAILS(id), payload),
+  saveTracking: (id, payload) => apiClient.post(CREATE_SHIPMENT_SAVE_TRACKING(id), payload),
+  addContainers: (id, payload) => apiClient.post(CREATE_SHIPMENT_ADD_CONTAINERS(id), payload),
+  deleteContainers: (id, payload) => apiClient.post(CREATE_SHIPMENT_DELETE_CONTAINERS(id), payload),
+  deleteAllContainers: (id) => apiClient.post(CREATE_SHIPMENT_DELETE_ALL_CONTAINERS(id), {}),
+  addItem: (id, payload) => apiClient.post(CREATE_SHIPMENT_ADD_ITEM(id), payload),
+  deleteItem: (id, payload) => apiClient.post(CREATE_SHIPMENT_DELETE_ITEM(id), payload),
+  moveItem: (id, payload) => apiClient.post(CREATE_SHIPMENT_MOVE_ITEM(id), payload),
+  getBinLocations: (id, itemId) => apiClient.get(CREATE_SHIPMENT_BIN_LOCATIONS(id, itemId)),
+  pickItem: (id, payload) => apiClient.post(CREATE_SHIPMENT_PICK_ITEM(id), payload),
+  splitItem: (id, payload) => apiClient.post(CREATE_SHIPMENT_SPLIT_ITEM(id), payload),
+  validatePicklist: (id) => apiClient.post(CREATE_SHIPMENT_VALIDATE_PICKLIST(id), {}),
+  clearPicklist: (id) => apiClient.post(CREATE_SHIPMENT_CLEAR_PICKLIST(id), {}),
+  send: (id, payload) => apiClient.post(CREATE_SHIPMENT_SEND(id), payload),
+};
