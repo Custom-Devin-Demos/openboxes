@@ -1,0 +1,234 @@
+# Generic domain REST API (GenericApiController): CRUD + search over any
+# domain class by resource name (e.g. product, category, tag). Routed by the
+# "/api/generic/${resource}/..." mappings. An unknown resource name raises an
+# IllegalAccessException rendered as a 500 error.
+
+/api/generic/{resource}/:
+  parameters:
+    - name: resource
+      in: path
+      required: true
+      description: Domain class name in camelCase (e.g. product, category).
+      schema:
+        type: string
+  get:
+    tags: [generic]
+    summary: List all objects of a domain class
+    operationId: genericList
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    x-contract-tests:
+      - name: list seeded products
+        params:
+          resource: product
+        status: 200
+      - name: unknown resource returns 500
+        params:
+          resource: bogusresource
+        status: 500
+    responses:
+      '200':
+        description: All objects of the resource's domain class.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenericObjectListResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [generic]
+    summary: Create one or more objects of a domain class
+    operationId: genericCreate
+    description: |
+      Accepts a single JSON object or a JSON array (bulk create). Validation
+      failures raise a ValidationException rendered as a 400 error.
+      Schema-only in contract tests (would create rows in seeded tables).
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            description: Properties of the domain object to create.
+            additionalProperties: true
+          example:
+            tag: sample-tag
+    responses:
+      '201':
+        description: The created object(s).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  oneOf:
+                    - $ref: '#/components/schemas/GenericObject'
+                    - type: array
+                      items:
+                        $ref: '#/components/schemas/GenericObject'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20003
+                tag: sample-tag
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/generic/{resource}/search:
+  parameters:
+    - name: resource
+      in: path
+      required: true
+      schema:
+        type: string
+  post:
+    tags: [generic]
+    summary: Search objects of a domain class by attribute criteria
+    operationId: genericSearch
+    description: |
+      Also routed as GET with the same JSON body semantics; POST is the
+      practical form. Criteria are ANDed; operator is one of eq (default),
+      like, ilike. Missing property/value raises a 500 error
+      (IllegalArgumentException).
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GenericSearchRequest'
+          example:
+            searchAttributes:
+              - property: productCode
+                operator: eq
+                value: DM0001
+    x-contract-tests:
+      - name: search seeded product by product code
+        params:
+          resource: product
+        body:
+          searchAttributes:
+            - property: productCode
+              operator: eq
+              value: '{productCode}'
+        status: 200
+    responses:
+      '200':
+        description: Matching objects.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenericObjectListResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/generic/{resource}/{id}:
+  parameters:
+    - name: resource
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      required: true
+      description: Domain object id.
+      schema:
+        type: string
+  get:
+    tags: [generic]
+    summary: Read a domain object by id
+    operationId: genericRead
+    x-contract-tests:
+      - name: read seeded product
+        params:
+          resource: product
+          id: '{productId}'
+        status: 200
+      - name: unknown id returns 404
+        params:
+          resource: product
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The serialized domain object.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenericObjectResponse'
+      '404':
+        $ref: '#/components/responses/NotFound'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [generic]
+    summary: Update a domain object by id (POST alias of PUT)
+    operationId: genericUpdatePost
+    description: Schema-only in contract tests (would mutate seeded rows).
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: true
+          example:
+            description: Updated description
+    responses:
+      '200':
+        description: The updated object.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenericObjectResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20003
+                description: Updated description
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [generic]
+    summary: Update a domain object by id
+    operationId: genericUpdate
+    description: Schema-only in contract tests (would mutate seeded rows).
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: true
+          example:
+            description: Updated description
+    responses:
+      '200':
+        description: The updated object.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenericObjectResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20003
+                description: Updated description
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [generic]
+    summary: Delete a domain object by id
+    operationId: genericDelete
+    description: Schema-only in contract tests (would delete seeded rows).
+    responses:
+      '204':
+        description: Deleted (no content).
+      '404':
+        $ref: '#/components/responses/NotFound'

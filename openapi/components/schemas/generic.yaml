@@ -1,0 +1,60 @@
+# Schemas for the generic domain REST API (GenericApiController).
+
+GenericObject:
+  type: object
+  description: |
+    Serialized domain object. The shape depends entirely on the resource's
+    domain class JSON serialization (e.g. product, category); only `id` is
+    guaranteed.
+  required:
+    - id
+  properties:
+    id:
+      type: string
+  additionalProperties: true
+
+GenericObjectResponse:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      $ref: '#/components/schemas/GenericObject'
+
+GenericObjectListResponse:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/components/schemas/GenericObject'
+
+GenericSearchRequest:
+  type: object
+  required:
+    - searchAttributes
+  properties:
+    searchAttributes:
+      type: array
+      items:
+        type: object
+        required:
+          - property
+          - value
+        properties:
+          property:
+            type: string
+            example: productCode
+          operator:
+            type: string
+            description: One of eq (default), like, ilike.
+            enum: [eq, like, ilike]
+          value:
+            type: string
+            example: DM0001
+    max:
+      type: integer
+    offset:
+      type: integer

@@ -1,0 +1,309 @@
+# Admin API (AdminApiController): introspection, caches, upgrade, mail and
+# stock-alert triggering. All routes are explicit mappings under /api/admin.
+
+/api/admin/controllers:
+  get:
+    tags: [admin]
+    summary: List Grails controller classes
+    operationId: adminListControllers
+    responses:
+      '200':
+        description: All controller classes sorted by full name.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/AdminController'
+
+/api/admin/controllerActions:
+  get:
+    tags: [admin]
+    summary: List controller action label lines
+    operationId: adminListControllerActions
+    responses:
+      '200':
+        description: |
+          One string per controller action, formatted as
+          `<controller>.<action>.label = <action>` (message-bundle style).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: string
+                    example: admin.cache.label = cache
+
+/api/admin/plugins:
+  get:
+    tags: [admin]
+    summary: List installed Grails plugins
+    operationId: adminListPlugins
+    responses:
+      '200':
+        description: Installed plugins with versions.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/AdminPlugin'
+
+/api/admin/status:
+  get:
+    tags: [admin]
+    summary: Application metadata and artifact counts
+    operationId: adminStatus
+    responses:
+      '200':
+        description: Versions, artifact counts, plugins and controllers.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminStatus'
+
+/api/admin/cache:
+  get:
+    tags: [admin]
+    summary: Hibernate cache configuration and statistics
+    operationId: adminCache
+    responses:
+      '200':
+        description: Cache configuration and per-region/query/entity statistics.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminCache'
+
+/api/admin/cache/evictDomainCache:
+  post:
+    tags: [admin]
+    summary: Evict the second-level cache region of a domain class
+    operationId: adminEvictDomainCache
+    description: |
+      Always responds 200; the message says whether the named domain cache
+      was invalidated or does not exist. Schema-only in contract tests
+      (mutates Hibernate cache state).
+    parameters:
+      - name: name
+        in: query
+        required: false
+        description: Domain class name (e.g. Product).
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Result message.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminMessageResponse'
+            example:
+              data:
+                message: Domain cache 'Product' was invalidated
+
+/api/admin/cache/evictQueryCache:
+  post:
+    tags: [admin]
+    summary: Evict one or all Hibernate query cache regions
+    operationId: adminEvictQueryCache
+    description: |
+      With `name`, evicts that query region; without it, evicts all query
+      regions. Always responds 200. Schema-only in contract tests.
+    parameters:
+      - name: name
+        in: query
+        required: false
+        description: Query cache region name. Omit to evict all regions.
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Result message.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminMessageResponse'
+            example:
+              data:
+                message: All query caches were invalidated
+
+/api/admin/settings:
+  get:
+    tags: [admin]
+    summary: Instance settings and configuration dump
+    operationId: adminSettings
+    responses:
+      '200':
+        description: Environment, locales, masked config and system properties.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminSettings'
+
+/api/admin/upgrade:
+  get:
+    tags: [admin]
+    summary: Status of an in-session WAR upgrade download
+    operationId: adminUpgradeStatus
+    responses:
+      '200':
+        description: Upgrade download state (all nulls when no download started).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminUpgradeStatus'
+
+/api/admin/upgrade/download:
+  post:
+    tags: [admin]
+    summary: Start downloading a WAR upgrade
+    operationId: adminDownloadUpgrade
+    description: |
+      Binds an UpgradeCommand from the request; stores it in the HTTP session.
+      Always responds 200 (message indicates whether the URL was accepted).
+      Schema-only in contract tests (writes files / session state).
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              remoteWebArchiveUrl:
+                type: string
+                description: URL of the WAR file to download.
+          example:
+            remoteWebArchiveUrl: https://example.com/openboxes.war
+    responses:
+      '200':
+        description: Result message.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminMessageResponse'
+            example:
+              data:
+                message: Please enter valid web archive url
+
+/api/admin/upgrade/deploy:
+  post:
+    tags: [admin]
+    summary: Deploy a previously downloaded WAR
+    operationId: adminDeployUpgrade
+    description: |
+      Copies the WAR downloaded by `POST /api/admin/upgrade/download` (held in
+      the HTTP session) to `localWebArchivePath`. Throws a 500 if no download
+      command exists in the session. Schema-only in contract tests (writes to
+      the server filesystem).
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              localWebArchivePath:
+                type: string
+          example:
+            localWebArchivePath: /tmp/openboxes.war
+    responses:
+      '200':
+        description: Result message.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminMessageResponse'
+            example:
+              data:
+                message: Deployed 'warehouse.war' to '/tmp/openboxes.war'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/admin/triggerStockAlerts:
+  post:
+    tags: [admin]
+    summary: Trigger the send-stock-alerts job
+    operationId: adminTriggerStockAlerts
+    description: |
+      Fires SendStockAlertsJob immediately in the background. Schema-only in
+      contract tests (triggers background work / outbound mail).
+    responses:
+      '200':
+        description: Confirmation message.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminMessageResponse'
+            example:
+              data:
+                message: Triggered send stock alerts job in background
+
+/api/admin/sendMail:
+  post:
+    tags: [admin]
+    summary: Send a test email (text, HTML or multipart with attachment)
+    operationId: adminSendMail
+    description: |
+      Accepts form/query params `to` (repeatable), `subject`, `message`,
+      `includesHtml`, and an optional multipart `file` attachment. Always
+      responds 200; mail errors are reported in the message text. Schema-only
+      in contract tests (sends outbound mail).
+    parameters:
+      - name: to
+        in: query
+        required: false
+        description: Recipient address (repeatable).
+        schema:
+          type: string
+      - name: subject
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: message
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: includesHtml
+        in: query
+        required: false
+        description: When set, sends an HTML email instead of plain text.
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Result message (success or error text).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminMessageResponse'
+            example:
+              data:
+                message: Text email with subject Test email has been sent to admin@admin.com
+
+/api/admin/mailForm:
+  get:
+    tags: [admin]
+    summary: Default values for the test-mail form
+    operationId: adminMailForm
+    responses:
+      '200':
+        description: Default to/from/subject values.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminMailForm'

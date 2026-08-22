@@ -1,0 +1,51 @@
+# Demo/configuration data loading API (LoadDataApiController).
+
+/api/loadData/listOfDemoData:
+  get:
+    tags: [loadData]
+    summary: Summary of demo data available to load
+    operationId: loadDataListOfDemoData
+    responses:
+      '200':
+        description: Configured demo-data summary (title + HTML description).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  description: Configured map (openboxes.configurationWizard.listOfDemoData).
+                  properties:
+                    title:
+                      type: string
+                      example: Summary of data to be loaded
+                    description:
+                      type: string
+                      description: HTML fragment describing the demo data.
+
+/api/config/data/demo:
+  get:
+    tags: [loadData]
+    summary: Load configured demo/configuration data (mutating GET)
+    operationId: loadDataLoad
+    description: |
+      Characterized as-is: although routed as a GET, this endpoint imports the
+      configured demo/configuration datasets (locations, categories, products,
+      users, ...) into the database. Always renders an empty JSON array.
+      Not exercised live in contract tests because it mutates seeded data.
+    x-contract-tests:
+      - name: load demo data
+        skip: Mutating GET — imports demo datasets and would corrupt the seeded data used by the api-snapshots suite.
+    responses:
+      '200':
+        description: Always an empty JSON array.
+        content:
+          application/json:
+            schema:
+              type: array
+              maxItems: 0
+              items: {}
+      '500':
+        $ref: '#/components/responses/ServerError'

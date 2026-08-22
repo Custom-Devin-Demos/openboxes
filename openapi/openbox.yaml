@@ -20,6 +20,10 @@ servers:
 security:
   - sessionCookie: []
 tags:
+  - name: admin
+    description: Admin introspection, caches, upgrade and mail (AdminApiController)
+  - name: app
+    description: Authentication, session context and instance status (ApiController)
   - name: attributes
     description: Product/entity attributes (AttributeApiController)
   - name: categories
@@ -28,10 +32,22 @@ tags:
     description: Dashboard configuration and widget data (DashboardApiController)
   - name: finance
     description: GL accounts, GL account types, budget codes, payment terms (GlAccountApiController, GlAccountTypeApiController, BudgetCodeApiController, PaymentTermApiController)
+  - name: generic
+    description: Generic domain CRUD/search by resource name (GenericApiController)
+  - name: helpscout
+    description: HelpScout Beacon widget configuration (HelpScoutApiController)
   - name: invoice
     description: Invoicing (InvoiceApiController, PrepaymentInvoiceApiController, PrepaymentInvoiceItemApiController)
+  - name: jobs
+    description: Quartz job and scheduler management (JobApiController)
+  - name: loadData
+    description: Demo/configuration data loading (LoadDataApiController)
   - name: localization
     description: Translations / localized messages (LocalizationApiController)
+  - name: migration
+    description: Data migration diagnostics (MigrationApiController)
+  - name: noop
+    description: Placeholder no-op REST resource (NoopApiController)
   - name: orders
     description: Orders, purchase orders, receiving, fulfillment, consumption, batch import, data exports and documents (Order/PurchaseOrder/OrderAdjustmentType/ReceiveOrder/PartialReceiving/Fulfillment/Consumption/Batch/DataExport/Document API controllers)
   - name: preferenceTypes
@@ -42,6 +58,8 @@ tags:
     description: Reason codes (ReasonCodeApiController)
   - name: report
     description: Reports and KPI indicators (ReportApiController, IndicatorApiController)
+  - name: selectOptions
+    description: Dropdown option lists for the frontend (SelectOptionsApiController)
   - name: shipments
     description: Shipments, shipment items/workflows, create-shipment workflow, combined shipments, pack lists, delivery/receipt notes, putaways
   - name: stock-requisitions
@@ -56,17 +74,26 @@ tags:
 # One line per per-domain fragment file under paths/. Sibling sessions add
 # their fragment here (append a single line; keep the list alphabetized).
 x-fragments:
+  - paths/admin.yaml
+  - paths/app.yaml
   - paths/attributes.yaml
   - paths/categories.yaml
   - paths/dashboard.yaml
   - paths/finance.yaml
+  - paths/generic.yaml
+  - paths/helpscout.yaml
   - paths/invoice.yaml
+  - paths/jobs.yaml
+  - paths/load-data.yaml
   - paths/localization.yaml
+  - paths/migration.yaml
+  - paths/noop.yaml
   - paths/orders.yaml
   - paths/preference-types.yaml
   - paths/product-suppliers.yaml
   - paths/reason-codes.yaml
   - paths/report.yaml
+  - paths/select-options.yaml
   - paths/shipments.yaml
   - paths/stock-requisitions.yaml
   - paths/supplier.yaml

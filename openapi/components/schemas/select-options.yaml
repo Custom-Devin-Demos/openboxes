@@ -1,0 +1,97 @@
+# Schemas for the select-options API (SelectOptionsApiController).
+
+SelectOption:
+  type: object
+  description: Basic dropdown option (`id` + `label`).
+  required:
+    - id
+    - label
+  properties:
+    id:
+      type: string
+    label:
+      type: string
+
+SelectOptionWithValue:
+  type: object
+  description: Dropdown option carrying an explicit `value` alongside id/label.
+  required:
+    - id
+    - value
+    - label
+  properties:
+    id:
+      type: string
+    value:
+      type: string
+    label:
+      type: string
+
+SelectOptionList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/components/schemas/SelectOption'
+
+SelectOptionWithValueList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/components/schemas/SelectOptionWithValue'
+
+SelectOptionUser:
+  type: object
+  description: Serialized user returned by GET /api/users.
+  required:
+    - id
+    - username
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+      nullable: true
+    firstName:
+      type: string
+      nullable: true
+    lastName:
+      type: string
+      nullable: true
+    email:
+      type: string
+      nullable: true
+    username:
+      type: string
+    roles:
+      type: array
+      items:
+        type: string
+
+SelectOptionShipmentStatusCode:
+  type: object
+  required:
+    - id
+    - value
+    - label
+  properties:
+    id:
+      type: string
+      example: SHIPPED
+    value:
+      type: string
+      example: SHIPPED
+    label:
+      type: string
+      example: Shipped
+    variant:
+      type: string
+      nullable: true
+      example: success
