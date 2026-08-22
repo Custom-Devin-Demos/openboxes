@@ -229,4 +229,5 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 - 2026-08-22: 4.2 Liquibase dry-run merged (#82). GO recommendation; MySQL 8 rehearsal caveat noted.
 - 2026-08-22: 4.4 GSP removal merged (#81). Dead GSP screen layer removed; live server-rendered templates (print/mail/error/React host) retained by design. 4.1 regression still running.
 - 2026-08-22: 4.1 full regression merged (#83). PHASE 4 COMPLETE — all validation & cutover gates green on develop. Remaining gap vs plan target: plan header targets Spring Boot 3 but prescribed Phase 1 stages end at Grails 6 (Boot 2.7.18); spawning final P1.6 Grails 6→7 / Spring Boot 3 / javax→jakarta child to close it.
+- 2026-08-22: P1.6 spawned: [b99a036d](https://app.devin.ai/sessions/b99a036df5e0434a9de2bb84764336d0) — Grails 7 / Spring Boot 3.5 / Spring 6 / Groovy 4 / Hibernate 6 / jakarta, full parity gates.
 - 2026-08-20: Wave 5 COMPLETE (10/10 merged): PR #59 (receiving) merged post-rebase (CI 4/4, clean merge, localization union 30 added/0 removed/0 changed).
