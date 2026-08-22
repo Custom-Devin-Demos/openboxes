@@ -41,7 +41,7 @@ class MainRouter extends React.Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (PRE_SESSION_ROUTES.test(window.location.pathname)) {
       return;
     }

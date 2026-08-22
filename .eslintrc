@@ -21,6 +21,7 @@
     "airbnb"
   ],
   "rules": {
+    "camelcase": ["error", { "properties": "never", "ignoreDestructuring": false, "allow": ["^UNSAFE_"] }],
     "react/prop-types": "warn",
     "arrow-parens": "warn",
     "implicit-arrow-linebreak": "off",

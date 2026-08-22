@@ -1,0 +1,162 @@
+# Preference type API (PreferenceTypeApiController). Explicit mappings in
+# UrlMappings.groovy.
+
+/api/preferenceTypes:
+  get:
+    tags: [preferenceTypes]
+    summary: List preference types
+    operationId: listPreferenceTypes
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: Preference types with totalCount.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PreferenceType'
+                totalCount:
+                  type: integer
+  post:
+    tags: [preferenceTypes]
+    summary: Create a preference type
+    operationId: createPreferenceType
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PreferenceTypeInput'
+          example:
+            name: Scratch preference type
+            validationCode: WARN
+    responses:
+      '201':
+        description: The created preference type.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/PreferenceType'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b2000e
+                name: Scratch preference type
+                validationCode: WARN
+                dateCreated: '2024-01-01T00:00:00Z'
+                lastUpdated: '2024-01-01T00:00:00Z'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/preferenceTypes/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Preference type id.
+      schema:
+        type: string
+  get:
+    tags: [preferenceTypes]
+    summary: Read a preference type by id
+    operationId: readPreferenceType
+    x-contract-tests:
+      - name: missing id returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The preference type.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/PreferenceType'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [preferenceTypes]
+    summary: Update a preference type
+    operationId: updatePreferenceType
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PreferenceTypeInput'
+          example:
+            name: Renamed preference type
+            validationCode: BLOCK
+    responses:
+      '200':
+        description: The updated preference type.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/PreferenceType'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b2000e
+                name: Renamed preference type
+                validationCode: BLOCK
+                dateCreated: '2024-01-01T00:00:00Z'
+                lastUpdated: '2024-01-02T00:00:00Z'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [preferenceTypes]
+    summary: Delete a preference type
+    operationId: deletePreferenceType
+    responses:
+      '204':
+        description: Deleted (no content).
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/preferenceTypes/validationCodeOptions:
+  get:
+    tags: [preferenceTypes]
+    summary: List validation code select options
+    operationId: preferenceTypeValidationCodeOptions
+    responses:
+      '200':
+        description: All ValidationCode enum values as {id, label} options.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required: [id, label]
+                    properties:
+                      id:
+                        type: string
+                        enum: [HIDE, WARN, BLOCK, DEFAULT, ALLOW_ONLY, PREFERRED]
+                      label:
+                        type: string

@@ -20,16 +20,37 @@ servers:
 security:
   - sessionCookie: []
 tags:
+  - name: attributes
+    description: Product/entity attributes (AttributeApiController)
+  - name: categories
+    description: Product categories (CategoryApiController)
   - name: localization
     description: Translations / localized messages (LocalizationApiController)
+  - name: preferenceTypes
+    description: Preference types (PreferenceTypeApiController)
+  - name: productSuppliers
+    description: Product suppliers, their attributes and preferences (ProductSupplierApiController, ProductSupplierAttributeApiController, ProductSupplierPreferenceApiController)
+  - name: reasonCodes
+    description: Reason codes (ReasonCodeApiController)
   - name: shipments
     description: Shipments, shipment items/workflows, create-shipment workflow, combined shipments, pack lists, delivery/receipt notes, putaways
+  - name: tags
+    description: Product tags (TagApiController)
+  - name: unitOfMeasure
+    description: Units of measure and conversions (UnitOfMeasureApiController, UnitOfMeasureConversionApiController)
 
 # One line per per-domain fragment file under paths/. Sibling sessions add
 # their fragment here (append a single line; keep the list alphabetized).
 x-fragments:
+  - paths/attributes.yaml
+  - paths/categories.yaml
   - paths/localization.yaml
+  - paths/preference-types.yaml
+  - paths/product-suppliers.yaml
+  - paths/reason-codes.yaml
   - paths/shipments.yaml
+  - paths/tags.yaml
+  - paths/unit-of-measure.yaml
 
 paths: {}
 
