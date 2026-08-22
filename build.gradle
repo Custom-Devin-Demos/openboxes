@@ -669,6 +669,9 @@ tasks.withType(Test) {
     // Spock 2 runs on the JUnit 5 platform
     useJUnitPlatform()
 
+    // Grails 6's gradle plugin set this automatically; Grails 7's does not.
+    systemProperty 'grails.env', 'test'
+
     // never consider test tasks as up-to-date - always run them when requested
     outputs.upToDateWhen { false }
 
