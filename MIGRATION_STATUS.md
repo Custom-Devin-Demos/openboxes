@@ -53,7 +53,7 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | 2-finance-config-1 | finance-config-1 batch | MERGED | [b4493527](https://app.devin.ai/sessions/b449352701744466b15efb5dd64533c4) | [#9](https://github.com/Custom-Devin-Demos/openboxes/pull/9) | Playwright 10/10, snapshots 122/122, CI green |
 | 2-stock-card-1 | stock-card-1 batch | MERGED | [7ba30033](https://app.devin.ai/sessions/7ba3003323244216bdb4bed9ab92ce27) | [#15](https://github.com/Custom-Devin-Demos/openboxes/pull/15) | Snapshots 122/122, Playwright 10/10, integrationTest green, CI green |
 | 2-(remaining) | 48 remaining batches (see live-screen-inventory.md) | DONE | | | All 58 batches merged across waves 1–6 (PRs #5–#68). GSP→REACT MIGRATION COMPLETE (GSP removal in Phase 4) |
-| 2.R | React 16.8→18 + Redux/router modernization of existing SPA | IN_PROGRESS | [875c4feb](https://app.devin.ai/sessions/875c4febd11442d2ba207173af779935) | — | React 18 + toolchain upgrade, parity-only |
+| 2.R | React 16.8→18 + Redux/router modernization of existing SPA | MERGED | [875c4feb](https://app.devin.ai/sessions/875c4febd11442d2ba207173af779935) | [#69](https://github.com/Custom-Devin-Demos/openboxes/pull/69) | React 18.3.1 createRoot, react-redux 7.2.9, RTL 14; 60 UNSAFE_componentWillReceiveProps renames; fixed React18-exposed receiving-spinner regression; npm test 213, Playwright 10/10, snapshots 122/122, CI 4/4; Node 14 kept |
 
 ## Phase 3 — API formalization (parallel with Phase 2)
 
@@ -222,4 +222,5 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 - 2026-08-20: Phase 2 wave 6 spawned (final 9 batches). After wave 6 + receiving (#59), all 58 Phase 2 batches will be complete.
 - 2026-08-20: Wave 6 fully merged (#60, #61, #62, #63, #64, #65, #66, #67, #68). ALL 58 Phase 2 GSP→React batches complete. Spawned P3.0 (OpenAPI harness) + P2.R (React 18).
 - 2026-08-22: P3.0 harness merged (#70, CI 6/6 incl. new contracts lint+verify jobs). Spawned 9 Phase 3 spec children (~90 controllers). P2.R React 18 (#69) still in progress.
+- 2026-08-22: P2.R React 18 merged (#69). Full parity evidence on PR (Playwright 10/10, snapshots 122/122, CI 4/4).
 - 2026-08-20: Wave 5 COMPLETE (10/10 merged): PR #59 (receiving) merged post-rebase (CI 4/4, clean merge, localization union 30 added/0 removed/0 changed).
