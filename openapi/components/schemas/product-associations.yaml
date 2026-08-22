@@ -1,0 +1,93 @@
+# Schemas for the Product Association API domain (ProductAssociationApiController).
+
+ProductAssociation:
+  type: object
+  description: Product association rendering used by search and details.
+  required: [id, mutualAssociation]
+  properties:
+    id:
+      type: string
+    code:
+      type: string
+      nullable: true
+      description: ProductAssociationTypeCode name (e.g. SUBSTITUTE).
+    product:
+      type: object
+      nullable: true
+      description: Product reference (id / productCode / name).
+      additionalProperties: true
+    associatedProduct:
+      type: object
+      nullable: true
+      description: Product reference (id / productCode / name).
+      additionalProperties: true
+    quantity:
+      type: number
+      nullable: true
+    comments:
+      type: string
+      nullable: true
+    mutualAssociation:
+      type: boolean
+    version:
+      type: integer
+      nullable: true
+    dateCreated:
+      type: string
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+
+ProductAssociationInput:
+  type: object
+  description: Request body for creating/updating a product association.
+  properties:
+    product:
+      type: object
+      properties:
+        id:
+          type: string
+    associatedProduct:
+      type: object
+      properties:
+        id:
+          type: string
+    code:
+      type: string
+      description: ProductAssociationTypeCode name.
+    quantity:
+      type: number
+    comments:
+      type: string
+      nullable: true
+    hasMutualAssociation:
+      type: boolean
+    version:
+      type: integer
+      description: Optimistic-locking version (update only).
+
+ProductAssociationMutationResponse:
+  type: object
+  description: Response of save/update ({id, message}, no "data" envelope).
+  required: [id, message]
+  properties:
+    id:
+      type: string
+    message:
+      type: string
+
+ProductAssociationValidationError:
+  type: object
+  description: |
+    Validation error body rendered directly by the controller:
+    {errorCode, errorMessages} - note there is no errorMessage field, unlike
+    the shared ErrorResponse.
+  required: [errorCode, errorMessages]
+  properties:
+    errorCode:
+      type: integer
+    errorMessages:
+      type: array
+      items:
+        type: string

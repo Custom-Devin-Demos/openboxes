@@ -1,0 +1,193 @@
+# Product Type API (ProductTypeApiController).
+
+/api/productTypes:
+  get:
+    tags: [productType]
+    summary: List product types (paginated)
+    operationId: listProductTypes
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: Product types ({data, totalCount}).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ProductTypeItem'
+                totalCount:
+                  type: integer
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [productType]
+    summary: Create a product type
+    operationId: createProductType
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductTypeInput'
+          example:
+            name: Scratch type
+            code: SCR
+            productIdentifierFormat: LLNNN
+            sequenceNumber: 0
+            supportedActivities: []
+            displayedFields: [NAME, CATEGORY]
+    responses:
+      '201':
+        description: Created product type ({data}).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductTypeResponse'
+            example:
+              data:
+                id: ff80818175f31a340175f31a3fda0040
+                name: Scratch type
+                code: SCR
+                productTypeCode: GOOD
+                productIdentifierFormat: LLNNN
+                sequenceNumber: 0
+                supportedActivities: []
+                requiredFields: [PRODUCT_CODE, NAME, CATEGORY, GL_ACCOUNT]
+                displayedFields: [NAME, CATEGORY]
+                productCount: 0
+                dateCreated: '2024-01-01T00:00:00Z'
+                lastUpdated: '2024-01-01T00:00:00Z'
+                version: 0
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/productTypes/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [productType]
+    summary: Read a product type by id
+    operationId: readProductType
+    x-contract-tests:
+      - name: default product type
+        params:
+          id: DEFAULT
+        status: 200
+      - name: missing id returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The product type ({data}).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductTypeResponse'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [productType]
+    summary: Update a product type
+    operationId: updateProductType
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductTypeInput'
+          example:
+            name: Renamed type
+            sequenceNumber: 1
+            version: 0
+    responses:
+      '200':
+        description: Updated product type ({data}).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductTypeResponse'
+            example:
+              data:
+                id: ff80818175f31a340175f31a3fda0040
+                name: Renamed type
+                code: SCR
+                productTypeCode: GOOD
+                productIdentifierFormat: LLNNN
+                sequenceNumber: 1
+                supportedActivities: []
+                requiredFields: [PRODUCT_CODE, NAME, CATEGORY, GL_ACCOUNT]
+                displayedFields: []
+                productCount: 0
+                dateCreated: '2024-01-01T00:00:00Z'
+                lastUpdated: '2024-01-02T00:00:00Z'
+                version: 1
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [productType]
+    summary: Delete a product type (not the default one, not with existing products)
+    operationId: deleteProductType
+    responses:
+      '204':
+        description: Deleted (no content).
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/productTypes/productActivityCodeOptions:
+  get:
+    tags: [productType]
+    summary: List product activity code options
+    operationId: productActivityCodeOptions
+    responses:
+      '200':
+        description: ProductActivityCode enum options ({data}).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ProductTypeOption'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/productTypes/productFieldOptions:
+  get:
+    tags: [productType]
+    summary: List product field options
+    operationId: productFieldOptions
+    responses:
+      '200':
+        description: ProductField enum options ({data}).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ProductTypeOption'
+      '500':
+        $ref: '#/components/responses/ServerError'

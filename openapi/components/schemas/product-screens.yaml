@@ -1,0 +1,236 @@
+# Schemas for the Product Screen API domain (ProductScreenApiController) -
+# JSON endpoints backing the React product screens.
+
+ProductScreenMergeLog:
+  type: object
+  description: Product merge log row.
+  properties:
+    id:
+      type: string
+      nullable: true
+    primaryProductCode:
+      type: string
+      nullable: true
+    obsoleteProductCode:
+      type: string
+      nullable: true
+    relatedObjectId:
+      type: string
+      nullable: true
+    relatedObjectClassName:
+      type: string
+      nullable: true
+    dateMerged:
+      type: string
+      nullable: true
+    createdBy:
+      type: string
+      nullable: true
+
+ProductScreenSearchResult:
+  type: object
+  description: Product search result row.
+  required: [id]
+  properties:
+    id:
+      type: string
+    productCode:
+      type: string
+      nullable: true
+    name:
+      type: string
+      nullable: true
+    description:
+      type: string
+      nullable: true
+    upc:
+      type: string
+      nullable: true
+    manufacturer:
+      type: string
+      nullable: true
+    category:
+      type: string
+      nullable: true
+
+ProductScreenEditData:
+  type: object
+  description: |
+    Data backing the product edit/create screen. Rendered unwrapped (no
+    "data" envelope); product is null when no id is given (create mode).
+  required: [productTypes, attributes, permissions]
+  properties:
+    product:
+      type: object
+      nullable: true
+      description: Full product details (toProductDetails rendering).
+      additionalProperties: true
+    defaultProductTypeId:
+      type: string
+      nullable: true
+    productTypes:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+    attributes:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+    productSupplierAttributes:
+      type: array
+      nullable: true
+      items:
+        type: object
+        additionalProperties: true
+    synonymTypeCodes:
+      type: array
+      nullable: true
+      items:
+        type: string
+    supportedLocales:
+      type: array
+      nullable: true
+      items:
+        type: string
+    currencyCode:
+      type: string
+      nullable: true
+    bomEnabled:
+      type: boolean
+      nullable: true
+    mergeProductsEnabled:
+      type: boolean
+      nullable: true
+    assigningParentCategoryToProductEnabled:
+      type: boolean
+      nullable: true
+    isAccountingRequired:
+      type: boolean
+      nullable: true
+    permissions:
+      type: object
+      additionalProperties: true
+
+ProductScreenNotFoundError:
+  type: object
+  description: |
+    404 body rendered directly by ProductScreenApiController:
+    {errorMessage} only - no errorCode, unlike the shared ErrorResponse.
+  required: [errorMessage]
+  properties:
+    errorMessage:
+      type: string
+
+ProductScreenErrorMessages:
+  type: object
+  description: |
+    Error body rendered directly by ProductScreenApiController:
+    {errorMessages} only - no errorCode/errorMessage, unlike the shared
+    ErrorResponse.
+  required: [errorMessages]
+  properties:
+    errorMessages:
+      type: array
+      items:
+        type: string
+
+ProductScreenSaveResponse:
+  type: object
+  description: Success response of saveDetails ({success, id, message}).
+  required: [success]
+  properties:
+    success:
+      type: boolean
+    id:
+      type: string
+      nullable: true
+    message:
+      type: string
+      nullable: true
+
+ProductScreenBatchEditData:
+  type: object
+  description: |
+    Data backing the batch edit screen. Products are only fetched when a
+    category or tag filter is present. Rendered unwrapped.
+  required: [products, totalCount]
+  properties:
+    products:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+    totalCount:
+      type: integer
+    categoryName:
+      type: string
+      nullable: true
+
+ProductScreenImportUploadResponse:
+  type: object
+  description: Response of importUpload with parsed CSV preview rows.
+  required: [success]
+  properties:
+    success:
+      type: boolean
+    message:
+      type: string
+      nullable: true
+    filename:
+      type: string
+      nullable: true
+    contentType:
+      type: string
+      nullable: true
+    size:
+      type: integer
+      nullable: true
+    columns:
+      type: array
+      nullable: true
+      items:
+        type: string
+    tag:
+      type: string
+      nullable: true
+    products:
+      type: array
+      nullable: true
+      items:
+        type: object
+        additionalProperties: true
+
+ProductScreenImportConfirmResponse:
+  type: object
+  description: Response of importConfirm.
+  required: [success]
+  properties:
+    success:
+      type: boolean
+    message:
+      type: string
+      nullable: true
+    tag:
+      type: string
+      nullable: true
+
+ProductScreenAddDocumentContext:
+  type: object
+  description: Context for the add document screen. Rendered unwrapped.
+  required: [product, documentTypes]
+  properties:
+    product:
+      $ref: '#/components/schemas/ProductReference'
+    documentTypes:
+      type: array
+      items:
+        type: object
+        required: [id]
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+            nullable: true

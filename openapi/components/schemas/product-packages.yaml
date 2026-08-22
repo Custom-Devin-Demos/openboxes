@@ -1,0 +1,35 @@
+# Schemas for the Product Package API domain (ProductPackageApiController).
+
+ProductPackageInput:
+  type: object
+  description: Request body bound to ProductPackageCommand.
+  properties:
+    productSupplier:
+      type: object
+      properties:
+        id:
+          type: string
+    uom:
+      type: object
+      description: Unit of measure reference.
+      properties:
+        id:
+          type: string
+    productPackageQuantity:
+      type: integer
+      minimum: 0
+      description: Package size.
+    minOrderQuantity:
+      type: number
+      nullable: true
+    productPackagePrice:
+      type: number
+      nullable: true
+    contractPricePrice:
+      type: number
+      nullable: true
+    contractPriceValidUntil:
+      type: string
+      nullable: true
+    tieredPricing:
+      type: boolean

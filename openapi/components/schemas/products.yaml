@@ -1,0 +1,231 @@
+# Schemas for the Product API domain (ProductApiController).
+# Map of SchemaName -> Schema, merged into components.schemas by the bundler.
+
+Product:
+  type: object
+  description: |
+    Default Grails JSON rendering of a Product domain object (custom object
+    marshaller), as returned by product list and other endpoints that render
+    Product instances directly.
+  required: [id, name]
+  properties:
+    id:
+      type: string
+      example: ff80818175f31a340175f31a3fda0001
+    productCode:
+      type: string
+      nullable: true
+      example: 10001
+    name:
+      type: string
+      example: Ibuprofen 200mg tablet
+    description:
+      type: string
+      nullable: true
+    category:
+      description: Category rendering (object or name depending on marshaller; may be null).
+    unitOfMeasure:
+      type: string
+      nullable: true
+      example: EA
+    pricePerUnit:
+      type: number
+      nullable: true
+    dateCreated:
+      type: string
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+    updatedBy:
+      type: string
+      nullable: true
+    color:
+      type: string
+      nullable: true
+    handlingIcons:
+      type: array
+      nullable: true
+      items:
+        type: object
+        additionalProperties: true
+    lotAndExpiryControl:
+      type: boolean
+      nullable: true
+    active:
+      type: boolean
+      nullable: true
+    displayName:
+      type: string
+      nullable: true
+    displayNames:
+      type: object
+      nullable: true
+      additionalProperties: true
+  additionalProperties: true
+
+ProductReference:
+  type: object
+  description: Minimal product reference (id / productCode / name).
+  required: [id]
+  properties:
+    id:
+      type: string
+    productCode:
+      type: string
+      nullable: true
+    name:
+      type: string
+      nullable: true
+
+ProductListResponse:
+  type: object
+  description: Paginated product list ({data, totalCount}).
+  required: [data, totalCount]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/components/schemas/Product'
+    totalCount:
+      type: integer
+      nullable: true
+
+ProductInput:
+  type: object
+  description: |
+    Request body for POST /api/products. Bound directly onto the Product
+    domain object by Grails data binding; productCode is generated from the
+    product type identifier format when omitted.
+  required: [name]
+  properties:
+    name:
+      type: string
+    productCode:
+      type: string
+    category:
+      type: object
+      properties:
+        id:
+          type: string
+    productType:
+      type: object
+      properties:
+        id:
+          type: string
+    description:
+      type: string
+    unitOfMeasure:
+      type: string
+    active:
+      type: boolean
+  additionalProperties: true
+
+ProductSaveResponse:
+  type: object
+  description: |
+    Response of POST /api/products - the created/updated product rendered via
+    Product.toFullJson(), wrapped in "product" (not "data").
+  required: [product]
+  properties:
+    product:
+      type: object
+      required: [id]
+      properties:
+        id:
+          type: string
+        productCode:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+      additionalProperties: true
+
+ProductAvailableItem:
+  type: object
+  description: |
+    Available inventory item entry (AvailableItem command object rendered by
+    the default marshaller) returned by availableItems / availableBins.
+  properties:
+    inventoryItem:
+      type: object
+      nullable: true
+      additionalProperties: true
+    binLocation:
+      description: Bin location rendering (object or null).
+    quantityAvailable:
+      type: number
+      nullable: true
+    quantityOnHand:
+      type: number
+      nullable: true
+  additionalProperties: true
+
+ProductAssociationEntry:
+  type: object
+  description: Associated-product entry returned by associatedProducts / substitutions.
+  properties:
+    id:
+      type: string
+      nullable: true
+    type:
+      type: string
+      nullable: true
+      description: ProductAssociationTypeCode name (e.g. SUBSTITUTE).
+    product:
+      description: Associated product (default marshaller rendering; may be null).
+    conversionFactor:
+      type: number
+      nullable: true
+    comments:
+      type: string
+      nullable: true
+    minExpirationDate:
+      type: string
+      nullable: true
+    availableQuantity:
+      type: number
+      nullable: true
+  additionalProperties: true
+
+ProductAssociatedProductsResponse:
+  type: object
+  description: |
+    Response of GET /api/products/{id}/associatedProducts and /substitutions.
+    The association list key is dynamic: "substitutions" for the
+    substitutions endpoint, otherwise "productAssociations" (or the supplied
+    resource parameter).
+  required: [data]
+  properties:
+    data:
+      type: object
+      required: [hasAssociations, hasEarlierExpiringItems]
+      properties:
+        product:
+          description: The requested product (default marshaller rendering; may be null).
+        availableItems:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/ProductAvailableItem'
+        hasAssociations:
+          type: boolean
+        hasEarlierExpiringItems:
+          type: boolean
+      additionalProperties: true
+
+ProductInventoryItemResponse:
+  type: object
+  description: |
+    Response of GET /api/products/{productId}/inventoryItems/{lotNumber}.
+    inventoryItem is null (with quantityOnHand 0) when the lot number does
+    not exist for the product. Rendered unwrapped (no "data" envelope).
+  required: [quantityOnHand]
+  properties:
+    inventoryItem:
+      type: object
+      nullable: true
+      additionalProperties: true
+    quantityOnHand:
+      type: number

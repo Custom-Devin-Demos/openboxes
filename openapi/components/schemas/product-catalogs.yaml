@@ -1,0 +1,94 @@
+# Schemas for the Product Catalog API domain (ProductCatalogApiController).
+
+ProductCatalog:
+  type: object
+  description: Product catalog list rendering.
+  required: [id, name, active]
+  properties:
+    id:
+      type: string
+    code:
+      type: string
+      nullable: true
+    name:
+      type: string
+    description:
+      type: string
+      nullable: true
+    active:
+      type: boolean
+    color:
+      type: string
+      nullable: true
+    dateCreated:
+      type: string
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+
+ProductCatalogDetails:
+  allOf:
+    - $ref: '#/components/schemas/ProductCatalog'
+    - type: object
+      description: Detailed rendering with version and catalog items.
+      required: [productCatalogItems]
+      properties:
+        version:
+          type: integer
+          nullable: true
+        productCatalogItems:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              product:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    nullable: true
+                  productCode:
+                    type: string
+                    nullable: true
+                  name:
+                    type: string
+                    nullable: true
+                  categoryName:
+                    type: string
+                    nullable: true
+
+ProductCatalogInput:
+  type: object
+  description: Request body for saving (creating or updating) a product catalog.
+  required: [name]
+  properties:
+    id:
+      type: string
+      description: Existing catalog id (update); omit to create.
+    code:
+      type: string
+      nullable: true
+    name:
+      type: string
+    description:
+      type: string
+      nullable: true
+    active:
+      type: boolean
+    color:
+      type: string
+      nullable: true
+    version:
+      type: integer
+      description: Optimistic-locking version (update only).
+
+ProductCatalogMessageResponse:
+  type: object
+  description: Simple message response ({message}).
+  required: [message]
+  properties:
+    message:
+      type: string

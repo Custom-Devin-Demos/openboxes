@@ -66,8 +66,28 @@ tags:
     description: Persons (PersonApiController)
   - name: preferenceTypes
     description: Preference types (PreferenceTypeApiController)
+  - name: product
+    description: Product API (ProductApiController)
+  - name: productAssociation
+    description: Product associations (ProductAssociationApiController)
+  - name: productCatalog
+    description: Product catalogs (ProductCatalogApiController)
+  - name: productClassification
+    description: Product classifications (ProductClassificationApiController)
+  - name: productComponent
+    description: Product components / BOM (ProductComponentApiController)
+  - name: productGroup
+    description: Product groups / families (ProductGroupApiController)
+  - name: productPackage
+    description: Product packages (ProductPackageApiController)
+  - name: productScreen
+    description: React product screen endpoints (ProductScreenApiController)
   - name: productSuppliers
     description: Product suppliers, their attributes and preferences (ProductSupplierApiController, ProductSupplierAttributeApiController, ProductSupplierPreferenceApiController)
+  - name: productType
+    description: Product types (ProductTypeApiController)
+  - name: productsConfiguration
+    description: Products configuration wizard (ProductsConfigurationApiController)
   - name: reasonCodes
     description: Reason codes (ReasonCodeApiController)
   - name: report
@@ -115,7 +135,17 @@ x-fragments:
   - paths/parties.yaml
   - paths/persons.yaml
   - paths/preference-types.yaml
+  - paths/product-associations.yaml
+  - paths/product-catalogs.yaml
+  - paths/product-classifications.yaml
+  - paths/product-components.yaml
+  - paths/product-groups.yaml
+  - paths/product-packages.yaml
+  - paths/product-screens.yaml
   - paths/product-suppliers.yaml
+  - paths/product-types.yaml
+  - paths/products-configuration.yaml
+  - paths/products.yaml
   - paths/reason-codes.yaml
   - paths/report.yaml
   - paths/roles.yaml

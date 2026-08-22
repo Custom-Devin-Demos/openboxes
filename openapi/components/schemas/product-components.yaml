@@ -1,0 +1,36 @@
+# Schemas for the Product Component API domain (ProductComponentApiController).
+
+ProductComponent:
+  type: object
+  description: Bill-of-materials row linking an assembly product to a component product.
+  required: [id]
+  properties:
+    id:
+      type: string
+    assemblyProduct:
+      type: object
+      nullable: true
+      description: Product reference rendered as {id, name}.
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          nullable: true
+    componentProduct:
+      type: object
+      nullable: true
+      description: Product reference rendered as {id, name}.
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          nullable: true
+    quantity:
+      type: number
+      nullable: true
+    unitOfMeasure:
+      type: string
+      nullable: true
+

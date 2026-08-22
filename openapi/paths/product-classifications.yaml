@@ -1,0 +1,37 @@
+# Product Classification API (ProductClassificationApiController).
+
+/api/facilities/{facilityId}/products/classifications:
+  get:
+    tags: [productClassification]
+    summary: List distinct product classifications (ABC classes) for a facility
+    operationId: listProductClassifications
+    parameters:
+      - name: facilityId
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: main warehouse
+        params:
+          facilityId: '{facilityId}'
+        status: 200
+    responses:
+      '200':
+        description: Classification names ({data}).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required: [name]
+                    properties:
+                      name:
+                        type: string
+      '500':
+        $ref: '#/components/responses/ServerError'

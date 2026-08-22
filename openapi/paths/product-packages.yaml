@@ -1,0 +1,43 @@
+# Product Package API (ProductPackageApiController).
+# Routed by the generic "/api/${resource}s" REST mapping (resource =
+# productPackage); the controller only implements create (POST). Other
+# generic verbs (GET list, etc.) have no matching action.
+
+/api/productPackages:
+  post:
+    tags: [productPackage]
+    summary: Create a product package (package size / price) on a product supplier
+    operationId: createProductPackage
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductPackageInput'
+          example:
+            productSupplier: {id: ff80818175f31a340175f31a3fda0030}
+            uom: {id: ff80818175f31a340175f31a3fda0031}
+            productPackageQuantity: 10
+            productPackagePrice: 5.5
+            tieredPricing: false
+    responses:
+      '200':
+        description: The updated ProductSupplier ({data} - default marshaller rendering).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  description: ProductSupplier domain object (default marshaller).
+                  additionalProperties: true
+            example:
+              data:
+                id: ff80818175f31a340175f31a3fda0030
+                code: SUP-001
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '500':
+        $ref: '#/components/responses/ServerError'
