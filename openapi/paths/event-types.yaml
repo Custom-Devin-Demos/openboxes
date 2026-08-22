@@ -1,0 +1,160 @@
+# EventType API (EventTypeApiController).
+
+/api/eventTypes:
+  get:
+    tags: [eventTypes]
+    summary: List event types (paginated)
+    operationId: listEventTypes
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: Event types (max is capped at 100, default 10).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/EventType'
+                totalCount:
+                  type: integer
+  post:
+    tags: [eventTypes]
+    summary: Create an event type
+    operationId: createEventType
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EventTypeInput'
+          example:
+            name: Scratch Event Type
+            eventCode: SHIPPED
+    responses:
+      '201':
+        description: The created event type.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/EventType'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b2000b
+                name: Scratch Event Type
+                eventCode: SHIPPED
+                version: 0
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/eventTypes/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [eventTypes]
+    summary: Read an event type by id
+    operationId: readEventType
+    x-contract-tests:
+      - name: unknown id
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The event type.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/EventType'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [eventTypes]
+    summary: Update an event type
+    operationId: updateEventType
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EventTypeInput'
+          example:
+            name: Renamed Event Type
+            version: 0
+    responses:
+      '200':
+        description: The updated event type.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/EventType'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b2000b
+                name: Renamed Event Type
+                version: 1
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [eventTypes]
+    summary: Delete an event type
+    operationId: deleteEventType
+    responses:
+      '204':
+        description: Deleted (no content).
+      '404':
+        $ref: '#/components/responses/NotFound'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/eventTypes/eventCodeOptions:
+  get:
+    tags: [eventTypes]
+    summary: List event codes as select options
+    operationId: eventCodeOptions
+    responses:
+      '200':
+        description: Event code options (all EventCode enum values).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required: [id, label]
+                    properties:
+                      id:
+                        type: string
+                        example: SHIPPED
+                      label:
+                        type: string
+                        example: SHIPPED

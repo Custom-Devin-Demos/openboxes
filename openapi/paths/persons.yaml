@@ -1,0 +1,207 @@
+# Person API (PersonApiController).
+
+/api/persons:
+  get:
+    tags: [persons]
+    summary: List persons matching name terms
+    operationId: listPersons
+    parameters:
+      - name: name
+        in: query
+        required: false
+        description: Name terms (split on comma/space).
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    responses:
+      '200':
+        description: Matching persons (no totalCount).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PersonSummary'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [persons]
+    summary: Create a person
+    operationId: createPerson
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PersonInput'
+          example:
+            firstName: Scratch
+            lastName: Person
+            active: true
+    responses:
+      '200':
+        description: >
+          The created person (200, not 201). NOTE - rendered WITHOUT a `data`
+          wrapper.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonDetails'
+            example:
+              id: ff8081817f0e3f80017f0e40a1b20008
+              type: Person
+              name: Scratch Person
+              firstName: Scratch
+              lastName: Person
+              active: true
+              version: 0
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/persons/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [persons]
+    summary: Read a person by id
+    operationId: readPerson
+    x-contract-tests:
+      - name: seeded admin person
+        params:
+          id: '1'
+        status: 200
+      - name: unknown id
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The person. NOTE - rendered WITHOUT a `data` wrapper.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonDetails'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [persons]
+    summary: Update a person
+    operationId: updatePerson
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PersonInput'
+          example:
+            firstName: Renamed
+            lastName: Person
+            active: true
+            version: 0
+    responses:
+      '200':
+        description: The updated person. NOTE - rendered WITHOUT a `data` wrapper.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonDetails'
+            example:
+              id: ff8081817f0e3f80017f0e40a1b20008
+              type: Person
+              name: Renamed Person
+              firstName: Renamed
+              lastName: Person
+              active: true
+              version: 1
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  post:
+    tags: [persons]
+    summary: Update a person (POST alias of PUT)
+    operationId: updatePersonPost
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PersonInput'
+          example:
+            firstName: Renamed
+            lastName: Person
+            active: true
+    responses:
+      '200':
+        description: The updated person. NOTE - rendered WITHOUT a `data` wrapper.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonDetails'
+            example:
+              id: ff8081817f0e3f80017f0e40a1b20008
+              type: Person
+              name: Renamed Person
+              active: true
+              version: 1
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [persons]
+    summary: Delete a person
+    operationId: deletePerson
+    responses:
+      '204':
+        description: Deleted (no content).
+      '400':
+        description: Person is still referenced (data integrity violation).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+            example: {errorCode: 400, errorMessage: 'Person 1 could not be deleted'}
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/persons/search:
+  get:
+    tags: [persons]
+    summary: Search persons (paginated)
+    operationId: searchPersons
+    parameters:
+      - name: q
+        in: query
+        required: false
+        description: Substring match on name.
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: Matching persons (max is capped at 100, default 10).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PersonSearchResult'
+                totalCount:
+                  type: integer

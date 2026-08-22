@@ -1,0 +1,166 @@
+# Role API (RoleApiController).
+
+/api/roles:
+  get:
+    tags: [roles]
+    summary: List roles (paginated)
+    operationId: listRoles
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: Roles (max is capped at 100, default 10).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Role'
+                totalCount:
+                  type: integer
+  post:
+    tags: [roles]
+    summary: Create a role
+    operationId: createRole
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RoleInput'
+          example:
+            name: Scratch Role
+            roleType: ROLE_MANAGER
+    responses:
+      '200':
+        description: >
+          The created role (200, not 201). NOTE - rendered WITHOUT a `data`
+          wrapper and without `version`, unlike read/update.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleCreateResponse'
+            example:
+              id: ff8081817f0e3f80017f0e40a1b20009
+              name: Scratch Role
+              roleType: ROLE_MANAGER
+              description: null
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '500':
+        description: An invalid roleType enum name surfaces as 500.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+            example: {errorCode: 500, errorMessage: 'Cannot cast object', cause: org.codehaus.groovy.runtime.typehandling.GroovyCastException}
+
+/api/roles/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [roles]
+    summary: Read a role by id
+    operationId: readRole
+    x-contract-tests:
+      - name: unknown id
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The role.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/Role'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [roles]
+    summary: Update a role
+    operationId: updateRole
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RoleInput'
+          example:
+            name: Renamed Role
+            roleType: ROLE_MANAGER
+            version: 0
+    responses:
+      '200':
+        description: The updated role (wrapped in `data`, unlike create).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/Role'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20009
+                name: Renamed Role
+                roleType: ROLE_MANAGER
+                version: 1
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [roles]
+    summary: Delete a role
+    operationId: deleteRole
+    responses:
+      '204':
+        description: Deleted (no content).
+      '404':
+        $ref: '#/components/responses/NotFound'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/roleTypeOptions:
+  get:
+    tags: [roles]
+    summary: List role types as select options
+    operationId: roleTypeOptions
+    responses:
+      '200':
+        description: Role type options (all RoleType enum values).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required: [id, label]
+                    properties:
+                      id:
+                        type: string
+                        example: ROLE_MANAGER
+                      label:
+                        type: string
+                        example: ROLE_MANAGER

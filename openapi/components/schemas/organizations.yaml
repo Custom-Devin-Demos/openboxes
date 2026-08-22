@@ -1,0 +1,198 @@
+# Schemas for the Organization API (OrganizationApiController).
+
+Organization:
+  description: Organization as rendered by the registered Grails JSON marshaller.
+  required: [id, name]
+  properties:
+    id:
+      type: string
+      example: '1'
+    name:
+      type: string
+      example: Main Organization
+    displayName:
+      type: string
+      nullable: true
+      example: MO - Main Organization
+    description:
+      type: string
+      nullable: true
+    code:
+      type: string
+      nullable: true
+      example: MO
+    dateCreated:
+      type: string
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+    defaultLocation:
+      type: object
+      nullable: true
+      description: Default location reference (null when unset).
+    partyType:
+      type: object
+      nullable: true
+      allOf:
+        - $ref: '#/components/schemas/OrganizationPartyType'
+    roles:
+      type: array
+      items:
+        $ref: '#/components/schemas/OrganizationRole'
+    sequences:
+      type: object
+      additionalProperties:
+        type: string
+
+OrganizationPartyType:
+  required: [id]
+  properties:
+    id:
+      type: string
+      example: '1'
+    name:
+      type: string
+      nullable: true
+      example: Organization
+    code:
+      type: string
+      nullable: true
+      example: ORG
+    partyTypeCode:
+      type: string
+      nullable: true
+      example: ORGANIZATION
+
+OrganizationRole:
+  type: object
+  required: [id]
+  properties:
+    id:
+      type: string
+    roleType:
+      type: string
+      nullable: true
+      example: ROLE_ORGANIZATION
+    startDate:
+      type: string
+      nullable: true
+    endDate:
+      type: string
+      nullable: true
+
+OrganizationDetails:
+  type: object
+  description: Detailed organization shape rendered by OrganizationApiController.toDetailsJson.
+  required: [id, name]
+  properties:
+    id:
+      type: string
+    code:
+      type: string
+      nullable: true
+    name:
+      type: string
+    description:
+      type: string
+      nullable: true
+    active:
+      type: boolean
+    version:
+      type: integer
+    dateCreated:
+      type: string
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+    partyType:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          nullable: true
+    defaultLocation:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          nullable: true
+    locations:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+            nullable: true
+    roles:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+            nullable: true
+    sequences:
+      type: object
+      additionalProperties:
+        type: string
+    sequenceTypes:
+      type: array
+      items:
+        type: string
+    hasPurchaseOrders:
+      type: boolean
+    maxPurchaseOrderNumber:
+      type: string
+      nullable: true
+      description: Highest purchase order number for this organization (null when none).
+    isSuperuser:
+      type: boolean
+      description: Whether the current session user is a superuser (session-dependent).
+
+OrganizationInput:
+  type: object
+  description: >
+    Request body for creating (databinding onto a new Organization) or
+    updating (explicit property copy) an organization.
+  properties:
+    name:
+      type: string
+    description:
+      type: string
+      nullable: true
+    active:
+      type: boolean
+    code:
+      type: string
+      nullable: true
+      description: Ignored on update when the organization has purchase orders and the user is not a superuser.
+    partyType:
+      type: string
+      nullable: true
+      description: PartyType id.
+    defaultLocation:
+      type: string
+      nullable: true
+      description: Location id.
+    sequences:
+      type: object
+      nullable: true
+      description: Identifier sequences (applied on update only when the user is a superuser).
+      additionalProperties: {}
+    version:
+      type: integer
+      nullable: true
+      description: Optimistic-locking version (update only).
