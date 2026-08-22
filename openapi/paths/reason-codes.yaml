@@ -1,0 +1,80 @@
+# Reason code API (ReasonCodeApiController). Routed by the generic
+# "/api/${resource}s" REST mappings; only list and read are implemented.
+
+/api/reasonCodes:
+  get:
+    tags: [reasonCodes]
+    summary: List reason codes for an activity
+    operationId: listReasonCodes
+    description: |
+      Returns the localized reason codes for the first matching activity code
+      (SUBSTITUTE_REQUISITION_ITEM, MODIFY_REQUISITION_ITEM,
+      ADJUST_INVENTORY, CYCLE_COUNT); with no recognized activityCode the
+      default reason code list is returned.
+    parameters:
+      - name: activityCode
+        in: query
+        required: false
+        description: Activity code filter (repeatable).
+        schema:
+          type: string
+    x-contract-tests:
+      - name: default list
+        status: 200
+      - name: inventory adjustment codes
+        query:
+          activityCode: ADJUST_INVENTORY
+        status: 200
+    responses:
+      '200':
+        description: "Localized reason codes (`{data: [...]}`, no totalCount)."
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ReasonCode'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/reasonCodes/{id}:
+  get:
+    tags: [reasonCodes]
+    summary: Read a reason code by enum name
+    operationId: readReasonCode
+    description: |
+      `id` must be a ReasonCode enum name; unknown names throw and return 500
+      (current behavior — there is no 404 path).
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: ReasonCode enum name (e.g. STOCKOUT).
+        schema:
+          type: string
+    x-contract-tests:
+      - name: known reason code
+        params:
+          id: STOCKOUT
+        status: 200
+      - name: unknown enum name returns 500
+        params:
+          id: NOT_A_REASON_CODE
+        status: 500
+    responses:
+      '200':
+        description: The localized reason code.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/ReasonCode'
+      '500':
+        $ref: '#/components/responses/ServerError'

@@ -1,0 +1,157 @@
+# Category API schemas (CategoryApiController).
+
+Category:
+  type: object
+  description: |
+    Category as rendered by Category.toJson(). `categories` recursively nests
+    child categories; on freshly-created instances (POST /api/categories)
+    `dateCreated`/`lastUpdated`/`categories` may be null.
+  required: [id, name]
+  properties:
+    id:
+      type: string
+      example: seed-category-medicines
+    description:
+      type: string
+      nullable: true
+    name:
+      type: string
+      example: Medicines
+    version:
+      type: integer
+    dateCreated:
+      type: string
+      nullable: true
+      description: Formatted as dd/MMM/yyyy hh:mm a.
+      example: 01/Jan/2024 12:00 AM
+    lastUpdated:
+      type: string
+      nullable: true
+      example: 01/Jan/2024 12:00 AM
+    sortOrder:
+      type: integer
+      nullable: true
+    deleted:
+      type: boolean
+      nullable: true
+    isRoot:
+      type: boolean
+      nullable: true
+    categories:
+      type: array
+      nullable: true
+      description: Recursively-nested child categories (same shape as Category).
+      items:
+        type: object
+        required: [id, name]
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+        additionalProperties: true
+
+CategoryReference:
+  type: object
+  description: Minimal {id, name} reference to a category.
+  required: [id, name]
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+
+CategoryDetails:
+  type: object
+  description: Response of GET /api/categories/{id}/details.
+  required: [id, name, version]
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    version:
+      type: integer
+    sortOrder:
+      type: integer
+      nullable: true
+    isRoot:
+      type: boolean
+      nullable: true
+    parentCategory:
+      type: object
+      nullable: true
+      description: Minimal {id, name} reference to the parent category.
+      required: [id, name]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    categories:
+      type: array
+      items:
+        $ref: '#/components/schemas/CategoryReference'
+    products:
+      type: array
+      items:
+        type: object
+        required: [id, name]
+        properties:
+          id:
+            type: string
+          productCode:
+            type: string
+            nullable: true
+          name:
+            type: string
+
+CategoryInput:
+  type: object
+  description: Request body for POST /api/categories and POST/PUT /api/categories/{id}.
+  properties:
+    name:
+      type: string
+    description:
+      type: string
+      nullable: true
+    sortOrder:
+      type: integer
+      nullable: true
+    isRoot:
+      type: boolean
+    parentCategory:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+
+CategoryTreeData:
+  type: object
+  description: Response of GET /api/categories/tree.
+  required: [categoriesWithoutParent, assigningParentToProductEnabled]
+  properties:
+    selectedCategory:
+      type: object
+      nullable: true
+      description: Same shape as Category, or null when no category is selected.
+      additionalProperties: true
+    categoriesWithoutParent:
+      type: array
+      items:
+        $ref: '#/components/schemas/CategoryReference'
+    assigningParentToProductEnabled:
+      type: boolean
+
+CategorySaveCategoryResponse:
+  type: object
+  description: Response of POST /api/categories/saveCategory.
+  required: [id, name, message]
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    message:
+      type: string

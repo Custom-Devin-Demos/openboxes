@@ -1,0 +1,520 @@
+# Product supplier APIs (ProductSupplierApiController,
+# ProductSupplierAttributeApiController, ProductSupplierPreferenceApiController).
+# List/read/create/update/delete are routed by the generic "/api/${resource}s"
+# REST mappings; export, details and the batch endpoints have explicit mappings.
+
+/api/productSuppliers:
+  get:
+    tags: [productSuppliers]
+    summary: List product suppliers (product sources)
+    operationId: listProductSuppliers
+    parameters:
+      - name: searchTerm
+        in: query
+        required: false
+        description: Free-text search term.
+        schema:
+          type: string
+      - name: product
+        in: query
+        required: false
+        description: Product id filter.
+        schema:
+          type: string
+      - name: supplier
+        in: query
+        required: false
+        description: Supplier organization id filter.
+        schema:
+          type: string
+      - name: defaultPreferenceTypes
+        in: query
+        required: false
+        description: Default preference type ids (repeatable).
+        schema:
+          type: string
+      - name: createdFrom
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: createdTo
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: includeInactive
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: disableMaxLimit
+        in: query
+        required: false
+        description: When true, returns all results ignoring `max`.
+        schema:
+          type: boolean
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: Product suppliers with totalCount.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ProductSupplier'
+                totalCount:
+                  type: integer
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [productSuppliers]
+    summary: Create a product supplier
+    operationId: createProductSupplier
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductSupplierInput'
+          example:
+            name: Scratch product source
+            product:
+              id: ff8081817f0e3f80017f0e40a1b20004
+            supplier:
+              id: ff8081817f0e3f80017f0e40a1b20005
+            supplierCode: SUP-001
+            active: true
+    responses:
+      '201':
+        description: The created product supplier (default Grails JSON rendering).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  description: Created ProductSupplier (default Grails JSON rendering).
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20006
+                name: Scratch product source
+                code: MAIN-SUP-001
+                active: true
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/productSuppliers/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Product supplier id.
+      schema:
+        type: string
+  get:
+    tags: [productSuppliers]
+    summary: Read a product supplier by id
+    operationId: readProductSupplier
+    x-contract-tests:
+      - name: missing id returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The product supplier (ProductSupplier.toJson()).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/ProductSupplier'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  post:
+    tags: [productSuppliers]
+    summary: Update a product supplier (POST alias of PUT)
+    operationId: updateProductSupplierPost
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductSupplierInput'
+          example:
+            name: Renamed product source
+            supplier:
+              id: ff8081817f0e3f80017f0e40a1b20005
+    responses:
+      '200':
+        description: The updated product supplier (default Grails JSON rendering).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  description: Updated ProductSupplier (default Grails JSON rendering).
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20006
+                name: Renamed product source
+      '400':
+        $ref: '#/components/responses/BadRequest'
+  put:
+    tags: [productSuppliers]
+    summary: Update a product supplier
+    operationId: updateProductSupplier
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductSupplierInput'
+          example:
+            name: Renamed product source
+            supplier:
+              id: ff8081817f0e3f80017f0e40a1b20005
+    responses:
+      '200':
+        description: The updated product supplier (default Grails JSON rendering).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  description: Updated ProductSupplier (default Grails JSON rendering).
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20006
+                name: Renamed product source
+      '400':
+        $ref: '#/components/responses/BadRequest'
+  delete:
+    tags: [productSuppliers]
+    summary: Delete a product supplier
+    operationId: deleteProductSupplier
+    responses:
+      '204':
+        description: Deleted (no content).
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/productSuppliers/{id}/details:
+  get:
+    tags: [productSuppliers]
+    summary: Product supplier details for the edit form
+    operationId: productSupplierDetails
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing id returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The product supplier details.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/ProductSupplierDetails'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/productSuppliers/export:
+  get:
+    tags: [productSuppliers]
+    summary: Export product suppliers (JSON, CSV or XLS)
+    operationId: exportProductSuppliers
+    parameters:
+      - name: format
+        in: query
+        required: false
+        description: Response format (json is the default; csv and xls stream file attachments).
+        schema:
+          type: string
+          enum: [json, csv, xls]
+      - name: searchTerm
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: product
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: supplier
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: includeInactive
+        in: query
+        required: false
+        schema:
+          type: boolean
+    responses:
+      '200':
+        description: Export rows (JSON format; CSV/XLS return file attachments instead).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    description: Flat export row (column name -> value).
+                totalCount:
+                  type: integer
+          text/csv:
+            schema:
+              type: string
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/productSupplierAttributes/batch:
+  post:
+    tags: [productSuppliers]
+    summary: Batch create/update/delete product supplier attribute values
+    operationId: batchUpdateProductSupplierAttributes
+    description: |
+      Creates, updates or deletes (empty `value`) product attribute values for
+      product suppliers. Validation errors (invalid attribute, missing
+      required attributes) return 400.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductSupplierAttributeBatchInput'
+          example:
+            productAttributes:
+              - attribute:
+                  id: ff8081817f0e3f80017f0e40a1b20007
+                productSupplier:
+                  id: ff8081817f0e3f80017f0e40a1b20006
+                value: Option A
+    responses:
+      '200':
+        description: Created, updated and deleted attribute values.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductSupplierAttributeBatchResponse'
+            example:
+              data:
+                createdAttributes:
+                  - id: ff8081817f0e3f80017f0e40a1b20008
+                    value: Option A
+                updatedAttributes: []
+                deletedAttributes: []
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/productSupplierPreferences:
+  post:
+    tags: [productSuppliers]
+    summary: Create a product supplier preference
+    operationId: createProductSupplierPreference
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductSupplierPreferenceInput'
+          example:
+            productSupplier:
+              id: ff8081817f0e3f80017f0e40a1b20006
+            preferenceType:
+              id: ff8081817f0e3f80017f0e40a1b20009
+            comments: Preferred for destination
+    responses:
+      '201':
+        description: The created preference (ProductSupplierPreference.toJson()).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/ProductSupplierPreference'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b2000a
+                destinationParty: null
+                preferenceType:
+                  id: ff8081817f0e3f80017f0e40a1b20009
+                validityStartDate: null
+                validityEndDate: null
+                comments: Preferred for destination
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/productSupplierPreferences/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Product supplier preference id.
+      schema:
+        type: string
+  post:
+    tags: [productSuppliers]
+    summary: Update a product supplier preference (POST alias of PUT)
+    operationId: updateProductSupplierPreferencePost
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductSupplierPreferenceInput'
+          example:
+            comments: Updated comment
+    responses:
+      '200':
+        description: The updated preference.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/ProductSupplierPreference'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b2000a
+                destinationParty: null
+                preferenceType:
+                  id: ff8081817f0e3f80017f0e40a1b20009
+                validityStartDate: null
+                validityEndDate: null
+                comments: Updated comment
+      '400':
+        $ref: '#/components/responses/BadRequest'
+  put:
+    tags: [productSuppliers]
+    summary: Update a product supplier preference
+    operationId: updateProductSupplierPreference
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductSupplierPreferenceInput'
+          example:
+            comments: Updated comment
+    responses:
+      '200':
+        description: The updated preference.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/ProductSupplierPreference'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b2000a
+                destinationParty: null
+                preferenceType:
+                  id: ff8081817f0e3f80017f0e40a1b20009
+                validityStartDate: null
+                validityEndDate: null
+                comments: Updated comment
+      '400':
+        $ref: '#/components/responses/BadRequest'
+  delete:
+    tags: [productSuppliers]
+    summary: Delete a product supplier preference
+    operationId: deleteProductSupplierPreference
+    responses:
+      '204':
+        description: Deleted (no content).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/productSupplierPreferences/batch:
+  post:
+    tags: [productSuppliers]
+    summary: Batch create or update product supplier preferences
+    operationId: batchSaveProductSupplierPreferences
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [productSupplierPreferences]
+            properties:
+              productSupplierPreferences:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductSupplierPreferenceInput'
+          example:
+            productSupplierPreferences:
+              - productSupplier:
+                  id: ff8081817f0e3f80017f0e40a1b20006
+                preferenceType:
+                  id: ff8081817f0e3f80017f0e40a1b20009
+                comments: Batch-created preference
+    responses:
+      '200':
+        description: The saved preferences.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ProductSupplierPreference'
+            example:
+              data:
+                - id: ff8081817f0e3f80017f0e40a1b2000a
+                  destinationParty: null
+                  preferenceType:
+                    id: ff8081817f0e3f80017f0e40a1b20009
+                  validityStartDate: null
+                  validityEndDate: null
+                  comments: Batch-created preference
+      '400':
+        $ref: '#/components/responses/BadRequest'

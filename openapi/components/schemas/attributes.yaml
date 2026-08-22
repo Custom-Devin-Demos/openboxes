@@ -1,0 +1,141 @@
+# Attribute API schemas (AttributeApiController).
+
+Attribute:
+  type: object
+  description: |
+    Attribute rendered by the default Grails JSON converter
+    (GET /api/attributes list). Association fields are id-only references.
+  required: [id, name]
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    code:
+      type: string
+      nullable: true
+    description:
+      type: string
+      nullable: true
+    active:
+      type: boolean
+    required:
+      type: boolean
+    allowOther:
+      type: boolean
+    exportable:
+      type: boolean
+      nullable: true
+    options:
+      type: array
+      nullable: true
+      items:
+        type: string
+    entityTypeCodes:
+      type: array
+      nullable: true
+      items:
+        type: string
+    unitOfMeasureClass:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+    dateCreated:
+      type: string
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+
+AttributeDetails:
+  type: object
+  description: |
+    Attribute rendered by AttributeApiController.toDetailedJson (search
+    results, read, create/update responses). Dates formatted as
+    dd/MMM/yyyy hh:mm a.
+  required: [id, name, active, required, allowOther, options, version]
+  properties:
+    id:
+      type: string
+    code:
+      type: string
+      nullable: true
+    name:
+      type: string
+    description:
+      type: string
+      nullable: true
+    entityTypeCode:
+      type: string
+      nullable: true
+      description: First entity type code of the attribute (e.g. PRODUCT, PRODUCT_SUPPLIER).
+    unitOfMeasureClass:
+      type: object
+      nullable: true
+      required: [id, name]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    options:
+      type: array
+      items:
+        type: string
+    active:
+      type: boolean
+    required:
+      type: boolean
+    allowOther:
+      type: boolean
+    dateCreated:
+      type: string
+      nullable: true
+      example: 01/Jan/2024 12:00 AM
+    lastUpdated:
+      type: string
+      nullable: true
+      example: 01/Jan/2024 12:00 AM
+    version:
+      type: integer
+
+AttributeInput:
+  type: object
+  description: Request body for POST /api/attributes and POST/PUT /api/attributes/{id}.
+  properties:
+    code:
+      type: string
+      nullable: true
+    name:
+      type: string
+    description:
+      type: string
+      nullable: true
+    active:
+      type: boolean
+    required:
+      type: boolean
+    allowOther:
+      type: boolean
+    entityTypeCode:
+      type: string
+      nullable: true
+      description: Entity type code to assign (e.g. PRODUCT, PRODUCT_SUPPLIER).
+    unitOfMeasureClass:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+    option:
+      type: array
+      nullable: true
+      description: Attribute option values (empty entries are ignored).
+      items:
+        type: string
+    version:
+      type: integer
+      nullable: true
+      description: Optimistic-locking version (updates only).

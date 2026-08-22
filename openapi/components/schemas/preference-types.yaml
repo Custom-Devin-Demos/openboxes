@@ -1,0 +1,34 @@
+# Preference type API schemas (PreferenceTypeApiController).
+
+PreferenceType:
+  type: object
+  description: Preference type as rendered by PreferenceTypeApiController.toJson.
+  required: [id, name]
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    validationCode:
+      type: string
+      nullable: true
+      enum: [HIDE, WARN, BLOCK, DEFAULT, ALLOW_ONLY, PREFERRED, null]
+    dateCreated:
+      type: string
+      nullable: true
+      example: '2024-01-01T00:00:00Z'
+    lastUpdated:
+      type: string
+      nullable: true
+      example: '2024-01-01T00:00:00Z'
+
+PreferenceTypeInput:
+  type: object
+  description: Request body for POST /api/preferenceTypes and PUT /api/preferenceTypes/{id} (bindData).
+  properties:
+    name:
+      type: string
+    validationCode:
+      type: string
+      nullable: true
+      enum: [HIDE, WARN, BLOCK, DEFAULT, ALLOW_ONLY, PREFERRED, null]
