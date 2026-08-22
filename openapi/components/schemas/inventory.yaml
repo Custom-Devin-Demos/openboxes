@@ -17,7 +17,7 @@ ProductSummary:
       type: string
       nullable: true
 
-ProductReference:
+InventoryProductReference:
   type: object
   description: Product reference with unit of measure (InventoryApiController.serializeProduct).
   nullable: true
@@ -305,7 +305,7 @@ DailyTransactionsResponse:
               type: object
               properties:
                 product:
-                  $ref: '#/components/schemas/ProductReference'
+                  $ref: '#/components/schemas/InventoryProductReference'
                 lotNumber:
                   type: string
                   nullable: true
@@ -390,14 +390,14 @@ CreateTransactionContextResponse:
     products:
       type: array
       items:
-        $ref: '#/components/schemas/ProductReference'
+        $ref: '#/components/schemas/InventoryProductReference'
     binLocations:
       type: array
       items:
         type: object
         properties:
           product:
-            $ref: '#/components/schemas/ProductReference'
+            $ref: '#/components/schemas/InventoryProductReference'
           inventoryItem:
             $ref: '#/components/schemas/InventoryItemReference'
           binLocation:
@@ -1703,7 +1703,7 @@ TransactionEntryDetailed:
           type: string
           nullable: true
         product:
-          $ref: '#/components/schemas/ProductReference'
+          $ref: '#/components/schemas/InventoryProductReference'
         productInventoryItems:
           type: array
           items:
