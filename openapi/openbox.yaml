@@ -32,6 +32,8 @@ tags:
     description: Product suppliers, their attributes and preferences (ProductSupplierApiController, ProductSupplierAttributeApiController, ProductSupplierPreferenceApiController)
   - name: reasonCodes
     description: Reason codes (ReasonCodeApiController)
+  - name: shipments
+    description: Shipments, shipment items/workflows, create-shipment workflow, combined shipments, pack lists, delivery/receipt notes, putaways
   - name: tags
     description: Product tags (TagApiController)
   - name: unitOfMeasure
@@ -46,6 +48,7 @@ x-fragments:
   - paths/preference-types.yaml
   - paths/product-suppliers.yaml
   - paths/reason-codes.yaml
+  - paths/shipments.yaml
   - paths/tags.yaml
   - paths/unit-of-measure.yaml
 
