@@ -39,18 +39,18 @@ class ErrorsController {
 
     def handleException() {
         if (RequestUtil.isAjax(request)) {
-            Throwable exception = request.getAttribute('exception') ?: request.getAttribute("javax.servlet.error.exception")
+            Throwable exception = request.getAttribute('exception') ?: request.getAttribute("jakarta.servlet.error.exception")
             Throwable root = exception ? ExceptionUtils.getRootCause(exception) : null
             String message = root?.message ?: ""
             render([errorCode: 500, cause: root?.class, errorMessage: message] as JSON)
         } else {
             if (userAgentIdentService.isMobile()) {
-                Throwable exception = request.getAttribute('exception') ?: request.getAttribute("javax.servlet.error.exception")
+                Throwable exception = request.getAttribute('exception') ?: request.getAttribute("jakarta.servlet.error.exception")
                 session.mobileError = [
-                        statusCode      : request.getAttribute('javax.servlet.error.status_code')?.toString(),
-                        message         : request.getAttribute('javax.servlet.error.message')?.toString(),
-                        servletName     : request.getAttribute('javax.servlet.error.servlet_name')?.toString(),
-                        requestUri      : request.getAttribute('javax.servlet.error.request_uri')?.toString(),
+                        statusCode      : request.getAttribute('jakarta.servlet.error.status_code')?.toString(),
+                        message         : request.getAttribute('jakarta.servlet.error.message')?.toString(),
+                        servletName     : request.getAttribute('jakarta.servlet.error.servlet_name')?.toString(),
+                        requestUri      : request.getAttribute('jakarta.servlet.error.request_uri')?.toString(),
                         exceptionMessage: exception?.message,
                         causeMessage    : exception?.cause?.message,
                         className       : exception instanceof GrailsWrappedRuntimeException ? exception.className : exception?.class?.name,
@@ -110,13 +110,13 @@ class ErrorsController {
         if (RequestUtil.isAjax(request)) {
             render([errorCode: 500, errorMessage: "Illegal data access"] as JSON)
         } else {
-            Throwable exception = (Throwable) (request.getAttribute("exception") ?: request.getAttribute("javax.servlet.error.exception"))
+            Throwable exception = (Throwable) (request.getAttribute("exception") ?: request.getAttribute("jakarta.servlet.error.exception"))
             renderReactErrorPage([
                     page       : "dataAccess",
-                    statusCode : request.getAttribute("javax.servlet.error.status_code"),
-                    errorMessage: request.getAttribute("javax.servlet.error.message"),
-                    servletName: request.getAttribute("javax.servlet.error.servlet_name"),
-                    requestUri : request.getAttribute("javax.servlet.error.request_uri"),
+                    statusCode : request.getAttribute("jakarta.servlet.error.status_code"),
+                    errorMessage: request.getAttribute("jakarta.servlet.error.message"),
+                    servletName: request.getAttribute("jakarta.servlet.error.servlet_name"),
+                    requestUri : request.getAttribute("jakarta.servlet.error.request_uri"),
                     exception  : exceptionDetails(exception),
             ])
         }
@@ -188,13 +188,13 @@ class ErrorsController {
     }
 
     private Map generalErrorPayload() {
-        Throwable exception = (Throwable) (request.getAttribute("exception") ?: request.getAttribute("javax.servlet.error.exception"))
+        Throwable exception = (Throwable) (request.getAttribute("exception") ?: request.getAttribute("jakarta.servlet.error.exception"))
         String targetUri = (request.forwardURI - request.contextPath) + (request.queryString ? "?" : "") + (request.queryString ?: "")
         List recipients = ConfigHelper.listValue(grailsApplication.config.openboxes.mail.errors.recipients)
         return [
                 page         : "error",
-                statusCode   : request.getAttribute("javax.servlet.error.status_code"),
-                errorMessage : request.getAttribute("javax.servlet.error.message"),
+                statusCode   : request.getAttribute("jakarta.servlet.error.status_code"),
+                errorMessage : request.getAttribute("jakarta.servlet.error.message"),
                 path         : targetUri,
                 exception    : exceptionDetails(exception),
                 bugReport    : [
