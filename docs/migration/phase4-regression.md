@@ -1,8 +1,11 @@
 # Phase 4.1 — Full Characterization Regression (develop)
 
-Full characterization run on current `develop` (`a8b6e13de`) against a fresh,
-reseeded demo database (`docker/seed-demo-data.sql`, 8 products verified),
-followed by a manual browser regression sweep of the migrated React screens.
+Full characterization run on current `develop` (`2b2322f51`, which includes
+the Phase 4.4 GSP removal — 298 dead GSPs and 5 orphaned taglibs removed)
+against a fresh, reseeded demo database (`docker/seed-demo-data.sql`,
+8 products verified), followed by a manual browser regression sweep of the
+migrated React screens. All suites and the sweep were re-run after rebasing
+onto the post-GSP-removal develop, so results reflect the cutover state.
 
 Stack: Grails 6.2.3 / Gradle 8.11.1 / Groovy 3.0.23 / Spring Boot 2.7.18 on
 JDK 21; React 18 bundle built with Node 14.
@@ -11,7 +14,7 @@ JDK 21; React 18 bundle built with Node 14.
 
 | Suite | Command | Result |
 |---|---|---|
-| Playwright golden paths | `cd e2e && npm run e2e` | **10/10 passed** |
+| Playwright golden paths | `cd e2e && npm run e2e` | **10/10 passed** (Flow 3 needed the documented one-retry for the cold-app flake) |
 | API snapshots | `cd api-snapshots && npm run snapshots:verify` (fresh reseeded DB) | **122 passed, 0 failed, 0 skipped** |
 | OpenAPI lint | `cd openapi && npm run contracts:lint` | **passed** (58 warnings, no errors) |
 | OpenAPI contracts | `cd openapi && npm run contracts:verify` | **747 passed, 0 failed, 58 skipped** (skips are the documented mutating/data-dependent operations) |
@@ -42,6 +45,23 @@ Legacy URL routing checks: `/stockMovement/list` → `/dashboard`,
 `/shipment/showDetails/<id>` → `/stockMovement/show/<id>`, `/order/list` and
 `/invoice/list` and `/location/list` add their default filter query params —
 all consistent with pre-migration behavior notes.
+
+Post-GSP-removal checks (after the Phase 4.4 merge):
+
+- All 24 sweep URLs re-checked — legacy URLs still route to the React screens
+  with no console/page errors.
+- Print/export flows still served by the retained GSP/legacy layer:
+  `picklist/renderPdf/<id>` (200, `application/pdf`),
+  `shipment/exportPackingList/<id>` (200, `application/vnd.ms-excel`),
+  `report/exportBinLocation?...downloadFormat=csv` (200, `text/csv`),
+  `order/print/<id>` (200, HTML print view).
+- Fresh-seed note: workflow detail screens (`stockMovement/show`,
+  `shipment/showDetails`, `order/show`, `invoice/show`) have no seed objects
+  on a truly fresh DB — they were exercised against data created by the e2e
+  flows. `invoice/*` additionally requires the supplemental `ROLE_INVOICE`
+  (not granted to the seeded admin; e2e Flow 8 grants it via the user admin
+  screen) — the RoleInterceptor redirect to `/errors/handleForbidden` without
+  that role is pre-existing RBAC behavior, not a regression.
 
 ## 3. Regressions found (and fixed in this PR)
 
