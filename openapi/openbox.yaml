@@ -1,0 +1,44 @@
+openapi: 3.0.3
+info:
+  title: OpenBoxes REST API
+  description: |
+    OpenAPI specification for the OpenBoxes REST API (`/openboxes/api/**`).
+
+    This root document is composed from per-domain path fragments listed under
+    `x-fragments` (one line per fragment file). The bundler
+    (`node src/bundle.js`) merges every fragment's paths and every schema file
+    under `components/schemas/` into a single bundled document at
+    `dist/openbox.bundled.json`, which is what lint and contract tests run
+    against. See docs/migration/openapi-conventions.md.
+  version: 0.1.0
+  contact:
+    name: OpenBoxes
+    url: https://openboxes.com
+servers:
+  - url: /openboxes
+    description: Application context root. All API paths below are relative to it (e.g. /openboxes/api/status).
+security:
+  - sessionCookie: []
+tags:
+  - name: localization
+    description: Translations / localized messages (LocalizationApiController)
+
+# One line per per-domain fragment file under paths/. Sibling sessions add
+# their fragment here (append a single line; keep the list alphabetized).
+x-fragments:
+  - paths/localization.yaml
+
+paths: {}
+
+components:
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: JSESSIONID
+      description: |
+        Grails session cookie. Obtain by POSTing
+        `{"username": "...", "password": "...", "location": "<locationId>"}`
+        to `/openboxes/api/login`; the JSESSIONID Set-Cookie from that response
+        authenticates all subsequent requests. Choose the acting facility with
+        `GET /openboxes/api/chooseLocation/{locationId}` if not set at login.

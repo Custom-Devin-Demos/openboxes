@@ -1,0 +1,50 @@
+# Shared responses merged into components.responses of the bundled document.
+# Reference from fragments as: $ref: '#/components/responses/<Name>'
+
+BadRequest:
+  description: Bad request (validation error).
+  content:
+    application/json:
+      schema:
+        $ref: '#/components/schemas/ErrorResponse'
+      example: {errorCode: 400, errorMessage: 'Validation error', errorMessages: ['Field is required']}
+
+Unauthorized:
+  description: Not authenticated (no valid JSESSIONID session).
+  content:
+    application/json:
+      schema:
+        $ref: '#/components/schemas/ErrorResponse'
+      example: {errorCode: 401, errorMessage: 'Unauthorized user'}
+
+Forbidden:
+  description: Authenticated but not permitted.
+  content:
+    application/json:
+      schema:
+        $ref: '#/components/schemas/ErrorResponse'
+      example: {errorCode: 403, errorMessage: 'Access denied'}
+
+NotFound:
+  description: Resource not found.
+  content:
+    application/json:
+      schema:
+        $ref: '#/components/schemas/ErrorResponse'
+      example: {errorCode: 404, errorMessage: 'Resource not found'}
+
+MethodNotAllowed:
+  description: HTTP method not allowed for this path.
+  content:
+    application/json:
+      schema:
+        $ref: '#/components/schemas/ErrorResponse'
+      example: {errorCode: 405, errorMessage: 'Method not allowed'}
+
+ServerError:
+  description: Internal server error.
+  content:
+    application/json:
+      schema:
+        $ref: '#/components/schemas/ErrorResponse'
+      example: {errorCode: 500, errorMessage: 'An unknown error occurred'}

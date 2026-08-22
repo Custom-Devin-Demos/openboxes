@@ -1,0 +1,18 @@
+# Minimal spec-lint ruleset for the composed OpenAPI document.
+# Run via: npm run contracts:lint (lints dist/openbox.bundled.json).
+extends:
+  - minimal
+rules:
+  # The legacy API is not fully RESTful; keep lint focused on structural
+  # correctness rather than style.
+  operation-4xx-response: off
+  no-ambiguous-paths: warn
+  # Shared components (pagination params, error responses) are provided ahead
+  # of the fragments that will use them.
+  no-unused-components: off
+  operation-operationId: error
+  operation-operationId-unique: error
+  operation-summary: error
+  no-unresolved-refs: error
+  no-invalid-media-type-examples: error
+  spec-components-invalid-map-name: off
