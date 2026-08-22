@@ -1,0 +1,239 @@
+# Organization API (OrganizationApiController).
+
+/api/organizations:
+  get:
+    tags: [organizations]
+    summary: List organizations
+    operationId: listOrganizations
+    parameters:
+      - name: q
+        in: query
+        required: false
+        description: Search on name/code.
+        schema:
+          type: string
+      - name: roleType
+        in: query
+        required: false
+        description: Filter by party role type (repeatable).
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: >
+          Organizations. NOTE - `totalCount` is only present when the `max`
+          query parameter is supplied.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Organization'
+                totalCount:
+                  type: integer
+                  nullable: true
+  post:
+    tags: [organizations]
+    summary: Create an organization
+    operationId: createOrganization
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrganizationInput'
+          example:
+            name: Scratch Organization
+    responses:
+      '200':
+        description: Id of the created organization (200, not 201).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  required: [id]
+                  properties:
+                    id:
+                      type: string
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20004
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/organizations/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [organizations]
+    summary: Read an organization by id
+    operationId: readOrganization
+    x-contract-tests:
+      - name: seeded organization
+        params:
+          id: '{organizationId}'
+        status: 200
+      - name: unknown id surfaces as 500
+        params:
+          id: does-not-exist
+        status: 500
+    responses:
+      '200':
+        description: The organization (Grails marshaller output).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/Organization'
+      '500':
+        description: NOTE - an unknown id throws IllegalArgumentException and surfaces as 500, not 404.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+            example: {errorCode: 500, errorMessage: 'No Organization found for organization ID xyz', cause: java.lang.IllegalArgumentException}
+  put:
+    tags: [organizations]
+    summary: Update an organization
+    operationId: updateOrganization
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrganizationInput'
+          example:
+            name: Renamed Organization
+            version: 0
+    responses:
+      '200':
+        description: The updated organization (details shape).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/OrganizationDetails'
+            example:
+              data:
+                id: '1'
+                code: MO
+                name: Renamed Organization
+                active: true
+                version: 1
+                locations: []
+                roles: []
+                sequences: {}
+                sequenceTypes: [PURCHASE_ORDER_NUMBER]
+                hasPurchaseOrders: false
+                isSuperuser: true
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  post:
+    tags: [organizations]
+    summary: Update an organization (POST alias of PUT)
+    operationId: updateOrganizationPost
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrganizationInput'
+          example:
+            name: Renamed Organization
+            version: 0
+    responses:
+      '200':
+        description: The updated organization (details shape).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/OrganizationDetails'
+            example:
+              data:
+                id: '1'
+                name: Renamed Organization
+                active: true
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [organizations]
+    summary: Delete an organization
+    operationId: deleteOrganization
+    responses:
+      '204':
+        description: Deleted (no content).
+      '400':
+        description: Organization is still referenced (data integrity violation).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+            example: {errorCode: 400, errorMessage: 'Organization 1 could not be deleted'}
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/organizations/{id}/details:
+  get:
+    tags: [organizations]
+    summary: Read detailed organization information
+    operationId: organizationDetails
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded organization
+        params:
+          id: '{organizationId}'
+        status: 200
+      - name: unknown id
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Detailed organization information.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/OrganizationDetails'
+      '404':
+        $ref: '#/components/responses/NotFound'

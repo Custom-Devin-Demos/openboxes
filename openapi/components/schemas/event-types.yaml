@@ -1,0 +1,56 @@
+# Schemas for the EventType API (EventTypeApiController).
+
+EventType:
+  type: object
+  description: Shape rendered by EventTypeApiController.toJson.
+  required: [id]
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+      nullable: true
+      example: Shipped
+    description:
+      type: string
+      nullable: true
+    sortOrder:
+      type: integer
+      nullable: true
+    eventCode:
+      type: string
+      nullable: true
+      example: SHIPPED
+    optionValue:
+      type: string
+      nullable: true
+    dateCreated:
+      type: string
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+    version:
+      type: integer
+
+EventTypeInput:
+  type: object
+  description: Request body bound onto the EventType domain by Grails databinding.
+  properties:
+    name:
+      type: string
+    description:
+      type: string
+      nullable: true
+    sortOrder:
+      type: integer
+      nullable: true
+    eventCode:
+      type: string
+      nullable: true
+      description: EventCode enum name.
+      example: SHIPPED
+    version:
+      type: integer
+      nullable: true
+      description: Optimistic-locking version (update only).

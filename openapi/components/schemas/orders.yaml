@@ -1,0 +1,687 @@
+# Schemas for the orders domain fragment (paths/orders.yaml): OrderApiController,
+# PurchaseOrderApiController, OrderAdjustmentTypeApiController,
+# ReceiveOrderApiController, PartialReceivingApiController,
+# FulfillmentApiController, ConsumptionApiController, BatchApiController,
+# DataExportApiController, DocumentApiController.
+
+# {id, value, label} select option used by several option endpoints.
+OrdersSelectOption:
+  type: object
+  required: [id, value, label]
+  properties:
+    id:
+      type: string
+    value:
+      type: string
+    label:
+      type: string
+
+# {id, name} reference pair used across form-data endpoints.
+OrdersIdNamePair:
+  type: object
+  required: [id]
+  properties:
+    id:
+      type: string
+      nullable: true
+    name:
+      type: string
+      nullable: true
+
+# 404 body rendered directly by several controllers: {errorMessage: "..."}
+# (not the shared ErrorResponse shape produced by ErrorsController).
+OrdersErrorMessage:
+  type: object
+  required: [errorMessage]
+  properties:
+    errorMessage:
+      type: string
+
+# 400/404 body rendered by ReceiveOrderApiController and some
+# PurchaseOrderApiController/DocumentApiController error paths:
+# {errorMessages: ["..."]}.
+OrdersErrorMessages:
+  type: object
+  required: [errorMessages]
+  properties:
+    errorMessages:
+      type: array
+      items:
+        type: string
+
+OrderListItem:
+  type: object
+  required: [id, orderNumber]
+  properties:
+    id:
+      type: string
+    orderNumber:
+      type: string
+    name:
+      type: string
+      nullable: true
+    orderTypeCode:
+      type: string
+      nullable: true
+    orderTypeName:
+      type: string
+      nullable: true
+    status:
+      type: string
+      nullable: true
+    derivedStatus:
+      type: string
+      nullable: true
+    origin:
+      type: string
+      nullable: true
+    destination:
+      type: string
+      nullable: true
+    orderedBy:
+      type: string
+      nullable: true
+    dateOrdered:
+      type: string
+      nullable: true
+    orderItemsCount:
+      type: integer
+    orderedOrderItemsCount:
+      type: integer
+    shippedItemsCount:
+      type: integer
+    receivedItemsCount:
+      type: integer
+    total:
+      type: string
+      nullable: true
+    totalNormalized:
+      type: string
+      nullable: true
+    shipmentsCount:
+      type: integer
+    isPending:
+      type: boolean
+    isPlaced:
+      type: boolean
+    isBeforePlaced:
+      type: boolean
+
+PendingOrderItem:
+  type: object
+  properties:
+    id:
+      type: string
+    orderId:
+      type: string
+      nullable: true
+    orderName:
+      type: string
+      nullable: true
+    description:
+      type: string
+      nullable: true
+    quantity:
+      type: integer
+      nullable: true
+    isCompletelyFulfilled:
+      type: boolean
+
+OrderItemSummary:
+  type: object
+  properties:
+    id:
+      type: string
+    orderId:
+      type: string
+      nullable: true
+    orderNumber:
+      type: string
+      nullable: true
+    productCode:
+      type: string
+      nullable: true
+    orderItemStatus:
+      type: string
+      nullable: true
+    quantityOrdered:
+      type: integer
+      nullable: true
+    quantityShipped:
+      type: integer
+      nullable: true
+    quantityReceived:
+      type: integer
+      nullable: true
+    quantityCanceled:
+      type: integer
+      nullable: true
+    quantityInvoiced:
+      type: integer
+      nullable: true
+    isItemFullyShipped:
+      type: boolean
+      nullable: true
+    isItemFullyReceived:
+      type: boolean
+      nullable: true
+    isItemFullyInvoiced:
+      type: boolean
+      nullable: true
+    derivedStatus:
+      type: string
+      nullable: true
+
+OrderSummaryListItem:
+  type: object
+  properties:
+    id:
+      type: string
+    orderNumber:
+      type: string
+      nullable: true
+    itemsOrdered:
+      type: integer
+      nullable: true
+    itemsShipped:
+      type: integer
+      nullable: true
+    itemsReceived:
+      type: integer
+      nullable: true
+    itemsInvoiced:
+      type: integer
+      nullable: true
+    orderStatus:
+      type: string
+      nullable: true
+    shipmentStatus:
+      type: string
+      nullable: true
+    receiptStatus:
+      type: string
+      nullable: true
+    paymentStatus:
+      type: string
+      nullable: true
+    derivedStatus:
+      type: string
+      nullable: true
+
+OrderHeaderSummary:
+  type: object
+  required: [id, orderNumber]
+  properties:
+    id:
+      type: string
+    orderNumber:
+      type: string
+    name:
+      type: string
+      nullable: true
+    status:
+      type: string
+      nullable: true
+    derivedStatus:
+      type: string
+      nullable: true
+    orderTypeCode:
+      type: string
+      nullable: true
+    isPutaway:
+      type: boolean
+    isPending:
+      type: boolean
+    isPlaced:
+      type: boolean
+    shipmentsCount:
+      type: integer
+
+# Order details for the React order show screen: many formatted-string and
+# boolean fields; documented loosely because the exact set is large and
+# derived from the GORM domain (see OrderApiController.details()).
+OrderDetails:
+  type: object
+  required: [id, orderNumber]
+  properties:
+    id:
+      type: string
+    orderNumber:
+      type: string
+  additionalProperties: true
+
+# Default GORM/Grails JSON marshaling of the OrderSummary view row plus its
+# nested Order graph (PurchaseOrderApiController.list()); documented loosely.
+PurchaseOrderSummary:
+  type: object
+  additionalProperties: true
+
+# Default GORM/Grails JSON marshaling of the whole Order domain graph
+# (PurchaseOrderApiController.read()); documented loosely.
+PurchaseOrderDetail:
+  type: object
+  additionalProperties: true
+
+OrderAdjustmentTypeDetail:
+  type: object
+  required: [id, name]
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    description:
+      type: string
+      nullable: true
+    code:
+      type: string
+      nullable: true
+    glAccount:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+    dateCreated:
+      type: string
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+
+OrderAdjustmentTypeInput:
+  type: object
+  properties:
+    name:
+      type: string
+    description:
+      type: string
+      nullable: true
+    code:
+      type: string
+      description: OrderAdjustmentTypeCode enum name.
+      nullable: true
+    glAccount:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+
+ReceiveOrderData:
+  type: object
+  required: [order, orderItems, shipmentTypes, recipients]
+  properties:
+    order:
+      type: object
+      properties:
+        id:
+          type: string
+        orderNumber:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        origin:
+          type: string
+          nullable: true
+        destination:
+          type: string
+          nullable: true
+        dateOrdered:
+          type: string
+          nullable: true
+    orderItems:
+      type: array
+      items:
+        $ref: '#/components/schemas/ReceiveOrderItem'
+    shipmentTypes:
+      type: array
+      items:
+        $ref: '#/components/schemas/OrdersIdNamePair'
+    recipients:
+      type: array
+      items:
+        $ref: '#/components/schemas/OrdersIdNamePair'
+
+ReceiveOrderItem:
+  type: object
+  properties:
+    orderItemId:
+      type: string
+      nullable: true
+    primary:
+      type: boolean
+    type:
+      type: string
+      nullable: true
+    description:
+      type: string
+      nullable: true
+    productId:
+      type: string
+      nullable: true
+    productCode:
+      type: string
+      nullable: true
+    productName:
+      type: string
+      nullable: true
+    unitOfMeasure:
+      type: string
+      nullable: true
+    quantityOrdered:
+      type: integer
+      nullable: true
+    quantityFulfilled:
+      type: integer
+      nullable: true
+    completelyFulfilled:
+      type: boolean
+
+# Request body for receive-order validate/submit operations
+# (bound manually by ReceiveOrderApiController from request.JSON).
+ReceiveOrderInput:
+  type: object
+  properties:
+    shipmentTypeId:
+      type: string
+      nullable: true
+    recipientId:
+      type: string
+      nullable: true
+    shippedOn:
+      type: string
+      description: MM/dd/yyyy
+      nullable: true
+    deliveredOn:
+      type: string
+      description: MM/dd/yyyy
+      nullable: true
+    orderItems:
+      type: array
+      items:
+        type: object
+        properties:
+          orderItemId:
+            type: string
+            nullable: true
+          primary:
+            type: boolean
+            nullable: true
+          type:
+            type: string
+            nullable: true
+          description:
+            type: string
+            nullable: true
+          quantityOrdered:
+            type: integer
+            nullable: true
+          quantityReceived:
+            type: integer
+            nullable: true
+          productId:
+            type: string
+            nullable: true
+          lotNumber:
+            type: string
+            nullable: true
+          expirationDate:
+            type: string
+            description: MM/dd/yyyy
+            nullable: true
+
+# Default Grails JSON marshaling of the PartialReceipt command object graph
+# (PartialReceivingApiController read/update); documented loosely.
+PartialReceipt:
+  type: object
+  additionalProperties: true
+
+# Request body for partial-receiving update/exportCsv: the PartialReceipt
+# JSON structure posted by the React receiving screen; documented loosely
+# (bound via bindData in PartialReceivingApiController).
+PartialReceiptInput:
+  type: object
+  properties:
+    receiptStatus:
+      type: string
+      description: PartialReceiptStatus enum name (PENDING, CHECKING, COMPLETED, ROLLBACK).
+      nullable: true
+    dateDelivered:
+      type: string
+      nullable: true
+    containers:
+      type: array
+      nullable: true
+      items:
+        type: object
+        additionalProperties: true
+  additionalProperties: true
+
+# Fulfillment validate/save response: command error messages + packing-list
+# table rows (ImportPackingListItem.toTableJson()); rows documented loosely.
+FulfillmentValidationResult:
+  type: object
+  required: [errors, data]
+  properties:
+    errors:
+      type: object
+      additionalProperties: true
+    data:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+
+# Request body for fulfillment validate/save (ImportPackingListCommand);
+# documented loosely.
+FulfillmentInput:
+  type: object
+  additionalProperties: true
+
+# Default Grails JSON marshaling of the saved StockMovement
+# (FulfillmentApiController.save()); documented loosely.
+FulfillmentStockMovement:
+  type: object
+  additionalProperties: true
+
+ConsumptionFactEntry:
+  type: object
+  properties:
+    id:
+      type: integer
+      nullable: true
+    productCode:
+      type: string
+      nullable: true
+    productName:
+      type: string
+      nullable: true
+    categoryName:
+      type: string
+      nullable: true
+    year:
+      type: integer
+      nullable: true
+    month:
+      type: integer
+      nullable: true
+    day:
+      type: integer
+      nullable: true
+    quantity:
+      type: number
+      nullable: true
+    unitCost:
+      type: number
+      nullable: true
+    unitPrice:
+      type: number
+      nullable: true
+
+ConsumptionRow:
+  type: object
+  properties:
+    productId:
+      type: string
+      nullable: true
+    productCode:
+      type: string
+      nullable: true
+    productName:
+      type: string
+      nullable: true
+    pricePerUnit:
+      type: number
+      nullable: true
+    issuedQuantity:
+      type: number
+      nullable: true
+    consumedQuantity:
+      type: number
+      nullable: true
+    returnedQuantity:
+      type: number
+      nullable: true
+    totalConsumptionQuantity:
+      type: number
+      nullable: true
+    totalConsumptionValue:
+      type: number
+      nullable: true
+    monthlyQuantity:
+      type: number
+      nullable: true
+    onHandQuantity:
+      type: number
+      nullable: true
+    numberOfMonthsRemaining:
+      type: number
+      nullable: true
+
+BatchImportResult:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: object
+      properties:
+        message:
+          type: string
+          nullable: true
+        errors:
+          type: array
+          items:
+            type: string
+        imported:
+          type: boolean
+        location:
+          type: string
+          nullable: true
+        importType:
+          type: string
+          nullable: true
+        filename:
+          type: string
+          nullable: true
+        date:
+          type: string
+          nullable: true
+        columnMap:
+          type: object
+          nullable: true
+          additionalProperties: true
+        data:
+          type: array
+          nullable: true
+          items:
+            type: object
+            additionalProperties: true
+
+DocumentDetail:
+  type: object
+  required: [id]
+  properties:
+    id:
+      type: string
+    version:
+      type: integer
+      nullable: true
+    name:
+      type: string
+      nullable: true
+    documentType:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          nullable: true
+    extension:
+      type: string
+      nullable: true
+    contentType:
+      type: string
+      nullable: true
+    fileUri:
+      type: string
+      nullable: true
+    documentNumber:
+      type: string
+      nullable: true
+    filename:
+      type: string
+      nullable: true
+    isImage:
+      type: boolean
+      nullable: true
+    size:
+      type: integer
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+    dateCreated:
+      type: string
+      nullable: true
+
+DocumentMutationResponse:
+  type: object
+  required: [data, message]
+  properties:
+    data:
+      type: object
+      required: [id]
+      properties:
+        id:
+          type: string
+    message:
+      type: string
+    flashMessage:
+      type: string
+      nullable: true
+
+DocumentMutationError:
+  type: object
+  required: [errorMessages]
+  properties:
+    errorMessages:
+      type: array
+      items:
+        type: string
+    flashMessage:
+      type: string
+      nullable: true

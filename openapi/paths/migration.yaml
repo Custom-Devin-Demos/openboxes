@@ -1,0 +1,289 @@
+# Data-migration diagnostics API (MigrationApiController): read-only counts
+# and comparisons used to validate data migrations, plus a product
+# availability refresh trigger.
+
+/api/migration/dataMigration:
+  get:
+    tags: [migration]
+    summary: Data migration diagnostics for the session's current location
+    operationId: migrationDataMigration
+    responses:
+      '200':
+        description: Counts of migratable/migrated entities.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MigrationDataMigration'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/migration/dimensionTables:
+  get:
+    tags: [migration]
+    summary: Row counts of reporting dimension tables
+    operationId: migrationDimensionTables
+    responses:
+      '200':
+        description: Dimension table counts.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MigrationDimensionTables'
+
+/api/migration/factTables:
+  get:
+    tags: [migration]
+    summary: Row counts of reporting fact tables
+    operationId: migrationFactTables
+    responses:
+      '200':
+        description: Fact table counts.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MigrationFactTables'
+
+/api/migration/materializedViews:
+  get:
+    tags: [migration]
+    summary: Row counts of materialized views
+    operationId: migrationMaterializedViews
+    responses:
+      '200':
+        description: product_demand_details and product_availability counts.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MigrationMaterializedViews'
+
+/api/migration/productAvailability:
+  get:
+    tags: [migration]
+    summary: Product availability row counts per depot
+    operationId: migrationProductAvailability
+    responses:
+      '200':
+        description: One row per depot with its product_availability count.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MigrationProductAvailabilityByLocation'
+
+/api/migration/productAvailability/{locationId}/count:
+  get:
+    tags: [migration]
+    summary: Product availability row count for a location
+    operationId: migrationProductAvailabilityCount
+    parameters:
+      - name: locationId
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: count for seeded main warehouse
+        params:
+          locationId: '{facilityId}'
+        status: 200
+    responses:
+      '200':
+        description: Count of product_availability rows.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MigrationCount'
+
+/api/migration/productAvailability/{locationId}/calculated:
+  get:
+    tags: [migration]
+    summary: Product availability count calculated from transactions
+    operationId: migrationProductAvailabilityCalculated
+    parameters:
+      - name: locationId
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: calculated count for seeded main warehouse
+        params:
+          locationId: '{facilityId}'
+        status: 200
+    responses:
+      '200':
+        description: Count of bin location rows calculated from transactions.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MigrationCount'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/migration/productAvailability/{locationId}/compare:
+  get:
+    tags: [migration]
+    summary: Compare stored vs calculated product availability
+    operationId: migrationProductAvailabilityCompare
+    parameters:
+      - name: locationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: showAll
+        in: query
+        required: false
+        description: When true, include rows without discrepancies.
+        schema:
+          type: boolean
+    x-contract-tests:
+      - name: compare for seeded main warehouse
+        params:
+          locationId: '{facilityId}'
+        status: 200
+    responses:
+      '200':
+        description: Discrepancy rows (stored vs transaction-calculated).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/MigrationCompareRow'
+                totalCount:
+                  type: integer
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/migration/productAvailability/{locationId}/refresh:
+  post:
+    tags: [migration]
+    summary: Refresh product availability for a location
+    operationId: migrationProductAvailabilityRefresh
+    description: |
+      Recalculates the product_availability rows for the location. Raises a
+      500 (NullPointerException) when the location id does not exist.
+      Schema-only in contract tests (rewrites seeded product availability data).
+    parameters:
+      - name: locationId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Confirmation message.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  required: [message]
+                  properties:
+                    message:
+                      type: string
+            example:
+              data:
+                message: Refreshed product availability for location Main Warehouse
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/migration/receiptsWithoutTransaction:
+  get:
+    tags: [migration]
+    summary: Receipts that have no corresponding transaction
+    operationId: migrationReceiptsWithoutTransaction
+    parameters:
+      - name: format
+        in: query
+        required: false
+        description: 'Pass `count` to get a bare `{count: n}` body instead of rows.'
+        schema:
+          type: string
+          enum: [count]
+    responses:
+      '200':
+        description: Receipt rows, or a bare count when `format=count`.
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: object
+                  required: [data, totalCount]
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/MigrationReceiptRow'
+                    totalCount:
+                      type: integer
+                - $ref: '#/components/schemas/MigrationBareCount'
+
+/api/migration/shipmentsWithoutTransactions:
+  get:
+    tags: [migration]
+    summary: Shipped shipments that have no transactions
+    operationId: migrationShipmentsWithoutTransactions
+    parameters:
+      - name: format
+        in: query
+        required: false
+        description: 'Pass `count` to get a bare `{count: n}` body instead of rows.'
+        schema:
+          type: string
+          enum: [count]
+    responses:
+      '200':
+        description: Shipment rows, or a bare count when `format=count`.
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: object
+                  required: [data, totalCount]
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/MigrationShipmentRow'
+                    totalCount:
+                      type: integer
+                - $ref: '#/components/schemas/MigrationBareCount'
+
+/api/migration/stockMovementsWithoutShipmentItems:
+  get:
+    tags: [migration]
+    summary: Stock movements that have no shipment items
+    operationId: migrationStockMovementsWithoutShipmentItems
+    parameters:
+      - name: format
+        in: query
+        required: false
+        description: 'Pass `count` to get a bare `{count: n}` body instead of rows.'
+        schema:
+          type: string
+          enum: [count]
+    responses:
+      '200':
+        description: Stock movement rows, or a bare count when `format=count`.
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: object
+                  required: [data, totalCount]
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/MigrationStockMovementRow'
+                    totalCount:
+                      type: integer
+                - $ref: '#/components/schemas/MigrationBareCount'

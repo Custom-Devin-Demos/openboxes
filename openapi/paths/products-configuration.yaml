@@ -1,0 +1,175 @@
+# Products Configuration API (ProductsConfigurationApiController) - the
+# configuration-wizard category/product import endpoints.
+
+/api/productsConfiguration/categoriesCount:
+  get:
+    tags: [productsConfiguration]
+    summary: Count categories
+    operationId: productsConfigurationCategoriesCount
+    responses:
+      '200':
+        description: Category count ({data}).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: integer
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/productsConfiguration/downloadCategories:
+  get:
+    tags: [productsConfiguration]
+    summary: Download all categories as CSV
+    operationId: productsConfigurationDownloadCategories
+    responses:
+      '200':
+        description: CSV attachment (Categories.csv).
+        content:
+          text/csv: {}
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/productsConfiguration/downloadCategoryTemplate:
+  get:
+    tags: [productsConfiguration]
+    summary: Download the category import CSV template
+    operationId: productsConfigurationDownloadCategoryTemplate
+    responses:
+      '200':
+        description: CSV attachment (Category_template.csv) with header row only.
+        content:
+          text/csv: {}
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/productsConfiguration/categoryOptions:
+  get:
+    tags: [productsConfiguration]
+    summary: Configuration-wizard category import options
+    operationId: productsConfigurationCategoryOptions
+    responses:
+      '200':
+        description: Configured category options map ({data}).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  additionalProperties: true
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/productsConfiguration/productOptions:
+  get:
+    tags: [productsConfiguration]
+    summary: Configuration-wizard product import options
+    operationId: productsConfigurationProductOptions
+    responses:
+      '200':
+        description: Configured product options map ({data}).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  additionalProperties: true
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/productsConfiguration/importCategories:
+  post:
+    tags: [productsConfiguration]
+    summary: Import a predefined category tree
+    operationId: productsConfigurationImportCategories
+    parameters:
+      - name: categoryOption
+        in: query
+        required: false
+        description: Key of the configured category option to import (e.g. defaultCategories).
+        schema:
+          type: string
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            type: object
+            nullable: true
+            description: No body required; parameters are read from the query string.
+          example: {}
+    responses:
+      '200':
+        description: Imported (empty body).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/productsConfiguration/importCategoryCsv:
+  post:
+    tags: [productsConfiguration]
+    summary: Import categories from an uploaded CSV file
+    operationId: productsConfigurationImportCategoryCsv
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              importFile:
+                type: string
+                format: binary
+                description: CSV with "Category Name,Parent Category Name" columns (content type must be text/csv).
+          example:
+            importFile: (binary CSV content)
+    responses:
+      '200':
+        description: Imported (empty body).
+      '500':
+        description: Import error rendered by the controller ({errorCode, errorMessage}).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+            example: {errorCode: 500, errorMessage: File cannot be empty}
+
+/api/productsConfiguration/importProducts:
+  post:
+    tags: [productsConfiguration]
+    summary: Import a predefined product list (superuser only)
+    operationId: productsConfigurationImportProducts
+    parameters:
+      - name: productOption
+        in: query
+        required: false
+        description: Key of the configured product option to import (e.g. whoProducts).
+        schema:
+          type: string
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            type: object
+            nullable: true
+            description: No body required; parameters are read from the query string.
+          example: {}
+    responses:
+      '200':
+        description: Imported (empty body).
+      '500':
+        description: Not a superuser, or import error (exception rendered by the 500 handler).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+            example: {errorCode: 500, errorMessage: You are not authorized to perform this action}

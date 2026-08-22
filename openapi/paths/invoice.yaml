@@ -1,0 +1,569 @@
+# Invoicing API (InvoiceApiController, PrepaymentInvoiceApiController,
+# PrepaymentInvoiceItemApiController).
+#
+# Note: several invoice endpoints throw IllegalArgumentException when the
+# invoice id is unknown, which the global handler renders as HTTP 500 (not
+# 404) — spec'd as observed.
+
+/api/invoices:
+  get:
+    tags: [invoice]
+    summary: List invoices visible to the current facility's organization
+    operationId: listInvoices
+    parameters:
+      - name: invoiceItems
+        in: query
+        required: false
+        description: Include invoice items in the result (used by CSV export).
+        schema:
+          type: boolean
+      - name: format
+        in: query
+        required: false
+        description: Set to `csv` to download as CSV instead of JSON.
+        schema:
+          type: string
+          enum: [csv]
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    responses:
+      '200':
+        description: Paginated invoice list rows (or CSV attachment when format=csv).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceListResponse'
+          text/csv:
+            schema:
+              type: string
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [invoice]
+    summary: Create an invoice
+    operationId: createInvoice
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InvoiceInput'
+          example:
+            vendor: ff8081817f0e3f80017f0e40a1b20005
+            vendorInvoiceNumber: VIN-123
+            dateInvoiced: '2026-01-01'
+    responses:
+      '200':
+        description: Created invoice (rendered with HTTP 200, not 201).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20006
+                invoiceNumber: PMT00001
+                vendorInvoiceNumber: VIN-123
+                status: PENDING
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/invoices/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [invoice]
+    summary: Read an invoice by id
+    operationId: readInvoice
+    x-contract-tests:
+      - name: unknown id returns 500
+        params:
+          id: no-such-invoice
+        status: 500
+    responses:
+      '200':
+        description: The invoice.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [invoice]
+    summary: Update an invoice (POST alias of PUT)
+    operationId: updateInvoicePost
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InvoiceInput'
+          example:
+            vendorInvoiceNumber: VIN-124
+    responses:
+      '200':
+        description: Updated invoice.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20006
+                invoiceNumber: PMT00001
+                vendorInvoiceNumber: VIN-124
+                status: PENDING
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  put:
+    tags: [invoice]
+    summary: Update an invoice
+    operationId: updateInvoice
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InvoiceInput'
+          example:
+            vendorInvoiceNumber: VIN-124
+    responses:
+      '200':
+        description: Updated invoice.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20006
+                invoiceNumber: PMT00001
+                vendorInvoiceNumber: VIN-124
+                status: PENDING
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/invoices/{id}/items:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [invoice]
+    summary: List invoice items of an invoice (paginated)
+    operationId: getInvoiceItems
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    x-contract-tests:
+      - name: unknown invoice returns empty list
+        params:
+          id: no-such-invoice
+        status: 200
+    responses:
+      '200':
+        description: Invoice items with totalCount.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceItemList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [invoice]
+    summary: Bulk update invoice items of an invoice
+    operationId: updateInvoiceItems
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InvoiceItemsUpdateRequest'
+          example:
+            invoiceItems:
+              - id: ff8081817f0e3f80017f0e40a1b20007
+                quantity: 2
+    responses:
+      '204':
+        description: Items updated (no content).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/invoices/{id}/invoiceItemCandidates:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  post:
+    tags: [invoice]
+    summary: Compute invoice item candidates for an invoice
+    operationId: getInvoiceItemCandidates
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InvoiceItemCandidatesRequest'
+          example:
+            orderNumbers: []
+            shipmentNumbers: []
+    responses:
+      '200':
+        description: Candidate invoice items.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceItemCandidatesResponse'
+            example:
+              data: []
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/invoices/{id}/orders:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [invoice]
+    summary: List distinct order numbers among an invoice's item candidates
+    operationId: getInvoiceOrderNumbers
+    x-contract-tests:
+      - name: unknown invoice returns empty list
+        params:
+          id: no-such-invoice
+        status: 200
+    responses:
+      '200':
+        description: Distinct order numbers.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceNumbersResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/invoices/{id}/shipments:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [invoice]
+    summary: List distinct shipment numbers among an invoice's item candidates
+    operationId: getInvoiceShipmentNumbers
+    x-contract-tests:
+      - name: unknown invoice returns empty list
+        params:
+          id: no-such-invoice
+        status: 200
+    responses:
+      '200':
+        description: Distinct shipment numbers.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceNumbersResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/invoices/{id}/removeItem:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Invoice item id to remove (not the invoice id).
+      schema:
+        type: string
+  delete:
+    tags: [invoice]
+    summary: Remove an invoice item
+    operationId: removeInvoiceItem
+    x-contract-tests:
+      - name: unknown invoice item returns 500
+        params:
+          id: no-such-invoice-item
+        status: 500
+    responses:
+      '204':
+        description: Item removed (no content).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/invoices/{id}/submit:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  post:
+    tags: [invoice]
+    summary: Submit an invoice
+    operationId: submitInvoice
+    responses:
+      '200':
+        description: The submitted invoice.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20006
+                invoiceNumber: PMT00001
+                status: SUBMITTED
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/invoices/{id}/post:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  post:
+    tags: [invoice]
+    summary: Post an invoice
+    operationId: postInvoice
+    responses:
+      '200':
+        description: The posted invoice.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20006
+                invoiceNumber: PMT00001
+                status: POSTED
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/invoices/{id}/prepaymentItems:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [invoice]
+    summary: List prepayment items of an invoice (deprecated)
+    operationId: getInvoicePrepaymentItems
+    deprecated: true
+    x-contract-tests:
+      - name: unknown invoice returns 500 (NullPointerException)
+        params:
+          id: no-such-invoice
+        status: 500
+    responses:
+      '200':
+        description: Prepayment invoice items.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceItemList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/invoices/{id}/details:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [invoice]
+    summary: Read invoice header details for the invoice show page
+    operationId: getInvoiceDetails
+    x-contract-tests:
+      - name: unknown id returns 500
+        params:
+          id: no-such-invoice
+        status: 500
+    responses:
+      '200':
+        description: Invoice details.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceDetails'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/invoices/{id}/documentFormData:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [invoice]
+    summary: Read form data for attaching documents to an invoice
+    operationId: getInvoiceDocumentFormData
+    parameters:
+      - name: documentId
+        in: query
+        required: false
+        description: Existing document id to prefill the form with.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: unknown id returns 500
+        params:
+          id: no-such-invoice
+        status: 500
+    responses:
+      '200':
+        description: Document form data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceDocumentFormData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/invoiceStatuses:
+  get:
+    tags: [invoice]
+    summary: List invoice status options
+    operationId: listInvoiceStatusOptions
+    responses:
+      '200':
+        description: InvoiceStatus enum select options.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceOptionsList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/invoiceTypeCodes:
+  get:
+    tags: [invoice]
+    summary: List invoice type code options
+    operationId: listInvoiceTypeCodes
+    responses:
+      '200':
+        description: InvoiceTypeCode enum select options.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceOptionsList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/invoiceItems/{id}/validation:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Invoice item id (routing only; body fields are validated).
+      schema:
+        type: string
+  post:
+    tags: [invoice]
+    summary: Validate invoice item fields without saving
+    operationId: validateInvoiceItem
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InvoiceItemValidationRequest'
+          example:
+            quantity: 1
+            unitPrice: 10.5
+    responses:
+      '200':
+        description: Valid (empty body).
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/prepaymentInvoices/{id}/invoiceItems:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Final (non-prepayment) invoice id whose prepaid items are edited.
+      schema:
+        type: string
+  post:
+    tags: [invoice]
+    summary: Bulk edit quantities of prepaid invoice items
+    operationId: updatePrepaymentInvoiceItems
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PrepaymentInvoiceItemsUpdateRequest'
+          example:
+            - id: ff8081817f0e3f80017f0e40a1b20007
+              quantity: 2
+    responses:
+      '200':
+        description: Items updated (empty body).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/prepaymentInvoiceItems/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Prepayment invoice item id.
+      schema:
+        type: string
+  post:
+    tags: [invoice]
+    summary: Update a prepayment invoice item
+    operationId: updatePrepaymentInvoiceItem
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PrepaymentInvoiceItemUpdateRequest'
+          example:
+            quantity: 3
+    responses:
+      '200':
+        description: Item updated (empty body).
+      '500':
+        $ref: '#/components/responses/ServerError'
+  delete:
+    tags: [invoice]
+    summary: Delete a prepayment invoice item
+    operationId: deletePrepaymentInvoiceItem
+    responses:
+      '204':
+        description: Item deleted (no content).
+      '500':
+        $ref: '#/components/responses/ServerError'

@@ -1,0 +1,117 @@
+# Schemas for the Product Group API domain (ProductGroupApiController).
+
+ProductGroupListItem:
+  type: object
+  description: Product group list rendering.
+  required: [id, name, productCount]
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    category:
+      type: object
+      nullable: true
+      description: Category reference rendered as {id, name}.
+      additionalProperties: true
+    productCount:
+      type: integer
+    dateCreated:
+      type: string
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+
+
+ProductGroupDetails:
+  type: object
+  description: Product group details rendering with member products and siblings.
+  required: [id, name, products, siblings]
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    description:
+      type: string
+      nullable: true
+    version:
+      type: integer
+      nullable: true
+    category:
+      type: object
+      nullable: true
+      description: Category reference rendered as {id, name}.
+      additionalProperties: true
+    dateCreated:
+      type: string
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+    products:
+      type: array
+      items:
+        $ref: '#/components/schemas/ProductGroupProduct'
+    siblings:
+      type: array
+      items:
+        $ref: '#/components/schemas/ProductGroupProduct'
+
+ProductGroupProduct:
+  type: object
+  description: Product rendering inside product group details.
+  required: [id]
+  properties:
+    id:
+      type: string
+    productCode:
+      type: string
+      nullable: true
+    name:
+      type: string
+      nullable: true
+    category:
+      type: string
+      nullable: true
+    unitOfMeasure:
+      type: string
+      nullable: true
+    manufacturer:
+      type: string
+      nullable: true
+    manufacturerCode:
+      type: string
+      nullable: true
+    vendor:
+      type: string
+      nullable: true
+    vendorCode:
+      type: string
+      nullable: true
+
+ProductGroupInput:
+  type: object
+  description: Request body for creating/updating a product group.
+  properties:
+    name:
+      type: string
+    description:
+      type: string
+      nullable: true
+    category:
+      type: string
+      nullable: true
+      description: Category id.
+    version:
+      type: integer
+      description: Optimistic-locking version (update only).
+
+ProductGroupDetailsResponse:
+  type: object
+  description: Details wrapped in a "data" envelope.
+  required: [data]
+  properties:
+    data:
+      $ref: '#/components/schemas/ProductGroupDetails'

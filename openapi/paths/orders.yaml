@@ -1,0 +1,2056 @@
+# Orders domain fragment: OrderApiController, PurchaseOrderApiController,
+# OrderAdjustmentTypeApiController, ReceiveOrderApiController,
+# PartialReceivingApiController, FulfillmentApiController,
+# ConsumptionApiController, BatchApiController, DataExportApiController,
+# DocumentApiController. Map of <path> -> PathItem (see
+# docs/migration/openapi-conventions.md).
+
+# ---------------------------------------------------------------------------
+# OrderApiController
+# ---------------------------------------------------------------------------
+
+/api/orders:
+  get:
+    tags: [orders]
+    summary: List orders for the React order list screen
+    operationId: listOrders
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - name: orderType
+        in: query
+        required: false
+        description: Order type id or code (defaults to PURCHASE_ORDER).
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: false
+        description: OrderStatus enum name.
+        schema:
+          type: string
+      - name: destination
+        in: query
+        required: false
+        description: Destination location id (defaults to the session warehouse unless central purchasing is enabled).
+        schema:
+          type: string
+      - name: statusStartDate
+        in: query
+        required: false
+        description: MM/dd/yyyy
+        schema:
+          type: string
+      - name: statusEndDate
+        in: query
+        required: false
+        description: MM/dd/yyyy
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Paginated orders plus total normalized price.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount, totalPrice]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/OrderListItem'
+                totalCount:
+                  type: integer
+                totalPrice:
+                  type: number
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/orders/statusOptions:
+  get:
+    tags: [orders]
+    summary: Order status filter options
+    operationId: orderStatusOptions
+    responses:
+      '200':
+        description: OrderStatus select options.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/OrdersSelectOption'
+
+/api/orders/orderTypeOptions:
+  get:
+    tags: [orders]
+    summary: Order type filter options
+    operationId: orderTypeOptions
+    responses:
+      '200':
+        description: OrderType select options.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/OrdersSelectOption'
+
+/api/orders/pendingOrderItems:
+  get:
+    tags: [orders]
+    summary: List incomplete order items grouped by order
+    operationId: pendingOrderItems
+    responses:
+      '200':
+        description: Incomplete order items.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PendingOrderItem'
+
+/api/orders/orderItemSummaries:
+  get:
+    tags: [orders]
+    summary: List order item summaries (summary or details mode)
+    operationId: orderItemSummaries
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - name: mode
+        in: query
+        required: false
+        description: '"details" switches to the order item details projection.'
+        schema:
+          type: string
+      - name: derivedStatus
+        in: query
+        required: false
+        description: Repeatable derived status filter.
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Paginated order item summaries.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/OrderItemSummary'
+                totalCount:
+                  type: integer
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/orders/orderSummaries:
+  get:
+    tags: [orders]
+    summary: List order summaries for the React order summary list screen
+    operationId: orderSummaries
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - name: orderNumber
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: orderStatus
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: shipmentStatus
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: receiptStatus
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: paymentStatus
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: derivedStatus
+        in: query
+        required: false
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Paginated order summaries.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/OrderSummaryListItem'
+                totalCount:
+                  type: integer
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/orders/orderSummaryStatusOptions:
+  get:
+    tags: [orders]
+    summary: Status filter options for the order summary list screen
+    operationId: orderSummaryStatusOptions
+    responses:
+      '200':
+        description: Status option groups.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  required: [orderStatuses, shipmentStatuses, receiptStatuses, paymentStatuses, derivedStatuses]
+                  properties:
+                    orderStatuses:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/OrdersSelectOption'
+                    shipmentStatuses:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/OrdersSelectOption'
+                    receiptStatuses:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/OrdersSelectOption'
+                    paymentStatuses:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/OrdersSelectOption'
+                    derivedStatuses:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/OrdersSelectOption'
+
+/api/orders/{id}/summary:
+  get:
+    tags: [orders]
+    summary: Order header summary for the React order show screen
+    operationId: orderSummary
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing order returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Order header data.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/OrderHeaderSummary'
+      '404':
+        description: Order not found ({errorMessage} rendered directly by the controller).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrdersErrorMessage'
+
+/api/orders/{id}/commentFormData:
+  get:
+    tags: [orders]
+    summary: Form data for the order add/edit comment screen
+    operationId: orderCommentFormData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: commentId
+        in: query
+        required: false
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing order returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Recipients and (optionally) the comment being edited.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  required: [recipients]
+                  properties:
+                    recipients:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/OrdersIdNamePair'
+                    comment:
+                      type: object
+                      nullable: true
+                      properties:
+                        id:
+                          type: string
+                        comment:
+                          type: string
+                          nullable: true
+                        recipientId:
+                          type: string
+                          nullable: true
+      '404':
+        description: Order not found ({errorMessage} rendered directly by the controller).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrdersErrorMessage'
+
+/api/orders/{id}/documentFormData:
+  get:
+    tags: [orders]
+    summary: Form data for the order add/edit document screen
+    operationId: orderDocumentFormData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: documentId
+        in: query
+        required: false
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing order returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Document types and (optionally) the document being edited.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  required: [documentTypes]
+                  properties:
+                    documentTypes:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/OrdersIdNamePair'
+                    document:
+                      type: object
+                      nullable: true
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                          nullable: true
+                        documentNumber:
+                          type: string
+                          nullable: true
+                        documentTypeId:
+                          type: string
+                          nullable: true
+                        filename:
+                          type: string
+                          nullable: true
+                        fileUri:
+                          type: string
+                          nullable: true
+      '404':
+        description: Order not found ({errorMessage} rendered directly by the controller).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrdersErrorMessage'
+
+/api/orders/{id}/adjustmentFormData:
+  get:
+    tags: [orders]
+    summary: Form data for the order edit adjustment screen
+    operationId: orderAdjustmentFormData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: adjustmentId
+        in: query
+        required: false
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing order returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Adjustment form reference data.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  required: [orderItems, adjustmentTypes, budgetCodes]
+                  properties:
+                    isAccountingRequired:
+                      type: boolean
+                      nullable: true
+                    orderItems:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/OrdersIdNamePair'
+                    adjustmentTypes:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/OrdersIdNamePair'
+                    budgetCodes:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          code:
+                            type: string
+                            nullable: true
+                    adjustment:
+                      type: object
+                      nullable: true
+                      additionalProperties: true
+      '404':
+        description: Order not found ({errorMessage} rendered directly by the controller).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrdersErrorMessage'
+
+/api/orders/{id}/details:
+  get:
+    tags: [orders]
+    summary: Order details for the React order show screen
+    operationId: orderDetails
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing order returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Order header, auditing and action-permission data.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/OrderDetails'
+      '404':
+        description: Order not found ({errorMessage} rendered directly by the controller).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrdersErrorMessage'
+
+/api/orders/{id}/orderItemsSummaryData:
+  get:
+    tags: [orders]
+    summary: Summary tab data for the React order show screen
+    operationId: orderItemsSummaryData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: happy path needs a seeded order
+        skip: no seeded order exists in demo data; 404 path is rendered as text/html (render text)
+    responses:
+      '200':
+        description: Order items summary tab data.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  additionalProperties: true
+      '404':
+        description: Order not found. The JSON-ish body is rendered via render(text) so the content type is text/html.
+
+/api/orders/{id}/itemStatusData:
+  get:
+    tags: [orders]
+    summary: Item status tab data for the React order show screen
+    operationId: orderItemStatusData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: happy path needs a seeded order
+        skip: no seeded order exists in demo data; 404 path is rendered as text/html (render text)
+    responses:
+      '200':
+        description: Item status tab data.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  additionalProperties: true
+      '404':
+        description: Order not found. The JSON-ish body is rendered via render(text) so the content type is text/html.
+
+/api/orders/{id}/itemDetailsData:
+  get:
+    tags: [orders]
+    summary: Item details tab data for the React order show screen
+    operationId: orderItemDetailsData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: happy path needs a seeded order
+        skip: no seeded order exists in demo data; 404 path is rendered as text/html (render text)
+    responses:
+      '200':
+        description: Item details tab data.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  additionalProperties: true
+      '404':
+        description: Order not found. The JSON-ish body is rendered via render(text) so the content type is text/html.
+
+/api/orders/{id}/adjustmentsData:
+  get:
+    tags: [orders]
+    summary: Adjustments tab data for the React order show screen
+    operationId: orderAdjustmentsData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: happy path needs a seeded order
+        skip: no seeded order exists in demo data; 404 path is rendered as text/html (render text)
+    responses:
+      '200':
+        description: Adjustments tab data.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  additionalProperties: true
+      '404':
+        description: Order not found. The JSON-ish body is rendered via render(text) so the content type is text/html.
+
+/api/orders/{id}/shipmentsData:
+  get:
+    tags: [orders]
+    summary: Shipments tab data for the React order show screen
+    operationId: orderShipmentsData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: happy path needs a seeded order
+        skip: no seeded order exists in demo data; 404 path is rendered as text/html (render text)
+    responses:
+      '200':
+        description: Shipments tab data.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  additionalProperties: true
+      '404':
+        description: Order not found. The JSON-ish body is rendered via render(text) so the content type is text/html.
+
+/api/orders/{id}/invoicesData:
+  get:
+    tags: [orders]
+    summary: Invoices tab data for the React order show screen
+    operationId: orderInvoicesData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: happy path needs a seeded order
+        skip: no seeded order exists in demo data; 404 path is rendered as text/html (render text)
+    responses:
+      '200':
+        description: Invoices tab data.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  additionalProperties: true
+      '404':
+        description: Order not found. The JSON-ish body is rendered via render(text) so the content type is text/html.
+
+/api/orders/{id}/documentsData:
+  get:
+    tags: [orders]
+    summary: Documents tab data for the React order show screen
+    operationId: orderDocumentsData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: happy path needs a seeded order
+        skip: no seeded order exists in demo data; 404 path is rendered as text/html (render text)
+    responses:
+      '200':
+        description: Documents tab data.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  additionalProperties: true
+      '404':
+        description: Order not found. The JSON-ish body is rendered via render(text) so the content type is text/html.
+
+/api/orders/{id}/commentsData:
+  get:
+    tags: [orders]
+    summary: Comments tab data for the React order show screen
+    operationId: orderCommentsData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: happy path needs a seeded order
+        skip: no seeded order exists in demo data; 404 path is rendered as text/html (render text)
+    responses:
+      '200':
+        description: Comments tab data.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  additionalProperties: true
+      '404':
+        description: Order not found. The JSON-ish body is rendered via render(text) so the content type is text/html.
+
+/api/orders/{id}/printData:
+  get:
+    tags: [orders]
+    summary: Data for the React order print screen
+    operationId: orderPrintData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing order returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Print screen data.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  additionalProperties: true
+      '404':
+        description: Order not found ({errorMessage} rendered directly by the controller).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrdersErrorMessage'
+
+# ---------------------------------------------------------------------------
+# PurchaseOrderApiController
+# ---------------------------------------------------------------------------
+
+/api/purchaseOrders:
+  get:
+    tags: [orders]
+    summary: List purchase orders (JSON or CSV export)
+    operationId: listPurchaseOrders
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+      - name: format
+        in: query
+        required: false
+        description: '"csv" downloads a CSV export instead of JSON.'
+        schema:
+          type: string
+      - name: orderItems
+        in: query
+        required: false
+        description: With format=csv, "true" exports order line items instead of orders.
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Purchase order summaries (default GORM marshaling) or CSV.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalPrice]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PurchaseOrderSummary'
+                totalPrice:
+                  type: number
+                totalCount:
+                  type: integer
+                  nullable: true
+          text/csv:
+            schema:
+              type: string
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/purchaseOrders/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [orders]
+    summary: Read a purchase order (full domain marshaling)
+    operationId: readPurchaseOrder
+    x-contract-tests:
+      - name: happy path needs a seeded purchase order
+        skip: no seeded purchase order exists in demo data; missing-id path renders a text/html 404 and then attempts a second render (see behavioral findings)
+    responses:
+      '200':
+        description: The order rendered with default GORM marshaling.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/PurchaseOrderDetail'
+      '404':
+        description: Order not found; plain-text message via render(status:404, text) (content type text/html). The action does not return after this render.
+  delete:
+    tags: [orders]
+    summary: Delete a pending purchase order
+    operationId: deletePurchaseOrder
+    responses:
+      '204':
+        description: Deleted (no content).
+      '400':
+        description: Order cannot be deleted (prepaid, non-pending, non-PO, or integrity violation).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrdersErrorMessages'
+            example:
+              errorMessages: ['Order could not be deleted']
+      '404':
+        description: Order not found ({errorMessage} rendered directly by the controller).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrdersErrorMessage'
+            example:
+              errorMessage: Order with id does-not-exist not found
+
+/api/purchaseOrders/{id}/rollback:
+  post:
+    tags: [orders]
+    summary: Roll back a purchase order's status
+    operationId: rollbackPurchaseOrder
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Rolled back (empty body).
+      '404':
+        description: Order not found ({errorMessage} rendered directly by the controller).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrdersErrorMessage'
+            example:
+              errorMessage: Order with id does-not-exist not found
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/orderSummaryStatus:
+  get:
+    tags: [orders]
+    summary: Purchase order derived-status filter options
+    operationId: purchaseOrderStatusOptions
+    responses:
+      '200':
+        description: Derived status select options (with badge variant).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required: [id, value, label]
+                    properties:
+                      id:
+                        type: string
+                      value:
+                        type: string
+                      label:
+                        type: string
+                      variant:
+                        type: string
+                        nullable: true
+
+# ---------------------------------------------------------------------------
+# OrderAdjustmentTypeApiController
+# ---------------------------------------------------------------------------
+
+/api/orderAdjustmentTypes:
+  get:
+    tags: [orders]
+    summary: List order adjustment types
+    operationId: listOrderAdjustmentTypes
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    responses:
+      '200':
+        description: Order adjustment types.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/OrderAdjustmentTypeDetail'
+                totalCount:
+                  type: integer
+  post:
+    tags: [orders]
+    summary: Create an order adjustment type
+    operationId: createOrderAdjustmentType
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrderAdjustmentTypeInput'
+          example:
+            name: Shipping surcharge
+            description: Additional freight cost
+            code: SHIPPING_FEE
+    responses:
+      '201':
+        description: Created order adjustment type.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/OrderAdjustmentTypeDetail'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20003
+                name: Shipping surcharge
+                description: Additional freight cost
+                code: SHIPPING_FEE
+                glAccount: null
+                dateCreated: '2024-01-01T00:00:00Z'
+                lastUpdated: '2024-01-01T00:00:00Z'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/orderAdjustmentTypes/formData:
+  get:
+    tags: [orders]
+    summary: Form data for the order adjustment type create/edit screens
+    operationId: orderAdjustmentTypeFormData
+    responses:
+      '200':
+        description: Code options, active GL accounts and the accounting-required flag.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  required: [codeOptions, glAccountOptions]
+                  properties:
+                    isAccountingRequired:
+                      type: boolean
+                      nullable: true
+                    codeOptions:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/OrdersSelectOption'
+                    glAccountOptions:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/OrdersSelectOption'
+
+/api/orderAdjustmentTypes/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [orders]
+    summary: Read an order adjustment type
+    operationId: readOrderAdjustmentType
+    x-contract-tests:
+      - name: missing id returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The order adjustment type.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/OrderAdjustmentTypeDetail'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [orders]
+    summary: Update an order adjustment type
+    operationId: updateOrderAdjustmentType
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrderAdjustmentTypeInput'
+          example:
+            name: Shipping surcharge (updated)
+    responses:
+      '200':
+        description: Updated order adjustment type.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/OrderAdjustmentTypeDetail'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20003
+                name: Shipping surcharge (updated)
+                description: null
+                code: null
+                glAccount: null
+                dateCreated: '2024-01-01T00:00:00Z'
+                lastUpdated: '2024-01-02T00:00:00Z'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [orders]
+    summary: Delete an order adjustment type
+    operationId: deleteOrderAdjustmentType
+    responses:
+      '204':
+        description: Deleted (no content).
+      '400':
+        description: Cannot be deleted because of an existing association.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrdersErrorMessage'
+            example:
+              errorMessage: Order Adjustment Type does-not-exist could not be deleted
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+# ---------------------------------------------------------------------------
+# ReceiveOrderApiController
+# ---------------------------------------------------------------------------
+
+/api/receiveOrder/{id}:
+  get:
+    tags: [orders]
+    summary: Read an order for the receiving workflow
+    operationId: readReceiveOrder
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing order returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Order, order items and receiving reference data.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/ReceiveOrderData'
+      '404':
+        description: Order not found ({errorMessages} rendered directly by the controller).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrdersErrorMessages'
+
+/api/receiveOrder/{id}/validateShipmentDetails:
+  post:
+    tags: [orders]
+    summary: Validate the shipment details step of the receiving workflow
+    operationId: validateReceiveOrderShipmentDetails
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReceiveOrderInput'
+          example:
+            shipmentTypeId: '1'
+            recipientId: null
+            shippedOn: 01/01/2024
+            deliveredOn: 01/02/2024
+    responses:
+      '200':
+        description: Shipment details are valid.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  required: [valid]
+                  properties:
+                    valid:
+                      type: boolean
+            example:
+              data:
+                valid: true
+      '400':
+        description: Validation errors.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrdersErrorMessages'
+            example:
+              errorMessages: ['Shipment type is required']
+      '404':
+        description: Order not found ({errorMessages} rendered directly by the controller).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrdersErrorMessages'
+            example:
+              errorMessages: ['Unable to locate order with ID does-not-exist']
+
+/api/receiveOrder/{id}/validateOrderItems:
+  post:
+    tags: [orders]
+    summary: Validate the order items step of the receiving workflow
+    operationId: validateReceiveOrderItems
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReceiveOrderInput'
+          example:
+            orderItems:
+              - orderItemId: ff8081817f0e3f80017f0e40a1b20003
+                quantityReceived: 1
+                productId: ff8081817f0e3f80017f0e40a1b20004
+    responses:
+      '200':
+        description: Order items are valid.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  required: [valid]
+                  properties:
+                    valid:
+                      type: boolean
+            example:
+              data:
+                valid: true
+      '400':
+        description: Validation errors.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrdersErrorMessages'
+            example:
+              errorMessages: ['Product received is required']
+
+/api/receiveOrder/{id}/submit:
+  post:
+    tags: [orders]
+    summary: Submit the receiving workflow (creates the order shipment/receipt)
+    operationId: submitReceiveOrder
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReceiveOrderInput'
+          example:
+            shipmentTypeId: '1'
+            shippedOn: 01/01/2024
+            deliveredOn: 01/02/2024
+            orderItems:
+              - orderItemId: ff8081817f0e3f80017f0e40a1b20003
+                quantityReceived: 1
+                productId: ff8081817f0e3f80017f0e40a1b20004
+    responses:
+      '200':
+        description: Shipment/receipt saved.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  required: [orderId]
+                  properties:
+                    orderId:
+                      type: string
+            example:
+              data:
+                orderId: ff8081817f0e3f80017f0e40a1b20003
+      '400':
+        description: Validation or persistence errors.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrdersErrorMessages'
+            example:
+              errorMessages: ['Shipment type is required']
+      '404':
+        description: Order not found ({errorMessages} rendered directly by the controller).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrdersErrorMessages'
+            example:
+              errorMessages: ['Unable to locate order with ID does-not-exist']
+
+# ---------------------------------------------------------------------------
+# PartialReceivingApiController
+# ---------------------------------------------------------------------------
+
+/api/partialReceiving:
+  get:
+    tags: [orders]
+    summary: List partial receipts (always empty)
+    operationId: listPartialReceiving
+    responses:
+      '200':
+        description: Always an empty data array (the action is a stub).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+  post:
+    tags: [orders]
+    summary: Create partial receipt (mapped but not implemented)
+    operationId: createPartialReceiving
+    description: The URL mapping routes POST to a "create" action that does not exist on the controller, so the request fails with 404 (see behavioral findings).
+    responses:
+      '404':
+        description: Action not found.
+
+/api/partialReceiving/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Shipment id.
+      schema:
+        type: string
+    - name: stepNumber
+      in: query
+      required: false
+      schema:
+        type: string
+  get:
+    tags: [orders]
+    summary: Read the partial receipt for a shipment
+    operationId: readPartialReceiving
+    parameters:
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+    x-contract-tests:
+      - name: happy path needs a seeded inbound shipment
+        skip: no seeded receivable shipment exists in demo data; a missing id raises an unhandled exception (500)
+    responses:
+      '200':
+        description: The partial receipt (default Grails marshaling of the command object).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/PartialReceipt'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [orders]
+    summary: Save/complete/rollback a partial receipt
+    operationId: updatePartialReceiving
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PartialReceiptInput'
+          example:
+            receiptStatus: PENDING
+            dateDelivered: 01/02/2024 12:00 +0000
+            containers: []
+    responses:
+      '200':
+        description: The refreshed partial receipt, or an empty object when completed.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/PartialReceipt'
+            example:
+              data: {}
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/partialReceiving/importCsv/{id}:
+  post:
+    tags: [orders]
+    summary: Import receiving quantities from a CSV template
+    operationId: importPartialReceivingCsv
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Shipment id.
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              importFile:
+                type: string
+                format: binary
+    responses:
+      '200':
+        description: Import succeeded.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: string
+            example:
+              data: Data was imported successfully
+      '500':
+        description: Any import error (including user errors such as editing non-importable columns) is rendered as a 500 with {errorCode, errorMessage}.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+            example:
+              errorCode: 500
+              errorMessage: 'Receipt item id: 123 not found'
+
+/api/partialReceiving/exportCsv/{id}:
+  post:
+    tags: [orders]
+    summary: Export the partial receipt as a CSV template
+    operationId: exportPartialReceivingCsv
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Shipment id.
+        schema:
+          type: string
+      - name: stepNumber
+        in: query
+        required: false
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PartialReceiptInput'
+          example:
+            containers: []
+    responses:
+      '200':
+        description: CSV attachment (Content-disposition attachment).
+        content:
+          text/csv:
+            schema:
+              type: string
+            example: 'Receipt item id,Shipment item id,Code,Name'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+# ---------------------------------------------------------------------------
+# FulfillmentApiController
+# ---------------------------------------------------------------------------
+
+/api/fulfillments/validate:
+  post:
+    tags: [orders]
+    summary: Validate an imported packing list
+    operationId: validateFulfillment
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FulfillmentInput'
+          example:
+            packingList: []
+    responses:
+      '200':
+        description: Packing list is valid; table rows echoed back.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FulfillmentValidationResult'
+            example:
+              errors: {}
+              data: []
+      '400':
+        description: Validation errors; same body shape with errors populated.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FulfillmentValidationResult'
+            example:
+              errors:
+                packingList: ['Packing list cannot be empty']
+              data: []
+
+/api/fulfillments:
+  post:
+    tags: [orders]
+    summary: Save an imported packing list as a stock movement
+    operationId: saveFulfillment
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FulfillmentInput'
+          example:
+            packingList: []
+    responses:
+      '200':
+        description: The created stock movement (default Grails marshaling).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/FulfillmentStockMovement'
+            example:
+              data: {}
+      '400':
+        description: Validation errors; packing-list rows echoed back.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FulfillmentValidationResult'
+            example:
+              errors:
+                packingList: ['Packing list cannot be empty']
+              data: []
+
+# ---------------------------------------------------------------------------
+# ConsumptionApiController
+# ---------------------------------------------------------------------------
+
+/api/consumption/aggregate:
+  get:
+    tags: [orders]
+    summary: Aggregate consumption facts for a location and date range
+    operationId: aggregateConsumption
+    parameters:
+      - name: location.id
+        in: query
+        required: false
+        description: Defaults to the session warehouse.
+        schema:
+          type: string
+      - name: startDate
+        in: query
+        required: false
+        description: Defaults to six months ago.
+        schema:
+          type: string
+      - name: endDate
+        in: query
+        required: false
+        description: Defaults to now.
+        schema:
+          type: string
+      - name: category.id
+        in: query
+        required: false
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Consumption fact rows.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ConsumptionFactEntry'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/consumption/show:
+  get:
+    tags: [orders]
+    summary: Consumption report rows (React consumption report screen)
+    operationId: showConsumption
+    parameters:
+      - name: fromDate
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: fromLocations
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: toLocations
+        in: query
+        required: false
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Consumption report rows per product.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ConsumptionRow'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/consumption/depots:
+  get:
+    tags: [orders]
+    summary: List active depot locations for consumption filters
+    operationId: consumptionDepots
+    responses:
+      '200':
+        description: Active depots.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/OrdersIdNamePair'
+
+# ---------------------------------------------------------------------------
+# BatchApiController
+# ---------------------------------------------------------------------------
+
+/api/batch/importData:
+  post:
+    tags: [orders]
+    summary: Validate/import an Excel data file (category, product, location, ...)
+    operationId: batchImportData
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              importFile:
+                type: string
+                format: binary
+              importType:
+                type: string
+                description: One of category, inventory, inventoryLevel, location, person, product, productAttribute, productCatalog, productCatalogItem, productSupplier, productSupplierPreference, productSupplierAttribute, productPackage, outboundStockMovement, tag, user, userLocation, productAssociation, productSynonym, purchaseOrderActualReadyDate.
+              importNow:
+                type: string
+                description: '"true" performs the import; otherwise the file is only validated.'
+              importDate:
+                type: string
+                description: yyyy-MM-dd HH:mm (required for importType=inventory).
+    responses:
+      '200':
+        description: Import/validation outcome. Always 200; errors are reported in data.errors.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchImportResult'
+            example:
+              data:
+                message: null
+                errors: ['Please choose a valid import type']
+                imported: false
+                location: 'Main Warehouse'
+                importType: null
+                filename: /tmp/import.xls
+                date: null
+                columnMap: null
+                data: []
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+# ---------------------------------------------------------------------------
+# DataExportApiController
+# ---------------------------------------------------------------------------
+
+/api/dataExports:
+  get:
+    tags: [orders]
+    summary: List data-export documents
+    operationId: listDataExports
+    responses:
+      '200':
+        description: Documents with document code DATA_EXPORT.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/OrdersIdNamePair'
+
+# ---------------------------------------------------------------------------
+# DocumentApiController
+# ---------------------------------------------------------------------------
+
+/api/documents:
+  get:
+    tags: [orders]
+    summary: List documents
+    operationId: listDocuments
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+      - name: q
+        in: query
+        required: false
+        description: Search term.
+        schema:
+          type: string
+      - name: documentType
+        in: query
+        required: false
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Paginated documents.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/DocumentDetail'
+                totalCount:
+                  type: integer
+  post:
+    tags: [orders]
+    summary: Create a document (multipart upload)
+    operationId: createDocument
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              fileContents:
+                type: string
+                format: binary
+              name:
+                type: string
+              documentNumber:
+                type: string
+              documentType.id:
+                type: string
+    responses:
+      '200':
+        description: Created (note - 200, not 201).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentMutationResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20003
+              message: Document ff8081817f0e3f80017f0e40a1b20003 created
+              flashMessage: null
+      '400':
+        description: Validation errors.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentMutationError'
+            example:
+              errorMessages: ['Property [filename] of class [class org.pih.warehouse.core.Document] cannot be null']
+              flashMessage: Document cannot be empty
+
+/api/documents/documentTypeOptions:
+  get:
+    tags: [orders]
+    summary: List document types as options
+    operationId: documentTypeOptions
+    responses:
+      '200':
+        description: Document types.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/OrdersIdNamePair'
+
+/api/documents/{id}/details:
+  get:
+    tags: [orders]
+    summary: Read a document's metadata
+    operationId: documentDetails
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing document returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The document metadata.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/DocumentDetail'
+      '404':
+        description: Document not found ({errorMessage} rendered directly by the controller).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrdersErrorMessage'
+
+/api/documents/{id}/update:
+  post:
+    tags: [orders]
+    summary: Update a document's metadata
+    operationId: updateDocument
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              documentNumber:
+                type: string
+              version:
+                type: integer
+                description: Optimistic-locking version.
+            additionalProperties: true
+          example:
+            name: Renamed document
+            version: 0
+    responses:
+      '200':
+        description: Updated.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, message]
+              properties:
+                data:
+                  type: object
+                  required: [id]
+                  properties:
+                    id:
+                      type: string
+                message:
+                  type: string
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20003
+              message: Document ff8081817f0e3f80017f0e40a1b20003 updated
+      '400':
+        description: Validation or optimistic-locking errors.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentMutationError'
+            example:
+              errorMessages: ['Another user has updated this Document while you were editing']
+      '404':
+        description: Document not found ({errorMessage} rendered directly by the controller).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrdersErrorMessage'
+            example:
+              errorMessage: Document with id does-not-exist not found
+
+/api/documents/{id}/upload:
+  post:
+    tags: [orders]
+    summary: Replace a document's file contents (multipart upload)
+    operationId: uploadDocument
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              fileContents:
+                type: string
+                format: binary
+              version:
+                type: string
+                description: Optimistic-locking version.
+    responses:
+      '200':
+        description: Updated.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentMutationResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20003
+              message: Document ff8081817f0e3f80017f0e40a1b20003 updated
+              flashMessage: null
+      '400':
+        description: Validation or optimistic-locking errors.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentMutationError'
+            example:
+              errorMessages: ['Another user has updated this Document while you were editing']
+              flashMessage: null
+      '404':
+        description: Document not found ({errorMessage} rendered directly by the controller).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrdersErrorMessage'
+            example:
+              errorMessage: Document with id does-not-exist not found
+
+/api/documents/{id}:
+  delete:
+    tags: [orders]
+    summary: Delete a document
+    operationId: deleteDocument
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Deleted (note - 200 with a message body, not 204).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [message]
+              properties:
+                message:
+                  type: string
+            example:
+              message: Document ff8081817f0e3f80017f0e40a1b20003 deleted
+      '400':
+        description: Cannot be deleted because of an existing association.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrdersErrorMessage'
+            example:
+              errorMessage: Document does-not-exist could not be deleted
+      '404':
+        description: Document not found ({errorMessage} rendered directly by the controller).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrdersErrorMessage'
+            example:
+              errorMessage: Document with id does-not-exist not found

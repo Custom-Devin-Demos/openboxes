@@ -1,0 +1,183 @@
+# Product Association API (ProductAssociationApiController).
+
+/api/productAssociations/search:
+  get:
+    tags: [productAssociation]
+    summary: Search product associations (paginated)
+    operationId: searchProductAssociations
+    parameters:
+      - name: q
+        in: query
+        required: false
+        description: Matches association id prefix or product name search.
+        schema:
+          type: string
+      - name: code
+        in: query
+        required: false
+        description: ProductAssociationTypeCode filter (repeatable).
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: Matching associations ({data, totalCount}).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ProductAssociation'
+                totalCount:
+                  type: integer
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/productAssociations/{id}/details:
+  get:
+    tags: [productAssociation]
+    summary: Read a product association by id
+    operationId: productAssociationDetails
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing id returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The association (unwrapped - no "data" envelope).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductAssociation'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/productAssociations/saveAssociation:
+  post:
+    tags: [productAssociation]
+    summary: Create a product association (optionally with its mutual pair)
+    operationId: createProductAssociation
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductAssociationInput'
+          example:
+            product: {id: ff80818175f31a340175f31a3fda0001}
+            associatedProduct: {id: ff80818175f31a340175f31a3fda0002}
+            code: SUBSTITUTE
+            quantity: 1
+            hasMutualAssociation: false
+    responses:
+      '200':
+        description: Created ({id, message}).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductAssociationMutationResponse'
+            example:
+              id: ff80818175f31a340175f31a3fda0003
+              message: ProductAssociation ff80818175f31a340175f31a3fda0003 created
+      '400':
+        description: Validation error ({errorCode, errorMessages} - no errorMessage field).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductAssociationValidationError'
+            example:
+              errorCode: 400
+              errorMessages: ['Property [product] of class [class org.pih.warehouse.product.ProductAssociation] cannot be null']
+
+/api/productAssociations/{id}/updateAssociation:
+  put:
+    tags: [productAssociation]
+    summary: Update a product association
+    operationId: updateProductAssociation
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductAssociationInput'
+          example:
+            code: SUBSTITUTE
+            quantity: 2
+            hasMutualAssociation: false
+            version: 0
+    responses:
+      '200':
+        description: Updated ({id, message}).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductAssociationMutationResponse'
+            example:
+              id: ff80818175f31a340175f31a3fda0003
+              message: ProductAssociation ff80818175f31a340175f31a3fda0003 updated
+      '400':
+        description: Validation or optimistic-locking error ({errorCode, errorMessages}).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductAssociationValidationError'
+            example:
+              errorCode: 400
+              errorMessages: [Another user has updated this ProductAssociation while you were editing]
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/productAssociations/{id}/deleteAssociation:
+  delete:
+    tags: [productAssociation]
+    summary: Delete a product association (optionally its mutual pair)
+    operationId: deleteProductAssociation
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: mutualDelete
+        in: query
+        required: false
+        description: Also delete the mutual association when true.
+        schema:
+          type: boolean
+    responses:
+      '200':
+        description: Deleted ({message}).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [message]
+              properties:
+                message:
+                  type: string
+            example:
+              message: ProductAssociation ff80818175f31a340175f31a3fda0003 deleted
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'

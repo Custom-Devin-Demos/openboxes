@@ -1,0 +1,198 @@
+# Schemas for the application-level API (ApiController). See paths/app.yaml.
+
+AppLoginRequest:
+  type: object
+  required:
+    - username
+    - password
+  properties:
+    username:
+      type: string
+      example: admin
+    password:
+      type: string
+      example: password
+    location:
+      type: string
+      nullable: true
+      description: Optional location id to set as the acting facility at login.
+
+AppStatus:
+  type: object
+  required:
+    - status
+    - database
+  properties:
+    status:
+      type: string
+      example: OK
+    database:
+      type: object
+      required:
+        - status
+        - message
+      properties:
+        status:
+          type: boolean
+          description: True when the database responded to a test query.
+        message:
+          type: string
+          example: Database is available
+
+AppLocaleResponse:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: object
+      required:
+        - activeLanguage
+        - activeLanguageTag
+      properties:
+        activeLanguage:
+          type: string
+          example: en
+        activeLanguageTag:
+          type: string
+          example: en
+
+AppLoginContext:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: object
+      required:
+        - labels
+      properties:
+        labels:
+          type: object
+          description: Localized labels for the login page.
+          additionalProperties:
+            type: string
+
+AppSignupContext:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: object
+      required:
+        - labels
+      properties:
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+        recaptchaEnabled:
+          type: boolean
+        recaptchaSiteKey:
+          type: string
+          nullable: true
+        additionalQuestions:
+          type: array
+          items: {}
+        supportedLocales:
+          type: array
+          items:
+            type: object
+            required:
+              - code
+              - name
+            properties:
+              code:
+                type: string
+                example: en
+              name:
+                type: string
+                example: English
+
+AppMenuConfig:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: object
+      required:
+        - menuConfig
+      properties:
+        menuConfig:
+          type: array
+          description: Menu sections (shape driven by configuration).
+          items:
+            type: object
+        menuSectionsUrlParts:
+          type: object
+          nullable: true
+          description: Only present when an acting location is set in the session.
+
+AppContext:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: object
+      description: |
+        Application context for the current session: user, location, locale,
+        menu, permissions, feature flags and instance-level configuration.
+        Keys vary with configuration; only a stable subset is documented.
+      properties:
+        user:
+          type: object
+          nullable: true
+        location:
+          type: object
+          nullable: true
+        isUserAdmin:
+          type: boolean
+        supportedActivities:
+          type: array
+          items:
+            type: string
+      additionalProperties: true
+
+AppRequestTypes:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        type: object
+        required:
+          - id
+          - name
+        properties:
+          id:
+            type: string
+            example: STOCK
+          name:
+            type: string
+            example: Stock
+
+AppSupportLinks:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: object
+      description: Configured support link map (openboxes.supportLinks).
+      additionalProperties:
+        type: string
+
+AppResettingInstanceCommand:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: string
+      nullable: true
+      description: Configured shell command shown to admins for resetting the instance.

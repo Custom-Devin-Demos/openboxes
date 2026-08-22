@@ -1,0 +1,240 @@
+# Schemas for the data-migration diagnostics API (MigrationApiController).
+
+MigrationDataMigration:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: object
+      required:
+        - organizationCount
+        - inventoryTransactionCount
+        - productInventoryTransactionCount
+        - productInventoryTransactionInCurrentLocationCount
+        - productsWithProductInventoryTransactionInCurrentLocation
+        - productSupplierCount
+        - overlappingTransactions
+        - amountOfMissingInventoryImportTransactionSources
+        - amountOfMissingCycleCountTransactionSources
+      properties:
+        organizationCount:
+          type: integer
+        inventoryTransactionCount:
+          type: integer
+        productInventoryTransactionCount:
+          type: integer
+        productInventoryTransactionInCurrentLocationCount:
+          type: integer
+        productsWithProductInventoryTransactionInCurrentLocation:
+          type: array
+          nullable: true
+          items:
+            type: string
+        productSupplierCount:
+          type: integer
+        overlappingTransactions:
+          type: array
+          items:
+            type: string
+        amountOfMissingInventoryImportTransactionSources:
+          type: integer
+        amountOfMissingCycleCountTransactionSources:
+          type: integer
+        amountOfMissingRecordStockTransactionSources:
+          type: integer
+          nullable: true
+          description: Null when other missing-source counts are non-zero.
+
+MigrationDimensionTables:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: object
+      required:
+        - dateDimensionCount
+        - locationDimensionCount
+        - lotDimensionCount
+        - productDimensionCount
+      properties:
+        dateDimensionCount:
+          type: integer
+        locationDimensionCount:
+          type: integer
+        lotDimensionCount:
+          type: integer
+        productDimensionCount:
+          type: integer
+
+MigrationFactTables:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: object
+      required:
+        - transactionFactCount
+        - consumptionFactCount
+        - stockoutFactCount
+      properties:
+        transactionFactCount:
+          type: integer
+        consumptionFactCount:
+          type: integer
+        stockoutFactCount:
+          type: integer
+
+MigrationMaterializedViews:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: object
+      required:
+        - productDemandCount
+        - productAvailabilityCount
+      properties:
+        productDemandCount:
+          type: integer
+        productAvailabilityCount:
+          type: integer
+
+MigrationProductAvailabilityByLocation:
+  type: object
+  required:
+    - data
+    - totalCount
+  properties:
+    data:
+      type: array
+      items:
+        type: object
+        required:
+          - locationId
+          - locationName
+        properties:
+          locationId:
+            type: string
+          locationName:
+            type: string
+          productAvailabilityCount:
+            type: integer
+            nullable: true
+            description: Null for depots with no product_availability rows.
+    totalCount:
+      type: integer
+
+MigrationCount:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: object
+      required:
+        - count
+      properties:
+        count:
+          type: integer
+          nullable: true
+          description: Null when the criteria query returns no rows.
+
+MigrationCompareRow:
+  type: object
+  properties:
+    productCode:
+      type: string
+      nullable: true
+    lotNumber:
+      type: string
+      nullable: true
+    binLocation:
+      type: string
+      nullable: true
+    quantityFromProductAvailability:
+      type: integer
+      nullable: true
+    quantityFromTransactions:
+      type: integer
+      nullable: true
+    includedInProductAvailability:
+      type: boolean
+
+MigrationBareCount:
+  type: object
+  description: Bare count shape rendered when `format=count` is passed.
+  required:
+    - count
+  properties:
+    count:
+      type: integer
+
+MigrationReceiptRow:
+  type: object
+  properties:
+    shipmentId:
+      type: string
+      nullable: true
+    shipmentNumber:
+      type: string
+      nullable: true
+    shipmentStatus:
+      type: string
+      nullable: true
+    shipmentName:
+      type: string
+      nullable: true
+    receiptNumber:
+      type: string
+      nullable: true
+    receiptStatus:
+      type: string
+
+MigrationShipmentRow:
+  type: object
+  properties:
+    shipmentId:
+      type: string
+      nullable: true
+    shipmentNumber:
+      type: string
+      nullable: true
+    shipmentStatus:
+      type: string
+    origin:
+      type: string
+      nullable: true
+    destination:
+      type: string
+      nullable: true
+
+MigrationStockMovementRow:
+  type: object
+  properties:
+    id:
+      type: string
+      nullable: true
+    identifier:
+      type: string
+      nullable: true
+    status:
+      type: string
+      nullable: true
+    dateCreated:
+      type: string
+      nullable: true
+    origin:
+      type: string
+      nullable: true
+    requested:
+      description: Nullable numeric/string aggregate from the raw SQL row.
+    picked:
+      description: Nullable numeric/string aggregate from the raw SQL row.
+    shipped:
+      description: Nullable numeric/string aggregate from the raw SQL row.
+    issued:
+      description: Nullable numeric/string aggregate from the raw SQL row.
