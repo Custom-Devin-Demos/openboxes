@@ -20,12 +20,15 @@ servers:
 security:
   - sessionCookie: []
 tags:
+  - name: inventory
+    description: Inventory, inventory levels, bin/internal locations, cycle counts, stock adjustments, record stock, stock card, transaction entries
   - name: localization
     description: Translations / localized messages (LocalizationApiController)
 
 # One line per per-domain fragment file under paths/. Sibling sessions add
 # their fragment here (append a single line; keep the list alphabetized).
 x-fragments:
+  - paths/inventory.yaml
   - paths/localization.yaml
 
 paths: {}

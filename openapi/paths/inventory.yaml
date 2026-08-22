@@ -1,0 +1,3071 @@
+# Inventory domain (Phase 3 batch: inventory). Characterization specs for:
+# InventoryApiController, InventoryLevelApiController,
+# InventoryTransactionSummaryApiController, BinLocationApiController,
+# InternalLocationApiController, CycleCountApiController,
+# StockAdjustmentApiController, RecordStockApiController,
+# StockCardApiController, TransactionEntryApiController.
+#
+# Map of <path> -> PathItem, merged into the root document's `paths`.
+
+# --- InventoryApiController -------------------------------------------------
+
+/api/facilities/{facilityId}/inventories/import:
+  post:
+    tags: [inventory]
+    summary: Import inventory baseline quantities from a CSV file
+    operationId: importInventoryCsv
+    parameters:
+      - name: facilityId
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        text/csv:
+          schema:
+            type: string
+            description: CSV payload. The request Content-Type must be exactly text/csv or a 500 is returned.
+          example: |
+            Product Code,Product Name,Lot Number,Expiration Date,Bin Location,Quantity
+            DM0001,Acetaminophen 325mg tablet,,,,100
+    responses:
+      '200':
+        description: Inventory imported (empty body).
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/facilities/{facilityId}/inventories/reorderReport:
+  get:
+    tags: [inventory]
+    summary: Reorder report for a facility
+    operationId: getReorderReport
+    parameters:
+      - name: facilityId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: format
+        in: query
+        required: false
+        description: Use `csv` for a CSV download instead of JSON.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        params:
+          facilityId: '{facilityId}'
+        status: 200
+    responses:
+      '200':
+        description: Reorder report rows.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReorderReportResponse'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/inventories/expirationHistoryReport:
+  get:
+    tags: [inventory]
+    summary: Expiration history report
+    operationId: getExpirationHistoryReport
+    parameters:
+      - name: format
+        in: query
+        required: false
+        description: Use `csv` for a CSV download instead of JSON.
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Expiration history rows plus totals.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpirationHistoryReportResponse'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/inventory/browse:
+  get:
+    tags: [inventory]
+    summary: Browse inventory (React inventory browser data provider)
+    operationId: browseInventory
+    parameters:
+      - name: searchTerms
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: categoryId
+        in: query
+        required: false
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    responses:
+      '200':
+        description: Search results plus filter options.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryBrowseResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/inventory/listInventory:
+  get:
+    tags: [inventory]
+    summary: Inventory report list (current stock by product)
+    operationId: listInventory
+    parameters:
+      - name: categories
+        in: query
+        required: false
+        description: Category ids (repeatable).
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Inventory items for the session warehouse.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockListResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/inventory/listLowStock:
+  get:
+    tags: [inventory]
+    summary: Low stock report list
+    operationId: listLowStock
+    responses:
+      '200':
+        description: Low stock items for the session warehouse.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockListResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/inventory/listReorderStock:
+  get:
+    tags: [inventory]
+    summary: Reorder stock report list
+    operationId: listReorderStock
+    responses:
+      '200':
+        description: Reorder stock items for the session warehouse.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockListResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/inventory/listDailyTransactions:
+  get:
+    tags: [inventory]
+    summary: Daily transactions list
+    operationId: listDailyTransactions
+    parameters:
+      - name: date
+        in: query
+        required: false
+        description: Date formatted `dd/MM/yyyy` (defaults to today).
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Transactions grouped by day plus the selected day's transactions.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DailyTransactionsResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/inventory/listExpiredStock:
+  get:
+    tags: [inventory]
+    summary: Expired stock report
+    operationId: listExpiredStock
+    parameters:
+      - name: categoryId
+        in: query
+        required: false
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Expired inventory items with quantities.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpirationStockListResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/inventory/listExpiringStock:
+  get:
+    tags: [inventory]
+    summary: Expiring stock report
+    operationId: listExpiringStock
+    parameters:
+      - name: expirationStatus
+        in: query
+        required: false
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Expiring inventory items with quantities.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpirationStockListResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/inventory/editBinLocation:
+  get:
+    tags: [inventory]
+    summary: Edit bin location screen data provider
+    operationId: editBinLocation
+    parameters:
+      - name: productCode
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: binLocation
+        in: query
+        required: false
+        description: Bin location name within the session warehouse.
+        schema:
+          type: string
+      - name: lotNumber
+        in: query
+        required: false
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product code and lot number
+        query:
+          productCode: '{productCode}'
+          lotNumber: LOT-ACE-001
+        status: 200
+      - name: missing lot number causes NPE (actual behavior)
+        query:
+          productCode: '{productCode}'
+        status: 500
+    responses:
+      '200':
+        description: Bin location editing context.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditBinLocationResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/inventory/adjustStock:
+  post:
+    tags: [inventory]
+    summary: Save a stock adjustment (edit bin location screen)
+    operationId: adjustStock
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            description: AdjustStockCommand fields bound from request parameters.
+            properties:
+              inventoryItem.id:
+                type: string
+              binLocation.id:
+                type: string
+              quantityAdjusted:
+                type: integer
+              reasonCode:
+                type: string
+              comment:
+                type: string
+          example:
+            inventoryItem.id: ff8081817f0e3f80017f0e40a1b20003
+            quantityAdjusted: 5
+            reasonCode: DAMAGED_PRODUCT
+    responses:
+      '200':
+        description: Adjustment saved.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessMessageResponse'
+            example:
+              success: true
+              message: Inventory item ff8081817f0e3f80017f0e40a1b20003 updated
+      '400':
+        description: Validation failure (`{success:false, errors}`).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessErrorsResponse'
+            example:
+              success: false
+              errors: ['Property [inventoryItem] cannot be null']
+
+/api/inventory/createTransaction:
+  get:
+    tags: [inventory]
+    summary: Create transaction screen data provider
+    operationId: getCreateTransactionContext
+    parameters:
+      - name: product.id
+        in: query
+        required: false
+        description: Product id(s); either this or inventoryItem.id is required (500 otherwise).
+        schema:
+          type: string
+      - name: inventoryItem.id
+        in: query
+        required: false
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        query:
+          product.id: '{productId}'
+        status: 200
+      - name: no product or inventory item returns 500
+        status: 500
+    responses:
+      '200':
+        description: Transaction creation context.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTransactionContextResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/inventory/saveAdjustmentTransaction:
+  post:
+    tags: [inventory]
+    summary: Save an inventory adjustment transaction
+    operationId: saveAdjustmentTransaction
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            description: TransactionCommand fields bound from request parameters.
+            additionalProperties: true
+          example:
+            transactionInstance.transactionDate: 01/01/2025 12:00
+    responses:
+      '200':
+        description: Transaction saved.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveTransactionSuccessResponse'
+            example:
+              success: true
+              message: Successfully saved transaction
+              productId: seed-product-01
+      '400':
+        description: Validation failure (`{success:false, errors}`).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessErrorsResponse'
+            example:
+              success: false
+              errors: ['Transaction entry quantity is invalid']
+
+/api/inventory/saveDebitTransaction:
+  post:
+    tags: [inventory]
+    summary: Save a debit transaction (transfer out / consumption)
+    operationId: saveDebitTransaction
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            additionalProperties: true
+          example:
+            product.id: seed-product-01
+    responses:
+      '200':
+        description: Transaction saved.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveTransactionSuccessResponse'
+            example:
+              success: true
+              message: Successfully saved transaction
+              productId: seed-product-01
+      '400':
+        description: Validation failure.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessErrorsResponse'
+            example:
+              success: false
+              errors: ['Transaction entry quantity is invalid']
+
+/api/inventory/saveCreditTransaction:
+  post:
+    tags: [inventory]
+    summary: Save a credit transaction (transfer in)
+    operationId: saveCreditTransaction
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            additionalProperties: true
+          example:
+            product.id: seed-product-01
+    responses:
+      '200':
+        description: Transaction saved.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveTransactionSuccessResponse'
+            example:
+              success: true
+              message: Successfully saved transaction
+              productId: seed-product-01
+      '400':
+        description: Validation failure.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessErrorsResponse'
+            example:
+              success: false
+              errors: ['Inventory item is invalid']
+
+/api/inventory/transactions/{id}:
+  get:
+    tags: [inventory]
+    summary: Edit transaction screen data provider
+    operationId: getTransactionEditContext
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: unknown transaction returns custom 404 body
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Transaction editing context.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionEditContextResponse'
+      '404':
+        description: Transaction not found (custom `{error}` body, not the shared ErrorResponse).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionNotFoundResponse'
+
+/api/inventory/saveTransaction:
+  post:
+    tags: [inventory]
+    summary: Save transaction header (edit transaction screen)
+    operationId: saveTransaction
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            additionalProperties: true
+          example:
+            id: ff80818195a9d87b0195a9dd6a2c0001
+            comment: Updated comment
+    responses:
+      '200':
+        description: Transaction saved.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveTransactionHeaderResponse'
+            example:
+              success: true
+              message: Transaction saved
+              id: ff80818195a9d87b0195a9dd6a2c0001
+      '400':
+        description: Save failed.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveTransactionHeaderResponse'
+            example:
+              success: false
+              message: Unable to save transaction
+              errors: ['Property [transactionType] cannot be null']
+              id: null
+
+/api/inventory/transactionEntries/{id}:
+  delete:
+    tags: [inventory]
+    summary: Delete a transaction entry (edit transaction screen)
+    operationId: deleteInventoryTransactionEntry
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Entry deleted.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessMessageResponse'
+            example:
+              success: true
+              message: Transaction entry 123 deleted
+      '404':
+        description: Entry not found (`{success:false, message}` body with 404 status).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessMessageResponse'
+            example:
+              success: false
+              message: Transaction entry 123 not found
+
+/api/inventory/listTransactions:
+  get:
+    tags: [inventory]
+    summary: Transaction list screen data provider
+    operationId: listInventoryTransactions
+    parameters:
+      - name: transactionNumber
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: transactionType.id
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: transactionDateFrom
+        in: query
+        required: false
+        description: Formatted `MM/dd/yyyy`.
+        schema:
+          type: string
+      - name: transactionDateTo
+        in: query
+        required: false
+        description: Formatted `MM/dd/yyyy`.
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    responses:
+      '200':
+        description: Transactions for the session warehouse.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListTransactionsResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/inventory/showTransaction/{id}:
+  get:
+    tags: [inventory]
+    summary: Show transaction screen data provider
+    operationId: showTransaction
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: unknown transaction returns custom 404 body
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Transaction details.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShowTransactionResponse'
+      '404':
+        description: Transaction not found (custom `{error}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionNotFoundResponse'
+
+/api/inventory/deleteTransaction/{id}:
+  delete:
+    tags: [inventory]
+    summary: Delete a transaction
+    operationId: deleteTransaction
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Transaction deleted.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessMessageResponse'
+            example:
+              success: true
+              message: Transaction 123 deleted
+      '400':
+        description: Delete failed (data integrity violation).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessMessageResponse'
+            example:
+              success: false
+              message: Transaction 123 could not be deleted
+      '404':
+        description: Transaction not found (`{success:false, message}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessMessageResponse'
+            example:
+              success: false
+              message: Transaction 123 not found
+
+/api/inventory/listBinLocations:
+  get:
+    tags: [inventory]
+    summary: Quantity on hand by bin location (manage inventory screen)
+    operationId: listInventoryBinLocations
+    responses:
+      '200':
+        description: Quantities by bin location for the session warehouse.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListBinLocationsQuantityResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/inventory/showProducts:
+  get:
+    tags: [inventory]
+    summary: Products with empty lot number issues, grouped by category
+    operationId: showProductsWithoutEmptyLotNumber
+    responses:
+      '200':
+        description: Products grouped by category.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShowProductsResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/inventory/uploadInventory:
+  post:
+    tags: [inventory]
+    summary: Parse an uploaded inventory Excel file
+    operationId: uploadInventory
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+          example:
+            file: (binary xls content)
+    responses:
+      '200':
+        description: Parsed inventory rows.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadInventoryResponse'
+            example:
+              inventoryList:
+                - - {key: product.productCode, value: DM0001}
+                  - {key: quantity, value: '100'}
+      '400':
+        description: No file uploaded (custom `{error}` body).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [error]
+              properties:
+                error:
+                  type: string
+            example:
+              error: Please select a file to upload
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+# --- InventoryLevelApiController --------------------------------------------
+
+/api/facilities/{facilityId}/inventory-levels:
+  get:
+    tags: [inventory]
+    summary: List facility-level inventory levels
+    operationId: listInventoryLevels
+    parameters:
+      - name: facilityId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: format
+        in: query
+        required: false
+        description: Use `csv` or `xls` for file downloads instead of JSON.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        params:
+          facilityId: '{facilityId}'
+        status: 200
+    responses:
+      '200':
+        description: Inventory levels without an internal location.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryLevelListResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/inventoryLevels/search:
+  get:
+    tags: [inventory]
+    summary: Search inventory levels (inventory level list screen)
+    operationId: searchInventoryLevels
+    parameters:
+      - name: q
+        in: query
+        required: false
+        description: Product search terms (space separated).
+        schema:
+          type: string
+      - name: location.id
+        in: query
+        required: false
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    responses:
+      '200':
+        description: Matching inventory levels plus location options.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryLevelSearchResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/inventoryLevels/formContext:
+  get:
+    tags: [inventory]
+    summary: Inventory level create form context
+    operationId: inventoryLevelCreateFormContext
+    parameters:
+      - name: product.id
+        in: query
+        required: false
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Form context (no existing inventory level).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryLevelFormContextResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/inventoryLevels/{id}/formContext:
+  get:
+    tags: [inventory]
+    summary: Inventory level edit form context
+    operationId: inventoryLevelEditFormContext
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Inventory level id, or a product id (legacy fallback).
+        schema:
+          type: string
+    x-contract-tests:
+      - name: unknown id returns custom 404 body
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Form context for the existing inventory level.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryLevelFormContextResponse'
+      '404':
+        description: Inventory level not found (custom `{errorMessage}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryLevelNotFoundResponse'
+
+/api/inventoryLevels/{id}/details:
+  get:
+    tags: [inventory]
+    summary: Inventory level details (show screen)
+    operationId: inventoryLevelDetails
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: unknown id returns custom 404 body
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Detailed inventory level.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryLevelDetailsResponse'
+      '404':
+        description: Inventory level not found (custom `{errorMessage}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryLevelNotFoundResponse'
+
+/api/inventoryLevels:
+  post:
+    tags: [inventory]
+    summary: Create an inventory level
+    operationId: createInventoryLevel
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            description: InventoryLevel fields bound from request parameters; product.id and location.id are required.
+            additionalProperties: true
+          example:
+            product.id: seed-product-01
+            location.id: seed-loc-main
+            minQuantity: 10
+    responses:
+      '200':
+        description: Inventory level created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryLevelMutationSuccessResponse'
+            example:
+              success: true
+              message: InventoryLevel created
+              id: ff8081817f0e3f80017f0e40a1b20003
+              productId: seed-product-01
+      '400':
+        description: Duplicate inventory level or validation errors.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryLevelMutationErrorResponse'
+            example:
+              success: false
+              errorMessages: ["Inventory level already exists for 'Product' in location 'Main Warehouse', bin location 'null' "]
+
+/api/inventoryLevels/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  post:
+    tags: [inventory]
+    summary: Update an inventory level (POST alias)
+    operationId: updateInventoryLevelPost
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            additionalProperties: true
+          example:
+            minQuantity: 20
+            version: 0
+    responses:
+      '200':
+        description: Inventory level updated.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryLevelMutationSuccessResponse'
+            example:
+              success: true
+              message: InventoryLevel updated
+              productId: seed-product-01
+      '400':
+        description: Optimistic locking failure or validation errors.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryLevelMutationErrorResponse'
+            example:
+              success: false
+              errorMessages: ['Another user has updated this InventoryLevel while you were editing']
+      '404':
+        description: Inventory level not found (`{success:false, errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryLevelMutationErrorResponse'
+            example:
+              success: false
+              errorMessages: ['InventoryLevel not found']
+  put:
+    tags: [inventory]
+    summary: Update an inventory level
+    operationId: updateInventoryLevelPut
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            additionalProperties: true
+          example:
+            minQuantity: 20
+    responses:
+      '200':
+        description: Inventory level updated.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryLevelMutationSuccessResponse'
+            example:
+              success: true
+              message: InventoryLevel updated
+              productId: seed-product-01
+      '400':
+        description: Validation errors.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryLevelMutationErrorResponse'
+            example:
+              success: false
+              errorMessages: ['Property [minQuantity] is invalid']
+      '404':
+        description: Inventory level not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryLevelMutationErrorResponse'
+            example:
+              success: false
+              errorMessages: ['InventoryLevel not found']
+  delete:
+    tags: [inventory]
+    summary: Delete an inventory level
+    operationId: deleteInventoryLevel
+    responses:
+      '200':
+        description: Inventory level deleted.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryLevelMutationSuccessResponse'
+            example:
+              success: true
+              message: InventoryLevel deleted
+              productId: seed-product-01
+      '400':
+        description: Delete failed (data integrity violation).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryLevelMutationErrorResponse'
+            example:
+              success: false
+              errorMessages: ['InventoryLevel could not be deleted']
+              productId: seed-product-01
+      '404':
+        description: Inventory level not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryLevelMutationErrorResponse'
+            example:
+              success: false
+              errorMessages: ['InventoryLevel not found']
+
+# --- InventoryTransactionSummaryApiController --------------------------------
+
+/api/reports/inventory-transactions-summary:
+  get:
+    tags: [inventory]
+    summary: Inventory transactions summary report
+    operationId: getInventoryTransactionsSummaryReport
+    parameters:
+      - name: facility.id
+        in: query
+        required: true
+        description: Facility location id (400 if missing).
+        schema:
+          type: string
+      - name: startDate
+        in: query
+        required: false
+        description: Formatted `MM/dd/yyyy`.
+        schema:
+          type: string
+      - name: endDate
+        in: query
+        required: false
+        description: Formatted `MM/dd/yyyy`.
+        schema:
+          type: string
+      - name: format
+        in: query
+        required: false
+        description: Use `csv` for a CSV download instead of JSON.
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    x-contract-tests:
+      - name: seeded facility
+        query:
+          facility.id: '{facilityId}'
+          startDate: 01/01/2020
+          endDate: 12/31/2030
+        status: 200
+      - name: missing facility returns 400
+        status: 400
+    responses:
+      '200':
+        description: Paginated transaction summary rows.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryTransactionsSummaryResponse'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+# --- BinLocationApiController -------------------------------------------------
+
+/api/binLocations:
+  get:
+    tags: [inventory]
+    summary: List bin locations of a facility
+    operationId: listBinLocations
+    parameters:
+      - name: parentLocation.id
+        in: query
+        required: false
+        description: Facility id (defaults to the session warehouse; 500 if neither resolves).
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query:
+          parentLocation.id: '{facilityId}'
+        status: 200
+    responses:
+      '200':
+        description: Bin locations (default Grails JSON of Location objects).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BinLocationListResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/binLocations/{id}:
+  get:
+    tags: [inventory]
+    summary: Read a bin location by id
+    operationId: readBinLocation
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: unknown id returns 404 (ObjectNotFoundException)
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The bin location (default Grails JSON of a Location object).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BinLocationReadResponse'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+# --- InternalLocationApiController -------------------------------------------
+
+/api/internalLocations:
+  get:
+    tags: [inventory]
+    summary: List internal locations of a facility
+    operationId: listInternalLocations
+    parameters:
+      - name: location.id
+        in: query
+        required: false
+        description: Facility id (defaults to the session warehouse).
+        schema:
+          type: string
+      - name: locationTypeCode
+        in: query
+        required: false
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query:
+          location.id: '{facilityId}'
+        status: 200
+    responses:
+      '200':
+        description: Internal locations.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternalLocationListResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/internalLocations/search:
+  get:
+    tags: [inventory]
+    summary: Search internal locations
+    operationId: searchInternalLocations
+    parameters:
+      - name: location.id
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: locationTypeCode
+        in: query
+        required: false
+        description: Repeatable; defaults to INTERNAL and BIN_LOCATION.
+        schema:
+          type: string
+      - name: searchTerm
+        in: query
+        required: false
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    x-contract-tests:
+      - name: seeded facility
+        query:
+          location.id: '{facilityId}'
+        status: 200
+    responses:
+      '200':
+        description: Matching internal locations (default Grails JSON) with totalCount.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternalLocationSearchResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/internalLocations/receiving:
+  get:
+    tags: [inventory]
+    summary: List receiving internal locations
+    operationId: listReceivingInternalLocations
+    parameters:
+      - name: location.id
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: shipmentNumber
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: locationTypeCode
+        in: query
+        required: false
+        description: Repeatable; defaults to BIN_LOCATION.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query:
+          location.id: '{facilityId}'
+        status: 200
+    responses:
+      '200':
+        description: Receiving locations.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternalLocationListResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/internalLocations/{id}:
+  get:
+    tags: [inventory]
+    summary: Read an internal location by id
+    operationId: readInternalLocation
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility id
+        params:
+          id: '{facilityId}'
+        status: 200
+    responses:
+      '200':
+        description: The location (default Grails JSON; `data` is null for unknown ids).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternalLocationReadResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+# --- CycleCountApiController ---------------------------------------------------
+
+/api/facilities/{facilityId}/cycle-counts/candidates:
+  get:
+    tags: [inventory]
+    summary: List cycle count candidates for a facility
+    operationId: getCycleCountCandidates
+    parameters:
+      - name: facilityId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: format
+        in: query
+        required: false
+        description: Use `csv` for a CSV download instead of JSON.
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    x-contract-tests:
+      - name: seeded facility
+        params:
+          facilityId: '{facilityId}'
+        status: 200
+    responses:
+      '200':
+        description: Candidates in the JsonSerializer envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CycleCountCandidatesResponse'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/facilities/{facilityId}/cycle-counts/requests/pending:
+  get:
+    tags: [inventory]
+    summary: List pending cycle count requests
+    operationId: getPendingCycleCountRequests
+    parameters:
+      - name: facilityId
+        in: path
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    x-contract-tests:
+      - name: seeded facility
+        params:
+          facilityId: '{facilityId}'
+        status: 200
+    responses:
+      '200':
+        description: Pending requests in the JsonSerializer envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CycleCountPaginatedEnvelope'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/facilities/{facilityId}/cycle-counts/requests/batch:
+  parameters:
+    - name: facilityId
+      in: path
+      required: true
+      schema:
+        type: string
+  post:
+    tags: [inventory]
+    summary: Create cycle count requests (batch)
+    operationId: createCycleCountRequests
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CycleCountRequestBatchInput'
+          example:
+            requests:
+              - facility: seed-loc-main
+                product: seed-product-01
+                blindCount: true
+    responses:
+      '200':
+        description: Created requests in the JsonSerializer envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CycleCountEnvelope'
+            example:
+              data:
+                - id: ff8081819501aa2e019501ab60520001
+                  status: CREATED
+              status: 200
+              count: 1
+      '400':
+        $ref: '#/components/responses/BadRequest'
+  patch:
+    tags: [inventory]
+    summary: Update cycle count requests (batch)
+    operationId: updateCycleCountRequests
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CycleCountUpdateRequestBatchInput'
+          example:
+            requests:
+              - id: ff8081819501aa2e019501ab60520001
+                blindCount: false
+    responses:
+      '200':
+        description: Updated requests in the JsonSerializer envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CycleCountEnvelope'
+            example:
+              data:
+                - id: ff8081819501aa2e019501ab60520001
+                  status: CREATED
+              status: 200
+              count: 1
+      '400':
+        $ref: '#/components/responses/BadRequest'
+  delete:
+    tags: [inventory]
+    summary: Delete cycle count requests (batch)
+    operationId: deleteCycleCountRequests
+    parameters:
+      - name: id
+        in: query
+        required: false
+        description: Cycle count request ids (repeatable).
+        schema:
+          type: string
+    responses:
+      '204':
+        description: Requests deleted (no content).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/facilities/{facility}/cycle-counts/start/batch:
+  post:
+    tags: [inventory]
+    summary: Start cycle counts (batch)
+    operationId: startCycleCounts
+    parameters:
+      - name: facility
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CycleCountStartBatchInput'
+          example:
+            requests:
+              - requestId: ff8081819501aa2e019501ab60520001
+                countIndex: 0
+    responses:
+      '200':
+        description: Started cycle counts in the JsonSerializer envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CycleCountEnvelope'
+            example:
+              data:
+                - id: ff8081819501aa2e019501ac00000002
+                  status: COUNTING
+              status: 200
+              count: 1
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/facilities/{facility}/cycle-counts/recount/start/batch:
+  post:
+    tags: [inventory]
+    summary: Start recounts (batch)
+    operationId: startRecounts
+    parameters:
+      - name: facility
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CycleCountStartBatchInput'
+          example:
+            requests:
+              - requestId: ff8081819501aa2e019501ab60520001
+    responses:
+      '200':
+        description: Started recounts in the JsonSerializer envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CycleCountEnvelope'
+            example:
+              data:
+                - id: ff8081819501aa2e019501ac00000002
+                  status: REQUESTED_RECOUNT
+              status: 200
+              count: 1
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/facilities/{facility}/cycle-counts:
+  get:
+    tags: [inventory]
+    summary: List cycle counts by ids
+    operationId: listCycleCounts
+    parameters:
+      - name: facility
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: query
+        required: false
+        description: Cycle count ids (repeatable).
+        schema:
+          type: string
+      - name: sortBy
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: format
+        in: query
+        required: false
+        description: Use `xls` or `pdf` for file downloads instead of JSON.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility, no ids
+        params:
+          facility: '{facilityId}'
+        status: 200
+    responses:
+      '200':
+        description: Cycle counts in the JsonSerializer envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CycleCountEnvelope'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/facilities/{facility}/cycle-counts/{cycleCountId}:
+  delete:
+    tags: [inventory]
+    summary: Delete a cycle count and its associations
+    operationId: deleteCycleCount
+    parameters:
+      - name: facility
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: cycleCountId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '204':
+        description: Cycle count deleted (no content).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/facilities/{facility}/cycle-counts/{cycleCountId}/count:
+  post:
+    tags: [inventory]
+    summary: Submit a count
+    operationId: submitCount
+    parameters:
+      - name: facility
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: cycleCountId
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CycleCountSubmitCountInput'
+          example:
+            refreshQuantityOnHand: false
+            failOnOutdatedQuantity: true
+            requireRecountOnDiscrepancy: true
+    responses:
+      '200':
+        description: The cycle count in the JsonSerializer envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CycleCountObjectEnvelope'
+            example:
+              data:
+                id: ff8081819501aa2e019501ac00000002
+                status: COUNTED
+              status: 200
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/facilities/{facility}/cycle-counts/{cycleCountId}/recount:
+  post:
+    tags: [inventory]
+    summary: Submit a recount
+    operationId: submitRecount
+    parameters:
+      - name: facility
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: cycleCountId
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CycleCountSubmitCountInput'
+          example:
+            failOnOutdatedQuantity: false
+    responses:
+      '200':
+        description: The cycle count in the JsonSerializer envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CycleCountObjectEnvelope'
+            example:
+              data:
+                id: ff8081819501aa2e019501ac00000002
+                status: COMPLETED
+              status: 200
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/facilities/{facility}/cycle-counts/items/{cycleCountItemId}:
+  parameters:
+    - name: facility
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: cycleCountItemId
+      in: path
+      required: true
+      schema:
+        type: string
+  patch:
+    tags: [inventory]
+    summary: Update a cycle count item
+    operationId: updateCycleCountItem
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CycleCountItemInput'
+          example:
+            quantityCounted: 100
+            countIndex: 0
+    responses:
+      '200':
+        description: The cycle count item in the JsonSerializer envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CycleCountObjectEnvelope'
+            example:
+              data:
+                id: ff8081819501aa2e019501ad00000003
+                quantityCounted: 100
+              status: 200
+      '400':
+        $ref: '#/components/responses/BadRequest'
+  delete:
+    tags: [inventory]
+    summary: Delete a cycle count item
+    operationId: deleteCycleCountItem
+    responses:
+      '204':
+        description: Item deleted (no content).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/facilities/{facility}/cycle-counts/items/upload/count:
+  post:
+    tags: [inventory]
+    summary: Upload cycle count items (count) from an Excel file
+    operationId: uploadCycleCountItems
+    parameters:
+      - name: facility
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              importFile:
+                type: string
+                format: binary
+          example:
+            importFile: (binary xls content)
+    responses:
+      '200':
+        description: Parsed rows plus validation errors.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CycleCountItemsUploadResponse'
+            example:
+              data: []
+              status: 200
+              count: 0
+              errors: []
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/facilities/{facility}/cycle-counts/items/upload/recount:
+  post:
+    tags: [inventory]
+    summary: Upload cycle count items (recount) from an Excel file
+    operationId: uploadCycleCountRecountItems
+    parameters:
+      - name: facility
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              importFile:
+                type: string
+                format: binary
+          example:
+            importFile: (binary xls content)
+    responses:
+      '200':
+        description: Parsed rows plus validation errors.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CycleCountItemsUploadResponse'
+            example:
+              data: []
+              status: 200
+              count: 0
+              errors: []
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/facilities/{facility}/cycle-counts/{cycleCountId}/items:
+  post:
+    tags: [inventory]
+    summary: Create a cycle count item
+    operationId: createCycleCountItem
+    parameters:
+      - name: facility
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: cycleCountId
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CycleCountItemInput'
+          example:
+            cycleCount: ff8081819501aa2e019501ac00000002
+            product: seed-product-01
+            inventoryItem: ff8081817f0e3f80017f0e40a1b20003
+            countIndex: 0
+            recount: false
+    responses:
+      '200':
+        description: The created item in the JsonSerializer envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CycleCountObjectEnvelope'
+            example:
+              data:
+                id: ff8081819501aa2e019501ad00000003
+              status: 200
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/facilities/{facility}/cycle-counts/{cycleCountId}/items/batch:
+  parameters:
+    - name: facility
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: cycleCountId
+      in: path
+      required: true
+      schema:
+        type: string
+  post:
+    tags: [inventory]
+    summary: Create cycle count items (batch)
+    operationId: createCycleCountItemBatch
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CycleCountItemBatchInput'
+          example:
+            itemsToCreate:
+              - cycleCount: ff8081819501aa2e019501ac00000002
+                product: seed-product-01
+                countIndex: 0
+    responses:
+      '200':
+        description: Created items in the JsonSerializer envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CycleCountEnvelope'
+            example:
+              data:
+                - id: ff8081819501aa2e019501ad00000003
+              status: 200
+              count: 1
+      '400':
+        $ref: '#/components/responses/BadRequest'
+  patch:
+    tags: [inventory]
+    summary: Update cycle count items (batch)
+    operationId: updateCycleCountItemBatch
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CycleCountUpdateItemBatchInput'
+          example:
+            itemsToUpdate:
+              - id: ff8081819501aa2e019501ad00000003
+                quantityCounted: 90
+    responses:
+      '200':
+        description: Updated items in the JsonSerializer envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CycleCountEnvelope'
+            example:
+              data:
+                - id: ff8081819501aa2e019501ad00000003
+                  quantityCounted: 90
+              status: 200
+              count: 1
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/facilities/{facility}/cycle-counts/items/batch:
+  parameters:
+    - name: facility
+      in: path
+      required: true
+      schema:
+        type: string
+  post:
+    tags: [inventory]
+    summary: Create cycle count items (batch, no cycle count in path)
+    operationId: createCycleCountItemBatchAlias
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CycleCountItemBatchInput'
+          example:
+            itemsToCreate:
+              - cycleCount: ff8081819501aa2e019501ac00000002
+                product: seed-product-01
+                countIndex: 0
+    responses:
+      '200':
+        description: Created items in the JsonSerializer envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CycleCountEnvelope'
+            example:
+              data:
+                - id: ff8081819501aa2e019501ad00000003
+              status: 200
+              count: 1
+      '400':
+        $ref: '#/components/responses/BadRequest'
+  patch:
+    tags: [inventory]
+    summary: Update cycle count items (batch, no cycle count in path)
+    operationId: updateCycleCountItemBatchAlias
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CycleCountUpdateItemBatchInput'
+          example:
+            itemsToUpdate:
+              - id: ff8081819501aa2e019501ad00000003
+                quantityCounted: 90
+    responses:
+      '200':
+        description: Updated items in the JsonSerializer envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CycleCountEnvelope'
+            example:
+              data:
+                - id: ff8081819501aa2e019501ad00000003
+                  quantityCounted: 90
+              status: 200
+              count: 1
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/facilities/{facility}/cycle-counts/{cycleCountId}/refresh:
+  post:
+    tags: [inventory]
+    summary: Refresh a cycle count
+    operationId: refreshCycleCount
+    parameters:
+      - name: facility
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: cycleCountId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: removeOutOfStockItemsImplicitly
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: countIndex
+        in: query
+        required: false
+        schema:
+          type: integer
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: true
+          example: {}
+    responses:
+      '200':
+        description: The refreshed cycle count in the JsonSerializer envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CycleCountObjectEnvelope'
+            example:
+              data:
+                id: ff8081819501aa2e019501ac00000002
+                status: COUNTING
+              status: 200
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/reports/cycle-count-details:
+  get:
+    tags: [inventory]
+    summary: Cycle count details report
+    operationId: getCycleCountDetailsReport
+    parameters:
+      - name: facility.id
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: startDate
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: endDate
+        in: query
+        required: false
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    x-contract-tests:
+      - name: seeded facility
+        query:
+          facility.id: '{facilityId}'
+        status: 200
+    responses:
+      '200':
+        description: Report rows in the JsonSerializer envelope with max/offset.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CycleCountReportEnvelope'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [inventory]
+    summary: Cycle count details report (POST alias)
+    operationId: postCycleCountDetailsReport
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            type: object
+            description: CycleCountReportCommand fields.
+            additionalProperties: true
+          example:
+            facility: seed-loc-main
+    responses:
+      '200':
+        description: Report rows in the JsonSerializer envelope with max/offset.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CycleCountReportEnvelope'
+            example:
+              data: []
+              status: 200
+              count: 0
+              totalCount: 0
+              max: 10
+              offset: 0
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/reports/cycle-count-summary:
+  get:
+    tags: [inventory]
+    summary: Cycle count summary report
+    operationId: getCycleCountSummaryReport
+    parameters:
+      - name: facility.id
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: startDate
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: endDate
+        in: query
+        required: false
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    x-contract-tests:
+      - name: seeded facility
+        query:
+          facility.id: '{facilityId}'
+        status: 200
+    responses:
+      '200':
+        description: Report rows in the JsonSerializer envelope with max/offset.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CycleCountReportEnvelope'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [inventory]
+    summary: Cycle count summary report (POST alias)
+    operationId: postCycleCountSummaryReport
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: true
+          example:
+            facility: seed-loc-main
+    responses:
+      '200':
+        description: Report rows in the JsonSerializer envelope with max/offset.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CycleCountReportEnvelope'
+            example:
+              data: []
+              status: 200
+              count: 0
+              totalCount: 0
+              max: 10
+              offset: 0
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+# --- RecordStockApiController ---------------------------------------------------
+
+/api/facilities/{facility}/inventory/record-stock/save:
+  post:
+    tags: [inventory]
+    summary: Save a record stock (record inventory) submission
+    operationId: saveRecordStock
+    parameters:
+      - name: facility
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            description: RecordInventoryCommand fields bound from request parameters.
+            additionalProperties: true
+          example:
+            product.id: seed-product-01
+    responses:
+      '200':
+        description: The serialized RecordInventoryCommand.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordStockResponse'
+            example:
+              data:
+                product:
+                  id: seed-product-01
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+# --- StockAdjustmentApiController -----------------------------------------------
+
+/api/stockAdjustments:
+  post:
+    tags: [inventory]
+    summary: Create stock adjustments (array payload)
+    operationId: createStockAdjustments
+    parameters:
+      - name: location.id
+        in: query
+        required: false
+        description: Facility id (defaults to the session warehouse; 500 if neither resolves).
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/StockAdjustmentInput'
+          example:
+            - productId: seed-product-01
+              lotNumber: LOT-1
+              quantityAdjusted: 5
+              comments: Damaged in transit
+    responses:
+      '200':
+        description: The bound stock adjustments (default Grails JSON).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockAdjustmentListResponse'
+            example:
+              data:
+                - quantityAdjusted: 5
+                  comments: Damaged in transit
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+# --- StockCardApiController -----------------------------------------------------
+
+/api/stockCard/{id}/details:
+  get:
+    tags: [inventory]
+    summary: Stock card details for a product
+    operationId: stockCardDetails
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Product id or product code.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        params:
+          id: '{productId}'
+        status: 200
+      - name: unknown product returns custom 404 body
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Stock card details.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockCardDetailsResponse'
+      '404':
+        description: Product not found (custom `{errorMessage}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryLevelNotFoundResponse'
+
+/api/stockCard/{id}/currentStock:
+  get:
+    tags: [inventory]
+    summary: Current stock for a product
+    operationId: stockCardCurrentStock
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        params:
+          id: '{productId}'
+        status: 200
+    responses:
+      '200':
+        description: Available items with quantities.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockCardCurrentStockResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockCard/{id}/stockHistory:
+  get:
+    tags: [inventory]
+    summary: Stock history for a product
+    operationId: stockCardStockHistory
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        params:
+          id: '{productId}'
+        status: 200
+    responses:
+      '200':
+        description: Stock history grouped by year and month.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockCardStockHistoryResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockCard/{id}/allLocations:
+  get:
+    tags: [inventory]
+    summary: Current stock across all locations for a product
+    operationId: stockCardAllLocations
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        params:
+          id: '{productId}'
+        status: 200
+      - name: unknown product returns custom 404 body
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Quantities grouped by location group.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockCardAllLocationsResponse'
+      '404':
+        description: Product not found (custom `{errorMessage}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryLevelNotFoundResponse'
+
+/api/stockCard/{id}/suppliers:
+  get:
+    tags: [inventory]
+    summary: Product suppliers for a product
+    operationId: stockCardSuppliers
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        params:
+          id: '{productId}'
+        status: 200
+    responses:
+      '200':
+        description: Active product suppliers.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockCardSuppliersResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockCard/{id}/associations:
+  get:
+    tags: [inventory]
+    summary: Product associations for a product
+    operationId: stockCardAssociations
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        params:
+          id: '{productId}'
+        status: 200
+    responses:
+      '200':
+        description: Product associations with available quantities.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockCardAssociationsResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockCard/{id}/pendingInbound:
+  get:
+    tags: [inventory]
+    summary: Pending inbound shipments/orders for a product
+    operationId: stockCardPendingInbound
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        params:
+          id: '{productId}'
+        status: 200
+    responses:
+      '200':
+        description: Pending inbound items.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockCardPendingInboundResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockCard/{id}/pendingOutbound:
+  get:
+    tags: [inventory]
+    summary: Pending outbound requisitions for a product
+    operationId: stockCardPendingOutbound
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        params:
+          id: '{productId}'
+        status: 200
+    responses:
+      '200':
+        description: Pending outbound items.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockCardPendingOutboundResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockCard/{id}/demand:
+  get:
+    tags: [inventory]
+    summary: Demand details for a product
+    operationId: stockCardDemand
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: startDate
+        in: query
+        required: false
+        description: Formatted `MM/dd/yyyy`.
+        schema:
+          type: string
+      - name: endDate
+        in: query
+        required: false
+        description: Formatted `MM/dd/yyyy`.
+        schema:
+          type: string
+      - name: destination
+        in: query
+        required: false
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        params:
+          id: '{productId}'
+        status: 200
+    responses:
+      '200':
+        description: Demand details by requisition item.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockCardDemandResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockCard/{id}/snapshot:
+  get:
+    tags: [inventory]
+    summary: Inventory snapshots for a product
+    operationId: stockCardSnapshot
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        params:
+          id: '{productId}'
+        status: 200
+    responses:
+      '200':
+        description: Inventory snapshots plus inventory level.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockCardSnapshotResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockCard/{id}/documents:
+  get:
+    tags: [inventory]
+    summary: Documents and links attached to a product
+    operationId: stockCardDocuments
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        params:
+          id: '{productId}'
+        status: 200
+    responses:
+      '200':
+        description: Documents and file links.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockCardDocumentsResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockCard/{id}/lotNumbers:
+  get:
+    tags: [inventory]
+    summary: Lot numbers (inventory items) for a product
+    operationId: stockCardLotNumbers
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        params:
+          id: '{productId}'
+        status: 200
+      - name: unknown product returns custom 404 body
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Inventory items of the product.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockCardLotNumbersResponse'
+      '404':
+        description: Product not found (custom `{errorMessage}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryLevelNotFoundResponse'
+
+/api/stockCard/{id}/transactionLog:
+  get:
+    tags: [inventory]
+    summary: Transaction log for a product
+    operationId: stockCardTransactionLog
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: transactionType.id
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: startDate
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: endDate
+        in: query
+        required: false
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        params:
+          id: '{productId}'
+        status: 200
+      - name: unknown product returns custom 404 body
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Transaction log entries.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockCardTransactionLogResponse'
+      '404':
+        description: Product not found (custom `{errorMessage}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryLevelNotFoundResponse'
+
+/api/stockCard/recordInventory:
+  get:
+    tags: [inventory]
+    summary: Record inventory form context for a product
+    operationId: stockCardRecordInventoryContext
+    parameters:
+      - name: product.id
+        in: query
+        required: true
+        description: Product id (500 if missing).
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        query:
+          product.id: '{productId}'
+        status: 200
+    responses:
+      '200':
+        description: Record inventory rows and totals.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockCardRecordInventoryResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockCard/actionContext:
+  get:
+    tags: [inventory]
+    summary: Stock card action context (transaction sources/destinations, pending shipments)
+    operationId: stockCardActionContext
+    responses:
+      '200':
+        description: Action context for the session warehouse.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockCardActionContextResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockCard/binLocations:
+  get:
+    tags: [inventory]
+    summary: Bin locations of a facility (stock card dialogs)
+    operationId: stockCardBinLocations
+    parameters:
+      - name: location.id
+        in: query
+        required: false
+        description: Facility id (defaults to the session warehouse).
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Bin locations with zone info.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockCardBinLocationsResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockCard/inventoryLevel:
+  get:
+    tags: [inventory]
+    summary: Inventory level details for a product (stock card dialog)
+    operationId: stockCardInventoryLevelDetails
+    parameters:
+      - name: product.id
+        in: query
+        required: true
+        description: Product id (404 if unknown).
+        schema:
+          type: string
+      - name: inventory.id
+        in: query
+        required: false
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        query:
+          product.id: '{productId}'
+        status: 200
+      - name: unknown product returns custom 404 body
+        query:
+          product.id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Inventory level details plus status options.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockCardInventoryLevelDetailsResponse'
+      '404':
+        description: Product not found (custom `{errorMessage}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryLevelNotFoundResponse'
+  post:
+    tags: [inventory]
+    summary: Create or update an inventory level (stock card dialog)
+    operationId: stockCardUpdateInventoryLevel
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            description: InventoryLevel fields bound from request parameters; id selects an existing level.
+            additionalProperties: true
+          example:
+            product.id: seed-product-01
+            inventory.id: seed-inventory-main
+            minQuantity: 5
+    responses:
+      '200':
+        description: Inventory level saved.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessMessageResponse'
+            example:
+              success: true
+              message: Inventory level updated
+      '400':
+        description: Validation errors (`{success:false, errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryLevelMutationErrorResponse'
+            example:
+              success: false
+              errorMessages: ['Property [product] cannot be null']
+
+/api/stockCard/transferStock:
+  post:
+    tags: [inventory]
+    summary: Transfer stock (transfer out / return in dialog)
+    operationId: stockCardTransferStock
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            description: TransferStockCommand fields bound from request parameters.
+            additionalProperties: true
+          example:
+            inventoryItem.id: ff8081817f0e3f80017f0e40a1b20003
+            quantity: 1
+    responses:
+      '200':
+        description: Stock transferred.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessMessageResponse'
+            example:
+              success: true
+              message: Inventory item ff8081817f0e3f80017f0e40a1b20003 updated
+      '400':
+        description: Missing inventory item or validation errors.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessErrorsResponse'
+            example:
+              success: false
+              errors: ['Inventory item null not found']
+
+/api/stockCard/updateInventoryItem:
+  post:
+    tags: [inventory]
+    summary: Update an inventory item (edit lot/expiry dialog)
+    operationId: stockCardUpdateInventoryItem
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            description: InventoryItem fields bound from request parameters; id is required.
+            additionalProperties: true
+          example:
+            id: ff8081817f0e3f80017f0e40a1b20003
+            lotNumber: LOT-1
+            expirationDate: 12/31/2030
+    responses:
+      '200':
+        description: Inventory item updated.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessMessageResponse'
+            example:
+              success: true
+              message: Inventory item ff8081817f0e3f80017f0e40a1b20003 updated
+      '400':
+        description: Not found or validation errors (400, not 404).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessErrorsResponse'
+            example:
+              success: false
+              errors: ['Lot number cannot be blank']
+
+/api/stockCard/addToShipment:
+  post:
+    tags: [inventory]
+    summary: Add an inventory item to a pending shipment
+    operationId: stockCardAddToShipment
+    requestBody:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            description: Shipment item fields; shipmentContainer is `shipmentId[:containerId]`.
+            additionalProperties: true
+          example:
+            product.id: seed-product-01
+            inventoryItem.id: ff8081817f0e3f80017f0e40a1b20003
+            shipmentContainer: ff8081819501aa2e019501ae00000004
+            quantity: 1
+    responses:
+      '200':
+        description: Item added to shipment.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessMessageResponse'
+            example:
+              success: true
+              message: Added item to shipment
+      '400':
+        description: Missing shipment/inventory item or validation errors.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessErrorsResponse'
+            example:
+              success: false
+              errors: ['Error adding item to shipment']
+
+# --- TransactionEntryApiController -----------------------------------------------
+
+/api/transactionEntries:
+  get:
+    tags: [inventory]
+    summary: List transaction entries (paginated)
+    operationId: listTransactionEntries
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    responses:
+      '200':
+        description: Transaction entries.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionEntryListResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [inventory]
+    summary: Create a transaction entry
+    operationId: createTransactionEntry
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TransactionEntryInput'
+          example:
+            inventoryItemId: ff8081817f0e3f80017f0e40a1b20003
+            transactionId: ff80818195a9d87b0195a9dd6a2c0001
+            quantity: 5
+            comments: Manual correction
+    responses:
+      '201':
+        description: The created entry.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionEntryReadResponse'
+            example:
+              data:
+                id: ff80818195a9d87b0195a9de00000002
+                inventoryItem: 'LOT-1'
+                inventoryItemId: ff8081817f0e3f80017f0e40a1b20003
+                quantity: 5
+                comments: Manual correction
+                transaction: 'TX-001'
+                transactionId: ff80818195a9d87b0195a9dd6a2c0001
+                version: 0
+                binLocationId: null
+                binLocationName: null
+                product: null
+                productInventoryItems: []
+                transactionDetails: null
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/transactionEntries/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [inventory]
+    summary: Read a transaction entry
+    operationId: readTransactionEntry
+    x-contract-tests:
+      - name: unknown id returns 404 (ObjectNotFoundException)
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The transaction entry.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionEntryReadResponse'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [inventory]
+    summary: Update a transaction entry
+    operationId: updateTransactionEntry
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TransactionEntryInput'
+          example:
+            quantity: 10
+            version: 0
+    responses:
+      '200':
+        description: The updated entry.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionEntryReadResponse'
+            example:
+              data:
+                id: ff80818195a9d87b0195a9de00000002
+                inventoryItem: 'LOT-1'
+                inventoryItemId: ff8081817f0e3f80017f0e40a1b20003
+                quantity: 10
+                comments: null
+                transaction: 'TX-001'
+                transactionId: ff80818195a9d87b0195a9dd6a2c0001
+                version: 1
+                binLocationId: null
+                binLocationName: null
+                product: null
+                productInventoryItems: []
+                transactionDetails: null
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [inventory]
+    summary: Delete a transaction entry
+    operationId: deleteTransactionEntry
+    responses:
+      '204':
+        description: Deleted (no content).
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/transactionEntries/inventoryItemOptions:
+  get:
+    tags: [inventory]
+    summary: Inventory item options for the transaction entry form
+    operationId: transactionEntryInventoryItemOptions
+    responses:
+      '200':
+        description: Options.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OptionListResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/transactionEntries/transactionOptions:
+  get:
+    tags: [inventory]
+    summary: Transaction options for the transaction entry form
+    operationId: transactionEntryTransactionOptions
+    responses:
+      '200':
+        description: Options.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OptionListResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/transactionEntries/binLocationOptions:
+  get:
+    tags: [inventory]
+    summary: Bin location options for the transaction entry form
+    operationId: transactionEntryBinLocationOptions
+    responses:
+      '200':
+        description: Options plus bin location support flag.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OptionListResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'

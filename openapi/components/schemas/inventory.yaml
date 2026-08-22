@@ -1,0 +1,1782 @@
+# Inventory domain schemas (InventoryApiController, InventoryLevelApiController,
+# InventoryTransactionSummaryApiController, BinLocationApiController,
+# InternalLocationApiController, CycleCountApiController,
+# StockAdjustmentApiController, RecordStockApiController, StockCardApiController,
+# TransactionEntryApiController). Characterization of current behavior only.
+
+ProductSummary:
+  type: object
+  description: Minimal product reference `{id, productCode, name}` used across inventory responses.
+  properties:
+    id:
+      type: string
+    productCode:
+      type: string
+      nullable: true
+    name:
+      type: string
+      nullable: true
+
+ProductReference:
+  type: object
+  description: Product reference with unit of measure (InventoryApiController.serializeProduct).
+  nullable: true
+  properties:
+    id:
+      type: string
+    productCode:
+      type: string
+      nullable: true
+    name:
+      type: string
+      nullable: true
+    unitOfMeasure:
+      type: string
+      nullable: true
+
+IdNamePair:
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+      nullable: true
+
+InventoryItemReference:
+  type: object
+  description: Inventory item reference (InventoryApiController.serializeInventoryItem).
+  nullable: true
+  properties:
+    id:
+      type: string
+    lotNumber:
+      type: string
+      nullable: true
+    expirationDate:
+      type: string
+      nullable: true
+      description: Formatted as `MMM dd, yyyy`.
+    productId:
+      type: string
+      nullable: true
+
+SuccessMessageResponse:
+  type: object
+  description: Common `{success, message}` mutation response.
+  required: [success]
+  properties:
+    success:
+      type: boolean
+    message:
+      type: string
+      nullable: true
+
+SuccessErrorsResponse:
+  type: object
+  description: 'Common `{success: false, errors: [...]}` 400 mutation response.'
+  required: [success]
+  properties:
+    success:
+      type: boolean
+    errors:
+      type: array
+      items:
+        type: string
+
+InventoryBrowseResponse:
+  type: object
+  description: Response of GET /api/inventory/browse.
+  required: [searchResults, filterOptions]
+  properties:
+    searchTerms:
+      type: string
+      nullable: true
+    categoryId:
+      type: string
+      nullable: true
+    tags:
+      type: array
+      nullable: true
+      items:
+        type: string
+    catalogs:
+      type: array
+      nullable: true
+      items:
+        type: string
+    productTypes:
+      type: array
+      nullable: true
+      items:
+        type: string
+    showOutOfStockProducts:
+      type: boolean
+      nullable: true
+    maxResults:
+      type: integer
+      nullable: true
+    offset:
+      type: integer
+      nullable: true
+    totalCount:
+      type: integer
+    searchResults:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          productCode:
+            type: string
+            nullable: true
+          name:
+            type: string
+            nullable: true
+          color:
+            type: string
+            nullable: true
+          hasImage:
+            type: boolean
+          imageId:
+            type: string
+            nullable: true
+          productType:
+            type: object
+            nullable: true
+            additionalProperties: true
+            description: See #/components/schemas/IdNamePair
+          category:
+            type: object
+            nullable: true
+            additionalProperties: true
+            description: See #/components/schemas/IdNamePair
+          tags:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                tag:
+                  type: string
+                  nullable: true
+          catalogs:
+            type: array
+            items:
+              $ref: '#/components/schemas/IdNamePair'
+          quantityOnHand:
+            type: number
+    filterOptions:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        tags:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        catalogs:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        productTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdNamePair'
+
+StockListResponse:
+  type: object
+  description: Response of listInventory / listLowStock / listReorderStock.
+  required: [hasRoleFinance, categories, data]
+  properties:
+    hasRoleFinance:
+      type: boolean
+    categories:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+    data:
+      type: array
+      items:
+        type: object
+        properties:
+          status:
+            type: string
+            nullable: true
+          product:
+            type: object
+            properties:
+              id:
+                type: string
+              productCode:
+                type: string
+                nullable: true
+              name:
+                type: string
+                nullable: true
+              color:
+                type: string
+                nullable: true
+              productGroups:
+                type: array
+                items:
+                  type: string
+              category:
+                type: string
+                nullable: true
+              abcClass:
+                type: string
+                nullable: true
+              unitOfMeasure:
+                type: string
+                nullable: true
+              pricePerUnit:
+                type: number
+                nullable: true
+          minQuantity:
+            type: number
+            nullable: true
+          reorderQuantity:
+            type: number
+            nullable: true
+          maxQuantity:
+            type: number
+            nullable: true
+          quantity:
+            type: number
+            nullable: true
+          quantityAvailableToPromise:
+            type: number
+            nullable: true
+          totalValue:
+            type: number
+            nullable: true
+
+DailyTransactionsResponse:
+  type: object
+  description: Response of GET /api/inventory/listDailyTransactions.
+  required: [dateSelected, transactionsByDate, transactions]
+  properties:
+    dateSelected:
+      type: string
+      description: Formatted `dd/MM/yyyy`.
+    transactionsByDate:
+      type: array
+      items:
+        type: object
+        properties:
+          date:
+            type: string
+          count:
+            type: integer
+    transactions:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          transactionNumber:
+            type: string
+            nullable: true
+          dateCreated:
+            type: string
+            nullable: true
+          transactionType:
+            type: string
+            nullable: true
+          source:
+            type: string
+            nullable: true
+          destination:
+            type: string
+            nullable: true
+          entries:
+            type: array
+            items:
+              type: object
+              properties:
+                product:
+                  $ref: '#/components/schemas/ProductReference'
+                lotNumber:
+                  type: string
+                  nullable: true
+                quantity:
+                  type: number
+                  nullable: true
+
+ExpirationStockListResponse:
+  type: object
+  description: Response of listExpiredStock / listExpiringStock.
+  required: [categories, data]
+  properties:
+    categories:
+      type: array
+      items:
+        $ref: '#/components/schemas/IdNamePair'
+    data:
+      type: array
+      items:
+        type: object
+        properties:
+          inventoryItem:
+            type: object
+            properties:
+              id:
+                type: string
+              lotNumber:
+                type: string
+                nullable: true
+              expirationDate:
+                type: string
+                nullable: true
+                description: Formatted `d MMM yyyy`.
+              product:
+                type: object
+                additionalProperties: true
+          quantity:
+            type: number
+            nullable: true
+
+EditBinLocationResponse:
+  type: object
+  description: Response of GET /api/inventory/editBinLocation.
+  required: [location, reasonCodes]
+  properties:
+    location:
+      $ref: '#/components/schemas/IdNamePair'
+    binLocation:
+      type: object
+      nullable: true
+      additionalProperties: true
+      description: See #/components/schemas/IdNamePair
+    inventoryItem:
+      type: object
+      nullable: true
+      additionalProperties: true
+    quantity:
+      type: number
+      nullable: true
+    reasonCodes:
+      type: array
+      items:
+        $ref: '#/components/schemas/IdNamePair'
+
+CreateTransactionContextResponse:
+  type: object
+  description: Response of GET /api/inventory/createTransaction (requires product.id or inventoryItem.id).
+  required: [location, products]
+  properties:
+    location:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        inventoryId:
+          type: string
+          nullable: true
+        hasBinLocationSupport:
+          type: boolean
+    products:
+      type: array
+      items:
+        $ref: '#/components/schemas/ProductReference'
+    binLocations:
+      type: array
+      items:
+        type: object
+        properties:
+          product:
+            $ref: '#/components/schemas/ProductReference'
+          inventoryItem:
+            $ref: '#/components/schemas/InventoryItemReference'
+          binLocation:
+            type: object
+            nullable: true
+            additionalProperties: true
+            description: See #/components/schemas/IdNamePair
+          quantity:
+            type: number
+            nullable: true
+    productInventoryItems:
+      type: object
+      description: Map of productId -> inventory items.
+      additionalProperties:
+        type: array
+        items:
+          $ref: '#/components/schemas/InventoryItemReference'
+    quantityMap:
+      type: object
+      description: Map of inventoryItemId -> quantity.
+      additionalProperties:
+        type: number
+        nullable: true
+    reasonCodes:
+      type: array
+      items:
+        $ref: '#/components/schemas/IdNamePair'
+    transactionTypesDebit:
+      type: array
+      items:
+        $ref: '#/components/schemas/IdNamePair'
+    destinations:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+    sources:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+    warehouseBinLocations:
+      type: array
+      items:
+        $ref: '#/components/schemas/IdNamePair'
+    users:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+    currentUserId:
+      type: string
+      nullable: true
+
+SaveTransactionSuccessResponse:
+  type: object
+  description: Success response of the saveAdjustment/saveDebit/saveCredit transaction endpoints.
+  required: [success]
+  properties:
+    success:
+      type: boolean
+    message:
+      type: string
+    productId:
+      type: string
+      nullable: true
+
+TransactionEditContextResponse:
+  type: object
+  description: Response of GET /api/inventory/transactions/{id}.
+  required: [transaction]
+  properties:
+    transaction:
+      type: object
+      additionalProperties: true
+    inventoryItemsMap:
+      type: object
+      additionalProperties:
+        type: array
+        items:
+          $ref: '#/components/schemas/InventoryItemReference'
+    transactionTypeList:
+      type: array
+      items:
+        $ref: '#/components/schemas/IdNamePair'
+    locationInstanceList:
+      type: array
+      items:
+        $ref: '#/components/schemas/IdNamePair'
+    warehouseInstance:
+      $ref: '#/components/schemas/IdNamePair'
+
+TransactionNotFoundResponse:
+  type: object
+  description: 404 body of getTransaction/showTransaction (`{error}` rather than the shared ErrorResponse).
+  required: [error]
+  properties:
+    error:
+      type: string
+
+SaveTransactionHeaderResponse:
+  type: object
+  description: Response of POST /api/inventory/saveTransaction.
+  required: [success]
+  properties:
+    success:
+      type: boolean
+    message:
+      type: string
+      nullable: true
+    errors:
+      type: array
+      items:
+        type: string
+    id:
+      type: string
+      nullable: true
+
+ShowTransactionResponse:
+  type: object
+  description: Response of GET /api/inventory/showTransaction/{id}.
+  required: [transaction]
+  properties:
+    isSuperuser:
+      type: boolean
+    transaction:
+      type: object
+      additionalProperties: true
+
+ListTransactionsResponse:
+  type: object
+  description: Response of GET /api/inventory/listTransactions.
+  required: [transactions]
+  properties:
+    warehouseName:
+      type: string
+      nullable: true
+    transactionCount:
+      type: integer
+    transactionTypeSelected:
+      type: string
+      nullable: true
+    transactionTypes:
+      type: array
+      items:
+        $ref: '#/components/schemas/IdNamePair'
+    isSuperuser:
+      type: boolean
+    max:
+      type: integer
+    offset:
+      type: integer
+    transactions:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+
+ListBinLocationsQuantityResponse:
+  type: object
+  description: Response of GET /api/inventory/listBinLocations.
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        type: object
+        properties:
+          productCode:
+            type: string
+            nullable: true
+          productName:
+            type: string
+            nullable: true
+          binLocation:
+            type: string
+            nullable: true
+          lotNumber:
+            type: string
+            nullable: true
+          expirationDate:
+            type: string
+            nullable: true
+          quantity:
+            type: number
+            nullable: true
+
+ShowProductsResponse:
+  type: object
+  description: Response of GET /api/inventory/showProducts.
+  required: [categories]
+  properties:
+    categories:
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+            nullable: true
+          products:
+            type: array
+            items:
+              $ref: '#/components/schemas/ProductSummary'
+
+UploadInventoryResponse:
+  type: object
+  description: Response of POST /api/inventory/uploadInventory.
+  required: [inventoryList]
+  properties:
+    inventoryList:
+      type: array
+      items:
+        type: array
+        items:
+          type: object
+          properties:
+            key:
+              type: string
+              nullable: true
+            value:
+              type: string
+              nullable: true
+
+ReorderReportResponse:
+  type: object
+  description: Response of GET /api/facilities/{facilityId}/inventories/reorderReport.
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+
+ExpirationHistoryReportResponse:
+  type: object
+  description: Response of GET /api/inventories/expirationHistoryReport.
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+    totalCount:
+      type: integer
+      nullable: true
+    totalQuantityLostToExpiry:
+      type: number
+      nullable: true
+    totalValueLostToExpiry:
+      type: number
+      nullable: true
+
+InventoryLevelListResponse:
+  type: object
+  description: Response of GET /api/facilities/{facilityId}/inventory-levels (default Grails JSON of InventoryLevel domain objects).
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+
+InventoryLevelSearchResponse:
+  type: object
+  description: Response of GET /api/inventoryLevels/search.
+  required: [inventoryLevels, totalCount, locations]
+  properties:
+    inventoryLevels:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          status:
+            type: string
+            nullable: true
+          product:
+            $ref: '#/components/schemas/ProductSummary'
+          inventory:
+            type: string
+            nullable: true
+          minQuantity:
+            type: number
+            nullable: true
+          reorderQuantity:
+            type: number
+            nullable: true
+          maxQuantity:
+            type: number
+            nullable: true
+          dateCreated:
+            type: string
+            nullable: true
+    totalCount:
+      type: integer
+    locations:
+      type: array
+      items:
+        $ref: '#/components/schemas/IdNamePair'
+
+InventoryLevelDetailed:
+  type: object
+  description: Detailed inventory level map (InventoryLevelApiController.toDetailedMap).
+  properties:
+    id:
+      type: string
+    version:
+      type: integer
+    status:
+      type: string
+      nullable: true
+    product:
+      type: object
+      additionalProperties: true
+    inventory:
+      $ref: '#/components/schemas/IdNamePair'
+    internalLocation:
+      type: object
+      nullable: true
+      additionalProperties: true
+      description: See #/components/schemas/IdNamePair
+    preferredBinLocation:
+      type: object
+      nullable: true
+      additionalProperties: true
+      description: See #/components/schemas/IdNamePair
+    replenishmentLocation:
+      type: object
+      nullable: true
+      additionalProperties: true
+      description: See #/components/schemas/IdNamePair
+    abcClass:
+      type: string
+      nullable: true
+    comments:
+      type: string
+      nullable: true
+    minQuantity:
+      type: number
+      nullable: true
+    reorderQuantity:
+      type: number
+      nullable: true
+    maxQuantity:
+      type: number
+      nullable: true
+    expectedLeadTimeDays:
+      type: number
+      nullable: true
+    replenishmentPeriodDays:
+      type: number
+      nullable: true
+    forecastQuantity:
+      type: number
+      nullable: true
+    forecastPeriodDays:
+      type: number
+      nullable: true
+    dateCreated:
+      type: string
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+
+InventoryLevelDetailsResponse:
+  type: object
+  description: Response of GET /api/inventoryLevels/{id}/details.
+  required: [inventoryLevel]
+  properties:
+    inventoryLevel:
+      $ref: '#/components/schemas/InventoryLevelDetailed'
+
+InventoryLevelNotFoundResponse:
+  type: object
+  description: 404 body `{errorMessage}` used by inventory level and stock card endpoints (not the shared ErrorResponse).
+  required: [errorMessage]
+  properties:
+    errorMessage:
+      type: string
+
+InventoryLevelFormContextResponse:
+  type: object
+  description: Response of GET /api/inventoryLevels/formContext and /api/inventoryLevels/{id}/formContext.
+  required: [statusOptions, binLocations]
+  properties:
+    inventoryLevel:
+      type: object
+      nullable: true
+      additionalProperties: true
+      description: See #/components/schemas/InventoryLevelDetailed
+    product:
+      type: object
+      nullable: true
+      additionalProperties: true
+    location:
+      type: object
+      nullable: true
+      additionalProperties: true
+      description: See #/components/schemas/IdNamePair
+    statusOptions:
+      type: array
+      items:
+        type: string
+    binLocations:
+      type: array
+      items:
+        $ref: '#/components/schemas/IdNamePair'
+
+InventoryLevelMutationSuccessResponse:
+  type: object
+  description: Success body of inventory level save/update/delete.
+  required: [success]
+  properties:
+    success:
+      type: boolean
+    message:
+      type: string
+    id:
+      type: string
+      nullable: true
+    productId:
+      type: string
+      nullable: true
+
+InventoryLevelMutationErrorResponse:
+  type: object
+  description: Error body (400/404) of inventory level save/update/delete (`{success:false, errorMessages}`).
+  required: [success]
+  properties:
+    success:
+      type: boolean
+    errorMessages:
+      type: array
+      items:
+        type: string
+    productId:
+      type: string
+      nullable: true
+
+InventoryTransactionsSummaryResponse:
+  type: object
+  description: Response of GET /api/reports/inventory-transactions-summary.
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+    totalCount:
+      type: integer
+      nullable: true
+
+BinLocationListResponse:
+  type: object
+  description: Response of GET /api/binLocations (default Grails JSON of Location domain objects).
+  required: [data]
+  properties:
+    data:
+      type: array
+      nullable: true
+      items:
+        type: object
+        additionalProperties: true
+
+BinLocationReadResponse:
+  type: object
+  description: Response of GET /api/binLocations/{id} (default Grails JSON of a Location domain object).
+  required: [data]
+  properties:
+    data:
+      type: object
+      additionalProperties: true
+
+InternalLocationSummary:
+  type: object
+  description: Internal location entry `{id, name, zoneId, zoneName}`.
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+      nullable: true
+    zoneId:
+      type: string
+      nullable: true
+    zoneName:
+      type: string
+      nullable: true
+
+InternalLocationListResponse:
+  type: object
+  description: Response of GET /api/internalLocations and /api/internalLocations/receiving.
+  required: [data]
+  properties:
+    data:
+      type: array
+      nullable: true
+      items:
+        $ref: '#/components/schemas/InternalLocationSummary'
+
+InternalLocationSearchResponse:
+  type: object
+  description: Response of GET /api/internalLocations/search (data is default Grails JSON of Location domain objects).
+  required: [data]
+  properties:
+    data:
+      type: array
+      nullable: true
+      items:
+        type: object
+        additionalProperties: true
+    totalCount:
+      type: integer
+      nullable: true
+
+InternalLocationReadResponse:
+  type: object
+  description: Response of GET /api/internalLocations/{id} (default Grails JSON of a Location domain object; data is null when the id is unknown).
+  required: [data]
+  properties:
+    data:
+      type: object
+      nullable: true
+      additionalProperties: true
+
+CycleCountEnvelope:
+  type: object
+  description: Standard JsonSerializer envelope `{data, status, count}` used by CycleCountApiController.
+  required: [data, status]
+  properties:
+    data:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+    status:
+      type: integer
+    count:
+      type: integer
+
+CycleCountPaginatedEnvelope:
+  type: object
+  description: JsonSerializer envelope for paginated lists `{data, status, count, totalCount}`.
+  required: [data, status]
+  properties:
+    data:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+    status:
+      type: integer
+    count:
+      type: integer
+    totalCount:
+      type: integer
+      nullable: true
+
+CycleCountObjectEnvelope:
+  type: object
+  description: JsonSerializer envelope for a single object `{data, status}`.
+  required: [status]
+  properties:
+    data:
+      type: object
+      nullable: true
+      additionalProperties: true
+    status:
+      type: integer
+
+CycleCountReportEnvelope:
+  type: object
+  description: JsonSerializer envelope of the cycle-count report endpoints `{data, status, count, totalCount, max, offset}`.
+  required: [data, status]
+  properties:
+    data:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+    status:
+      type: integer
+    count:
+      type: integer
+    totalCount:
+      type: integer
+      nullable: true
+    max:
+      type: integer
+      nullable: true
+    offset:
+      type: integer
+      nullable: true
+
+CycleCountCandidatesResponse:
+  type: object
+  description: Response of GET /api/facilities/{facilityId}/cycle-counts/candidates.
+  required: [data, status]
+  properties:
+    data:
+      type: array
+      items:
+        type: object
+        properties:
+          product:
+            $ref: '#/components/schemas/ProductSummary'
+          dateLastCount:
+            type: string
+            nullable: true
+          dateNextCount:
+            type: string
+            nullable: true
+          daysUntilNextCount:
+            type: integer
+            nullable: true
+          category:
+            type: object
+            nullable: true
+            additionalProperties: true
+            description: See #/components/schemas/IdNamePair
+          internalLocations:
+            type: string
+            nullable: true
+          tags:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          productCatalogs:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          abcClass:
+            type: string
+            nullable: true
+          quantityOnHand:
+            type: number
+            nullable: true
+          quantityAllocated:
+            type: number
+            nullable: true
+          cycleCountRequest:
+            type: object
+            nullable: true
+            additionalProperties: true
+          status:
+            type: string
+            nullable: true
+          inventoryItemCount:
+            type: integer
+            nullable: true
+          negativeItemCount:
+            type: integer
+            nullable: true
+          hasStockOnHandOrNegativeStock:
+            type: boolean
+            nullable: true
+          sortOrder:
+            type: integer
+            nullable: true
+    status:
+      type: integer
+    count:
+      type: integer
+    totalCount:
+      type: integer
+      nullable: true
+
+CycleCountItemsUploadResponse:
+  type: object
+  description: Response of the cycle count items upload endpoints `{data, status, count, errors}`.
+  required: [status]
+  properties:
+    data:
+      type: array
+      nullable: true
+      items:
+        type: object
+        additionalProperties: true
+    status:
+      type: integer
+    count:
+      type: integer
+    errors:
+      type: array
+      items:
+        type: string
+
+CycleCountRequestBatchInput:
+  type: object
+  description: Request body of POST /api/facilities/{facilityId}/cycle-counts/requests/batch.
+  required: [requests]
+  properties:
+    requests:
+      type: array
+      items:
+        type: object
+        properties:
+          facility:
+            type: string
+            description: Facility location id.
+          product:
+            type: string
+            description: Product id.
+          blindCount:
+            type: boolean
+        additionalProperties: true
+
+CycleCountUpdateRequestBatchInput:
+  type: object
+  description: Request body of PATCH /api/facilities/{facilityId}/cycle-counts/requests/batch.
+  required: [requests]
+  properties:
+    requests:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+
+CycleCountStartBatchInput:
+  type: object
+  description: Request body of the cycle count start / recount-start batch endpoints.
+  required: [requests]
+  properties:
+    requests:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+
+CycleCountSubmitCountInput:
+  type: object
+  description: Request body of POST .../cycle-counts/{cycleCountId}/count and /recount.
+  additionalProperties: true
+  properties:
+    refreshQuantityOnHand:
+      type: boolean
+    failOnOutdatedQuantity:
+      type: boolean
+    requireRecountOnDiscrepancy:
+      type: boolean
+
+CycleCountItemInput:
+  type: object
+  description: Request body for creating/updating a cycle count item.
+  additionalProperties: true
+  properties:
+    cycleCount:
+      type: string
+    product:
+      type: string
+    inventoryItem:
+      type: string
+    binLocation:
+      type: string
+      nullable: true
+    quantityCounted:
+      type: integer
+      nullable: true
+    countIndex:
+      type: integer
+    recount:
+      type: boolean
+    comment:
+      type: string
+      nullable: true
+    assignee:
+      type: string
+      nullable: true
+
+CycleCountItemBatchInput:
+  type: object
+  description: Request body of POST .../items/batch (itemsToCreate).
+  required: [itemsToCreate]
+  properties:
+    itemsToCreate:
+      type: array
+      items:
+        $ref: '#/components/schemas/CycleCountItemInput'
+
+CycleCountUpdateItemBatchInput:
+  type: object
+  description: Request body of PATCH .../items/batch (itemsToUpdate).
+  required: [itemsToUpdate]
+  properties:
+    itemsToUpdate:
+      type: array
+      items:
+        $ref: '#/components/schemas/CycleCountItemInput'
+
+RecordStockResponse:
+  type: object
+  description: Response of POST /api/facilities/{facility}/inventory/record-stock/save (`{data}` is the serialized RecordInventoryCommand).
+  required: [data]
+  properties:
+    data:
+      type: object
+      additionalProperties: true
+
+StockAdjustmentInput:
+  type: object
+  description: One stock adjustment entry (POST /api/stockAdjustments takes an array of these).
+  properties:
+    productId:
+      type: string
+    lotNumber:
+      type: string
+      nullable: true
+    expirationDate:
+      type: string
+      nullable: true
+      description: Formatted per Constants.EXPIRATION_DATE_FORMATTER (MM/dd/yyyy).
+    quantityAdjusted:
+      type: integer
+    comments:
+      type: string
+      nullable: true
+  additionalProperties: true
+
+StockAdjustmentListResponse:
+  type: object
+  description: Response of POST /api/stockAdjustments (default Grails JSON of StockAdjustment objects).
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+
+StockCardInventoryLevel:
+  type: object
+  description: Inventory level map (StockCardApiController.toInventoryLevelMap); null when no level exists.
+  nullable: true
+  properties:
+    id:
+      type: string
+    status:
+      type: string
+      nullable: true
+    minQuantity:
+      type: number
+      nullable: true
+    reorderQuantity:
+      type: number
+      nullable: true
+    maxQuantity:
+      type: number
+      nullable: true
+    forecastQuantity:
+      type: number
+      nullable: true
+    monthlyForecastQuantity:
+      type: number
+      nullable: true
+    preferredBinLocation:
+      type: string
+      nullable: true
+    abcClass:
+      type: string
+      nullable: true
+
+StockCardBinLocation:
+  type: object
+  description: Bin location map (StockCardApiController.toBinLocationMap); null when absent.
+  nullable: true
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+      nullable: true
+    zone:
+      type: object
+      nullable: true
+      additionalProperties: true
+      description: See #/components/schemas/IdNamePair
+
+StockCardInventoryItem:
+  type: object
+  description: Inventory item map (StockCardApiController.toInventoryItemMap); null when absent.
+  nullable: true
+  properties:
+    id:
+      type: string
+    lotNumber:
+      type: string
+      nullable: true
+    expirationDate:
+      type: string
+      nullable: true
+    lotStatus:
+      type: string
+      nullable: true
+    recalled:
+      type: boolean
+
+StockCardDetailsResponse:
+  type: object
+  description: Response of GET /api/stockCard/{id}/details.
+  required: [product, warehouse, permissions]
+  properties:
+    product:
+      type: object
+      additionalProperties: true
+    inventoryLevel:
+      $ref: '#/components/schemas/StockCardInventoryLevel'
+    inventoryStatus:
+      type: string
+      nullable: true
+    totalQuantity:
+      type: number
+    totalQuantityAvailableToPromise:
+      type: number
+    latestInventoryDate:
+      type: string
+      nullable: true
+    forecastingEnabled:
+      type: boolean
+    mergeProductsEnabled:
+      type: boolean
+    currencyCode:
+      type: string
+      nullable: true
+    warehouse:
+      $ref: '#/components/schemas/IdNamePair'
+    permissions:
+      type: object
+      additionalProperties:
+        type: boolean
+
+StockCardCurrentStockResponse:
+  type: object
+  description: Response of GET /api/stockCard/{id}/currentStock.
+  required: [availableItems]
+  properties:
+    availableItems:
+      type: array
+      items:
+        type: object
+        properties:
+          inventoryItem:
+            $ref: '#/components/schemas/StockCardInventoryItem'
+          binLocation:
+            $ref: '#/components/schemas/StockCardBinLocation'
+          quantityOnHand:
+            type: number
+            nullable: true
+          quantityAvailable:
+            type: number
+            nullable: true
+          status:
+            type: string
+            nullable: true
+          recalled:
+            type: boolean
+          onHold:
+            type: boolean
+    totalQuantity:
+      type: number
+    totalQuantityAvailableToPromise:
+      type: number
+
+StockCardStockHistoryResponse:
+  type: object
+  description: Response of GET /api/stockCard/{id}/stockHistory (stockHistoryList is a map of year -> month -> entries).
+  required: [productId, stockHistoryList]
+  properties:
+    productId:
+      type: string
+    stockHistoryList:
+      type: object
+      additionalProperties: true
+    totalBalance:
+      type: number
+      nullable: true
+    totalCount:
+      type: integer
+      nullable: true
+    totalCredit:
+      type: number
+      nullable: true
+    totalDebit:
+      type: number
+      nullable: true
+
+StockCardAllLocationsResponse:
+  type: object
+  description: Response of GET /api/stockCard/{id}/allLocations.
+  required: [locationGroups, hasRoleFinance]
+  properties:
+    locationGroups:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+    hasRoleFinance:
+      type: boolean
+    unitOfMeasure:
+      type: string
+      nullable: true
+
+StockCardSuppliersResponse:
+  type: object
+  description: Response of GET /api/stockCard/{id}/suppliers.
+  required: [hasRoleFinance, productSuppliers]
+  properties:
+    hasRoleFinance:
+      type: boolean
+    currencyCode:
+      type: string
+      nullable: true
+    productSuppliers:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+
+StockCardAssociationsResponse:
+  type: object
+  description: Response of GET /api/stockCard/{id}/associations.
+  required: [associations]
+  properties:
+    associations:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+    totalQuantity:
+      type: number
+      nullable: true
+    unitOfMeasure:
+      type: string
+      nullable: true
+
+StockCardPendingInboundResponse:
+  type: object
+  description: Response of GET /api/stockCard/{id}/pendingInbound.
+  required: [items]
+  properties:
+    items:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+    totalQuantityPurchased:
+      type: number
+      nullable: true
+    totalQuantityRemaining:
+      type: number
+      nullable: true
+    unitOfMeasure:
+      type: string
+      nullable: true
+
+StockCardPendingOutboundResponse:
+  type: object
+  description: Response of GET /api/stockCard/{id}/pendingOutbound.
+  required: [items]
+  properties:
+    items:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+    totalQuantityRequested:
+      type: number
+      nullable: true
+    totalQuantityRequired:
+      type: number
+      nullable: true
+    totalQuantityPicked:
+      type: number
+      nullable: true
+    unitOfMeasure:
+      type: string
+      nullable: true
+
+StockCardDemandResponse:
+  type: object
+  description: Response of GET /api/stockCard/{id}/demand.
+  required: [requisitionItems, monthKeys]
+  properties:
+    requisitionItems:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+    numberOfMonths:
+      type: integer
+    monthKeys:
+      type: array
+      items:
+        type: string
+    startDate:
+      type: string
+      nullable: true
+    endDate:
+      type: string
+      nullable: true
+    destinations:
+      type: array
+      items:
+        $ref: '#/components/schemas/IdNamePair'
+
+StockCardSnapshotResponse:
+  type: object
+  description: Response of GET /api/stockCard/{id}/snapshot.
+  required: [inventorySnapshots]
+  properties:
+    inventoryLevel:
+      $ref: '#/components/schemas/StockCardInventoryLevel'
+    inventorySnapshots:
+      type: array
+      items:
+        type: object
+        properties:
+          date:
+            type: string
+            nullable: true
+          quantityOnHand:
+            type: number
+            nullable: true
+
+StockCardDocumentsResponse:
+  type: object
+  description: Response of GET /api/stockCard/{id}/documents.
+  required: [documents, links]
+  properties:
+    documents:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+    links:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+
+StockCardLotNumbersResponse:
+  type: object
+  description: Response of GET /api/stockCard/{id}/lotNumbers.
+  required: [product, inventoryItems]
+  properties:
+    product:
+      type: object
+      additionalProperties: true
+    inventoryItems:
+      type: array
+      items:
+        $ref: '#/components/schemas/StockCardInventoryItem'
+
+StockCardTransactionLogResponse:
+  type: object
+  description: Response of GET /api/stockCard/{id}/transactionLog.
+  required: [product, transactions]
+  properties:
+    product:
+      type: object
+      additionalProperties: true
+    startDate:
+      type: string
+      nullable: true
+    endDate:
+      type: string
+      nullable: true
+    transactionTypeId:
+      type: string
+      nullable: true
+    transactionTypes:
+      type: array
+      items:
+        $ref: '#/components/schemas/IdNamePair'
+    transactions:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+    shownCount:
+      type: integer
+    totalCount:
+      type: integer
+
+StockCardRecordInventoryResponse:
+  type: object
+  description: Response of GET /api/stockCard/recordInventory (requires product.id).
+  required: [product]
+  properties:
+    product:
+      type: object
+      additionalProperties: true
+    inventory:
+      type: object
+      additionalProperties: true
+    totalQuantity:
+      type: number
+      nullable: true
+    transactionDate:
+      type: string
+      nullable: true
+    recordInventoryRows:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+
+StockCardActionContextResponse:
+  type: object
+  description: Response of GET /api/stockCard/actionContext.
+  required: [transactionDestinations, transactionSources, pendingShipments]
+  properties:
+    transactionDestinations:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+    transactionSources:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+    pendingShipments:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+
+StockCardBinLocationsResponse:
+  type: object
+  description: Response of GET /api/stockCard/binLocations.
+  required: [hasBinLocationSupport, binLocations]
+  properties:
+    hasBinLocationSupport:
+      type: boolean
+    binLocations:
+      type: array
+      items:
+        $ref: '#/components/schemas/StockCardBinLocation'
+
+StockCardInventoryLevelDetailsResponse:
+  type: object
+  description: Response of GET /api/stockCard/inventoryLevel (requires product.id).
+  required: [product, inventory, statusOptions]
+  properties:
+    product:
+      type: object
+      additionalProperties: true
+    inventory:
+      $ref: '#/components/schemas/IdNamePair'
+    inventoryLevel:
+      $ref: '#/components/schemas/StockCardInventoryLevel'
+    statusOptions:
+      type: array
+      items:
+        type: string
+
+TransactionEntrySummary:
+  type: object
+  description: Transaction entry list item (TransactionEntryApiController.toJson).
+  properties:
+    id:
+      type: string
+    inventoryItem:
+      type: string
+      nullable: true
+    inventoryItemId:
+      type: string
+      nullable: true
+    quantity:
+      type: integer
+      nullable: true
+    comments:
+      type: string
+      nullable: true
+    transaction:
+      type: string
+      nullable: true
+    transactionId:
+      type: string
+      nullable: true
+
+TransactionEntryDetailed:
+  allOf:
+    - $ref: '#/components/schemas/TransactionEntrySummary'
+    - type: object
+      description: Detailed transaction entry (TransactionEntryApiController.toDetailedJson).
+      properties:
+        version:
+          type: integer
+        binLocationId:
+          type: string
+          nullable: true
+        binLocationName:
+          type: string
+          nullable: true
+        product:
+          $ref: '#/components/schemas/ProductReference'
+        productInventoryItems:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              lotNumber:
+                type: string
+                nullable: true
+        transactionDetails:
+          type: object
+          nullable: true
+          additionalProperties: true
+
+TransactionEntryListResponse:
+  type: object
+  description: Response of GET /api/transactionEntries.
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/components/schemas/TransactionEntrySummary'
+    totalCount:
+      type: integer
+      nullable: true
+
+TransactionEntryReadResponse:
+  type: object
+  description: Response of GET/POST/PUT /api/transactionEntries/{id}.
+  required: [data]
+  properties:
+    data:
+      $ref: '#/components/schemas/TransactionEntryDetailed'
+
+TransactionEntryInput:
+  type: object
+  description: Request body for creating/updating a transaction entry.
+  properties:
+    inventoryItemId:
+      type: string
+      nullable: true
+    transactionId:
+      type: string
+      nullable: true
+    binLocationId:
+      type: string
+      nullable: true
+    quantity:
+      type: integer
+      nullable: true
+    comments:
+      type: string
+      nullable: true
+    version:
+      type: integer
+      nullable: true
+
+OptionListResponse:
+  type: object
+  description: 'Response of the transaction entry option endpoints `{data: [{id, label}]}`.'
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          label:
+            type: string
+            nullable: true
+    hasBinLocationSupport:
+      type: boolean
