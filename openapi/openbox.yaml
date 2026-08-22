@@ -24,6 +24,12 @@ tags:
     description: Product/entity attributes (AttributeApiController)
   - name: categories
     description: Product categories (CategoryApiController)
+  - name: dashboard
+    description: Dashboard configuration and widget data (DashboardApiController)
+  - name: finance
+    description: GL accounts, GL account types, budget codes, payment terms (GlAccountApiController, GlAccountTypeApiController, BudgetCodeApiController, PaymentTermApiController)
+  - name: invoice
+    description: Invoicing (InvoiceApiController, PrepaymentInvoiceApiController, PrepaymentInvoiceItemApiController)
   - name: localization
     description: Translations / localized messages (LocalizationApiController)
   - name: preferenceTypes
@@ -32,8 +38,12 @@ tags:
     description: Product suppliers, their attributes and preferences (ProductSupplierApiController, ProductSupplierAttributeApiController, ProductSupplierPreferenceApiController)
   - name: reasonCodes
     description: Reason codes (ReasonCodeApiController)
+  - name: report
+    description: Reports and KPI indicators (ReportApiController, IndicatorApiController)
   - name: shipments
     description: Shipments, shipment items/workflows, create-shipment workflow, combined shipments, pack lists, delivery/receipt notes, putaways
+  - name: supplier
+    description: Supplier search and details (SupplierApiController)
   - name: tags
     description: Product tags (TagApiController)
   - name: unitOfMeasure
@@ -44,11 +54,16 @@ tags:
 x-fragments:
   - paths/attributes.yaml
   - paths/categories.yaml
+  - paths/dashboard.yaml
+  - paths/finance.yaml
+  - paths/invoice.yaml
   - paths/localization.yaml
   - paths/preference-types.yaml
   - paths/product-suppliers.yaml
   - paths/reason-codes.yaml
+  - paths/report.yaml
   - paths/shipments.yaml
+  - paths/supplier.yaml
   - paths/tags.yaml
   - paths/unit-of-measure.yaml
 

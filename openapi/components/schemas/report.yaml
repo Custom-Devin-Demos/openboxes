@@ -1,0 +1,174 @@
+# Report + indicator schemas (ReportApiController, IndicatorApiController).
+
+TransactionReportMetadata:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: object
+      properties:
+        transactionCount:
+          type: integer
+          nullable: true
+        productCount:
+          type: integer
+          nullable: true
+        minTransactionDate:
+          type: string
+          nullable: true
+        maxTransactionDate:
+          type: string
+          nullable: true
+        previousFireTime:
+          type: string
+          nullable: true
+          description: Last fire time of the RefreshTransactionFactJob quartz job.
+        nextFireTime:
+          type: string
+          nullable: true
+
+CycleCountReportRow:
+  type: object
+  description: One bin-location row of the cycle count report (values CSV-escaped).
+  properties:
+    productCode:
+      type: string
+      nullable: true
+    productName:
+      type: string
+      nullable: true
+    productFamily:
+      type: string
+      nullable: true
+    category:
+      type: string
+      nullable: true
+    formularies:
+      type: string
+      nullable: true
+    lotNumber:
+      type: string
+      nullable: true
+    expirationDate:
+      type: string
+      nullable: true
+    abcClassification:
+      type: string
+      nullable: true
+    binLocation:
+      type: string
+      nullable: true
+    status:
+      type: string
+      nullable: true
+    lastInventoryDate:
+      type: string
+      nullable: true
+    quantityOnHand:
+      type: number
+      nullable: true
+
+CycleCountReport:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/components/schemas/CycleCountReportRow'
+
+InventoryByLocationReport:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: object
+      properties:
+        locations:
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+                nullable: true
+        entries:
+          type: array
+          items:
+            type: object
+            properties:
+              productCode:
+                type: string
+                nullable: true
+              productName:
+                type: string
+                nullable: true
+              productFamily:
+                type: string
+                nullable: true
+              category:
+                type: string
+                nullable: true
+              formularies:
+                type: string
+                nullable: true
+              tags:
+                type: string
+                nullable: true
+              quantityOnHandByLocation:
+                type: object
+                nullable: true
+                additionalProperties:
+                  type: number
+                  nullable: true
+              totalQuantityOnHand:
+                type: number
+                nullable: true
+              totalQuantityAvailableToPromise:
+                type: number
+                nullable: true
+
+InventoryByLocationReportError:
+  type: object
+  description: |
+    400 body rendered directly by ReportApiController.inventoryByLocationReport()
+    on command validation failure (`errorCode` + `errorMessages`, no `errorMessage`).
+  required: [errorCode]
+  properties:
+    errorCode:
+      type: integer
+    errorMessages:
+      type: array
+      items:
+        type: string
+
+IndicatorNumberResponse:
+  type: object
+  description: Single- or double-valued KPI indicator (`type` SINGLE or DOUBLE).
+  required: [data]
+  properties:
+    data:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        type:
+          type: string
+          nullable: true
+          description: SINGLE or DOUBLE.
+        value:
+          type: number
+          nullable: true
+          description: Present for SINGLE indicators.
+        firstValue:
+          type: number
+          nullable: true
+          description: Present for DOUBLE indicators.
+        secondValue:
+          type: number
+          nullable: true
+          description: Present for DOUBLE indicators.
