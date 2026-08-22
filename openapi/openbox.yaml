@@ -20,13 +20,28 @@ servers:
 security:
   - sessionCookie: []
 tags:
+  - name: dashboard
+    description: Dashboard configuration and widget data (DashboardApiController)
+  - name: finance
+    description: GL accounts, GL account types, budget codes, payment terms (GlAccountApiController, GlAccountTypeApiController, BudgetCodeApiController, PaymentTermApiController)
+  - name: invoice
+    description: Invoicing (InvoiceApiController, PrepaymentInvoiceApiController, PrepaymentInvoiceItemApiController)
   - name: localization
     description: Translations / localized messages (LocalizationApiController)
+  - name: report
+    description: Reports and KPI indicators (ReportApiController, IndicatorApiController)
+  - name: supplier
+    description: Supplier search and details (SupplierApiController)
 
 # One line per per-domain fragment file under paths/. Sibling sessions add
 # their fragment here (append a single line; keep the list alphabetized).
 x-fragments:
+  - paths/dashboard.yaml
+  - paths/finance.yaml
+  - paths/invoice.yaml
   - paths/localization.yaml
+  - paths/report.yaml
+  - paths/supplier.yaml
 
 paths: {}
 
