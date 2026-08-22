@@ -174,9 +174,9 @@ AdminSettings:
           type: string
           nullable: true
         buildDate:
-          description: |
-            Build timestamp; serializes as a string or as an
-            `{empty, present}` Optional-like object when unset.
+          type: string
+          nullable: true
+          description: Build timestamp; null when built in real time (no packaged build).
         branchName:
           type: string
           nullable: true

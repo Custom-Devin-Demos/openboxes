@@ -246,7 +246,7 @@ class AdminApiController extends BaseApiController {
                 appVersion         : grailsApplication.metadata.getProperty('info.app.version'),
                 showUpgradeLink    : user?.roles?.contains(Role.findByRoleType('ROLE_ADMIN')) ?: false,
                 buildNumber        : gitProperties.shortCommitId,
-                buildDate          : grailsApplication.metadata.getProperty('build.time', String),
+                buildDate          : grailsApplication.metadata.getProperty('build.time'),
                 branchName         : ConfigHelper.getBranchName(gitProperties),
                 grailsVersion      : grailsApplication.metadata.getProperty('info.app.grailsVersion'),
                 currentDate        : new Date().toString(),

@@ -180,7 +180,7 @@ class ProductScreenApiController {
                     it.entityTypeCode == EntityTypeCode.PRODUCT_SUPPLIER
                 }.collect { [id: it.id, name: it.name, code: it.code] },
                 synonymTypeCodes     : SynonymTypeCode.values().collect { it.name() },
-                supportedLocales     : grailsApplication.config.openboxes.locale.supportedLocales?.sort() ?: [],
+                supportedLocales     : grailsApplication.config.openboxes.locale.supportedLocales?.sort(false) ?: [],
                 currencyCode         : grailsApplication.config.openboxes.locale.defaultCurrencyCode,
                 bomEnabled           : grailsApplication.config.openboxes.bom.enabled ?: false,
                 mergeProductsEnabled : grailsApplication.config.openboxes.products.merge.enabled ?: false,
