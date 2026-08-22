@@ -14,7 +14,7 @@ import grails.util.Holders
 import org.pih.warehouse.api.Stocklist
 
 @Transactional
-class StocklistController {
+class StocklistController implements grails.plugins.rendering.RenderingSupport {
 
     def stocklistService
     def documentService
@@ -33,7 +33,7 @@ class StocklistController {
     def renderPdf() {
         Stocklist stocklist = stocklistService.getStocklist(params.id)
 
-        renderPdf(
+        renderPdfDocument(
                 template: "/stocklist/print",
                 model: [stocklist: stocklist],
                 filename: "Stocklist - ${stocklist?.requisition?.name}.pdf"

@@ -17,7 +17,7 @@ import org.pih.warehouse.core.http.HttpResponseContext
  * We intentionally don't provide methods for rendering error responses. To return an error response,
  * throw an Exception, which will be processed by the {@link ErrorsController}.
  */
-abstract class BaseController {
+abstract class BaseController implements grails.plugins.rendering.RenderingSupport {
 
     FileNameGenerator fileNameGenerator
     JsonSerializer jsonSerializer
@@ -156,7 +156,7 @@ abstract class BaseController {
             throw new RuntimeException("This endpoint does not support formatting to PDF.")
         }
 
-        renderPdf(
+        renderPdfDocument(
                 model: model,
                 template: template,
                 filename: fileNameGenerator.generate(FileExtension.PDF, fileNameArgs ?: defaultFileName),

@@ -8,7 +8,7 @@ import org.pih.warehouse.inventory.InventoryLevel
 import org.pih.warehouse.order.Order
 
 @Transactional
-class PutAwayController {
+class PutAwayController implements grails.plugins.rendering.RenderingSupport {
 
     def productAvailabilityService
 
@@ -45,7 +45,7 @@ class PutAwayController {
             jsonObject = new JSONObject(putaway.toJson())
         }
 
-        renderPdf(
+        renderPdfDocument(
                 template: "/putAway/print",
                 model: [jsonObject: jsonObject],
                 filename: "Putaway ${putaway?.putawayNumber}.pdf"

@@ -268,19 +268,19 @@ class OrderItem implements Serializable, Comparable<OrderItem> {
         return quantityRemaining > 0 ? quantityRemaining : 0
     }
 
-    Boolean isPartiallyFulfilled() {
+    boolean isPartiallyFulfilled() {
         return quantityShipped > 0 && quantityShipped < quantity
     }
 
-    Boolean isCompletelyFulfilled() {
+    boolean isCompletelyFulfilled() {
         return quantityShipped >= quantity
     }
 
-    Boolean isCompletelyReceived() {
+    boolean isCompletelyReceived() {
         return (quantityReceived + quantityCanceled) >= quantity
     }
 
-    Boolean isPartiallyReceived() {
+    boolean isPartiallyReceived() {
         return quantityReceived > 0 && !isCompletelyReceived()
     }
 
@@ -347,7 +347,7 @@ class OrderItem implements Serializable, Comparable<OrderItem> {
         return !fullyInvoiced && quantityAvailableToInvoice > 0
     }
 
-    Boolean isPending() {
+    boolean isPending() {
         return !isCompletelyFulfilled()
     }
 
