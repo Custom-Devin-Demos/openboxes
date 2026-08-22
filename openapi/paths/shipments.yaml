@@ -1,0 +1,2284 @@
+# Shipments batch: ShipmentApiController, ShipmentItemApiController,
+# ShipmentWorkflowApiController, CreateShipmentApiController,
+# CombineShipmentApiController, CombinedShipmentItemApiController,
+# PackListApiController, DeliveryNoteApiController, GoodsReceiptNoteApiController,
+# PutawayApiController, PutawayItemApiController.
+# Characterization spec: documents current behavior exactly (see PR notes).
+
+/api/shipments/shipmentList:
+  get:
+    tags: [shipments]
+    summary: List shipments for the session warehouse with filters
+    operationId: shipmentList
+    parameters:
+      - name: type
+        in: query
+        required: false
+        description: '`incoming` lists inbound shipments; anything else lists outbound.'
+        schema:
+          type: string
+      - name: terms
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: shipmentType
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: origin
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: destination
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: max
+        in: query
+        required: false
+        description: Page size (default 100, capped at 10000). Not the shared pagination envelope.
+        schema:
+          type: integer
+    responses:
+      '200':
+        description: Shipment rows plus echoed filters and filter options.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentListResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/shipments/commentForm:
+  get:
+    tags: [shipments]
+    summary: Users available for shipment comment mentions
+    operationId: shipmentCommentForm
+    responses:
+      '200':
+        description: Active users.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentCommentFormResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/shipments/addToShipmentForm:
+  get:
+    tags: [shipments]
+    summary: Items and pending shipments for the add-to-shipment form
+    operationId: shipmentAddToShipmentForm
+    parameters:
+      - name: productId
+        in: query
+        required: false
+        description: Repeatable product id (product.id multi-param).
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Requested items and pending outbound shipments.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentAddToShipmentFormResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/shipments/{id}/summary:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [shipments]
+    summary: Shipment summary
+    operationId: shipmentSummary
+    x-contract-tests:
+      - name: missing shipment returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Shipment summary.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentSummaryResponse'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/shipments/{id}/showDetails:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [shipments]
+    summary: Full shipment details for the show-shipment screen
+    operationId: shipmentShowDetails
+    x-contract-tests:
+      - name: missing shipment returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Shipment details.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentDetailsResponse'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/shipments/{id}/documentForm:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Shipment id (echoed in the route but not read by the action).
+      schema:
+        type: string
+  get:
+    tags: [shipments]
+    summary: Document form data (document types, optionally an existing document)
+    operationId: shipmentDocumentForm
+    parameters:
+      - name: documentId
+        in: query
+        required: false
+        schema:
+          type: string
+    x-contract-tests:
+      - name: id is not validated (returns 200 for unknown shipment id)
+        params:
+          id: does-not-exist
+        status: 200
+    responses:
+      '200':
+        description: Document form data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentDocumentFormResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/shipments/{id}/eventForm:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Shipment id (echoed in the route but not read by the action).
+      schema:
+        type: string
+  get:
+    tags: [shipments]
+    summary: Event form data (event types, locations, optionally an existing event)
+    operationId: shipmentEventForm
+    parameters:
+      - name: eventId
+        in: query
+        required: false
+        schema:
+          type: string
+    x-contract-tests:
+      - name: id is not validated (returns 200 for unknown shipment id)
+        params:
+          id: does-not-exist
+        status: 200
+    responses:
+      '200':
+        description: Event form data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentEventFormResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/shipments/{id}/packingList:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [shipments]
+    summary: Packing list for a shipment
+    operationId: shipmentPackingList
+    x-contract-tests:
+      - name: missing shipment returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Packing list.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentPackingListResponse'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/shipments/{id}/paginatedPackingList:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [shipments]
+    summary: Packing list grouped by container (paginated by container)
+    operationId: shipmentPaginatedPackingList
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    x-contract-tests:
+      - name: missing shipment returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Packing list grouped by container.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentPaginatedPackingListResponse'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/shipments/{id}/pickListReport:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [shipments]
+    summary: Pick list report data
+    operationId: shipmentPickListReport
+    x-contract-tests:
+      - name: missing shipment returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Pick list report data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentPickListReportResponse'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/shipments/{id}/shippingReport:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [shipments]
+    summary: Shipping report (checklist) data
+    operationId: shipmentShippingReport
+    x-contract-tests:
+      - name: missing shipment returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Shipping report data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentShippingReportResponse'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/shipments/{id}/sendShipmentForm:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [shipments]
+    summary: Send-shipment form data
+    operationId: shipmentSendShipmentForm
+    x-contract-tests:
+      - name: missing shipment returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Send-shipment form data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentSendFormResponse'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/shipments/{id}/sendShipment:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  post:
+    tags: [shipments]
+    summary: Send a shipment
+    operationId: shipmentSendShipment
+    requestBody:
+      required: false
+      description: Parameters may also be sent as query/form params (parseRequest merges JSON into params).
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              actualShippingDate:
+                type: string
+                description: 'Format: MM/dd/yyyy HH:mm XXX. Must not be in the future.'
+          example:
+            actualShippingDate: 01/15/2024 10:00 +01:00
+    responses:
+      '200':
+        description: |
+          `{success: true, message}` when sent; `{success: false, errors}` for
+          validation problems (still HTTP 200).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentActionResult'
+            example:
+              success: true
+              message: Shipment sent on 01/15/2024
+      '404':
+        $ref: '#/components/responses/NotFound'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/shipments/{id}/receiveShipmentForm:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [shipments]
+    summary: Receive-shipment form data
+    operationId: shipmentReceiveShipmentForm
+    x-contract-tests:
+      - name: missing shipment returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Receive-shipment form data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentReceiveFormResponse'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/shipments/{id}/receiveShipment:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  post:
+    tags: [shipments]
+    summary: Receive (or credit/save receipt for) a shipment
+    operationId: shipmentReceiveShipment
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: true
+            properties:
+              actualDeliveryDate:
+                type: string
+                description: 'Format: MM/dd/yyyy HH:mm XXX.'
+              creditStockOnReceipt:
+                type: boolean
+          example:
+            actualDeliveryDate: 01/20/2024 10:00 +01:00
+            creditStockOnReceipt: true
+    responses:
+      '200':
+        description: |
+          `{success, received, message}` on success; `{success: false, errors}`
+          for validation problems (still HTTP 200).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentActionResult'
+            example:
+              success: true
+              received: false
+              message: Shipment received on 01/20/2024
+      '404':
+        $ref: '#/components/responses/NotFound'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/shipments/receiptItems/{id}/split:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Receipt item id.
+      schema:
+        type: string
+  post:
+    tags: [shipments]
+    summary: Split a receipt item into a new line
+    operationId: shipmentSplitReceiptItem
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: true
+          example: {}
+    responses:
+      '200':
+        description: |
+          `{success, message}` or `{success: false, errors}`; a missing receipt
+          item also renders `{success: false, errors}` with HTTP 200.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentActionResult'
+            example:
+              success: true
+              message: Receipt item split
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/shipments/receiptItems/{id}/delete:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Receipt item id.
+      schema:
+        type: string
+  post:
+    tags: [shipments]
+    summary: Delete a receipt item
+    operationId: shipmentDeleteReceiptItem
+    responses:
+      '200':
+        description: |
+          `{success, message}` or `{success: false, errors}`; a missing receipt
+          item renders `{success: false, errors}` with HTTP 200 (not 404).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentActionResult'
+            example:
+              success: true
+              message: Receipt item deleted
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/shipments/receipts/{id}/delete:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Receipt id.
+      schema:
+        type: string
+  post:
+    tags: [shipments]
+    summary: Delete a receipt (rolls back received stock)
+    operationId: shipmentDeleteReceipt
+    responses:
+      '200':
+        description: '`{success, message}` or `{success: false, errors}` (HTTP 200 in both cases).'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentActionResult'
+            example:
+              success: true
+              message: Receipt deleted
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/shipments/receiptItems/{id}/putawayLocations:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Receipt item id.
+      schema:
+        type: string
+  get:
+    tags: [shipments]
+    summary: Suggested putaway bin locations for a receipt item's product
+    operationId: shipmentPutawayLocations
+    x-contract-tests:
+      - name: missing receipt item returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Product and candidate bin locations.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentPutawayLocationsResponse'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/shipmentItems:
+  get:
+    tags: [shipments]
+    summary: List shipment items (paginated)
+    operationId: listShipmentItems
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: Shipment items (max defaults to 10, capped at 100).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentItemListResponse'
+  post:
+    tags: [shipments]
+    summary: Create a shipment item
+    operationId: createShipmentItem
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ShipmentItemInput'
+          example:
+            shipment: ff8081817f0e3f80017f0e40a1b20001
+            product: ff8081817f0e3f80017f0e40a1b20002
+            quantity: 10
+    responses:
+      '201':
+        description: Created shipment item.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentItemResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20003
+                quantity: 10
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/shipmentItems/options:
+  get:
+    tags: [shipments]
+    summary: Select options for the shipment item form
+    operationId: shipmentItemOptions
+    responses:
+      '200':
+        description: Options for containers, products, persons, inventory items, donors, shipments.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentItemOptionsResponse'
+
+/api/shipmentItems/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [shipments]
+    summary: Read a shipment item
+    operationId: readShipmentItem
+    x-contract-tests:
+      - name: missing shipment item returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The shipment item.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentItemResponse'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [shipments]
+    summary: Update a shipment item
+    operationId: updateShipmentItem
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ShipmentItemInput'
+          example:
+            quantity: 5
+            version: 0
+    responses:
+      '200':
+        description: Updated shipment item.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentItemResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20003
+                quantity: 5
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [shipments]
+    summary: Delete a shipment item
+    operationId: deleteShipmentItem
+    responses:
+      '204':
+        description: Deleted (no content).
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/shipmentItems/{id}/pick:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [shipments]
+    summary: Bin locations available to pick a shipment item from
+    operationId: shipmentItemPick
+    x-contract-tests:
+      - name: missing shipment item returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Shipment item plus available and selected bin locations.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentItemPickResponse'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  post:
+    tags: [shipments]
+    summary: Update the pick (bin location) for a shipment item
+    operationId: shipmentItemUpdatePick
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              binLocation:
+                type: object
+                properties:
+                  id:
+                    type: string
+          example:
+            binLocation:
+              id: ff8081817f0e3f80017f0e40a1b20004
+    responses:
+      '200':
+        description: Updated shipment item.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentItemResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20003
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/shipmentItems/{id}/split:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [shipments]
+    summary: Read a shipment item and a template for splitting it
+    operationId: shipmentItemSplit
+    x-contract-tests:
+      - name: missing shipment item returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Shipment item plus split-item template.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentItemSplitResponse'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  post:
+    tags: [shipments]
+    summary: Split a shipment item into two lines
+    operationId: shipmentItemUpdateSplit
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              quantity:
+                type: integer
+              binLocation:
+                type: object
+                properties:
+                  id:
+                    type: string
+          example:
+            quantity: 2
+            binLocation:
+              id: ff8081817f0e3f80017f0e40a1b20004
+    responses:
+      '200':
+        description: Original and split shipment items.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentItemSplitResponse'
+            example:
+              data:
+                shipmentItem:
+                  id: ff8081817f0e3f80017f0e40a1b20003
+                splitItem:
+                  id: ff8081817f0e3f80017f0e40a1b20005
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/shipmentWorkflows:
+  get:
+    tags: [shipments]
+    summary: List shipment workflows (paginated)
+    operationId: listShipmentWorkflows
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: Shipment workflows (max defaults to 10, capped at 100).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentWorkflowListResponse'
+  post:
+    tags: [shipments]
+    summary: Create a shipment workflow
+    operationId: createShipmentWorkflow
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ShipmentWorkflowInput'
+          example:
+            name: Test workflow
+            shipmentType: '1'
+    responses:
+      '201':
+        description: Created shipment workflow.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentWorkflowResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20006
+                name: Test workflow
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/shipmentWorkflows/options:
+  get:
+    tags: [shipments]
+    summary: Select options for the shipment workflow form
+    operationId: shipmentWorkflowOptions
+    responses:
+      '200':
+        description: Options for shipment types, reference number types, container types, document templates.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentWorkflowOptionsResponse'
+
+/api/shipmentWorkflows/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [shipments]
+    summary: Read a shipment workflow
+    operationId: readShipmentWorkflow
+    x-contract-tests:
+      - name: missing workflow returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The shipment workflow.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentWorkflowResponse'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [shipments]
+    summary: Update a shipment workflow
+    operationId: updateShipmentWorkflow
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ShipmentWorkflowInput'
+          example:
+            name: Renamed workflow
+            version: 0
+    responses:
+      '200':
+        description: Updated shipment workflow.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentWorkflowResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20006
+                name: Renamed workflow
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [shipments]
+    summary: Delete a shipment workflow
+    operationId: deleteShipmentWorkflow
+    responses:
+      '204':
+        description: Deleted (no content).
+      '404':
+        $ref: '#/components/responses/NotFound'
+      '409':
+        description: Workflow is referenced by other data (integrity violation).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+            example:
+              errorCode: 409
+              errorMessage: Cannot delete shipment workflow because it is in use
+
+/api/createShipment:
+  get:
+    tags: [shipments]
+    summary: Create-shipment workflow data for a new (unsaved) shipment
+    operationId: createShipmentReadNew
+    responses:
+      '200':
+        description: Workflow data with an unsaved shipment template.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentReadResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [shipments]
+    summary: Save details for a new shipment
+    operationId: createShipmentSaveDetailsNew
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateShipmentDetailsInput'
+          example:
+            name: Test shipment
+            shipmentTypeId: '1'
+            originId: ff8081817f0e3f80017f0e40a1b20010
+            destinationId: ff8081817f0e3f80017f0e40a1b20011
+            expectedShippingDate: 01/15/2024
+    responses:
+      '200':
+        description: Saved shipment workflow data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentReadResponse'
+            example:
+              data:
+                shipment:
+                  id: ff8081817f0e3f80017f0e40a1b20012
+                  name: Test shipment
+      '400':
+        description: Validation errors.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Shipment name is required
+
+/api/createShipment/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [shipments]
+    summary: Create-shipment workflow data for an existing shipment
+    operationId: createShipmentRead
+    x-contract-tests:
+      - name: missing shipment returns 404 with errorMessages body
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Workflow data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentReadResponse'
+      '404':
+        description: Shipment not found (`{errorMessages}` body, not the shared ErrorResponse).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+  post:
+    tags: [shipments]
+    summary: Save details for an existing shipment
+    operationId: createShipmentSaveDetails
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateShipmentDetailsInput'
+          example:
+            name: Updated shipment name
+    responses:
+      '200':
+        description: Saved shipment workflow data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentReadResponse'
+            example:
+              data:
+                shipment:
+                  id: ff8081817f0e3f80017f0e40a1b20012
+                  name: Updated shipment name
+      '400':
+        description: Validation errors.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Shipment name is required
+      '404':
+        description: Shipment not found (`{errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Unable to locate shipment with ID does-not-exist
+
+/api/createShipment/{id}/tracking:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  post:
+    tags: [shipments]
+    summary: Save tracking details (carrier, tracking number) for a shipment
+    operationId: createShipmentSaveTracking
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: true
+            properties:
+              carrierId:
+                type: string
+                nullable: true
+              trackingNumber:
+                type: string
+                nullable: true
+          example:
+            trackingNumber: TRACK-123
+    responses:
+      '200':
+        description: Updated workflow data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentReadResponse'
+            example:
+              data:
+                shipment:
+                  id: ff8081817f0e3f80017f0e40a1b20012
+      '400':
+        description: Validation errors (`{errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Invalid tracking details
+      '404':
+        description: Shipment not found (`{errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Unable to locate shipment with ID does-not-exist
+
+/api/createShipment/{id}/containers:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  post:
+    tags: [shipments]
+    summary: Add containers (boxes/pallets) to a shipment
+    operationId: createShipmentAddContainers
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: true
+            properties:
+              containers:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+          example:
+            containers:
+              - containerTypeId: '1'
+                name: Pallet 1
+                quantity: 1
+    responses:
+      '200':
+        description: Updated workflow data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentReadResponse'
+            example:
+              data:
+                shipment:
+                  id: ff8081817f0e3f80017f0e40a1b20012
+      '400':
+        description: Validation errors (`{errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Invalid container
+      '404':
+        description: Shipment not found (`{errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Unable to locate shipment with ID does-not-exist
+
+/api/createShipment/{id}/deleteContainers:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  post:
+    tags: [shipments]
+    summary: Delete selected containers from a shipment
+    operationId: createShipmentDeleteContainers
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: true
+            properties:
+              containerIds:
+                type: array
+                items:
+                  type: string
+          example:
+            containerIds:
+              - ff8081817f0e3f80017f0e40a1b20013
+    responses:
+      '200':
+        description: Updated workflow data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentReadResponse'
+            example:
+              data:
+                shipment:
+                  id: ff8081817f0e3f80017f0e40a1b20012
+      '400':
+        description: Validation errors (`{errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Container not found
+      '404':
+        description: Shipment not found (`{errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Unable to locate shipment with ID does-not-exist
+
+/api/createShipment/{id}/deleteAllContainers:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  post:
+    tags: [shipments]
+    summary: Delete all containers from a shipment
+    operationId: createShipmentDeleteAllContainers
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: true
+          example: {}
+    responses:
+      '200':
+        description: Updated workflow data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentReadResponse'
+            example:
+              data:
+                shipment:
+                  id: ff8081817f0e3f80017f0e40a1b20012
+      '404':
+        description: Shipment not found (`{errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Unable to locate shipment with ID does-not-exist
+
+/api/createShipment/{id}/items:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  post:
+    tags: [shipments]
+    summary: Add an item to a shipment
+    operationId: createShipmentAddItem
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: true
+            properties:
+              productId:
+                type: string
+              quantity:
+                type: integer
+              containerId:
+                type: string
+                nullable: true
+          example:
+            productId: ff8081817f0e3f80017f0e40a1b20002
+            quantity: 10
+    responses:
+      '200':
+        description: Updated workflow data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentReadResponse'
+            example:
+              data:
+                shipment:
+                  id: ff8081817f0e3f80017f0e40a1b20012
+      '400':
+        description: Validation errors (`{errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Product is required
+      '404':
+        description: Shipment not found (`{errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Unable to locate shipment with ID does-not-exist
+
+/api/createShipment/{id}/deleteItem:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  post:
+    tags: [shipments]
+    summary: Delete an item from a shipment
+    operationId: createShipmentDeleteItem
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: true
+            properties:
+              shipmentItemId:
+                type: string
+          example:
+            shipmentItemId: ff8081817f0e3f80017f0e40a1b20014
+    responses:
+      '200':
+        description: Updated workflow data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentReadResponse'
+            example:
+              data:
+                shipment:
+                  id: ff8081817f0e3f80017f0e40a1b20012
+      '400':
+        description: Validation errors (`{errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Shipment item not found
+      '404':
+        description: Shipment not found (`{errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Unable to locate shipment with ID does-not-exist
+
+/api/createShipment/{id}/moveItem:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  post:
+    tags: [shipments]
+    summary: Move an item between containers in a shipment
+    operationId: createShipmentMoveItem
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: true
+            properties:
+              shipmentItemId:
+                type: string
+              containerId:
+                type: string
+                nullable: true
+          example:
+            shipmentItemId: ff8081817f0e3f80017f0e40a1b20014
+            containerId: ff8081817f0e3f80017f0e40a1b20013
+    responses:
+      '200':
+        description: Updated workflow data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentReadResponse'
+            example:
+              data:
+                shipment:
+                  id: ff8081817f0e3f80017f0e40a1b20012
+      '400':
+        description: Validation errors (`{errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Shipment item not found
+      '404':
+        description: Shipment not found (`{errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Unable to locate shipment with ID does-not-exist
+
+/api/createShipment/{id}/binLocations:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [shipments]
+    summary: Available bin locations for picking a shipment's origin
+    operationId: createShipmentBinLocations
+    parameters:
+      - name: productId
+        in: query
+        required: false
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing shipment returns 404 with errorMessages body
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Bin locations with available quantity.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentBinLocationsResponse'
+      '404':
+        description: Shipment not found (`{errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+
+/api/createShipment/{id}/pickItem:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  post:
+    tags: [shipments]
+    summary: Pick a shipment item from a bin location
+    operationId: createShipmentPickItem
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: true
+            properties:
+              shipmentItemId:
+                type: string
+              binLocationId:
+                type: string
+                nullable: true
+          example:
+            shipmentItemId: ff8081817f0e3f80017f0e40a1b20014
+            binLocationId: ff8081817f0e3f80017f0e40a1b20015
+    responses:
+      '200':
+        description: Updated workflow data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentReadResponse'
+            example:
+              data:
+                shipment:
+                  id: ff8081817f0e3f80017f0e40a1b20012
+      '400':
+        description: Validation errors (`{errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Shipment item not found
+      '404':
+        description: Shipment not found (`{errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Unable to locate shipment with ID does-not-exist
+
+/api/createShipment/{id}/splitItem:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  post:
+    tags: [shipments]
+    summary: Split a picked shipment item across bin locations
+    operationId: createShipmentSplitItem
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: true
+            properties:
+              shipmentItemId:
+                type: string
+              splitItems:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+          example:
+            shipmentItemId: ff8081817f0e3f80017f0e40a1b20014
+            splitItems:
+              - quantity: 5
+                binLocationId: ff8081817f0e3f80017f0e40a1b20015
+    responses:
+      '200':
+        description: Updated workflow data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentReadResponse'
+            example:
+              data:
+                shipment:
+                  id: ff8081817f0e3f80017f0e40a1b20012
+      '400':
+        description: Validation errors (`{errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Shipment item not found
+      '404':
+        description: Shipment not found (`{errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Unable to locate shipment with ID does-not-exist
+
+/api/createShipment/{id}/validatePicklist:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  post:
+    tags: [shipments]
+    summary: Validate the shipment's picklist
+    operationId: createShipmentValidatePicklist
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: true
+          example: {}
+    responses:
+      '200':
+        description: Picklist validation result.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentValidatePicklistResponse'
+            example:
+              data:
+                valid: true
+      '400':
+        description: Validation errors (`{errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Picklist is not valid
+      '404':
+        description: Shipment not found (`{errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Unable to locate shipment with ID does-not-exist
+
+/api/createShipment/{id}/clearPicklist:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  post:
+    tags: [shipments]
+    summary: Clear the shipment's picklist
+    operationId: createShipmentClearPicklist
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: true
+          example: {}
+    responses:
+      '200':
+        description: Updated workflow data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentReadResponse'
+            example:
+              data:
+                shipment:
+                  id: ff8081817f0e3f80017f0e40a1b20012
+      '404':
+        description: Shipment not found (`{errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Unable to locate shipment with ID does-not-exist
+
+/api/createShipment/{id}/send:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  post:
+    tags: [shipments]
+    summary: Send the shipment created in the workflow
+    operationId: createShipmentSend
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: true
+            properties:
+              actualShippingDate:
+                type: string
+                nullable: true
+              emailRecipientIds:
+                type: array
+                items:
+                  type: string
+          example:
+            actualShippingDate: 01/15/2024
+    responses:
+      '200':
+        description: Sent shipment id.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentSendResponse'
+            example:
+              data:
+                shipmentId: ff8081817f0e3f80017f0e40a1b20012
+      '400':
+        description: Validation errors (`{errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Cannot send shipment without items
+      '404':
+        description: Shipment not found (`{errorMessages}` body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentErrors'
+            example:
+              errorMessages:
+                - Unable to locate shipment with ID does-not-exist
+
+/api/combineShipments/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Order id.
+      schema:
+        type: string
+  get:
+    tags: [shipments]
+    summary: Read an order as a raw domain object (combine-shipments screen)
+    operationId: combineShipmentsRead
+    x-contract-tests:
+      - name: unknown id still returns 200 with data null
+        params:
+          id: does-not-exist
+        status: 200
+    responses:
+      '200':
+        description: 'Raw Order graph, or `data: null` when the id does not exist (no 404).'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CombineShipmentOrderResponse'
+
+/api/orderNumberOptions:
+  get:
+    tags: [shipments]
+    summary: Order number options for combining shipments
+    operationId: combinedShipmentOrderNumberOptions
+    parameters:
+      - name: vendor
+        in: query
+        required: false
+        description: Vendor location id.
+        schema:
+          type: string
+      - name: destination
+        in: query
+        required: false
+        description: Destination location id.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded vendor and destination
+        query:
+          vendor: '{supplierId}'
+          destination: '{facilityId}'
+        status: 200
+    responses:
+      '200':
+        description: Orders with items still available to ship.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CombinedShipmentOrderOptionsResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/combinedShipmentItems/getProductsInOrders:
+  get:
+    tags: [shipments]
+    summary: Products contained in candidate orders for combined shipment
+    operationId: combinedShipmentProductsInOrders
+    parameters:
+      - name: vendor
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: destination
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: orderIds
+        in: query
+        required: false
+        description: Comma-separated or repeated order ids.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded vendor and destination
+        query:
+          vendor: '{supplierId}'
+          destination: '{facilityId}'
+          orderIds: ''
+        status: 200
+    responses:
+      '200':
+        description: Raw Product domain objects.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CombinedShipmentProductsInOrdersResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/combinedShipmentItems/findOrderItems:
+  post:
+    tags: [shipments]
+    summary: Find order items available to add to a combined shipment
+    operationId: combinedShipmentFindOrderItems
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CombinedShipmentFindOrderItemsInput'
+          example:
+            orderIds: []
+            vendor: ff8081817f0e3f80017f0e40a1b20010
+            destination: ff8081817f0e3f80017f0e40a1b20011
+    responses:
+      '200':
+        description: Order items under a top-level `orderItems` key (not `data`).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CombinedShipmentOrderItemsResponse'
+            example:
+              orderItems: []
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/combinedShipmentItems/addToShipment/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Shipment id.
+      schema:
+        type: string
+  post:
+    tags: [shipments]
+    summary: Add order items to a combined shipment
+    operationId: combinedShipmentAddItemsToShipment
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CombinedShipmentAddItemsInput'
+          example:
+            itemsToAdd:
+              - orderItemId: ff8081817f0e3f80017f0e40a1b20016
+                quantityToShip: 5
+    responses:
+      '200':
+        description: The updated raw Shipment domain graph.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CombinedShipmentShipmentResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20012
+      '400':
+        description: |
+          Missing shipment or empty item list renders plain-text
+          "Shipment not found" / "Cannot add empty items to shipment" with 400.
+        content:
+          text/html:
+            schema:
+              type: string
+            example: Shipment not found
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/combinedShipmentItems/importTemplate/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Shipment id.
+      schema:
+        type: string
+  post:
+    tags: [shipments]
+    summary: Import combined-shipment items from an uploaded CSV template
+    operationId: combinedShipmentImportTemplate
+    requestBody:
+      required: true
+      description: Multipart upload with `importFile` (CSV).
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              importFile:
+                type: string
+                format: binary
+          example:
+            importFile: (binary CSV)
+    responses:
+      '200':
+        description: Plain-text "Successfully imported template".
+        content:
+          text/html:
+            schema:
+              type: string
+            example: Successfully imported template
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/combinedShipmentItems/exportTemplate:
+  get:
+    tags: [shipments]
+    summary: Export the combined-shipment items CSV template
+    operationId: combinedShipmentExportTemplate
+    parameters:
+      - name: vendor
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: destination
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: blank
+        in: query
+        required: false
+        description: When true, exports an empty template.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: blank template
+        query:
+          blank: 'true'
+        status: 200
+    responses:
+      '200':
+        description: CSV attachment (schema intentionally omitted; non-JSON body).
+        content:
+          text/csv: {}
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovements/packlistTemplate/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Stock movement id.
+      schema:
+        type: string
+  get:
+    tags: [shipments]
+    summary: Export the pack list items template for a stock movement
+    operationId: packListExportTemplate
+    parameters:
+      - name: format
+        in: query
+        required: false
+        description: csv (default) or xls; any other value throws a server error.
+        schema:
+          type: string
+          enum: [csv, xls]
+    x-contract-tests:
+      - name: requires an existing stock movement id
+        skip: No seeded stock movement fixture placeholder is available to the harness.
+    responses:
+      '200':
+        description: CSV or XLS attachment.
+        content:
+          text/csv:
+            schema:
+              type: string
+          application/vnd.ms-excel:
+            schema:
+              type: string
+              format: binary
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovements/importPackListItems/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Stock movement id.
+      schema:
+        type: string
+  post:
+    tags: [shipments]
+    summary: Import pack list items from an uploaded file
+    operationId: packListImportItems
+    requestBody:
+      required: true
+      description: Multipart upload bound to ImportPackListCommand.
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            additionalProperties: true
+          example:
+            importFile: (binary file)
+    responses:
+      '200':
+        description: |
+          `{message}` on success. When row errors exist the controller renders
+          `{message, errors}` first and then also renders the success body
+          (both HTTP 200).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PackListImportResponse'
+            example:
+              message: Data imported successfully
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/deliveryNotes/{id}/printData:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Requisition id.
+      schema:
+        type: string
+  get:
+    tags: [shipments]
+    summary: Delivery note print data for a requisition
+    operationId: deliveryNotePrintData
+    parameters:
+      - name: sortOrder
+        in: query
+        required: false
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing requisition returns 404 with errorMessage body
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Delivery note report payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryNotePrintDataResponse'
+      '404':
+        description: Requisition not found (`{errorMessage}` body, no errorCode).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryNoteNotFound'
+
+/api/deliveryNotes/{id}/printOutboundReturnData:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Shipment id.
+      schema:
+        type: string
+  get:
+    tags: [shipments]
+    summary: Outbound-return delivery note print data for a shipment
+    operationId: deliveryNotePrintOutboundReturnData
+    x-contract-tests:
+      - name: missing shipment returns 404 with errorMessage body
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Outbound-return delivery note report payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryNoteOutboundReturnResponse'
+      '404':
+        description: Shipment not found (`{errorMessage}` body, no errorCode).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryNoteNotFound'
+
+/api/goodsReceiptNotes/{id}/printData:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Shipment id.
+      schema:
+        type: string
+  get:
+    tags: [shipments]
+    summary: Goods receipt note print data for a shipment
+    operationId: goodsReceiptNotePrintData
+    x-contract-tests:
+      - name: missing shipment returns 404 with errorMessage body
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Goods receipt note report payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoodsReceiptNotePrintDataResponse'
+      '404':
+        description: Shipment not found (`{errorMessage}` body, no errorCode).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryNoteNotFound'
+
+/api/putaways:
+  get:
+    tags: [shipments]
+    summary: List putaway candidate items for a location
+    operationId: listPutawayCandidates
+    parameters:
+      - name: location.id
+        in: query
+        required: false
+        description: Location id (defaults to the session warehouse).
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Putaway candidate items (no totalCount).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutawayCandidatesResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [shipments]
+    summary: Create or update (and optionally complete) a putaway
+    operationId: createPutaway
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PutawayInput'
+          example:
+            putawayStatus: PENDING
+            putawayItems: []
+    responses:
+      '200':
+        description: The saved putaway (HTTP 200, not 201).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutawayResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20017
+                putawayStatus: PENDING
+                putawayItems: []
+      '500':
+        description: |
+          Completed putaways cannot be updated; the IllegalArgumentException is
+          rendered by the global error handler as a 500 ErrorResponse.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+            example:
+              errorCode: 500
+              errorMessage: Can't update completed putaway
+
+/api/putaways/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Putaway order id.
+      schema:
+        type: string
+  get:
+    tags: [shipments]
+    summary: Read a putaway by its order id
+    operationId: readPutaway
+    x-contract-tests:
+      - name: missing putaway raises IllegalArgumentException rendered as 500
+        params:
+          id: does-not-exist
+        status: 500
+    responses:
+      '200':
+        description: The putaway.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutawayResponse'
+      '500':
+        description: |
+          Missing order ids raise IllegalArgumentException, rendered by the
+          global error handler as HTTP 500 (not 404).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+
+/api/putawayItems/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Order item id.
+      schema:
+        type: string
+  delete:
+    tags: [shipments]
+    summary: Remove an item from a pending putaway
+    operationId: deletePutawayItem
+    responses:
+      '204':
+        description: Deleted (no content).
+      '500':
+        description: |
+          Missing items or completed putaways raise IllegalArgumentException,
+          rendered by the global error handler as HTTP 500 (not 404).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+            example:
+              errorCode: 500
+              errorMessage: No putaway item found with ID does-not-exist

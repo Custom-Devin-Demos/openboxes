@@ -22,11 +22,14 @@ security:
 tags:
   - name: localization
     description: Translations / localized messages (LocalizationApiController)
+  - name: shipments
+    description: Shipments, shipment items/workflows, create-shipment workflow, combined shipments, pack lists, delivery/receipt notes, putaways
 
 # One line per per-domain fragment file under paths/. Sibling sessions add
 # their fragment here (append a single line; keep the list alphabetized).
 x-fragments:
   - paths/localization.yaml
+  - paths/shipments.yaml
 
 paths: {}
 
