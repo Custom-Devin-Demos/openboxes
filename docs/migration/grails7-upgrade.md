@@ -46,10 +46,10 @@ byte-for-byte compatible (zero new Liquibase changesets were needed).
 | gorm-hibernate5 8.1.1 | `org.apache.grails:grails-data-hibernate5` (BOM-managed) |
 | database-migration 5.0.0 | `org.apache.grails:grails-data-hibernate5-dbmigration` |
 | cache 7.0.0 | `org.apache.grails:grails-cache` (unified version) |
-| views-json 3.2.3 | `org.apache.grails:grails-views-json` (unified version) |
+| views-json 3.2.3 | dropped — the app has zero `*.gson` views (all JSON is rendered via converters); it was only ever a passive classpath entry |
 | asset-pipeline 4.5.2 (com.bertramlabs) | 5.0.34 (`cloud.wondrify:asset-pipeline-*`, the maintained Grails 7 line) |
 | quartz 2.0.13 | `org.apache.grails:grails-quartz:4.0.1`; the quartz-monitor job factory classes were inlined under `src/main/groovy/grails/plugins/quartz/` |
-| mail 3.0.0 | replaced by direct `jakarta.mail` (Angus Mail) + `commons-email2-jakarta`; mail sending code in `MailService` unchanged in behavior |
+| mail (commons-email 1.5 + jakarta.mail 1.6, javax namespace) | `jakarta.mail-api` 2.x + Angus Mail runtime + `commons-email2-jakarta`; `MailService` logic unchanged |
 | external-config 4.0.0 | inlined under `src/main/groovy/grails/plugin/externalconfig/` (no Grails 7 release; ~2 classes) with Groovy 4 static-compilation fixes |
 | rendering 2.0.3 | inlined under `src/main/groovy/grails/plugins/rendering/` (+ `RenderingSupport` trait replacing the plugin's runtime `renderPdf` meta-method injection) |
 | export 2.0.0 / excel-import 3.0.0 | minimal needed classes inlined (`grails/plugins/csv/`, `org/grails/plugins/excelimport/`, `imexporter/`) |
