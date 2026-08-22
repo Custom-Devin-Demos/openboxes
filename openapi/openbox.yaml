@@ -22,11 +22,14 @@ security:
 tags:
   - name: localization
     description: Translations / localized messages (LocalizationApiController)
+  - name: stock-requisitions
+    description: Stock movements, stock transfers, picklists, replenishments, requisitions, stocklists and mobile APIs (StockMovement/StockMovementItem/StockTransfer/Picklist/Replenishment/Requisition/RequisitionTemplate/Stocklist/StocklistItem/Mobile ApiControllers)
 
 # One line per per-domain fragment file under paths/. Sibling sessions add
 # their fragment here (append a single line; keep the list alphabetized).
 x-fragments:
   - paths/localization.yaml
+  - paths/stock-requisitions.yaml
 
 paths: {}
 
