@@ -38,6 +38,8 @@ tags:
     description: Generic domain CRUD/search by resource name (GenericApiController)
   - name: helpscout
     description: HelpScout Beacon widget configuration (HelpScoutApiController)
+  - name: inventory
+    description: Inventory, inventory levels, bin/internal locations, cycle counts, stock adjustments, record stock, stock card, transaction entries
   - name: invoice
     description: Invoicing (InvoiceApiController, PrepaymentInvoiceApiController, PrepaymentInvoiceItemApiController)
   - name: jobs
@@ -121,6 +123,7 @@ x-fragments:
   - paths/finance.yaml
   - paths/generic.yaml
   - paths/helpscout.yaml
+  - paths/inventory.yaml
   - paths/invoice.yaml
   - paths/jobs.yaml
   - paths/load-data.yaml
