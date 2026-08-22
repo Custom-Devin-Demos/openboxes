@@ -22,11 +22,14 @@ security:
 tags:
   - name: localization
     description: Translations / localized messages (LocalizationApiController)
+  - name: orders
+    description: Orders, purchase orders, receiving, fulfillment, consumption, batch import, data exports and documents (Order/PurchaseOrder/OrderAdjustmentType/ReceiveOrder/PartialReceiving/Fulfillment/Consumption/Batch/DataExport/Document API controllers)
 
 # One line per per-domain fragment file under paths/. Sibling sessions add
 # their fragment here (append a single line; keep the list alphabetized).
 x-fragments:
   - paths/localization.yaml
+  - paths/orders.yaml
 
 paths: {}
 
