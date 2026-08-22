@@ -1,0 +1,321 @@
+# Schemas for the Location API (LocationApiController).
+
+Location:
+  description: Location as rendered by the registered Grails JSON marshaller.
+  required: [id, name]
+  properties:
+    id:
+      type: string
+      example: '1'
+    name:
+      type: string
+      example: Main Warehouse
+    description:
+      type: string
+      nullable: true
+    locationNumber:
+      type: string
+      nullable: true
+    locationGroup:
+      type: object
+      nullable: true
+      description: Location group reference (null when unset).
+    parentLocation:
+      type: object
+      nullable: true
+      description: Parent location reference (null when unset).
+    locationType:
+      type: object
+      nullable: true
+      allOf:
+        - $ref: '#/components/schemas/LocationTypeSummary'
+    sortOrder:
+      type: integer
+      nullable: true
+    hasBinLocationSupport:
+      type: boolean
+    hasPackingSupport:
+      type: boolean
+    hasPartialReceivingSupport:
+      type: boolean
+    hasCentralPurchasingEnabled:
+      type: boolean
+    organizationName:
+      type: string
+      nullable: true
+    organizationCode:
+      type: string
+      nullable: true
+    backgroundColor:
+      type: string
+      nullable: true
+    zoneName:
+      type: string
+      nullable: true
+    zoneId:
+      type: string
+      nullable: true
+    active:
+      type: boolean
+    organization:
+      type: object
+      nullable: true
+      allOf:
+        - $ref: '#/components/schemas/Organization'
+    manager:
+      type: object
+      nullable: true
+      allOf:
+        - $ref: '#/components/schemas/PersonSummary'
+    address:
+      type: object
+      nullable: true
+      allOf:
+        - $ref: '#/components/schemas/LocationAddress'
+    supportedActivities:
+      type: array
+      nullable: true
+      items:
+        type: string
+
+LocationTypeSummary:
+  required: [id]
+  properties:
+    id:
+      type: string
+      example: '2'
+    name:
+      type: string
+      nullable: true
+      example: Depot
+    description:
+      type: string
+      nullable: true
+    locationTypeCode:
+      type: string
+      nullable: true
+      example: DEPOT
+
+LocationAddress:
+  properties:
+    address:
+      type: string
+      nullable: true
+    address2:
+      type: string
+      nullable: true
+    city:
+      type: string
+      nullable: true
+    stateOrProvince:
+      type: string
+      nullable: true
+    postalCode:
+      type: string
+      nullable: true
+    country:
+      type: string
+      nullable: true
+    description:
+      type: string
+      nullable: true
+
+LocationSearchResult:
+  type: object
+  description: List item rendered by LocationApiController.search.
+  required: [id]
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+      nullable: true
+    locationNumber:
+      type: string
+      nullable: true
+    locationType:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          nullable: true
+    locationGroup:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          nullable: true
+    organization:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          nullable: true
+    status:
+      type: string
+      nullable: true
+      example: ENABLED
+    active:
+      type: boolean
+    fgColor:
+      type: string
+      nullable: true
+    bgColor:
+      type: string
+      nullable: true
+    supportedActivities:
+      type: array
+      items:
+        type: string
+
+LocationDetails:
+  type: object
+  description: Shape rendered by LocationApiController.details.
+  required: [id]
+  properties:
+    id:
+      type: string
+    version:
+      type: integer
+    fgColor:
+      type: string
+      nullable: true
+    bgColor:
+      type: string
+      nullable: true
+    hasLogo:
+      type: boolean
+    usesDefaultActivities:
+      type: boolean
+    locationTypeCode:
+      type: string
+      nullable: true
+      example: DEPOT
+    isInternalLocation:
+      type: boolean
+    isZoneLocation:
+      type: boolean
+
+LocationContentsEntry:
+  type: object
+  description: Entry rendered by LocationApiController.contents.
+  properties:
+    product:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        productCode:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+    inventoryItem:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        lotNumber:
+          type: string
+          nullable: true
+        expirationDate:
+          type: string
+          nullable: true
+          description: Formatted as MMM yyyy.
+          example: Jan 2026
+    quantity:
+      type: number
+      nullable: true
+
+LocationTypeOption:
+  type: object
+  description: Location type rendered by LocationApiController.locationTypes.
+  required: [id]
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+      nullable: true
+    description:
+      type: string
+      nullable: true
+    locationTypeCode:
+      type: string
+      nullable: true
+    supportedActivities:
+      type: array
+      nullable: true
+      items:
+        type: string
+
+LocationProductSummaryEntry:
+  type: object
+  description: Aggregated on-hand quantity per product for the session's current location.
+  properties:
+    productId:
+      type: string
+      nullable: true
+    productName:
+      type: string
+      nullable: true
+    productCode:
+      type: string
+      nullable: true
+    quantityOnHand:
+      type: number
+      nullable: true
+
+LocationInput:
+  type: object
+  description: >
+    Request body bound onto the Location domain by
+    LocationApiController.bindLocationData (Grails databinding; `logo` is a
+    base64 string, `zoneId` is excluded from binding).
+  properties:
+    name:
+      type: string
+    description:
+      type: string
+      nullable: true
+    locationNumber:
+      type: string
+      nullable: true
+      description: Generated when omitted.
+    locationType:
+      type: object
+      description: 'Location type reference (e.g. `{id: ...}`).'
+      nullable: true
+    locationGroup:
+      type: object
+      nullable: true
+    parentLocation:
+      type: object
+      nullable: true
+    organization:
+      type: object
+      nullable: true
+    active:
+      type: boolean
+    supportedActivities:
+      type: array
+      nullable: true
+      description: When present but empty/null, bound as `[NONE]`.
+      items:
+        type: string
+    logo:
+      type: string
+      nullable: true
+      description: Base64-encoded logo image.

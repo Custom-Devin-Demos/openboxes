@@ -1,0 +1,119 @@
+# Schemas for the Person API (PersonApiController).
+
+PersonSummary:
+  description: >
+    Person as rendered by the registered Grails JSON marshaller (used by
+    GET /api/persons and as the `manager` of a location). Persons that are
+    also Users carry `username` and `roles`.
+  required: [id, name]
+  properties:
+    id:
+      type: string
+      example: '1'
+    name:
+      type: string
+      example: Miss Administrator
+    firstName:
+      type: string
+      nullable: true
+    lastName:
+      type: string
+      nullable: true
+    email:
+      type: string
+      nullable: true
+    username:
+      type: string
+      nullable: true
+    roles:
+      type: array
+      nullable: true
+      items:
+        type: string
+
+PersonSearchResult:
+  type: object
+  description: List item rendered by PersonApiController.toListJson.
+  required: [id]
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+      nullable: true
+    type:
+      type: string
+      description: Concrete class simple name (Person or User).
+      example: Person
+    email:
+      type: string
+      nullable: true
+    phoneNumber:
+      type: string
+      nullable: true
+    active:
+      type: boolean
+      nullable: true
+
+PersonDetails:
+  type: object
+  description: >
+    Detailed person shape rendered by PersonApiController.toDetailedJson.
+    NOTE - rendered WITHOUT a `data` wrapper (unlike most other endpoints).
+  required: [id]
+  properties:
+    id:
+      type: string
+    type:
+      type: string
+      example: Person
+    name:
+      type: string
+      nullable: true
+    firstName:
+      type: string
+      nullable: true
+    lastName:
+      type: string
+      nullable: true
+    email:
+      type: string
+      nullable: true
+    phoneNumber:
+      type: string
+      nullable: true
+    active:
+      type: boolean
+      nullable: true
+    dateCreated:
+      type: string
+      nullable: true
+      description: Formatted as dd/MMM/yyyy HH:mm:ss.
+      example: 01/Jan/2024 00:00:00
+    lastUpdated:
+      type: string
+      nullable: true
+      description: Formatted as dd/MMM/yyyy HH:mm:ss.
+    version:
+      type: integer
+
+PersonInput:
+  type: object
+  description: Request body bound by PersonApiController.bindPersonData.
+  properties:
+    firstName:
+      type: string
+    lastName:
+      type: string
+    email:
+      type: string
+      nullable: true
+    phoneNumber:
+      type: string
+      nullable: true
+    active:
+      type: boolean
+    version:
+      type: integer
+      nullable: true
+      description: Optimistic-locking version (update only).

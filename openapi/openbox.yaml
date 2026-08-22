@@ -20,13 +20,40 @@ servers:
 security:
   - sessionCookie: []
 tags:
+  - name: eventTypes
+    description: Event types (EventTypeApiController)
   - name: localization
     description: Translations / localized messages (LocalizationApiController)
+  - name: locationGroups
+    description: Location groups (LocationGroupApiController)
+  - name: locationTypes
+    description: Location types (LocationTypeApiController)
+  - name: locations
+    description: Locations (LocationApiController)
+  - name: organizations
+    description: Organizations (OrganizationApiController)
+  - name: parties
+    description: Parties, party roles and party types (PartyApiController, PartyRoleApiController, PartyTypeApiController)
+  - name: persons
+    description: Persons (PersonApiController)
+  - name: roles
+    description: Roles (RoleApiController)
+  - name: users
+    description: Users (UserApiController)
 
 # One line per per-domain fragment file under paths/. Sibling sessions add
 # their fragment here (append a single line; keep the list alphabetized).
 x-fragments:
+  - paths/event-types.yaml
   - paths/localization.yaml
+  - paths/location-groups.yaml
+  - paths/location-types.yaml
+  - paths/locations.yaml
+  - paths/organizations.yaml
+  - paths/parties.yaml
+  - paths/persons.yaml
+  - paths/roles.yaml
+  - paths/users.yaml
 
 paths: {}
 

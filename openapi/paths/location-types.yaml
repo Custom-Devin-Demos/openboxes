@@ -1,0 +1,192 @@
+# LocationType API (LocationTypeApiController).
+
+/api/locationTypes:
+  get:
+    tags: [locationTypes]
+    summary: List location types (paginated)
+    operationId: listLocationTypes
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: Location types (max is capped at 100, default 10).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/LocationType'
+                totalCount:
+                  type: integer
+  post:
+    tags: [locationTypes]
+    summary: Create a location type
+    operationId: createLocationType
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LocationTypeInput'
+          example:
+            name: Scratch Type
+            locationTypeCode: DEPOT
+    responses:
+      '201':
+        description: The created location type.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/LocationType'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20003
+                name: Scratch Type
+                locationTypeCode: DEPOT
+                supportedActivities: []
+                version: 0
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/locationTypes/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [locationTypes]
+    summary: Read a location type by id
+    operationId: readLocationType
+    x-contract-tests:
+      - name: seeded depot location type
+        params:
+          id: '2'
+        status: 200
+      - name: unknown id
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The location type.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/LocationType'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [locationTypes]
+    summary: Update a location type
+    operationId: updateLocationType
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LocationTypeInput'
+          example:
+            name: Renamed Type
+            version: 0
+    responses:
+      '200':
+        description: The updated location type.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/LocationType'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20003
+                name: Renamed Type
+                supportedActivities: []
+                version: 1
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [locationTypes]
+    summary: Delete a location type
+    operationId: deleteLocationType
+    responses:
+      '204':
+        description: Deleted (no content).
+      '404':
+        $ref: '#/components/responses/NotFound'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/locationTypes/locationTypeCodeOptions:
+  get:
+    tags: [locationTypes]
+    summary: List location type codes as select options
+    operationId: locationTypeCodeOptions
+    responses:
+      '200':
+        description: Location type code options.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required: [id, label]
+                    properties:
+                      id:
+                        type: string
+                        example: DEPOT
+                      label:
+                        type: string
+                        example: DEPOT
+
+/api/locationTypes/supportedActivityOptions:
+  get:
+    tags: [locationTypes]
+    summary: List activity codes as localized select options
+    operationId: supportedActivityOptions
+    responses:
+      '200':
+        description: Activity code options.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required: [id, label]
+                    properties:
+                      id:
+                        type: string
+                        example: MANAGE_INVENTORY
+                      label:
+                        type: string

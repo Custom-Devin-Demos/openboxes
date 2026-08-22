@@ -1,0 +1,542 @@
+# Location API (LocationApiController).
+# Map of <path> -> PathItem, merged into the root document's `paths`.
+
+/api/locations:
+  get:
+    tags: [locations]
+    summary: List locations visible to the current user
+    operationId: listLocations
+    parameters:
+      - name: name
+        in: query
+        required: false
+        description: >
+          Typeahead filter; when shorter than the configured minimum length the
+          endpoint short-circuits (see behavioral findings in the PR).
+        schema:
+          type: string
+      - name: locationChooser
+        in: query
+        required: false
+        description: Restrict to locations usable in the location chooser.
+        schema:
+          type: string
+      - name: direction
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: fields
+        in: query
+        required: false
+        description: Comma-separated field list passed to the location query.
+        schema:
+          type: string
+      - name: presentation
+        in: query
+        required: false
+        description: When `toBaseJson`, items are rendered via Location.toBaseJson().
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Unpaginated list of locations (no totalCount).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Location'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [locations]
+    summary: Create a location
+    operationId: createLocation
+    parameters:
+      - name: useDefaultActivities
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: assignCurrentLocationGroup
+        in: query
+        required: false
+        schema:
+          type: boolean
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LocationInput'
+          example:
+            name: Scratch Depot
+            locationType: {id: '2'}
+            organization: {id: '1'}
+            active: true
+    responses:
+      '200':
+        description: The created location (200, not 201).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/Location'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20001
+                name: Scratch Depot
+                active: true
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/locations/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [locations]
+    summary: Read a location by id
+    operationId: readLocation
+    x-contract-tests:
+      - name: seeded facility
+        params:
+          id: '{facilityId}'
+        status: 200
+      - name: unknown id returns data:null
+        params:
+          id: does-not-exist
+        status: 200
+    responses:
+      '200':
+        description: >
+          The location. NOTE - an unknown id still returns 200 with
+          `{"data": null}` (no 404).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  nullable: true
+                  allOf:
+                    - $ref: '#/components/schemas/Location'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  put:
+    tags: [locations]
+    summary: Update a location
+    operationId: updateLocation
+    parameters:
+      - name: useDefaultActivities
+        in: query
+        required: false
+        schema:
+          type: boolean
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LocationInput'
+          example:
+            name: Renamed Depot
+    responses:
+      '200':
+        description: The updated location.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/Location'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20001
+                name: Renamed Depot
+                active: true
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '500':
+        description: Unknown id (IllegalArgumentException) or other server error.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+            example: {errorCode: 500, errorMessage: 'No Location found for location ID xyz', cause: java.lang.IllegalArgumentException}
+  post:
+    tags: [locations]
+    summary: Update a location (POST alias of PUT)
+    operationId: updateLocationPost
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LocationInput'
+          example:
+            name: Renamed Depot
+    responses:
+      '200':
+        description: The updated location.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/Location'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20001
+                name: Renamed Depot
+                active: true
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  delete:
+    tags: [locations]
+    summary: Delete a location
+    operationId: deleteLocation
+    responses:
+      '204':
+        description: Deleted (no content).
+      '500':
+        description: Unknown id, zone in use, or delete failure (all surface as 500).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+            example: {errorCode: 500, errorMessage: 'No Location found for location ID xyz', cause: java.lang.IllegalArgumentException}
+
+/api/locations/search:
+  get:
+    tags: [locations]
+    summary: Search locations (paginated)
+    operationId: searchLocations
+    parameters:
+      - name: q
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: locationType.id
+        in: query
+        required: false
+        description: Defaults to the DEPOT location type when omitted.
+        schema:
+          type: string
+      - name: locationGroup.id
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: organization.id
+        in: query
+        required: false
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: Matching locations.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/LocationSearchResult'
+                totalCount:
+                  type: integer
+
+/api/locations/{id}/details:
+  get:
+    tags: [locations]
+    summary: Read display details of a location
+    operationId: locationDetails
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        params:
+          id: '{facilityId}'
+        status: 200
+      - name: unknown id
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Location display details.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/LocationDetails'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/locations/{id}/contents:
+  get:
+    tags: [locations]
+    summary: List inventory contents of a (bin) location
+    operationId: locationContents
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        params:
+          id: '{facilityId}'
+        status: 200
+      - name: unknown id
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Contents grouped by product/inventory item.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/LocationContentsEntry'
+                location:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                      nullable: true
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/locations/{id}/logo:
+  delete:
+    tags: [locations]
+    summary: Delete a location's logo
+    operationId: deleteLocationLogo
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '204':
+        description: Logo cleared (no content).
+      '500':
+        description: Unknown id (IllegalArgumentException) surfaces as 500.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+            example: {errorCode: 500, errorMessage: 'No Location found for location ID xyz', cause: java.lang.IllegalArgumentException}
+
+/api/locations/{id}/productSummary:
+  get:
+    tags: [locations]
+    summary: Aggregated product quantities for the session's current location
+    operationId: locationProductSummary
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: >
+          Present in the URL but IGNORED by the action - data always comes from
+          the session's current location.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        params:
+          id: '{facilityId}'
+        status: 200
+    responses:
+      '200':
+        description: On-hand quantity per product.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/LocationProductSummaryEntry'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/locations/locationTypes:
+  get:
+    tags: [locations]
+    summary: List location types (optionally filtered by supported activity)
+    operationId: locationLocationTypes
+    parameters:
+      - name: activityCode
+        in: query
+        required: false
+        description: Repeatable activity code filter.
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Location types.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/LocationTypeOption'
+
+/api/locations/supportedActivities:
+  get:
+    tags: [locations]
+    summary: List all activity codes
+    operationId: locationSupportedActivities
+    responses:
+      '200':
+        description: Activity code names.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: string
+
+/api/locations/template:
+  get:
+    tags: [locations]
+    summary: Download the location import CSV template
+    operationId: downloadLocationTemplate
+    responses:
+      '200':
+        description: CSV template (with BOM) as an attachment (`text/csv` body).
+
+/api/locations/binLocations/template:
+  get:
+    tags: [locations]
+    summary: Download the bin location import XLS template
+    operationId: downloadBinLocationTemplate
+    x-contract-tests:
+      - name: template download
+        status: 200
+    responses:
+      '200':
+        description: Binary XLS template as an attachment (content type not set explicitly).
+      '404':
+        description: Template file not found on the server (empty body).
+
+/api/locations/importCsv:
+  post:
+    tags: [locations]
+    summary: Import locations from a CSV file
+    operationId: importLocationsCsv
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              importFile:
+                type: string
+                description: CSV file (content type must be text/csv).
+          example:
+            importFile: 'id,name,active,...'
+    responses:
+      '200':
+        description: Imported (empty body).
+      '500':
+        description: Empty file, wrong content type, or import error (all surface as 500).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+            example: {errorCode: 500, errorMessage: 'File must be in CSV format', cause: java.lang.IllegalArgumentException}
+
+/api/locations/{id}/binLocations/import:
+  post:
+    tags: [locations]
+    summary: Import bin locations from an XLS file
+    operationId: importBinLocations
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Facility location id the bin locations are imported into.
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              fileContents:
+                type: string
+                description: XLS file.
+          example:
+            fileContents: '<binary xls content>'
+    responses:
+      '200':
+        description: Imported (empty body).
+      '500':
+        description: Any import failure is rendered inline as a 500 error body.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+            example: {errorCode: 500, errorMessage: 'File cannot be empty'}
