@@ -23,6 +23,7 @@ import Loading from 'components/Loading';
 import ActivityCode from 'consts/activityCode';
 import { DASHBOARD_URL } from 'consts/applicationUrls';
 import useConnectionListener from 'hooks/useConnectionListener';
+import getErrorPage from 'utils/errorPageUtils';
 import FlashScopeListenerWrapper from 'wrappers/FlashScopeListenerWrapper';
 
 import 'react-s-alert/dist/s-alert-default.css';
@@ -1410,6 +1411,11 @@ const AsyncRoleForm = Loadable({
   loading: Loading,
 });
 
+const AsyncErrorPage = Loadable({
+  loader: () => import('components/errors/ErrorPage'),
+  loading: Loading,
+});
+
 const Router = () => {
   useConnectionListener();
 
@@ -1429,6 +1435,9 @@ const Router = () => {
       <BrowserRouter>
         <FlashScopeListenerWrapper>
           <Switch>
+            {getErrorPage() && (
+              <MainLayoutRoute path="**" component={AsyncErrorPage} />
+            )}
             <MainLayoutRoute path="**/putAway/create/:putAwayId?" component={AsyncPutAwayMainPage} />
             <MainLayoutRoute path="**/inventoryItem/showStockCard/:id?" component={AsyncStockCardPage} />
             <MainLayoutRoute path="**/inventoryItem/showLotNumbers/:id?" component={AsyncLotNumbersPage} />

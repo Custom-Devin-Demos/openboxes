@@ -1,0 +1,132 @@
+.error-page {
+  padding: 1rem;
+
+  .error-page-flash-message {
+    background: #fffbe6;
+    border: 1px solid #f3961c;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin-bottom: 1em;
+  }
+
+  .error-page-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1em;
+
+    img {
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+  }
+
+  .error-page-bubble-container {
+    max-width: 400px;
+  }
+
+  // Bubble with an isosceles triangle (mirrors .triangle-isosceles in
+  // src/main/webapp/css/openboxes.css used by the legacy error GSPs)
+  .triangle-isosceles {
+    position: relative;
+    padding: 15px;
+    margin: 1em 0 3em;
+    color: white;
+    background: linear-gradient(#f9d835, #f3961c);
+    border-radius: 10px;
+
+    &:after {
+      content: "";
+      display: block;
+      position: absolute;
+      bottom: -15px;
+      left: 50px;
+      width: 0;
+      border-width: 15px 15px 0;
+      border-style: solid;
+      border-color: #f3961c transparent;
+    }
+  }
+
+  .error-page-portrait {
+    padding-left: 45px;
+
+    img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+  }
+
+  .error-page-details {
+    margin-top: 1em;
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin: 1em 0 0.5em;
+    }
+
+    .snippet {
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+
+    .stack {
+      max-height: 300px;
+      overflow: auto;
+
+      pre {
+        margin: 0;
+      }
+    }
+  }
+
+  .error-page-dialog-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1050;
+
+    .error-page-dialog {
+      background: white;
+      border-radius: 4px;
+      padding: 1.5rem;
+      max-width: 1000px;
+      max-height: 90vh;
+      overflow: auto;
+
+      h2 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        margin-bottom: 1em;
+      }
+
+      td.name {
+        padding-right: 1em;
+        vertical-align: top;
+        font-weight: bold;
+      }
+
+      input.text,
+      textarea {
+        width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 4px 8px;
+      }
+    }
+  }
+
+  .error-page-errors {
+    background: #fbe3e4;
+    border: 1px solid #fbc2c4;
+    border-radius: 4px;
+    color: #8a1f11;
+    padding: 8px 12px;
+    list-style: none;
+  }
+}
