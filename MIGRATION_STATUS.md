@@ -52,14 +52,15 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | 2-admin-config-1 | admin-config-1 batch | MERGED | [2bec6bb2](https://app.devin.ai/sessions/2bec6bb2245a4cb68c7e48ad754fb467) | [#10](https://github.com/Custom-Devin-Demos/openboxes/pull/10) | UI 10/10, snapshots 117/122 (5 pre-existing dirty baselines), CI green. Fixed Hibernate5 evictQueries bug |
 | 2-finance-config-1 | finance-config-1 batch | MERGED | [b4493527](https://app.devin.ai/sessions/b449352701744466b15efb5dd64533c4) | [#9](https://github.com/Custom-Devin-Demos/openboxes/pull/9) | Playwright 10/10, snapshots 122/122, CI green |
 | 2-stock-card-1 | stock-card-1 batch | MERGED | [7ba30033](https://app.devin.ai/sessions/7ba3003323244216bdb4bed9ab92ce27) | [#15](https://github.com/Custom-Devin-Demos/openboxes/pull/15) | Snapshots 122/122, Playwright 10/10, integrationTest green, CI green |
-| 2-(remaining) | 48 remaining batches (see live-screen-inventory.md) | PENDING | | | Spawn in subsequent waves |
-| 2.R | React 16.8→18 + Redux/router modernization of existing SPA | PENDING | | | |
+| 2-(remaining) | 48 remaining batches (see live-screen-inventory.md) | DONE | | | All 58 batches merged across waves 1–6 (PRs #5–#68). GSP→REACT MIGRATION COMPLETE (GSP removal in Phase 4) |
+| 2.R | React 16.8→18 + Redux/router modernization of existing SPA | IN_PROGRESS | [875c4feb](https://app.devin.ai/sessions/875c4febd11442d2ba207173af779935) | — | React 18 + toolchain upgrade, parity-only |
 
 ## Phase 3 — API formalization (parallel with Phase 2)
 
 | # | Task | Status | Session | PR | Notes |
 |---|------|--------|---------|----|-------|
-| 3.x | OpenAPI specs + contract tests, ~6 controllers per child (52 controllers ≈ 9 children); wire into CI | PENDING | | | Blocked by 0.4 |
+| 3.0 | Shared OpenAPI + contract-test harness (layout, shared schemas, runner, lint, CI job, 1 reference spec) | IN_PROGRESS | [848c9ab8](https://app.devin.ai/sessions/848c9ab83fbf4775ba97402c080e40c7) | — | Fragment layout designed for 9 parallel spec children (additive root $refs) |
+| 3.x | OpenAPI specs + contract tests, ~10 controllers per child (~90 API controllers ≈ 9 children); wire into CI | PENDING | | | Spawn after 3.0 harness merges |
 
 ## Phase 4 — Validation & cutover
 
@@ -206,9 +207,10 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 | 2-mobile-2 | mobile-2 batch | MERGED | [a6fbe255](https://app.devin.ai/sessions/a6fbe255040e452a9a067fad7be0200f) | [#61](https://github.com/Custom-Devin-Demos/openboxes/pull/61) | 4 mobile screens (menu/productList/productDetails/outboundList); /api/mobile/productSummaries[/id] + /api/mobile/outboundItems; additive menuBar action keeps header for mobile-1; post-rebase (incl. #59) snapshots 122/122, Playwright 10/10, CI 4/4; localization union verified (12 added/0 removed/0 changed) |
 | 2-product-catalog-8 | product-catalog-8 batch | MERGED | [4db11c99](https://app.devin.ai/sessions/4db11c99507542808c32c2d3931da794) | [#60](https://github.com/Custom-Devin-Demos/openboxes/pull/60) | uomConversion list/edit; /api/unitOfMeasureConversions CRUD; rebased twice over #59/#61 additively; post-rebase snapshots 122/122, Playwright 10/10, CI 4/4; localization union verified (8 added/0 removed/0 changed) |
 | 2-reporting-4 | reporting-4 batch | MERGED | [9aea9c11](https://app.devin.ai/sessions/9aea9c118fec4a60be67fc20d25fab70) | [#64](https://github.com/Custom-Devin-Demos/openboxes/pull/64) | showTransactionReport + 4 transactionEntry screens; /api/reports/transactionReportMetadata + /api/transactionEntries CRUD; report calc/CSV export unchanged server-side; post-rebase snapshots 122/122, Playwright 10/10, CI 4/4; no i18n changes |
-| 2-shipment-workflow | shipment-workflow batch | IN_PROGRESS | [48c116e0](https://app.devin.ai/sessions/48c116e04d5b40f0b2534f56e03693a8) | — | createShipmentWorkflow 5-step webflow |
+| 2-shipment-workflow | shipment-workflow batch | MERGED | [48c116e0](https://app.devin.ai/sessions/48c116e04d5b40f0b2534f56e03693a8) | [#62](https://github.com/Custom-Devin-Demos/openboxes/pull/62) | createShipmentWorkflow 5 webflow screens → React wizard at legacy URLs (skipTo/_eventId compat); 16 /api/createShipment endpoints; NOTE: webflow URLs were already 404 on develop (webflow plugin removed in Grails 6 upgrade) — this restores the workflow; 6 E2E-found bug fixes; recorded E2E reaches SHIPPED; post-rebase snapshots 122/122, Playwright 10/10, CI 4/4; localization union verified (56 added/0 removed/0 changed) |
 | 2-stock-movements | stock-movements batch | MERGED | [a73c93a9](https://app.devin.ai/sessions/a73c93a9ffa54d4bbd341b78eadec84e) | [#67](https://github.com/Custom-Devin-Demos/openboxes/pull/67) | stockMovement list/show/addComment/addDocument; 8 new /api/stockMovements/$id/* endpoints; POSTs still hit legacy controllers for validation/flash parity; child fixed Events-tab 500 for OutboundStockMovement; post-rebase snapshots 122/122, Playwright 10/10, CI 4/4; localization union verified (63 added/0 removed/0 changed) |
 | 2-stock-transfers | stock-transfers batch | MERGED | [36e97af6](https://app.devin.ai/sessions/36e97af6efc749e49705ae20932ae48f) | [#65](https://github.com/Custom-Devin-Demos/openboxes/pull/65) | returns/show + stockTransfer list/show/print; 3 new API endpoints; print zone-order/page-break/columns preserved; post-rebase snapshots 122/122, Playwright 10/10, CI 4/4; child fixed STOCK_TRANSFER_URL.list() crash; noted deviation: React disables Edit on COMPLETED transfers (GSP showed enabled link) |
 
 - 2026-08-20: Phase 2 wave 6 spawned (final 9 batches). After wave 6 + receiving (#59), all 58 Phase 2 batches will be complete.
+- 2026-08-20: Wave 6 fully merged (#60, #61, #62, #63, #64, #65, #66, #67, #68). ALL 58 Phase 2 GSP→React batches complete. Spawned P3.0 (OpenAPI harness) + P2.R (React 18).
 - 2026-08-20: Wave 5 COMPLETE (10/10 merged): PR #59 (receiving) merged post-rebase (CI 4/4, clean merge, localization union 30 added/0 removed/0 changed).
