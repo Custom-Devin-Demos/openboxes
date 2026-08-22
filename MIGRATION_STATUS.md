@@ -74,7 +74,7 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 
 | # | Task | Status | Session | PR | Notes |
 |---|------|--------|---------|----|-------|
-| 4.1 | Full Playwright regression vs Phase 0 baseline | IN_PROGRESS | [7486f04f](https://app.devin.ai/sessions/7486f04f2ae24a2cbbe95b6957d49975) | — | |
+| 4.1 | Full Playwright regression vs Phase 0 baseline | MERGED | [7486f04f](https://app.devin.ai/sessions/7486f04f2ae24a2cbbe95b6957d49975) | [#83](https://github.com/Custom-Devin-Demos/openboxes/pull/83) | Post-GSP-removal develop: e2e 10/10, snapshots 122/122, contracts 747/0, npm test 213, integrationTest 59/0/3, 24-URL sweep + print/export checks; 3 small regressions found & fixed (getGlAccountOptions, buildDate Optional, mutating locale sort); CI 6/6 |
 | 4.2 | Liquibase dry-run on production-shaped data | MERGED | [af9a1ad0](https://app.devin.ai/sessions/af9a1ad01d804258922afda916d56b29) | [#82](https://github.com/Custom-Devin-Demos/openboxes/pull/82) | GO: fresh install 983 changesets clean; upgrade from baseline 1cb3d4eb4 runs only 52 runAlways view rebuilds, zero checksum errors; idempotent; snapshots 122/122 on upgraded DB; CI 4/4. Caveat: dev MariaDB 10.11 — repeat upgrade boot on MySQL 8 at cutover rehearsal |
 | 4.3 | Performance smoke | MERGED | [acbb06a1](https://app.devin.ai/sessions/acbb06a17a6f4305918d29173e1db357) | [#80](https://github.com/Custom-Devin-Demos/openboxes/pull/80) | develop vs baseline 54993e2d8: startup ~2–3.7x faster, API latency parity (≤31ms median), TTI 21–40% faster on 5/6 pages, RSS −23%; no cutover blockers; CI 4/4 |
 | 4.4 | Remove GSP layer + dead code | MERGED | [b317e68e](https://app.devin.ai/sessions/b317e68ebc7347eea1a0783c00733974) | [#81](https://github.com/Custom-Devin-Demos/openboxes/pull/81) | 298/618 dead GSPs removed + 5 taglibs + legacy assets; 320 retained (print/PDF, mail, error, React host) per docs/migration/phase4-gsp-removal.md; Playwright 10/10, snapshots 122/122, contracts 747/0, integrationTest OK, CI 4/4 |
@@ -228,4 +228,5 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 - 2026-08-22: 4.3 perf smoke merged (#80). No performance blockers for cutover.
 - 2026-08-22: 4.2 Liquibase dry-run merged (#82). GO recommendation; MySQL 8 rehearsal caveat noted.
 - 2026-08-22: 4.4 GSP removal merged (#81). Dead GSP screen layer removed; live server-rendered templates (print/mail/error/React host) retained by design. 4.1 regression still running.
+- 2026-08-22: 4.1 full regression merged (#83). PHASE 4 COMPLETE — all validation & cutover gates green on develop. Remaining gap vs plan target: plan header targets Spring Boot 3 but prescribed Phase 1 stages end at Grails 6 (Boot 2.7.18); spawning final P1.6 Grails 6→7 / Spring Boot 3 / javax→jakarta child to close it.
 - 2026-08-20: Wave 5 COMPLETE (10/10 merged): PR #59 (receiving) merged post-rebase (CI 4/4, clean merge, localization union 30 added/0 removed/0 changed).
