@@ -1,0 +1,531 @@
+# Product Screen API (ProductScreenApiController) - JSON endpoints backing
+# the React product screens.
+
+/api/productScreens/productMergeLogs:
+  get:
+    tags: [productScreen]
+    summary: List product merge logs (paginated)
+    operationId: productScreenMergeLogs
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    responses:
+      '200':
+        description: Merge log rows ({data, totalCount}).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ProductScreenMergeLog'
+                totalCount:
+                  type: integer
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/productScreens/searchResults:
+  get:
+    tags: [productScreen]
+    summary: Product search results for the React search page
+    operationId: productScreenSearchResults
+    parameters:
+      - name: q
+        in: query
+        required: false
+        description: Search term; when omitted, data is an empty array.
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Search result rows ({data}).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ProductScreenSearchResult'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/productScreens/upnDatabase:
+  get:
+    tags: [productScreen]
+    summary: UPN database rows (hard-coded developer-local HIBCC file)
+    operationId: productScreenUpnDatabase
+    responses:
+      '200':
+        description: |
+          Rows parsed from a hard-coded developer-local file path; when the
+          file is unreadable (the normal case) the error is swallowed and an
+          empty {data: [], totalCount: 0} is returned.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                totalCount:
+                  type: integer
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/productScreens/editData:
+  get:
+    tags: [productScreen]
+    summary: Data for the product create screen (no product id)
+    operationId: productScreenCreateData
+    responses:
+      '200':
+        description: Edit-screen data with product null (create mode). Unwrapped.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductScreenEditData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/productScreens/{id}/editData:
+  get:
+    tags: [productScreen]
+    summary: Data for the product edit screen
+    operationId: productScreenEditData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        params:
+          id: '{productId}'
+        status: 200
+      - name: missing product returns 404 with errorMessage-only body
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Edit-screen data with full product details. Unwrapped.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductScreenEditData'
+      '404':
+        description: Product not found ({errorMessage} only - no errorCode).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductScreenNotFoundError'
+
+/api/productScreens/saveDetails:
+  post:
+    tags: [productScreen]
+    summary: Create or update product details from the React edit screen
+    operationId: productScreenSaveDetails
+    parameters:
+      - name: id
+        in: query
+        required: false
+        description: Existing product id (update); omit to create.
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            description: Product properties bound by Grails data binding, plus tag/attribute parameters.
+            additionalProperties: true
+          example:
+            name: Scratch product
+            category.id: ROOT
+            productType.id: DEFAULT
+    responses:
+      '200':
+        description: Saved ({success, id, message}).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductScreenSaveResponse'
+            example:
+              success: true
+              id: ff80818175f31a340175f31a3fda0001
+              message: Product 10001 created
+      '400':
+        description: Validation errors ({errorMessages} only).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductScreenErrorMessages'
+            example:
+              errorMessages: ['Property [name] of class [class org.pih.warehouse.product.Product] cannot be null']
+      '404':
+        description: Product not found ({errorMessages} only).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductScreenErrorMessages'
+            example:
+              errorMessages: [Product not found with id does-not-exist]
+
+/api/productScreens/batchEdit:
+  get:
+    tags: [productScreen]
+    summary: Data for the batch edit screen (category/tag filter)
+    operationId: productScreenBatchEditData
+    parameters:
+      - name: categoryId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: tagId
+        in: query
+        required: false
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    responses:
+      '200':
+        description: Products (empty unless a category or tag filter is given). Unwrapped.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductScreenBatchEditData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [productScreen]
+    summary: Batch save product edits
+    operationId: productScreenBatchSave
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              products:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    productCode:
+                      type: string
+                      nullable: true
+                    name:
+                      type: string
+                      nullable: true
+                    manufacturer:
+                      type: string
+                      nullable: true
+                    manufacturerCode:
+                      type: string
+                      nullable: true
+                    brandName:
+                      type: string
+                      nullable: true
+                    unitOfMeasure:
+                      type: string
+                      nullable: true
+                    coldChain:
+                      type: boolean
+                      nullable: true
+                    categoryId:
+                      type: string
+                      nullable: true
+          example:
+            products:
+              - id: ff80818175f31a340175f31a3fda0001
+                productCode: '10001'
+                name: Ibuprofen 200mg tablet
+                coldChain: false
+    responses:
+      '200':
+        description: All saved ({success, message}).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [success, message]
+              properties:
+                success:
+                  type: boolean
+                message:
+                  type: string
+            example:
+              success: true
+              message: All products saved successfully
+      '400':
+        description: No products supplied or validation errors ({errorMessages} only).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductScreenErrorMessages'
+            example:
+              errorMessages: [No results]
+
+/api/productScreens/importUpload:
+  post:
+    tags: [productScreen]
+    summary: Upload a product import CSV and return a preview
+    operationId: productScreenImportUpload
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              importFile:
+                type: string
+                format: binary
+          example:
+            importFile: (binary CSV content)
+    responses:
+      '200':
+        description: Parsed preview ({success, columns, products, ...}).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductScreenImportUploadResponse'
+            example:
+              success: true
+              message: Uploaded file products.csv to /opt/uploads/products.csv
+              filename: products.csv
+              contentType: text/csv
+              size: 1024
+              columns: [ID, Product Code, Name, Category]
+              tag: products
+              products: []
+      '400':
+        description: Empty file, permission or parse error ({errorMessages} only).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductScreenErrorMessages'
+            example:
+              errorMessages: [File is empty]
+
+/api/productScreens/importConfirm:
+  post:
+    tags: [productScreen]
+    summary: Import the previously uploaded product CSV
+    operationId: productScreenImportConfirm
+    parameters:
+      - name: tagsToBeAdded
+        in: query
+        required: false
+        description: Comma-separated tags to apply to imported products.
+        schema:
+          type: string
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            type: object
+            nullable: true
+            description: No body required; uses the file stored on the session by importUpload.
+          example: {}
+    responses:
+      '200':
+        description: Imported ({success, message, tag}).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductScreenImportConfirmResponse'
+            example:
+              success: true
+              message: All 2 product(s) were imported successfully.
+              tag: null
+      '400':
+        description: No uploaded file on the session, or validation errors ({errorMessages} only).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductScreenErrorMessages'
+            example:
+              errorMessages: [You must upload a data file before proceeding to this step.]
+
+/api/productScreens/{id}/addDocumentContext:
+  get:
+    tags: [productScreen]
+    summary: Context for the add-document screen (product + document types)
+    operationId: productScreenAddDocumentContext
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        params:
+          id: '{productId}'
+        status: 200
+      - name: missing product returns 404 with errorMessage-only body
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Product summary and non-template document types. Unwrapped.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductScreenAddDocumentContext'
+      '404':
+        description: Product not found ({errorMessage} only - no errorCode).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductScreenNotFoundError'
+
+/api/productScreens/{id}/documents:
+  post:
+    tags: [productScreen]
+    summary: Upload a document and attach it to a product
+    operationId: productScreenUploadDocument
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: typeId
+        in: query
+        required: false
+        description: DocumentType id (defaults to the default document type).
+        schema:
+          type: string
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: fileUri
+        in: query
+        required: false
+        description: External file URI (alternative to uploading file contents).
+        schema:
+          type: string
+    requestBody:
+      required: false
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              fileContents:
+                type: string
+                format: binary
+          example:
+            fileContents: (binary file content)
+    responses:
+      '200':
+        description: Attached ({success, message}).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [success, message]
+              properties:
+                success:
+                  type: boolean
+                message:
+                  type: string
+            example:
+              success: true
+              message: Successfully updated document
+      '400':
+        description: Empty/oversized/disallowed file or invalid document ({errorMessages} only).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductScreenErrorMessages'
+            example:
+              errorMessages: [Document cannot be empty]
+      '404':
+        description: Product not found ({errorMessages} only).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductScreenErrorMessages'
+            example:
+              errorMessages: [Product not found with id does-not-exist]
+
+/api/productScreens/{id}/synonyms:
+  post:
+    tags: [productScreen]
+    summary: Add a synonym to a product
+    operationId: productScreenAddSynonym
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: synonymTypeCode
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: synonym
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: locale
+        in: query
+        required: false
+        schema:
+          type: string
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            type: object
+            nullable: true
+            description: No body required; parameters are read from the query string.
+          example: {}
+    responses:
+      '200':
+        description: Added ({success}).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [success]
+              properties:
+                success:
+                  type: boolean
+            example:
+              success: true
+      '400':
+        description: Validation errors ({errorMessages} only).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductScreenErrorMessages'
+            example:
+              errorMessages: ['Property [synonym] of class [class org.pih.warehouse.core.Synonym] cannot be null']

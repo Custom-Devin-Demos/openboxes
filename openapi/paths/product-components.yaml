@@ -1,0 +1,29 @@
+# Product Component API (ProductComponentApiController).
+
+/api/productComponents:
+  get:
+    tags: [productComponent]
+    summary: List product components (bill of materials rows, paginated)
+    operationId: listProductComponents
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: Product components ({data, totalCount}).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ProductComponent'
+                totalCount:
+                  type: integer
+      '500':
+        $ref: '#/components/responses/ServerError'

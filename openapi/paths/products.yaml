@@ -1,0 +1,739 @@
+# Product API (ProductApiController). Map of <path> -> PathItem.
+# Routes from UrlMappings.groovy ("/api/products", "/api/products/search",
+# "/api/products/$id/$action" wildcard, plus explicit inventory-item routes).
+
+/api/products:
+  get:
+    tags: [product]
+    summary: List / filter products (paginated)
+    operationId: listProducts
+    parameters:
+      - name: q
+        in: query
+        required: false
+        description: Search term applied to name, description, codes, etc.
+        schema:
+          type: string
+      - name: categoryId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: tagId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: catalogId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: glAccountsId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: productFamilyId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: includeInactive
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: format
+        in: query
+        required: false
+        description: '"csv" downloads a CSV export; "list" returns lightweight ProductListItem rows; otherwise the default marshaller rendering.'
+        schema:
+          type: string
+          enum: [csv, list]
+      - name: includeAttributes
+        in: query
+        required: false
+        description: Include product attributes in the CSV export (format=csv only).
+        schema:
+          type: boolean
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: Paginated product list ({data, totalCount}) or a CSV attachment when format=csv.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductListResponse'
+          text/csv: {}
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [product]
+    summary: Create a product
+    operationId: createProduct
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductInput'
+          example:
+            name: Scratch test product
+            category: {id: ROOT}
+            productType: {id: DEFAULT}
+    responses:
+      '200':
+        description: The saved product (Product.toFullJson(), wrapped in "product" - not "data").
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductSaveResponse'
+            example:
+              product:
+                id: ff80818175f31a340175f31a3fda0001
+                productCode: '10001'
+                name: Scratch test product
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/products/search:
+  get:
+    tags: [product]
+    summary: Typeahead product search
+    operationId: searchProducts
+    parameters:
+      - name: name
+        in: query
+        required: false
+        description: Search terms (comma or space separated). Below the configured minimum length the controller renders a Groovy map *without* JSON conversion (text/html body like "[data:[]]").
+        schema:
+          type: string
+      - name: availableItems
+        in: query
+        required: false
+        description: When set, aggregates available bin locations per product in the session warehouse.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: name shorter than typeahead minimum renders non-JSON body
+        query:
+          name: ab
+        status: 200
+      - name: search by name
+        query:
+          name: Ibuprofen
+        status: 200
+    responses:
+      '200':
+        description: |
+          Matching products as {data: [...]} JSON, or - when the name parameter
+          is shorter than openboxes.typeahead.minLength - a text/html Groovy
+          map literal (render without JSON conversion; current behavior).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+          text/html: {}
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/products/{id}/demand:
+  get:
+    tags: [product]
+    summary: Demand details for a product in the session warehouse
+    operationId: productDemandDetails
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        params:
+          id: '{productId}'
+        status: 200
+    responses:
+      '200':
+        description: 'Demand data ({data: {location, product, demand}}).'
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  properties:
+                    location:
+                      description: Location rendering (may be null).
+                    product:
+                      description: Product rendering (may be null).
+                    demand:
+                      type: object
+                      nullable: true
+                      additionalProperties: true
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/products/{id}/demandSummary:
+  get:
+    tags: [product]
+    summary: Monthly demand summary for a product in the session warehouse
+    operationId: productDemandSummary
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        params:
+          id: '{productId}'
+        status: 200
+    responses:
+      '200':
+        description: Demand summary rows.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/products/{id}/productSummary:
+  get:
+    tags: [product]
+    summary: Quantity on hand summary for a product in the session warehouse
+    operationId: productSummary
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        params:
+          id: '{productId}'
+        status: 200
+    responses:
+      '200':
+        description: Product/location ids and summed quantityOnHand.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  required: [product, location]
+                  properties:
+                    product:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                    location:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                    quantityOnHand:
+                      type: number
+                      nullable: true
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/products/{id}/productAvailability:
+  get:
+    tags: [product]
+    summary: ProductAvailability rows for a product in the session warehouse
+    operationId: productAvailability
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        params:
+          id: '{productId}'
+        status: 200
+    responses:
+      '200':
+        description: ProductAvailability domain objects (default marshaller).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/products/{id}/substitutions:
+  get:
+    tags: [product]
+    summary: Substitute products (SUBSTITUTE associations) with availability
+    operationId: productSubstitutions
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: location.id
+        in: query
+        required: false
+        description: Location to compute availability for (defaults to the session warehouse).
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product without stock
+        params:
+          id: seed-product-05
+        status: 200
+      - name: seeded product with stock whose lots have no expiration date raises 500
+        params:
+          id: '{productId}'
+        status: 500
+    responses:
+      '200':
+        description: Associations under the dynamic "substitutions" key.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductAssociatedProductsResponse'
+      '500':
+        description: |
+          Current behavior: throws a NullPointerException (rendered by the
+          shared 500 handler) when the product has available inventory items
+          whose lots have a null expiration date.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+
+/api/products/{id}/associatedProducts:
+  get:
+    tags: [product]
+    summary: Product associations of the given types with availability
+    operationId: productAssociatedProducts
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: type
+        in: query
+        required: false
+        description: ProductAssociationTypeCode filter (repeatable).
+        schema:
+          type: string
+      - name: location.id
+        in: query
+        required: false
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product without stock, SUBSTITUTE type
+        params:
+          id: seed-product-05
+        query:
+          type: SUBSTITUTE
+        status: 200
+      - name: seeded product with stock whose lots have no expiration date raises 500
+        params:
+          id: '{productId}'
+        query:
+          type: SUBSTITUTE
+        status: 500
+    responses:
+      '200':
+        description: Associations under the dynamic "productAssociations" key.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductAssociatedProductsResponse'
+      '500':
+        description: |
+          Current behavior: throws a NullPointerException (rendered by the
+          shared 500 handler) when the product has available inventory items
+          whose lots have a null expiration date.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+
+/api/products/{id}/withCatalogs:
+  get:
+    tags: [product]
+    summary: Product with the catalogs it belongs to
+    operationId: productWithCatalogs
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        params:
+          id: '{productId}'
+        status: 200
+    responses:
+      '200':
+        description: Product id/name/code plus catalog references.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  required: [id]
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                      nullable: true
+                    productCode:
+                      type: string
+                      nullable: true
+                    catalogs:
+                      type: array
+                      nullable: true
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                            nullable: true
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/products/{id}/productAvailabilityAndDemand:
+  get:
+    tags: [product]
+    summary: Quantity on hand, quantity available and monthly demand
+    operationId: productAvailabilityAndDemand
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: locationId
+        in: query
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product at main warehouse
+        params:
+          id: '{productId}'
+        query:
+          locationId: '{facilityId}'
+        status: 200
+    responses:
+      '200':
+        description: Unwrapped map (no "data" envelope).
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                monthlyDemand:
+                  description: Monthly demand (numeric; may be null).
+                quantityOnHand:
+                  type: number
+                  nullable: true
+                quantityAvailable:
+                  type: number
+                  nullable: true
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/products/{id}/productDemand:
+  get:
+    tags: [product]
+    summary: Monthly demand between an origin and destination
+    operationId: productDemandBetweenLocations
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: originId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: destinationId
+        in: query
+        required: false
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product between main warehouse and itself
+        params:
+          id: '{productId}'
+        query:
+          originId: '{facilityId}'
+          destinationId: '{facilityId}'
+        status: 200
+    responses:
+      '200':
+        description: Unwrapped map (no "data" envelope).
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                monthlyDemand:
+                  description: Monthly demand (numeric; may be null).
+                quantityOnHand:
+                  type: number
+                  nullable: true
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/products/{id}/availableBins:
+  get:
+    tags: [product]
+    summary: Available bin locations for a product (via the {id}/{action} wildcard route)
+    operationId: productAvailableBins
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: location.id
+        in: query
+        required: false
+        description: Location (defaults to the session warehouse).
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        params:
+          id: '{productId}'
+        status: 200
+    responses:
+      '200':
+        description: Available bin locations.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ProductAvailableItem'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/products/availableItems:
+  get:
+    tags: [product]
+    summary: Available inventory items for one or more products
+    operationId: productAvailableItems
+    parameters:
+      - name: product.id
+        in: query
+        required: false
+        description: Product id (repeatable; "id" also accepted). Required in practice - omitting it raises a 500.
+        schema:
+          type: string
+      - name: id
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: location.id
+        in: query
+        required: false
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product in session warehouse
+        query:
+          product.id: '{productId}'
+        status: 200
+      - name: missing product raises server error
+        status: 500
+    responses:
+      '200':
+        description: Available items.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ProductAvailableItem'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/products/{productId}/inventoryItems/{lotNumber}:
+  get:
+    tags: [product]
+    summary: Inventory item by product and lot number
+    operationId: productInventoryItemByLot
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: lotNumber
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: unknown lot number returns null item with zero quantity
+        params:
+          productId: '{productId}'
+          lotNumber: no-such-lot
+        status: 200
+    responses:
+      '200':
+        description: Inventory item (null when the lot does not exist) and quantity on hand. Unwrapped (no "data" envelope).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInventoryItemResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/products/getLatestInventoryCountDate:
+  get:
+    tags: [product]
+    summary: Latest inventory count date per product
+    operationId: productLatestInventoryCountDate
+    parameters:
+      - name: productIds
+        in: query
+        required: false
+        description: Product ids (repeatable).
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Map of product id to latest inventory count timestamp.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  nullable: true
+                  additionalProperties: true
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/products/inventoryItems/lotNumbersWithExpirationDate:
+  get:
+    tags: [product]
+    summary: Lot numbers with expiration dates per product
+    operationId: productLotNumbersWithExpirationDate
+    parameters:
+      - name: productIds
+        in: query
+        required: false
+        description: Product ids (repeatable).
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Map of product id to lot number/expiration rows.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  nullable: true
+                  additionalProperties: true
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/products/import:
+  post:
+    tags: [product]
+    summary: Import products from a CSV request body
+    operationId: importProductsCsv
+    requestBody:
+      required: true
+      content:
+        text/csv:
+          schema:
+            type: string
+          example: |
+            ID,Product Code,Name,Category,Description,Unit of Measure,Tags,Unit Cost,Manufacturer,Brand,Manufacturer Code,Manufacturer Name,Vendor,Vendor Code,Vendor Name,Cold Chain,UPC,NDC,Date Created,Date Updated
+    responses:
+      '200':
+        description: Imported products (default marshaller rendering).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Product'
+      '500':
+        description: Empty file or non-CSV content type (IllegalArgumentException rendered by the 500 handler).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+            example: {errorCode: 500, errorMessage: File cannot be empty, cause: 'class java.lang.IllegalArgumentException'}

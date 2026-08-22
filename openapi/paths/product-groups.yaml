@@ -1,0 +1,242 @@
+# Product Group API (ProductGroupApiController).
+
+/api/productGroups:
+  get:
+    tags: [productGroup]
+    summary: List product groups (paginated, optional name filter)
+    operationId: listProductGroups
+    parameters:
+      - name: q
+        in: query
+        required: false
+        description: Name substring filter.
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: Product groups ({data, totalCount}).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ProductGroupListItem'
+                totalCount:
+                  type: integer
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [productGroup]
+    summary: Create a product group
+    operationId: createProductGroup
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductGroupInput'
+          example:
+            name: Scratch product group
+            description: Temporary group
+            category: ROOT
+    responses:
+      '200':
+        description: Created group details ({data}).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductGroupDetailsResponse'
+            example:
+              data:
+                id: ff80818175f31a340175f31a3fda0020
+                name: Scratch product group
+                description: Temporary group
+                version: 0
+                category: {id: ROOT, name: ROOT}
+                dateCreated: '2024-01-01T00:00:00Z'
+                lastUpdated: '2024-01-01T00:00:00Z'
+                products: []
+                siblings: []
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/productGroups/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [productGroup]
+    summary: Read a product group with its products
+    operationId: productGroupDetails
+    x-contract-tests:
+      - name: missing id returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Group details ({data}).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductGroupDetailsResponse'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [productGroup]
+    summary: Update a product group
+    operationId: updateProductGroup
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductGroupInput'
+          example:
+            name: Renamed product group
+            version: 0
+    responses:
+      '200':
+        description: Updated group details ({data}).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductGroupDetailsResponse'
+            example:
+              data:
+                id: ff80818175f31a340175f31a3fda0020
+                name: Renamed product group
+                description: null
+                version: 1
+                category: null
+                dateCreated: '2024-01-01T00:00:00Z'
+                lastUpdated: '2024-01-02T00:00:00Z'
+                products: []
+                siblings: []
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [productGroup]
+    summary: Delete a product group (detaching its products first)
+    operationId: deleteProductGroup
+    responses:
+      '204':
+        description: Deleted (no content).
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/productGroups/{id}/products:
+  post:
+    tags: [productGroup]
+    summary: Add a product to a product group (or set it as product family)
+    operationId: addProductToProductGroup
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              product:
+                type: object
+                properties:
+                  id:
+                    type: string
+              isProductFamily:
+                type: boolean
+          example:
+            product: {id: ff80818175f31a340175f31a3fda0001}
+            isProductFamily: false
+    responses:
+      '200':
+        description: Updated group details ({data}).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductGroupDetailsResponse'
+            example:
+              data:
+                id: ff80818175f31a340175f31a3fda0020
+                name: Scratch product group
+                description: null
+                version: 1
+                category: null
+                dateCreated: '2024-01-01T00:00:00Z'
+                lastUpdated: '2024-01-02T00:00:00Z'
+                products:
+                  - id: ff80818175f31a340175f31a3fda0001
+                    productCode: '10001'
+                    name: Ibuprofen 200mg tablet
+                siblings: []
+      '400':
+        description: Product or group not found, or product already in the group (IllegalArgumentException rendered as {errorCode, errorMessage}).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+            example: {errorCode: 400, errorMessage: Product group not found}
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/productGroups/{id}/products/{productId}:
+  delete:
+    tags: [productGroup]
+    summary: Remove a product from a product group (or unset its product family)
+    operationId: removeProductFromProductGroup
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: isProductFamily
+        in: query
+        required: false
+        schema:
+          type: boolean
+    responses:
+      '200':
+        description: Updated group details ({data}).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductGroupDetailsResponse'
+            example:
+              data:
+                id: ff80818175f31a340175f31a3fda0020
+                name: Scratch product group
+                description: null
+                version: 2
+                category: null
+                dateCreated: '2024-01-01T00:00:00Z'
+                lastUpdated: '2024-01-03T00:00:00Z'
+                products: []
+                siblings: []
+      '404':
+        $ref: '#/components/responses/NotFound'

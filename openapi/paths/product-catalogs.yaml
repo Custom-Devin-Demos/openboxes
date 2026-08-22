@@ -1,0 +1,218 @@
+# Product Catalog API (ProductCatalogApiController).
+
+/api/productCatalogs/search:
+  get:
+    tags: [productCatalog]
+    summary: List product catalogs (paginated)
+    operationId: searchProductCatalogs
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: Catalogs ({data, totalCount}).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ProductCatalog'
+                totalCount:
+                  type: integer
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/productCatalogs/{id}/details:
+  get:
+    tags: [productCatalog]
+    summary: Read a product catalog with its items
+    operationId: productCatalogDetails
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing id returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The catalog (unwrapped - no "data" envelope).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCatalogDetails'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/productCatalogs/saveCatalog:
+  post:
+    tags: [productCatalog]
+    summary: Create or update a product catalog
+    operationId: saveProductCatalog
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductCatalogInput'
+          example:
+            code: SCRATCH
+            name: Scratch catalog
+            description: Temporary catalog
+            active: true
+    responses:
+      '200':
+        description: The saved catalog (detailed rendering, unwrapped).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCatalogDetails'
+            example:
+              id: ff80818175f31a340175f31a3fda0010
+              code: SCRATCH
+              name: Scratch catalog
+              description: Temporary catalog
+              active: true
+              color: null
+              dateCreated: '2024-01-01T00:00:00Z'
+              lastUpdated: '2024-01-01T00:00:00Z'
+              version: 0
+              productCatalogItems: []
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/productCatalogs/{id}/deleteCatalog:
+  delete:
+    tags: [productCatalog]
+    summary: Delete a product catalog
+    operationId: deleteProductCatalog
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Deleted ({message}).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCatalogMessageResponse'
+            example:
+              message: ProductCatalog ff80818175f31a340175f31a3fda0010 deleted
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/productCatalogs/addItem:
+  post:
+    tags: [productCatalog]
+    summary: Add a product to a catalog
+    operationId: addProductCatalogItem
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              productCatalog:
+                type: object
+                properties:
+                  id:
+                    type: string
+              product:
+                type: object
+                properties:
+                  id:
+                    type: string
+          example:
+            productCatalog: {id: ff80818175f31a340175f31a3fda0010}
+            product: {id: ff80818175f31a340175f31a3fda0001}
+    responses:
+      '200':
+        description: Added ({message}). Rendered even when catalog or product is not found (no-op).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCatalogMessageResponse'
+            example:
+              message: Product Catalog Item ff80818175f31a340175f31a3fda0010 added
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/productCatalogs/items/{id}:
+  delete:
+    tags: [productCatalog]
+    summary: Remove a catalog item
+    operationId: removeProductCatalogItem
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: ProductCatalogItem id.
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Removed ({message}).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCatalogMessageResponse'
+            example:
+              message: Product Catalog Item ff80818175f31a340175f31a3fda0011 deleted
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/productCatalogs/{id}/importItems:
+  post:
+    tags: [productCatalog]
+    summary: Import catalog items from an uploaded CSV file
+    operationId: importProductCatalogItems
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              importFile:
+                type: string
+                format: binary
+                description: CSV file of catalog code / product code pairs.
+          example:
+            importFile: (binary CSV content)
+    responses:
+      '200':
+        description: Imported ({message}).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCatalogMessageResponse'
+            example:
+              message: Imported 2 catalog items from uploaded file catalog-items.csv
+      '400':
+        $ref: '#/components/responses/BadRequest'

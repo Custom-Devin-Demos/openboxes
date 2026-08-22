@@ -1,0 +1,98 @@
+# Schemas for the Product Type API domain (ProductTypeApiController).
+
+ProductTypeItem:
+  type: object
+  description: Product type rendering used by list, read, create and update.
+  required: [id, name, supportedActivities, requiredFields, displayedFields, productCount]
+  properties:
+    id:
+      type: string
+      example: DEFAULT
+    name:
+      type: string
+      example: Default
+    code:
+      type: string
+      nullable: true
+    productTypeCode:
+      type: string
+      nullable: true
+      description: ProductTypeCode name (e.g. GOOD).
+    productIdentifierFormat:
+      type: string
+      nullable: true
+    sequenceNumber:
+      type: integer
+      nullable: true
+    supportedActivities:
+      type: array
+      items:
+        type: string
+    requiredFields:
+      type: array
+      items:
+        type: string
+    displayedFields:
+      type: array
+      items:
+        type: string
+    productCount:
+      type: integer
+    dateCreated:
+      type: string
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+    version:
+      type: integer
+      nullable: true
+
+ProductTypeInput:
+  type: object
+  description: |
+    Request body for creating/updating a product type. On create,
+    productTypeCode is forced to GOOD and requiredFields to
+    [PRODUCT_CODE, NAME, CATEGORY, GL_ACCOUNT]; either code or
+    productIdentifierFormat must be provided.
+  properties:
+    name:
+      type: string
+    code:
+      type: string
+      nullable: true
+    productIdentifierFormat:
+      type: string
+      nullable: true
+    sequenceNumber:
+      type: integer
+      nullable: true
+    supportedActivities:
+      type: array
+      items:
+        type: string
+    displayedFields:
+      type: array
+      items:
+        type: string
+    version:
+      type: integer
+      description: Optimistic-locking version (update only).
+
+ProductTypeResponse:
+  type: object
+  description: Product type wrapped in a "data" envelope.
+  required: [data]
+  properties:
+    data:
+      $ref: '#/components/schemas/ProductTypeItem'
+
+ProductTypeOption:
+  type: object
+  description: Enum option rendering ({id, label}).
+  required: [id, label]
+  properties:
+    id:
+      type: string
+    label:
+      type: string
