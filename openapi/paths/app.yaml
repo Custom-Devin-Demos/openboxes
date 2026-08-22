@@ -1,0 +1,227 @@
+# Application-level API (ApiController): authentication, session context,
+# status and instance-level metadata. Routed via the catch-all
+# "/api/$action/$id?" mapping plus explicit mappings for
+# /api/supportLinks and /api/resettingInstance/command.
+
+/api/login:
+  post:
+    tags: [app]
+    summary: Authenticate and start a session
+    operationId: appLogin
+    security: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AppLoginRequest'
+          example:
+            username: admin
+            password: password
+    x-contract-tests:
+      - name: valid credentials
+        body:
+          username: admin
+          password: password
+        status: 200
+      - name: invalid credentials return 401
+        body:
+          username: admin
+          password: wrong-password
+        status: 401
+    responses:
+      '200':
+        description: Authentication was successful. Plain-text body, session cookie set.
+        content:
+          text/html:
+            example: Authentication was successful
+      '401':
+        description: Authentication failed. Plain-text body.
+        content:
+          text/html:
+            example: Authentication failed
+
+/api/logout:
+  post:
+    tags: [app]
+    summary: Invalidate the current session
+    operationId: appLogout
+    description: |
+      Invalidates the HTTP session unless the session is currently
+      impersonating another user (in which case impersonation is ended).
+      Schema-only in contract tests to preserve the runner's session.
+    responses:
+      '200':
+        description: Logout was successful. Plain-text body.
+        content:
+          text/html:
+            schema:
+              type: string
+            example: Logout was successful
+
+/api/status:
+  get:
+    tags: [app]
+    summary: Application and database health status
+    operationId: appStatus
+    security: []
+    responses:
+      '200':
+        description: |
+          Health status. Always HTTP 200 with top-level `status: "OK"`, even
+          when the database check fails (only `database.status`/`message`
+          reflect the failure).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppStatus'
+
+/api/chooseLocation/{id}:
+  get:
+    tags: [app]
+    summary: Choose the acting facility for the session
+    operationId: appChooseLocation
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Location id.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: choose seeded main warehouse
+        params:
+          id: '{facilityId}'
+        status: 200
+      - name: unknown location returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Confirmation message. Plain-text body.
+        content:
+          text/html:
+            example: User Miss Administrator is now logged into Main Warehouse
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/chooseLocale/{id}:
+  get:
+    tags: [app]
+    summary: Choose the session locale
+    operationId: appChooseLocale
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Locale code (e.g. en, fr).
+        schema:
+          type: string
+    x-contract-tests:
+      - name: choose english locale
+        params:
+          id: en
+        status: 200
+    responses:
+      '200':
+        description: The now-active language.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppLocaleResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/loginContext:
+  get:
+    tags: [app]
+    summary: Localized labels for the login page
+    operationId: appLoginContext
+    security: []
+    responses:
+      '200':
+        description: Login page labels.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppLoginContext'
+
+/api/signupContext:
+  get:
+    tags: [app]
+    summary: Labels and configuration for the signup page
+    operationId: appSignupContext
+    security: []
+    responses:
+      '200':
+        description: Signup page labels, recaptcha config and supported locales.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppSignupContext'
+
+/api/getMenuConfig:
+  get:
+    tags: [app]
+    summary: Menu configuration for the current user
+    operationId: appGetMenuConfig
+    responses:
+      '200':
+        description: Configured menu sections (filtered by user permissions).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppMenuConfig'
+
+/api/getAppContext:
+  get:
+    tags: [app]
+    summary: Full application context for the current session
+    operationId: appGetAppContext
+    responses:
+      '200':
+        description: Session/user/location context and instance configuration.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppContext'
+
+/api/getRequestTypes:
+  get:
+    tags: [app]
+    summary: List stock request types
+    operationId: appGetRequestTypes
+    responses:
+      '200':
+        description: Request type options.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppRequestTypes'
+
+/api/supportLinks:
+  get:
+    tags: [app]
+    summary: Configured support links
+    operationId: appGetSupportLinks
+    responses:
+      '200':
+        description: Support link map from configuration.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppSupportLinks'
+
+/api/resettingInstance/command:
+  get:
+    tags: [app]
+    summary: Configured instance-reset command
+    operationId: appGetResettingInstanceCommand
+    responses:
+      '200':
+        description: Shell command from configuration (may be null).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppResettingInstanceCommand'

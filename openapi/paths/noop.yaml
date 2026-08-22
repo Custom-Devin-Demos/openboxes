@@ -1,0 +1,60 @@
+# No-op REST API (NoopApiController): placeholder controller reached through
+# the generic "/api/${resource}s" REST mappings for resource "noop". Every
+# action throws NotImplementedException, rendered as a 500 error.
+
+/api/noops:
+  get:
+    tags: [noop]
+    summary: List noops (always 500 Not Implemented)
+    operationId: noopList
+    responses:
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [noop]
+    summary: Create a noop (always 500 Not Implemented)
+    operationId: noopCreate
+    responses:
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/noops/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [noop]
+    summary: Read a noop (always 500 Not Implemented)
+    operationId: noopRead
+    x-contract-tests:
+      - name: read always returns 500 Not Implemented
+        params:
+          id: any-id
+        status: 500
+    responses:
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [noop]
+    summary: Update a noop via POST (always 500 Not Implemented)
+    operationId: noopUpdatePost
+    responses:
+      '500':
+        $ref: '#/components/responses/ServerError'
+  put:
+    tags: [noop]
+    summary: Update a noop (always 500 Not Implemented)
+    operationId: noopUpdate
+    responses:
+      '500':
+        $ref: '#/components/responses/ServerError'
+  delete:
+    tags: [noop]
+    summary: Delete a noop (always 500 Not Implemented)
+    operationId: noopDelete
+    responses:
+      '500':
+        $ref: '#/components/responses/ServerError'

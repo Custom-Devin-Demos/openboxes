@@ -20,13 +20,40 @@ servers:
 security:
   - sessionCookie: []
 tags:
+  - name: admin
+    description: Admin introspection, caches, upgrade and mail (AdminApiController)
+  - name: app
+    description: Authentication, session context and instance status (ApiController)
+  - name: generic
+    description: Generic domain CRUD/search by resource name (GenericApiController)
+  - name: helpscout
+    description: HelpScout Beacon widget configuration (HelpScoutApiController)
+  - name: jobs
+    description: Quartz job and scheduler management (JobApiController)
+  - name: loadData
+    description: Demo/configuration data loading (LoadDataApiController)
   - name: localization
     description: Translations / localized messages (LocalizationApiController)
+  - name: migration
+    description: Data migration diagnostics (MigrationApiController)
+  - name: noop
+    description: Placeholder no-op REST resource (NoopApiController)
+  - name: selectOptions
+    description: Dropdown option lists for the frontend (SelectOptionsApiController)
 
 # One line per per-domain fragment file under paths/. Sibling sessions add
 # their fragment here (append a single line; keep the list alphabetized).
 x-fragments:
+  - paths/admin.yaml
+  - paths/app.yaml
+  - paths/generic.yaml
+  - paths/helpscout.yaml
+  - paths/jobs.yaml
+  - paths/load-data.yaml
   - paths/localization.yaml
+  - paths/migration.yaml
+  - paths/noop.yaml
+  - paths/select-options.yaml
 
 paths: {}
 

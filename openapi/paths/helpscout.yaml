@@ -1,0 +1,36 @@
+# HelpScout Beacon configuration API (HelpScoutApiController).
+
+/api/helpscout/configuration:
+  get:
+    tags: [helpscout]
+    summary: HelpScout Beacon widget configuration
+    operationId: helpscoutConfiguration
+    responses:
+      '200':
+        description: |
+          Widget configuration rendered as a top-level object (no `data`
+          envelope). Values come from openboxes.helpscout.widget configuration
+          and localized messages.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                color:
+                  type: string
+                  nullable: true
+                  example: '#3AB4B1'
+                enableFabAnimation:
+                  type: boolean
+                labels:
+                  type: object
+                  properties:
+                    noTimeToWaitAround:
+                      type: string
+                      nullable: true
+                    responseTime:
+                      type: string
+                      nullable: true
+                localizedHelpScoutKey:
+                  type: string
+                  nullable: true
