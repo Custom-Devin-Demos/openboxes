@@ -1,0 +1,387 @@
+# Product supplier API schemas (ProductSupplierApiController,
+# ProductSupplierAttributeApiController, ProductSupplierPreferenceApiController).
+
+ProductSupplier:
+  type: object
+  description: |
+    Product supplier (product source) as rendered by ProductSupplier.toJson()
+    (list items and read responses).
+  required: [id, name, product]
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    code:
+      type: string
+      nullable: true
+    productCode:
+      type: string
+      nullable: true
+    product:
+      type: object
+      required: [id, name]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        productCode:
+          type: string
+          nullable: true
+    supplier:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        code:
+          type: string
+          nullable: true
+        displayName:
+          type: string
+          nullable: true
+    supplierCode:
+      type: string
+      nullable: true
+    defaultProductPackage:
+      type: object
+      nullable: true
+      description: Default (or derived) product package (default Grails JSON rendering).
+    contractPrice:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+        price:
+          type: number
+          nullable: true
+        validUntil:
+          type: string
+          nullable: true
+    minOrderQuantity:
+      type: integer
+      nullable: true
+    productSupplierPreferences:
+      type: array
+      items:
+        $ref: '#/components/schemas/ProductSupplierPreference'
+    packageSize:
+      type: integer
+      nullable: true
+    packagePrice:
+      type: number
+      nullable: true
+    unitPrice:
+      type: number
+      nullable: true
+    dateCreated:
+      type: string
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+    createdBy:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          nullable: true
+    updatedBy:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          nullable: true
+    active:
+      type: boolean
+      nullable: true
+    ratingTypeCode:
+      type: string
+      nullable: true
+    manufacturer:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+          nullable: true
+    description:
+      type: string
+      nullable: true
+    manufacturerCode:
+      type: string
+      nullable: true
+    brandName:
+      type: string
+      nullable: true
+    attributes:
+      type: array
+      nullable: true
+      items:
+        type: object
+        description: Product attribute (default Grails JSON rendering).
+    tieredPricing:
+      type: boolean
+      nullable: true
+
+ProductSupplierDetails:
+  type: object
+  description: Response body of GET /api/productSuppliers/{id}/details.
+  required: [id, name]
+  properties:
+    id:
+      type: string
+    code:
+      type: string
+      nullable: true
+    name:
+      type: string
+    product:
+      type: object
+      nullable: true
+      required: [id, name]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        productCode:
+          type: string
+          nullable: true
+    upc:
+      type: string
+      nullable: true
+    ndc:
+      type: string
+      nullable: true
+    supplier:
+      type: object
+      nullable: true
+      required: [id, name]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    supplierCode:
+      type: string
+      nullable: true
+    supplierName:
+      type: string
+      nullable: true
+    modelNumber:
+      type: string
+      nullable: true
+    brandName:
+      type: string
+      nullable: true
+    manufacturer:
+      type: object
+      nullable: true
+      required: [id, name]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    manufacturerCode:
+      type: string
+      nullable: true
+    manufacturerName:
+      type: string
+      nullable: true
+    standardLeadTimeDays:
+      type: integer
+      nullable: true
+    minOrderQuantity:
+      type: integer
+      nullable: true
+    ratingTypeCode:
+      type: string
+      nullable: true
+    comments:
+      type: string
+      nullable: true
+
+ProductSupplierInput:
+  type: object
+  description: |
+    Request body for POST /api/productSuppliers and POST/PUT
+    /api/productSuppliers/{id} (ProductSupplierDetailsCommand). Associations
+    bind by id.
+  required: [name, supplier]
+  properties:
+    product:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+    supplier:
+      type: object
+      properties:
+        id:
+          type: string
+    manufacturer:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+    code:
+      type: string
+      nullable: true
+    name:
+      type: string
+    supplierCode:
+      type: string
+      nullable: true
+    manufacturerCode:
+      type: string
+      nullable: true
+    active:
+      type: boolean
+      nullable: true
+    description:
+      type: string
+      nullable: true
+    brandName:
+      type: string
+      nullable: true
+    ratingTypeCode:
+      type: string
+      nullable: true
+    productCode:
+      type: string
+      nullable: true
+
+ProductSupplierPreference:
+  type: object
+  description: |
+    Product supplier preference as rendered by
+    ProductSupplierPreference.toJson() (default Grails JSON rendering of the
+    nested associations).
+  required: [id]
+  properties:
+    id:
+      type: string
+    destinationParty:
+      type: object
+      nullable: true
+      description: Destination party (default Grails JSON rendering).
+    preferenceType:
+      type: object
+      nullable: true
+      description: Preference type (default Grails JSON rendering).
+    validityStartDate:
+      type: string
+      nullable: true
+    validityEndDate:
+      type: string
+      nullable: true
+    comments:
+      type: string
+      nullable: true
+
+ProductSupplierPreferenceInput:
+  type: object
+  description: |
+    Bindable ProductSupplierPreference fields for create/update/batch.
+    Associations bind by id.
+  properties:
+    id:
+      type: string
+      nullable: true
+      description: Existing preference id (batch updates only).
+    productSupplier:
+      type: object
+      properties:
+        id:
+          type: string
+    preferenceType:
+      type: object
+      properties:
+        id:
+          type: string
+    destinationParty:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+    validityStartDate:
+      type: string
+      nullable: true
+    validityEndDate:
+      type: string
+      nullable: true
+    comments:
+      type: string
+      nullable: true
+
+ProductSupplierAttributeBatchInput:
+  type: object
+  description: Request body for POST /api/productSupplierAttributes/batch.
+  required: [productAttributes]
+  properties:
+    productAttributes:
+      type: array
+      items:
+        type: object
+        properties:
+          attribute:
+            type: object
+            properties:
+              id:
+                type: string
+          productSupplier:
+            type: object
+            properties:
+              id:
+                type: string
+          value:
+            type: string
+            nullable: true
+            description: Empty value deletes a non-required attribute.
+
+ProductSupplierAttributeBatchResponse:
+  type: object
+  description: |
+    Response of POST /api/productSupplierAttributes/batch
+    (ProductSupplierAttributeUpdateResponse, default Grails JSON rendering of
+    the ProductAttribute elements).
+  required: [data]
+  properties:
+    data:
+      type: object
+      required: [createdAttributes, updatedAttributes, deletedAttributes]
+      properties:
+        createdAttributes:
+          type: array
+          items:
+            type: object
+            description: Created ProductAttribute (default Grails JSON rendering).
+        updatedAttributes:
+          type: array
+          items:
+            type: object
+            description: Updated ProductAttribute (default Grails JSON rendering).
+        deletedAttributes:
+          type: array
+          items:
+            type: string
+            description: Ids of deleted product attributes.

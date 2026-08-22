@@ -1,0 +1,234 @@
+# Attribute API (AttributeApiController). List/create/read/update/delete are
+# routed by the generic "/api/${resource}s" REST mappings in
+# UrlMappings.groovy; /api/attributes/search has an explicit mapping.
+
+/api/attributes:
+  get:
+    tags: [attributes]
+    summary: List attributes, optionally filtered by entity type
+    operationId: listAttributes
+    parameters:
+      - name: entityType
+        in: query
+        required: false
+        description: Entity type code filter (e.g. PRODUCT, PRODUCT_SUPPLIER).
+        schema:
+          type: string
+    responses:
+      '200':
+        description: "Attributes (`{data: [...]}`, no totalCount; default Grails JSON rendering)."
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Attribute'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [attributes]
+    summary: Create an attribute
+    operationId: createAttribute
+    description: Returns 200 (not 201) with the created attribute.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AttributeInput'
+          example:
+            code: SCRATCH_ATTR
+            name: Scratch Attribute
+            active: true
+            required: false
+            allowOther: true
+            entityTypeCode: PRODUCT_SUPPLIER
+            option: [Option A, Option B]
+    responses:
+      '200':
+        description: The created attribute (toDetailedJson, no data wrapper).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttributeDetails'
+            example:
+              id: ff8081817f0e3f80017f0e40a1b20003
+              code: SCRATCH_ATTR
+              name: Scratch Attribute
+              description: null
+              entityTypeCode: PRODUCT_SUPPLIER
+              unitOfMeasureClass: null
+              options: [Option A, Option B]
+              active: true
+              required: false
+              allowOther: true
+              dateCreated: 01/Jan/2024 12:00 AM
+              lastUpdated: 01/Jan/2024 12:00 AM
+              version: 0
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/attributes/search:
+  get:
+    tags: [attributes]
+    summary: Search attributes by name
+    operationId: searchAttributes
+    parameters:
+      - name: q
+        in: query
+        required: false
+        description: Search term matched against attribute names.
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    x-contract-tests:
+      - name: default search
+        status: 200
+      - name: filtered search
+        query:
+          q: size
+          max: '5'
+        status: 200
+    responses:
+      '200':
+        description: Matching attributes (toDetailedJson) with totalCount.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/AttributeDetails'
+                totalCount:
+                  type: integer
+
+/api/attributes/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Attribute id.
+      schema:
+        type: string
+  get:
+    tags: [attributes]
+    summary: Read an attribute by id
+    operationId: readAttribute
+    x-contract-tests:
+      - name: missing id returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The attribute (toDetailedJson, no data wrapper).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttributeDetails'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  post:
+    tags: [attributes]
+    summary: Update an attribute (POST alias of PUT)
+    operationId: updateAttributePost
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AttributeInput'
+          example:
+            name: Renamed Attribute
+            active: true
+            required: false
+            allowOther: true
+            version: 0
+    responses:
+      '200':
+        description: The updated attribute.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttributeDetails'
+            example:
+              id: ff8081817f0e3f80017f0e40a1b20003
+              code: SCRATCH_ATTR
+              name: Renamed Attribute
+              description: null
+              entityTypeCode: PRODUCT_SUPPLIER
+              unitOfMeasureClass: null
+              options: []
+              active: true
+              required: false
+              allowOther: true
+              dateCreated: 01/Jan/2024 12:00 AM
+              lastUpdated: 02/Jan/2024 12:00 AM
+              version: 1
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [attributes]
+    summary: Update an attribute
+    operationId: updateAttribute
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AttributeInput'
+          example:
+            name: Renamed Attribute
+            active: true
+            required: false
+            allowOther: true
+            version: 0
+    responses:
+      '200':
+        description: The updated attribute.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttributeDetails'
+            example:
+              id: ff8081817f0e3f80017f0e40a1b20003
+              code: SCRATCH_ATTR
+              name: Renamed Attribute
+              description: null
+              entityTypeCode: PRODUCT_SUPPLIER
+              unitOfMeasureClass: null
+              options: []
+              active: true
+              required: false
+              allowOther: true
+              dateCreated: 01/Jan/2024 12:00 AM
+              lastUpdated: 02/Jan/2024 12:00 AM
+              version: 1
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [attributes]
+    summary: Delete an attribute
+    operationId: deleteAttribute
+    description: Returns 400 when the attribute is still referenced (data-integrity violation).
+    responses:
+      '204':
+        description: Deleted (no content).
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
