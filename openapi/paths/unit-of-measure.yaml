@@ -1,0 +1,437 @@
+# Unit of measure APIs (UnitOfMeasureApiController — generic CRUD via
+# BaseDomainApiController/GenericApiController plus explicit currencies and
+# options mappings — and UnitOfMeasureConversionApiController).
+
+/api/unitOfMeasures:
+  get:
+    tags: [unitOfMeasure]
+    summary: List units of measure
+    operationId: listUnitsOfMeasure
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: "Units of measure (`{data: [...]}`, no totalCount; generic API rendering)."
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/UnitOfMeasure'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [unitOfMeasure]
+    summary: Create a unit of measure (generic API)
+    operationId: createUnitOfMeasure
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            description: Bindable UnitOfMeasure properties.
+            properties:
+              code:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
+                nullable: true
+              uomClass:
+                type: object
+                properties:
+                  id:
+                    type: string
+          example:
+            code: SCRTCH
+            name: Scratch unit
+            uomClass:
+              id: CURRENCY
+    responses:
+      '201':
+        description: The created unit of measure.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/UnitOfMeasure'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b2000b
+                code: SCRTCH
+                name: Scratch unit
+                description: null
+                uomClass:
+                  id: CURRENCY
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/unitOfMeasures/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Unit of measure id.
+      schema:
+        type: string
+  get:
+    tags: [unitOfMeasure]
+    summary: Read a unit of measure by id (generic API)
+    operationId: readUnitOfMeasure
+    x-contract-tests:
+      - name: missing id returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The unit of measure.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/UnitOfMeasure'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  post:
+    tags: [unitOfMeasure]
+    summary: Update a unit of measure (generic API; POST alias of PUT)
+    operationId: updateUnitOfMeasurePost
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            description: Bindable UnitOfMeasure properties.
+            properties:
+              name:
+                type: string
+          example:
+            name: Renamed unit
+    responses:
+      '200':
+        description: The updated unit of measure.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/UnitOfMeasure'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b2000b
+                code: SCRTCH
+                name: Renamed unit
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [unitOfMeasure]
+    summary: Update a unit of measure (generic API)
+    operationId: updateUnitOfMeasure
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            description: Bindable UnitOfMeasure properties.
+            properties:
+              name:
+                type: string
+          example:
+            name: Renamed unit
+    responses:
+      '200':
+        description: The updated unit of measure.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/UnitOfMeasure'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b2000b
+                code: SCRTCH
+                name: Renamed unit
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [unitOfMeasure]
+    summary: Delete a unit of measure (generic API)
+    operationId: deleteUnitOfMeasure
+    responses:
+      '204':
+        description: Deleted (no content).
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/unitOfMeasure/currencies:
+  get:
+    tags: [unitOfMeasure]
+    summary: List currency units of measure
+    operationId: listCurrencies
+    responses:
+      '200':
+        description: Units of measure in the CURRENCY class.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/UnitOfMeasure'
+
+/api/unitOfMeasures/options:
+  get:
+    tags: [unitOfMeasure]
+    summary: Unit of measure select options by type
+    operationId: uomOptions
+    description: |
+      Requires `type`; omitting it (or passing an unknown type) throws and
+      returns 500 (`UnitOfMeasureType.valueOf(null)` — current behavior).
+    parameters:
+      - name: type
+        in: query
+        required: true
+        description: Unit of measure type.
+        schema:
+          type: string
+          enum: [AREA, CURRENCY, LENGTH, MASS, PACKAGE, QUANTITY, VOLUME]
+    x-contract-tests:
+      - name: currency options
+        query:
+          type: CURRENCY
+        status: 200
+      - name: missing type returns 500
+        status: 500
+    responses:
+      '200':
+        description: Select options of the requested type.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/UomOption'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/unitOfMeasureConversions:
+  get:
+    tags: [unitOfMeasure]
+    summary: List unit of measure conversions
+    operationId: listUnitOfMeasureConversions
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - name: sort
+        in: query
+        required: false
+        description: |
+          Sort property (id, active, conversionRate, dateCreated, lastUpdated,
+          fromUnitOfMeasure, toUnitOfMeasure); other values are ignored.
+        schema:
+          type: string
+      - $ref: '#/components/parameters/orderParam'
+    responses:
+      '200':
+        description: Conversions with totalCount.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/UnitOfMeasureConversion'
+                totalCount:
+                  type: integer
+  post:
+    tags: [unitOfMeasure]
+    summary: Create a unit of measure conversion
+    operationId: createUnitOfMeasureConversion
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnitOfMeasureConversionInput'
+          example:
+            fromUnitOfMeasureId: ff8081817f0e3f80017f0e40a1b2000b
+            toUnitOfMeasureId: ff8081817f0e3f80017f0e40a1b2000c
+            conversionRate: 0.5
+            active: true
+    responses:
+      '201':
+        description: The created conversion.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/UnitOfMeasureConversion'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b2000d
+                fromUnitOfMeasure:
+                  id: ff8081817f0e3f80017f0e40a1b2000b
+                  name: Each
+                toUnitOfMeasure:
+                  id: ff8081817f0e3f80017f0e40a1b2000c
+                  name: Box
+                conversionRate: 0.5
+                active: true
+                dateCreated: '2024-01-01T00:00:00Z'
+                lastUpdated: '2024-01-01T00:00:00Z'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/unitOfMeasureConversions/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Unit of measure conversion id.
+      schema:
+        type: string
+  get:
+    tags: [unitOfMeasure]
+    summary: Read a unit of measure conversion by id
+    operationId: readUnitOfMeasureConversion
+    x-contract-tests:
+      - name: missing id returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The conversion.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/UnitOfMeasureConversion'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [unitOfMeasure]
+    summary: Update a unit of measure conversion
+    operationId: updateUnitOfMeasureConversion
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnitOfMeasureConversionInput'
+          example:
+            conversionRate: 0.25
+    responses:
+      '200':
+        description: The updated conversion.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/UnitOfMeasureConversion'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b2000d
+                fromUnitOfMeasure:
+                  id: ff8081817f0e3f80017f0e40a1b2000b
+                  name: Each
+                toUnitOfMeasure:
+                  id: ff8081817f0e3f80017f0e40a1b2000c
+                  name: Box
+                conversionRate: 0.25
+                active: true
+                dateCreated: '2024-01-01T00:00:00Z'
+                lastUpdated: '2024-01-02T00:00:00Z'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [unitOfMeasure]
+    summary: Delete a unit of measure conversion
+    operationId: deleteUnitOfMeasureConversion
+    description: Returns 400 (`{errorMessage}` only) when the conversion cannot be deleted (data-integrity violation).
+    responses:
+      '204':
+        description: Deleted (no content).
+      '400':
+        description: Could not be deleted (data-integrity violation).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [errorMessage]
+              properties:
+                errorMessage:
+                  type: string
+            example:
+              errorMessage: Unit of Measure conversion abc123 could not be deleted
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/unitOfMeasureConversions/unitOfMeasureOptions:
+  get:
+    tags: [unitOfMeasure]
+    summary: Unit of measure options for the conversion form
+    operationId: unitOfMeasureConversionUomOptions
+    responses:
+      '200':
+        description: All units of measure as {id, label} options.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required: [id, label]
+                    properties:
+                      id:
+                        type: string
+                      label:
+                        type: string
