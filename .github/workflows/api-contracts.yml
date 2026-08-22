@@ -1,0 +1,122 @@
+# OpenAPI spec lint + contract-test verification.
+#
+# Lint is cheap and always runs. The verify job boots the full app against a
+# seeded MariaDB (same bring-up as api-snapshots.yml, ~15-25 min) and
+# validates live responses against the spec, so it only runs when the spec /
+# harness changes (plus manual dispatch).
+# See docs/migration/openapi-conventions.md.
+name: API Contracts
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'openapi/**'
+      - '.github/workflows/api-contracts.yml'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: openapi
+        run: npm install
+
+      - name: Lint OpenAPI spec
+        working-directory: openapi
+        run: npm run contracts:lint
+
+  verify:
+    needs: lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    services:
+      mariadb:
+        image: mariadb:10.6
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: openboxes
+          MYSQL_USER: openboxes
+          MYSQL_PASSWORD: openboxes
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Configure application
+        run: |
+          mkdir -p ~/.grails
+          cat > ~/.grails/openboxes-config.properties <<'EOF'
+          dataSource.url=jdbc:mysql://localhost:3306/openboxes?useSSL=false&allowPublicKeyRetrieval=true
+          dataSource.username=openboxes
+          dataSource.password=openboxes
+          EOF
+
+      - name: Start application (runs Liquibase migrations)
+        run: |
+          ./gradlew bootRun > bootrun.log 2>&1 &
+          echo $! > bootrun.pid
+          # Wait up to 40 minutes for the app to answer.
+          for i in $(seq 1 240); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' http://localhost:8080/openboxes/ || true)
+            if [ "$code" != "000" ] && [ "$code" != "" ]; then
+              echo "App is up (HTTP $code)"; break
+            fi
+            sleep 10
+          done
+          tail -n 50 bootrun.log
+
+      - name: Seed demo data and restart app
+        run: |
+          mysql -h127.0.0.1 -uopenboxes -popenboxes openboxes < docker/seed-demo-data.sql
+          # Restart so caches reflect the seeded data.
+          kill "$(cat bootrun.pid)" || true
+          sleep 15
+          ./gradlew bootRun > bootrun2.log 2>&1 &
+          for i in $(seq 1 120); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' http://localhost:8080/openboxes/ || true)
+            if [ "$code" != "000" ] && [ "$code" != "" ]; then
+              echo "App is up (HTTP $code)"; break
+            fi
+            sleep 10
+          done
+
+      - name: Install dependencies
+        working-directory: openapi
+        run: npm install
+
+      - name: Run contract tests
+        working-directory: openapi
+        run: npm run contracts:verify
+
+      - name: Upload app logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: contracts-bootrun-logs
+          path: bootrun*.log

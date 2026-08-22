@@ -1,0 +1,260 @@
+# Localization API (LocalizationApiController). Reference fragment: shows the
+# conventions every domain fragment should follow — see
+# docs/migration/openapi-conventions.md.
+#
+# This file is a map of <path> -> PathItem, merged into the root document's
+# `paths` by the bundler. Register it in openbox.yaml x-fragments.
+
+/api/localizations:
+  get:
+    tags: [localization]
+    summary: List localized messages for a locale
+    operationId: listLocalizations
+    parameters:
+      - name: languageCode
+        in: query
+        required: false
+        description: Locale language code (defaults to the session/user locale).
+        schema:
+          type: string
+          example: en
+      - name: prefix
+        in: query
+        required: false
+        description: Only return message codes starting with this prefix.
+        schema:
+          type: string
+    responses:
+      '200':
+        description: All localized messages of the resolved locale.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocalizedMessages'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [localization]
+    summary: Create a localization entry
+    operationId: createLocalization
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LocalizationInput'
+          example:
+            code: default.button.save.label
+            locale: en
+            text: Save
+    responses:
+      '201':
+        description: Created localization.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocalizationMutationResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20003
+                code: default.button.save.label
+                locale: en
+                text: Save
+                message: Localization ff8081817f0e3f80017f0e40a1b20003 saved
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/localizations/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Message code (GET) or localization database id (PUT/DELETE).
+      schema:
+        type: string
+  get:
+    tags: [localization]
+    summary: Read a single localized message by message code
+    operationId: readLocalization
+    parameters:
+      - name: lang
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: args
+        in: query
+        required: false
+        description: Positional message arguments (repeatable).
+        schema:
+          type: string
+    x-contract-tests:
+      - name: known message code
+        params:
+          id: default.button.save.label
+        status: 200
+    responses:
+      '200':
+        description: The localized message.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocalizedMessage'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [localization]
+    summary: Update a localization entry
+    operationId: updateLocalization
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/LocalizationInput'
+              - type: object
+                properties:
+                  version:
+                    type: integer
+                    description: Optimistic-locking version.
+          example:
+            code: default.button.save.label
+            locale: en
+            text: Save changes
+            version: 0
+    responses:
+      '200':
+        description: Updated localization.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocalizationMutationResponse'
+            example:
+              data:
+                id: ff8081817f0e3f80017f0e40a1b20003
+                code: default.button.save.label
+                locale: en
+                text: Save changes
+                dateCreated: '2024-01-01T00:00:00Z'
+                lastUpdated: '2024-01-02T00:00:00Z'
+                version: 1
+                message: Localization ff8081817f0e3f80017f0e40a1b20003 updated
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  delete:
+    tags: [localization]
+    summary: Delete a localization entry
+    operationId: deleteLocalization
+    responses:
+      '204':
+        description: Deleted (no content).
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/localizations/search:
+  get:
+    tags: [localization]
+    summary: Search localization database entries
+    operationId: searchLocalizations
+    parameters:
+      - name: q
+        in: query
+        required: false
+        description: Matches code prefix or text substring.
+        schema:
+          type: string
+      - name: locale
+        in: query
+        required: false
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    x-contract-tests:
+      - name: default search
+        status: 200
+      - name: filtered by q and locale
+        query:
+          q: default
+          locale: en
+          max: '5'
+        status: 200
+    responses:
+      '200':
+        description: Matching localization entries.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Localization'
+                totalCount:
+                  type: integer
+
+/api/localizations/{id}/details:
+  get:
+    tags: [localization]
+    summary: Read a localization database entry by id
+    operationId: localizationDetails
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Localization database id.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing id returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The localization entry.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  $ref: '#/components/schemas/Localization'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/localizations/localeOptions:
+  get:
+    tags: [localization]
+    summary: List supported locales as select options
+    operationId: localizationLocaleOptions
+    responses:
+      '200':
+        description: Supported locales.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required: [id, value, label]
+                    properties:
+                      id:
+                        type: string
+                        example: en
+                      value:
+                        type: string
+                        example: en
+                      label:
+                        type: string
+                        example: English

@@ -1,0 +1,46 @@
+# Shared schemas merged into components.schemas of the bundled document.
+# Reference from fragments as: $ref: '#/components/schemas/<Name>'
+
+ErrorResponse:
+  type: object
+  description: |
+    Standard OpenBoxes JSON error shape rendered by ErrorsController (and by
+    controllers that render errors directly). `cause` is only present on some
+    500 responses; `errorMessages` only on validation (400) errors.
+  required:
+    - errorCode
+    - errorMessage
+  properties:
+    errorCode:
+      type: integer
+      description: HTTP-like error code echoed in the body (400, 401, 403, 404, 405, 500).
+      example: 404
+    errorMessage:
+      type: string
+      example: Resource not found
+    cause:
+      type: string
+      nullable: true
+      description: Root exception class name (500 responses only).
+      example: java.lang.IllegalArgumentException
+    errorMessages:
+      type: array
+      description: Localized field-level messages (validation errors only).
+      items:
+        type: string
+
+PaginatedList:
+  type: object
+  description: |
+    Common paginated list envelope used by list endpoints
+    (`{ data: [...], totalCount: n }`). Domain fragments should compose this
+    via allOf and override `data.items` with their concrete schema.
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items: {}
+    totalCount:
+      type: integer
+      nullable: true

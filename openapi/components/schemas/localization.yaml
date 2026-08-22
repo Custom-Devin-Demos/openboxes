@@ -1,0 +1,80 @@
+# Schemas for the Localization API fragment (paths/localization.yaml).
+# Map of <SchemaName> -> Schema, merged into components.schemas by the bundler.
+
+LocalizedMessages:
+  type: object
+  required: [messages, supportedLocales, currentLocale]
+  properties:
+    messages:
+      type: object
+      description: Map of message code to localized text.
+      additionalProperties:
+        type: string
+    supportedLocales:
+      type: array
+      items:
+        type: string
+      example: [en, fr, es]
+    currentLocale:
+      type: string
+      example: en
+
+LocalizedMessage:
+  type: object
+  required: [code, message, currentLocale]
+  properties:
+    code:
+      type: string
+      example: default.button.save.label
+    message:
+      type: string
+      example: Save
+    currentLocale:
+      type: string
+      example: en
+
+Localization:
+  type: object
+  required: [id, code, locale, text]
+  properties:
+    id:
+      type: string
+    code:
+      type: string
+    locale:
+      type: string
+    text:
+      type: string
+    dateCreated:
+      type: string
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+    version:
+      type: integer
+      nullable: true
+
+LocalizationInput:
+  type: object
+  required: [code, locale, text]
+  properties:
+    code:
+      type: string
+    locale:
+      type: string
+    text:
+      type: string
+
+LocalizationMutationResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      allOf:
+        - $ref: '#/components/schemas/Localization'
+        - type: object
+          properties:
+            message:
+              type: string
+              description: Localized confirmation message.
