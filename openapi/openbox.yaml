@@ -32,6 +32,8 @@ tags:
     description: Invoicing (InvoiceApiController, PrepaymentInvoiceApiController, PrepaymentInvoiceItemApiController)
   - name: localization
     description: Translations / localized messages (LocalizationApiController)
+  - name: orders
+    description: Orders, purchase orders, receiving, fulfillment, consumption, batch import, data exports and documents (Order/PurchaseOrder/OrderAdjustmentType/ReceiveOrder/PartialReceiving/Fulfillment/Consumption/Batch/DataExport/Document API controllers)
   - name: preferenceTypes
     description: Preference types (PreferenceTypeApiController)
   - name: productSuppliers
@@ -60,6 +62,7 @@ x-fragments:
   - paths/finance.yaml
   - paths/invoice.yaml
   - paths/localization.yaml
+  - paths/orders.yaml
   - paths/preference-types.yaml
   - paths/product-suppliers.yaml
   - paths/reason-codes.yaml
