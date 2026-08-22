@@ -1,0 +1,944 @@
+# Dashboard API (DashboardApiController). Widget endpoints render NumberData /
+# GraphData value objects directly (no {data,totalCount} envelope).
+
+/api/dashboard/config:
+  post:
+    tags: [dashboard]
+    summary: Update the current user's dashboard configuration
+    operationId: updateDashboardConfig
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DashboardConfig'
+          example:
+            dashboard: null
+            dashboardWidgets: {}
+    responses:
+      '200':
+        description: The updated dashboard configuration.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardConfig'
+            example:
+              dashboard: null
+              dashboardWidgets: {}
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/{id}/config:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Dashboard id (e.g. personal).
+      schema:
+        type: string
+  get:
+    tags: [dashboard]
+    summary: Get the current user's dashboard configuration
+    operationId: getDashboardConfig
+    x-contract-tests:
+      - name: personal dashboard
+        params:
+          id: personal
+        status: 200
+    responses:
+      '200':
+        description: Dashboard configuration for the given dashboard id.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardConfig'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/{id}/subdashboardKeys:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Dashboard id (falls back to the configured main dashboard when blank).
+      schema:
+        type: string
+  get:
+    tags: [dashboard]
+    summary: List subdashboard keys of a dashboard config
+    operationId: getSubdashboardKeys
+    x-contract-tests:
+      - name: personal dashboard
+        params:
+          id: personal
+        status: 200
+    responses:
+      '200':
+        description: Bare JSON array of subdashboard keys.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardSubdashboardKeys'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/inventoryByLotAndBin:
+  get:
+    tags: [dashboard]
+    summary: InventoryByLotAndBin dashboard widget data
+    operationId: getDashboardInventoryByLotAndBin
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardNumberData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/inProgressShipments:
+  get:
+    tags: [dashboard]
+    summary: InProgressShipments dashboard widget data
+    operationId: getDashboardInProgressShipments
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+      - name: userId
+        in: query
+        required: false
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardNumberData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/inProgressPutaways:
+  get:
+    tags: [dashboard]
+    summary: InProgressPutaways dashboard widget data
+    operationId: getDashboardInProgressPutaways
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+      - name: userId
+        in: query
+        required: false
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardNumberData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/receivingBin:
+  get:
+    tags: [dashboard]
+    summary: ReceivingBin dashboard widget data
+    operationId: getDashboardReceivingBin
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardNumberData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/itemsInventoried:
+  get:
+    tags: [dashboard]
+    summary: ItemsInventoried dashboard widget data
+    operationId: getDashboardItemsInventoried
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardNumberData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/defaultBin:
+  get:
+    tags: [dashboard]
+    summary: DefaultBin dashboard widget data
+    operationId: getDashboardDefaultBin
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardNumberData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/expiredProductsInStock:
+  get:
+    tags: [dashboard]
+    summary: ExpiredProductsInStock dashboard widget data
+    operationId: getDashboardExpiredProductsInStock
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardNumberData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/expirationSummary:
+  get:
+    tags: [dashboard]
+    summary: ExpirationSummary dashboard widget data
+    operationId: getDashboardExpirationSummary
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+      - name: querySize
+        in: query
+        required: false
+        schema:
+          type: integer
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardGraphData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/fillRate:
+  get:
+    tags: [dashboard]
+    summary: FillRate dashboard widget data
+    operationId: getDashboardFillRate
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+      - name: destinationLocation
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: querySize
+        in: query
+        required: false
+        schema:
+          type: integer
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardGraphData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/fillRateSnapshot:
+  get:
+    tags: [dashboard]
+    summary: FillRateSnapshot dashboard widget data
+    operationId: getDashboardFillRateSnapshot
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+      - name: querySize
+        in: query
+        required: false
+        schema:
+          type: integer
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardGraphData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/fillRateDestinations:
+  get:
+    tags: [dashboard]
+    summary: FillRateDestinations dashboard widget data
+    operationId: getDashboardFillRateDestinations
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardFillRateDestinations'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/inventorySummary:
+  get:
+    tags: [dashboard]
+    summary: InventorySummary dashboard widget data
+    operationId: getDashboardInventorySummary
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardGraphData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/requisitionsByYear:
+  get:
+    tags: [dashboard]
+    summary: RequisitionsByYear dashboard widget data
+    operationId: getDashboardRequisitionsByYear
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardGraphData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/sentStockMovements:
+  get:
+    tags: [dashboard]
+    summary: SentStockMovements dashboard widget data
+    operationId: getDashboardSentStockMovements
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+      - name: querySize
+        in: query
+        required: false
+        schema:
+          type: integer
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardGraphData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/receivedStockMovements:
+  get:
+    tags: [dashboard]
+    summary: ReceivedStockMovements dashboard widget data
+    operationId: getDashboardReceivedStockMovements
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+      - name: querySize
+        in: query
+        required: false
+        schema:
+          type: integer
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardGraphData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/outgoingStock:
+  get:
+    tags: [dashboard]
+    summary: OutgoingStock dashboard widget data
+    operationId: getDashboardOutgoingStock
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardNumbersData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/incomingStock:
+  get:
+    tags: [dashboard]
+    summary: IncomingStock dashboard widget data
+    operationId: getDashboardIncomingStock
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardNumbersData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/discrepancy:
+  get:
+    tags: [dashboard]
+    summary: Discrepancy dashboard widget data
+    operationId: getDashboardDiscrepancy
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardTableDataResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/delayedShipments:
+  get:
+    tags: [dashboard]
+    summary: DelayedShipments dashboard widget data
+    operationId: getDashboardDelayedShipments
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardNumbersTableData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/productWithNegativeInventory:
+  get:
+    tags: [dashboard]
+    summary: ProductWithNegativeInventory dashboard widget data
+    operationId: getDashboardProductWithNegativeInventory
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardNumberData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/lossCausedByExpiry:
+  get:
+    tags: [dashboard]
+    summary: LossCausedByExpiry dashboard widget data
+    operationId: getDashboardLossCausedByExpiry
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+      - name: querySize
+        in: query
+        required: false
+        schema:
+          type: integer
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardGraphData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/productsInventoried:
+  get:
+    tags: [dashboard]
+    summary: ProductsInventoried dashboard widget data
+    operationId: getDashboardProductsInventoried
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardListColorNumber'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/percentageAdHoc:
+  get:
+    tags: [dashboard]
+    summary: PercentageAdHoc dashboard widget data
+    operationId: getDashboardPercentageAdHoc
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardGraphData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/stockOutLastMonth:
+  get:
+    tags: [dashboard]
+    summary: StockOutLastMonth dashboard widget data
+    operationId: getDashboardStockOutLastMonth
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardGraphData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/openStockRequests:
+  get:
+    tags: [dashboard]
+    summary: OpenStockRequests dashboard widget data
+    operationId: getDashboardOpenStockRequests
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardNumberData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/requestsPendingApproval:
+  get:
+    tags: [dashboard]
+    summary: RequestsPendingApproval dashboard widget data
+    operationId: getDashboardRequestsPendingApproval
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardNumberData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/inventoryValue:
+  get:
+    tags: [dashboard]
+    summary: InventoryValue dashboard widget data
+    operationId: getDashboardInventoryValue
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardNumberData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/openPurchaseOrdersCount:
+  get:
+    tags: [dashboard]
+    summary: OpenPurchaseOrdersCount dashboard widget data
+    operationId: getDashboardOpenPurchaseOrdersCount
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardNumberData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/backdatedOutboundShipments:
+  get:
+    tags: [dashboard]
+    summary: BackdatedOutboundShipments dashboard widget data
+    operationId: getDashboardBackdatedOutboundShipments
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+      - name: querySize
+        in: query
+        required: false
+        schema:
+          type: integer
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardGraphData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/backdatedInboundShipments:
+  get:
+    tags: [dashboard]
+    summary: BackdatedInboundShipments dashboard widget data
+    operationId: getDashboardBackdatedInboundShipments
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+      - name: querySize
+        in: query
+        required: false
+        schema:
+          type: integer
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardGraphData'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/dashboard/itemsWithBackdatedShipments:
+  get:
+    tags: [dashboard]
+    summary: ItemsWithBackdatedShipments dashboard widget data
+    operationId: getDashboardItemsWithBackdatedShipments
+    parameters:
+      - name: locationId
+        in: query
+        required: false
+        description: Facility location id the widget is computed for.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: locationId={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: Widget payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardNumbersTableData'
+      '500':
+        $ref: '#/components/responses/ServerError'

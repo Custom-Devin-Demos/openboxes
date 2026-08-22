@@ -1,0 +1,296 @@
+# Finance reference-data schemas (GlAccountApiController, GlAccountTypeApiController,
+# BudgetCodeApiController, PaymentTermApiController).
+
+GlAccount:
+  type: object
+  description: GL account as serialized by GlAccountApiController.toJson().
+  required: [id, code, name]
+  properties:
+    id:
+      type: string
+    code:
+      type: string
+    name:
+      type: string
+    description:
+      type: string
+      nullable: true
+    active:
+      type: boolean
+      nullable: true
+    glAccountType:
+      $ref: '#/components/schemas/GlAccountTypeSummary'
+    dateCreated:
+      type: string
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+
+GlAccountTypeSummary:
+  type: object
+  nullable: true
+  properties:
+    id:
+      type: string
+    code:
+      type: string
+      nullable: true
+    name:
+      type: string
+      nullable: true
+
+GlAccountInput:
+  type: object
+  description: Request body bound onto a GlAccount domain instance with bindData().
+  properties:
+    code:
+      type: string
+    name:
+      type: string
+    description:
+      type: string
+      nullable: true
+    active:
+      type: boolean
+    glAccountType:
+      type: object
+      description: GL account type reference (bound by id).
+      properties:
+        id:
+          type: string
+
+GlAccountResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      $ref: '#/components/schemas/GlAccount'
+
+GlAccountList:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/components/schemas/GlAccount'
+    totalCount:
+      type: integer
+
+GlAccountDeactivationError:
+  type: object
+  description: |
+    Non-standard 400 body rendered directly by GlAccountApiController.update()
+    when attempting to deactivate a GL account linked to a product
+    (only `errorMessage`, no `errorCode`).
+  required: [errorMessage]
+  properties:
+    errorMessage:
+      type: string
+
+GlAccountType:
+  type: object
+  description: GL account type as serialized by GlAccountTypeApiController.toJson().
+  required: [id, name]
+  properties:
+    id:
+      type: string
+    code:
+      type: string
+      nullable: true
+    name:
+      type: string
+    glAccountTypeCode:
+      type: string
+      nullable: true
+      description: GlAccountTypeCode enum name (e.g. ASSET, LIABILITY, EQUITY, REVENUE, EXPENSE).
+    dateCreated:
+      type: string
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+
+GlAccountTypeInput:
+  type: object
+  properties:
+    code:
+      type: string
+      nullable: true
+    name:
+      type: string
+    glAccountTypeCode:
+      type: string
+      description: GlAccountTypeCode enum name.
+
+GlAccountTypeResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      $ref: '#/components/schemas/GlAccountType'
+
+GlAccountTypeList:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/components/schemas/GlAccountType'
+    totalCount:
+      type: integer
+
+BudgetCode:
+  type: object
+  description: Budget code as serialized by BudgetCodeApiController.toJson().
+  required: [id, code, name]
+  properties:
+    id:
+      type: string
+    code:
+      type: string
+    name:
+      type: string
+    description:
+      type: string
+      nullable: true
+    active:
+      type: boolean
+      nullable: true
+    organization:
+      nullable: true
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          nullable: true
+    dateCreated:
+      type: string
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+
+BudgetCodeInput:
+  type: object
+  properties:
+    code:
+      type: string
+    name:
+      type: string
+    description:
+      type: string
+      nullable: true
+    active:
+      type: boolean
+    organization:
+      type: object
+      description: Organization reference (bound by id).
+      properties:
+        id:
+          type: string
+
+BudgetCodeResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      $ref: '#/components/schemas/BudgetCode'
+
+BudgetCodeList:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/components/schemas/BudgetCode'
+    totalCount:
+      type: integer
+
+PaymentTerm:
+  type: object
+  description: Payment term as serialized by PaymentTermApiController.toJson().
+  required: [id, name]
+  properties:
+    id:
+      type: string
+    code:
+      type: string
+      nullable: true
+    name:
+      type: string
+    description:
+      type: string
+      nullable: true
+    prepaymentPercent:
+      type: number
+      nullable: true
+    daysToPayment:
+      type: integer
+      nullable: true
+    dateCreated:
+      type: string
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+
+PaymentTermInput:
+  type: object
+  properties:
+    code:
+      type: string
+      nullable: true
+    name:
+      type: string
+    description:
+      type: string
+      nullable: true
+    prepaymentPercent:
+      type: number
+      nullable: true
+    daysToPayment:
+      type: integer
+      nullable: true
+
+PaymentTermResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      $ref: '#/components/schemas/PaymentTerm'
+
+PaymentTermList:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/components/schemas/PaymentTerm'
+    totalCount:
+      type: integer
+
+IdLabelOption:
+  type: object
+  description: Generic `{id, label}` select option (GL account type options).
+  required: [id, label]
+  properties:
+    id:
+      type: string
+    label:
+      type: string
+
+IdLabelOptionList:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/components/schemas/IdLabelOption'

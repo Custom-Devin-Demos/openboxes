@@ -1,0 +1,298 @@
+# Quartz jobs API (JobApiController). Explicit /api/jobs/* mappings plus the
+# generic REST mapping "/api/${resource}s/$id" which routes
+# GET /api/jobs/{id} to JobApiController.read.
+
+/api/jobs/list:
+  get:
+    tags: [jobs]
+    summary: List Quartz jobs with trigger state
+    operationId: jobsList
+    responses:
+      '200':
+        description: All jobs (one entry per trigger) and scheduler standby state.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobList'
+
+/api/jobs/{id}:
+  get:
+    tags: [jobs]
+    summary: Read a Quartz job detail by job name
+    operationId: jobsRead
+    description: |
+      Routed by the generic "/api/${resource}s/$id" REST mapping. `id` is the
+      Quartz job name (fully-qualified job class name); `group` defaults to
+      GRAILS_JOBS. An unknown job name raises a SchedulerException, which is
+      rendered as a 500 error (not 404).
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Quartz job name.
+        schema:
+          type: string
+      - name: group
+        in: query
+        required: false
+        description: Quartz job group (default GRAILS_JOBS).
+        schema:
+          type: string
+    x-contract-tests:
+      - name: read a known job
+        params:
+          id: org.pih.warehouse.jobs.UpdateExchangeRatesJob
+        status: 200
+      - name: unknown job name returns 500
+        params:
+          id: does-not-exist
+        status: 500
+    responses:
+      '200':
+        description: Job detail with properties and triggers.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobDetail'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/jobs/stopJob:
+  post:
+    tags: [jobs]
+    summary: Unschedule a job's trigger (remembering it for restart)
+    operationId: jobsStopJob
+    description: |
+      Always responds 200; `data.message` is null on success or an explanation
+      when the trigger was not found. Schema-only in contract tests (mutates
+      scheduler state).
+    parameters:
+      - name: triggerGroup
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: triggerName
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: jobName
+        in: query
+        required: false
+        description: Key under which the stopped trigger is remembered.
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Result message (null on success).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobMessageResponse'
+            example:
+              data:
+                message: null
+
+/api/jobs/startJob:
+  post:
+    tags: [jobs]
+    summary: Re-schedule a previously stopped job trigger
+    operationId: jobsStartJob
+    description: Schema-only in contract tests (mutates scheduler state).
+    parameters:
+      - name: jobName
+        in: query
+        required: false
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Result message (null on success).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobMessageResponse'
+            example:
+              data:
+                message: No trigger could be found for org.pih.warehouse.jobs.UnknownJob
+
+/api/jobs/pauseJob:
+  post:
+    tags: [jobs]
+    summary: Pause a job
+    operationId: jobsPauseJob
+    description: Schema-only in contract tests (mutates scheduler state).
+    parameters:
+      - name: jobGroup
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: jobName
+        in: query
+        required: false
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Result message (null on success).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobMessageResponse'
+            example:
+              data:
+                message: null
+
+/api/jobs/resumeJob:
+  post:
+    tags: [jobs]
+    summary: Resume a paused job
+    operationId: jobsResumeJob
+    description: Schema-only in contract tests (mutates scheduler state).
+    parameters:
+      - name: jobGroup
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: jobName
+        in: query
+        required: false
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Result message (null on success).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobMessageResponse'
+            example:
+              data:
+                message: null
+
+/api/jobs/runNowJob:
+  post:
+    tags: [jobs]
+    summary: Trigger a job to run immediately
+    operationId: jobsRunNowJob
+    description: Schema-only in contract tests (triggers background work).
+    parameters:
+      - name: jobGroup
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: jobName
+        in: query
+        required: false
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Result message (null on success).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobMessageResponse'
+            example:
+              data:
+                message: null
+
+/api/jobs/startScheduler:
+  post:
+    tags: [jobs]
+    summary: Start the Quartz scheduler
+    operationId: jobsStartScheduler
+    description: Schema-only in contract tests (mutates scheduler state).
+    responses:
+      '200':
+        description: 'Always `{data: {message: null}}`.'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobMessageResponse'
+            example:
+              data:
+                message: null
+
+/api/jobs/stopScheduler:
+  post:
+    tags: [jobs]
+    summary: Put the Quartz scheduler in standby mode
+    operationId: jobsStopScheduler
+    description: Schema-only in contract tests (mutates scheduler state).
+    responses:
+      '200':
+        description: 'Always `{data: {message: null}}`.'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobMessageResponse'
+            example:
+              data:
+                message: null
+
+/api/jobs/triggers/{id}:
+  delete:
+    tags: [jobs]
+    summary: Unschedule a trigger by trigger key
+    operationId: jobsUnscheduleTrigger
+    description: |
+      Always responds 200; `data.message` is null when the trigger was
+      unscheduled or an explanation when it was not found. Schema-only in
+      contract tests (mutates scheduler state).
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Trigger key name.
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Result message (null on success).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobMessageResponse'
+            example:
+              data:
+                message: Unable to unschedule trigger with trigger key unknown-trigger
+
+/api/jobs/{id}/schedule:
+  post:
+    tags: [jobs]
+    summary: Schedule a job (currently always fails)
+    operationId: jobsScheduleJob
+    description: |
+      Characterized as-is: the action calls `quartzScheduler.scheduleJob(trigger)`
+      with an uninitialized (null) trigger, so it always raises an exception
+      rendered as a 500 error. The `cronExpression` parameter is accepted but
+      never used to build a trigger. Schema-only in contract tests.
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Quartz job key name.
+        schema:
+          type: string
+      - name: cronExpression
+        in: query
+        required: false
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Result message (documented shape; not reachable in practice).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobMessageResponse'
+            example:
+              data:
+                message: Job GRAILS_JOBS.someJob scheduled null
+      '500':
+        $ref: '#/components/responses/ServerError'

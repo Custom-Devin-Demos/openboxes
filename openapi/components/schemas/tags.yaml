@@ -1,0 +1,75 @@
+# Tag API schemas (TagApiController).
+
+Tag:
+  type: object
+  description: Tag summary as rendered by TagApiController.toJson (list items).
+  required: [id, tag, productsCount, version]
+  properties:
+    id:
+      type: string
+    tag:
+      type: string
+      example: fragile
+    isActive:
+      type: boolean
+      nullable: true
+    productsCount:
+      type: integer
+    updatedBy:
+      type: string
+      nullable: true
+      description: Display name of the user who last updated the tag.
+    createdBy:
+      type: string
+      nullable: true
+    dateCreated:
+      type: string
+      nullable: true
+      description: ISO-8601 timestamp.
+      example: '2024-01-01T00:00:00Z'
+    lastUpdated:
+      type: string
+      nullable: true
+      example: '2024-01-01T00:00:00Z'
+    version:
+      type: integer
+
+TagDetails:
+  allOf:
+    - $ref: '#/components/schemas/Tag'
+    - type: object
+      description: Tag with creator/updater ids and the tagged products.
+      required: [products]
+      properties:
+        updatedById:
+          type: string
+          nullable: true
+        createdById:
+          type: string
+          nullable: true
+        products:
+          type: array
+          items:
+            type: object
+            required: [id, name]
+            properties:
+              id:
+                type: string
+              productCode:
+                type: string
+                nullable: true
+              name:
+                type: string
+
+TagInput:
+  type: object
+  description: Request body for POST /api/tags and PUT /api/tags/{id} (bindable fields only).
+  properties:
+    tag:
+      type: string
+    isActive:
+      type: boolean
+    version:
+      type: integer
+      nullable: true
+      description: Optimistic-locking version (updates only).

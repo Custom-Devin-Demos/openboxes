@@ -1,0 +1,208 @@
+# Dashboard widget schemas (DashboardApiController). Widget endpoints render
+# NumberData / GraphData value objects directly (no {data,totalCount} envelope).
+
+DashboardNumberData:
+  type: object
+  description: Single-number widget payload (NumberData as JSON).
+  properties:
+    number:
+      type: number
+      nullable: true
+    link:
+      type: string
+      nullable: true
+    tooltipData:
+      description: Optional tooltip payload (null or shape varying by widget).
+
+DashboardColorNumber:
+  type: object
+  nullable: true
+  description: ColorNumber value object (colored number with subtitle); null when unset.
+  properties:
+    value:
+      description: Primary value (number or preformatted string, possibly null).
+    value2:
+      description: Secondary value (number or preformatted string, possibly null).
+    subtitle:
+      type: string
+      nullable: true
+    link:
+      type: string
+      nullable: true
+    color:
+      type: string
+      nullable: true
+    order:
+      type: integer
+      nullable: true
+
+DashboardGraphDataset:
+  type: object
+  description: Chart.js-style dataset within a GraphData payload.
+  properties:
+    label:
+      type: string
+      nullable: true
+    data:
+      type: array
+      items:
+        type: number
+        nullable: true
+    links:
+      type: array
+      nullable: true
+      items:
+        type: string
+        nullable: true
+    type:
+      type: string
+      nullable: true
+    yAxisID:
+      type: string
+      nullable: true
+    pointStyle:
+      type: string
+      nullable: true
+
+DashboardGraphData:
+  type: object
+  description: Graph widget payload (GraphData as JSON).
+  properties:
+    data:
+      type: object
+      nullable: true
+      properties:
+        labels:
+          type: array
+          items:
+            description: Axis label (plain string or `{code, message}` object).
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/DashboardGraphDataset'
+        colorNumber:
+          $ref: '#/components/schemas/DashboardColorNumber'
+    link:
+      type: string
+      nullable: true
+
+DashboardNumbersIndicator:
+  type: object
+  nullable: true
+  description: Up to four ColorNumber slots (first..fourth), each nullable.
+  properties:
+    first:
+      $ref: '#/components/schemas/DashboardColorNumber'
+    second:
+      $ref: '#/components/schemas/DashboardColorNumber'
+    third:
+      $ref: '#/components/schemas/DashboardColorNumber'
+    fourth:
+      $ref: '#/components/schemas/DashboardColorNumber'
+
+DashboardTableData:
+  type: object
+  nullable: true
+  description: Table widget payload section (null when unset).
+  properties:
+    body:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+    name:
+      type: string
+      nullable: true
+    number:
+      type: string
+      nullable: true
+    value:
+      type: string
+      nullable: true
+
+DashboardNumbersData:
+  type: object
+  description: Multi-number widget (incoming/outgoing stock).
+  properties:
+    data:
+      $ref: '#/components/schemas/DashboardNumbersIndicator'
+    link:
+      type: string
+      nullable: true
+
+DashboardNumbersTableData:
+  type: object
+  description: Combined numbers + table widget (delayed shipments, backdated items).
+  properties:
+    data:
+      type: object
+      nullable: true
+      properties:
+        numbersIndicator:
+          $ref: '#/components/schemas/DashboardNumbersIndicator'
+        tableData:
+          $ref: '#/components/schemas/DashboardTableData'
+    link:
+      type: string
+      nullable: true
+
+DashboardTableDataResponse:
+  type: object
+  description: Table-only widget (discrepancy).
+  properties:
+    data:
+      $ref: '#/components/schemas/DashboardTableData'
+    link:
+      type: string
+      nullable: true
+
+DashboardListColorNumber:
+  type: object
+  description: List-of-ColorNumber widget (products inventoried).
+  properties:
+    data:
+      type: object
+      nullable: true
+      properties:
+        listColorNumber:
+          type: array
+          items:
+            $ref: '#/components/schemas/DashboardColorNumber'
+    link:
+      type: string
+      nullable: true
+
+DashboardFillRateDestinations:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+            nullable: true
+          name:
+            description: Destination name (plain string or `{code, message}` object).
+
+DashboardConfig:
+  type: object
+  description: User dashboard configuration (raw config map from application config + user preferences).
+  properties:
+    dashboard:
+      description: Personal dashboard layout (null when the user has none saved).
+    dashboardWidgets:
+      type: object
+      nullable: true
+      description: Widget definitions keyed by widget name.
+      additionalProperties:
+        type: object
+        additionalProperties: true
+
+DashboardSubdashboardKeys:
+  type: array
+  description: Keys of the requested subdashboard config (may be empty).
+  items:
+    type: string

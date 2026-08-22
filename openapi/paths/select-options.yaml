@@ -1,0 +1,256 @@
+# Select-options API (SelectOptionsApiController): dropdown option lists for
+# the React frontend. All operations are read-only GETs.
+
+/api/glAccountOptions:
+  get:
+    tags: [selectOptions]
+    summary: GL account options
+    operationId: selectOptionsGlAccounts
+    responses:
+      '200':
+        description: GL accounts with a code, as `<code> - <name>` labels.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelectOptionList'
+
+/api/productGroupOptions:
+  get:
+    tags: [selectOptions]
+    summary: Product group options
+    operationId: selectOptionsProductGroups
+    responses:
+      '200':
+        description: Named product groups.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelectOptionList'
+
+/api/catalogOptions:
+  get:
+    tags: [selectOptions]
+    summary: Product catalog options
+    operationId: selectOptionsCatalogs
+    parameters:
+      - name: hideNumbers
+        in: query
+        required: false
+        description: When true, omit the item count from labels.
+        schema:
+          type: boolean
+    responses:
+      '200':
+        description: Product catalogs (label includes item count by default).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelectOptionList'
+
+/api/categoryOptions:
+  get:
+    tags: [selectOptions]
+    summary: Product category options
+    operationId: selectOptionsCategories
+    responses:
+      '200':
+        description: Categories labelled with their full hierarchy path.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelectOptionList'
+
+/api/unitOfMeasureClassOptions:
+  get:
+    tags: [selectOptions]
+    summary: Unit of measure class options
+    operationId: selectOptionsUnitOfMeasureClasses
+    responses:
+      '200':
+        description: UoM classes labelled with their base UoM.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelectOptionList'
+
+/api/tagOptions:
+  get:
+    tags: [selectOptions]
+    summary: Product tag options
+    operationId: selectOptionsTags
+    parameters:
+      - name: hideNumbers
+        in: query
+        required: false
+        description: When true, omit the product count from labels.
+        schema:
+          type: boolean
+    responses:
+      '200':
+        description: Tags (label includes product count by default).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelectOptionList'
+
+/api/paymentTermOptions:
+  get:
+    tags: [selectOptions]
+    summary: Payment term options
+    operationId: selectOptionsPaymentTerms
+    responses:
+      '200':
+        description: Payment terms (`value` mirrors `id`).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelectOptionWithValueList'
+
+/api/users:
+  get:
+    tags: [selectOptions]
+    summary: List users (optionally filtered by role types)
+    operationId: selectOptionsUsers
+    parameters:
+      - name: roleTypes
+        in: query
+        required: false
+        description: Role type filter (repeatable). When set, defaults `location` to the session warehouse.
+        schema:
+          type: string
+      - name: location
+        in: query
+        required: false
+        description: Location id used with roleTypes filtering.
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Serialized users.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/SelectOptionUser'
+
+/api/preferenceTypeOptions:
+  get:
+    tags: [selectOptions]
+    summary: Product supplier preference type options
+    operationId: selectOptionsPreferenceTypes
+    parameters:
+      - name: includeMultiple
+        in: query
+        required: false
+        description: When true, prepend the synthetic MULTIPLE option.
+        schema:
+          type: boolean
+      - name: includeNone
+        in: query
+        required: false
+        description: When true, prepend the synthetic NONE option.
+        schema:
+          type: boolean
+    responses:
+      '200':
+        description: Preference types (`value` mirrors `id`).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelectOptionWithValueList'
+
+/api/productAssociationTypeCodeOptions:
+  get:
+    tags: [selectOptions]
+    summary: Product association type code options
+    operationId: selectOptionsProductAssociationTypeCodes
+    responses:
+      '200':
+        description: ProductAssociationTypeCode enum values with localized labels.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelectOptionWithValueList'
+
+/api/ratingTypeCodeOptions:
+  get:
+    tags: [selectOptions]
+    summary: Rating type code options
+    operationId: selectOptionsRatingTypeCodes
+    responses:
+      '200':
+        description: RatingTypeCode enum values with localized labels.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelectOptionWithValueList'
+
+/api/shipmentOptions:
+  get:
+    tags: [selectOptions]
+    summary: Shipment options for the session's current location
+    operationId: selectOptionsShipments
+    responses:
+      '200':
+        description: Shipments destined for the current location.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelectOptionList'
+
+/api/requestReasonCodeOptions:
+  get:
+    tags: [selectOptions]
+    summary: Request reason code options
+    operationId: selectOptionsRequestReasonCodes
+    responses:
+      '200':
+        description: ReasonCode enum values applicable to requests.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelectOptionWithValueList'
+
+/api/stockMovements/shipmentStatusCodes:
+  get:
+    tags: [selectOptions]
+    summary: Shipment status code options
+    operationId: selectOptionsShipmentStatusCodes
+    parameters:
+      - name: excludedStatuses
+        in: query
+        required: false
+        description: Status codes to exclude (repeatable).
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Shipment status codes with display variant.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/SelectOptionShipmentStatusCode'
+
+/api/handlingRequirementsOptions:
+  get:
+    tags: [selectOptions]
+    summary: Handling requirement options
+    operationId: selectOptionsHandlingRequirements
+    responses:
+      '200':
+        description: Fixed set of handling-requirement product fields.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelectOptionWithValueList'
