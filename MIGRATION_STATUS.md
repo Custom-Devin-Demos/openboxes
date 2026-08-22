@@ -59,8 +59,16 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 
 | # | Task | Status | Session | PR | Notes |
 |---|------|--------|---------|----|-------|
-| 3.0 | Shared OpenAPI + contract-test harness (layout, shared schemas, runner, lint, CI job, 1 reference spec) | IN_PROGRESS | [848c9ab8](https://app.devin.ai/sessions/848c9ab83fbf4775ba97402c080e40c7) | — | Fragment layout designed for 9 parallel spec children (additive root $refs) |
-| 3.x | OpenAPI specs + contract tests, ~10 controllers per child (~90 API controllers ≈ 9 children); wire into CI | PENDING | | | Spawn after 3.0 harness merges |
+| 3.0 | Shared OpenAPI + contract-test harness (layout, shared schemas, runner, lint, CI job, 1 reference spec) | MERGED | [848c9ab8](https://app.devin.ai/sessions/848c9ab83fbf4775ba97402c080e40c7) | [#70](https://github.com/Custom-Devin-Demos/openboxes/pull/70) | openapi/ x-fragments layout; bundler + Ajv runner (contracts:verify); Redocly lint; api-contracts.yml CI (lint+verify); Localization reference spec 8 ops / 9 contract checks; contracts 9/9, snapshots 122/122, Playwright 10/10, CI 6/6 |
+| 3-core-admin | Admin/Api/Job/LoadData/Migration/Localization/HelpScout/Generic/Noop/SelectOptions | IN_PROGRESS | [0b1938ac](https://app.devin.ai/sessions/0b1938ac6c674aa09d142ff42f6096d1) | — | |
+| 3-product-1 | Product + 9 product-domain controllers | IN_PROGRESS | [1587e694](https://app.devin.ai/sessions/1587e69403cd4f8a8b6a5f9c8748594b) | — | |
+| 3-product-2 | ProductSupplier*/Category/Attribute/Tag/UoM*/PreferenceType/ReasonCode | IN_PROGRESS | [81aa0328](https://app.devin.ai/sessions/81aa03287ab348d481bc18644bf7bd1c) | — | |
+| 3-inventory | Inventory*/BinLocation/InternalLocation/CycleCount/StockAdjustment/RecordStock/StockCard/TransactionEntry | IN_PROGRESS | [e564b4dd](https://app.devin.ai/sessions/e564b4dd03f34887b697737c6356b2bf) | — | |
+| 3-locations-parties-users | Location*/Organization/Party*/Person/User/Role/EventType | IN_PROGRESS | [001f9e78](https://app.devin.ai/sessions/001f9e78d9dc449dafcec0907d636509) | — | |
+| 3-orders | Order*/PurchaseOrder/ReceiveOrder/PartialReceiving/Fulfillment/Consumption/Batch/DataExport/Document | IN_PROGRESS | [a8d3fb4b](https://app.devin.ai/sessions/a8d3fb4be3c345bf8e451fddd830d58c) | — | |
+| 3-shipments | Shipment*/CreateShipment/CombineShipment*/PackList/DeliveryNote/GoodsReceiptNote/Putaway* | IN_PROGRESS | [5da12359](https://app.devin.ai/sessions/5da12359b16c4c5dad2d48f2d0f5d6b6) | — | |
+| 3-stock-requisitions | StockMovement*/StockTransfer/Picklist/Replenishment/Requisition*/Stocklist*/Mobile | IN_PROGRESS | [8fe75cb6](https://app.devin.ai/sessions/8fe75cb6466446c199eab8bc0d54e5f4) | — | |
+| 3-finance-reporting | Invoice/PrepaymentInvoice*/GlAccount*/BudgetCode/PaymentTerm/Supplier/Report/Dashboard/Indicator | IN_PROGRESS | [5d31af32](https://app.devin.ai/sessions/5d31af32c10142f9a9f13d11dce09463) | — | |
 
 ## Phase 4 — Validation & cutover
 
@@ -213,4 +221,5 @@ Coordinator-maintained work queue for the Grails 3.3.16/Java 8 → Spring Boot 3
 
 - 2026-08-20: Phase 2 wave 6 spawned (final 9 batches). After wave 6 + receiving (#59), all 58 Phase 2 batches will be complete.
 - 2026-08-20: Wave 6 fully merged (#60, #61, #62, #63, #64, #65, #66, #67, #68). ALL 58 Phase 2 GSP→React batches complete. Spawned P3.0 (OpenAPI harness) + P2.R (React 18).
+- 2026-08-22: P3.0 harness merged (#70, CI 6/6 incl. new contracts lint+verify jobs). Spawned 9 Phase 3 spec children (~90 controllers). P2.R React 18 (#69) still in progress.
 - 2026-08-20: Wave 5 COMPLETE (10/10 merged): PR #59 (receiving) merged post-rebase (CI 4/4, clean merge, localization union 30 added/0 removed/0 changed).
