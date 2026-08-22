@@ -1,0 +1,1478 @@
+# Schemas for the shipments batch (ShipmentApiController, ShipmentItemApiController,
+# ShipmentWorkflowApiController, CreateShipmentApiController, CombineShipmentApiController,
+# CombinedShipmentItemApiController, PackListApiController, DeliveryNoteApiController,
+# GoodsReceiptNoteApiController, PutawayApiController, PutawayItemApiController).
+# Characterization schemas: they describe the actual JSON rendered today.
+
+IdName:
+  type: object
+  description: Minimal id/name pair rendered for many nested references.
+  properties:
+    id:
+      type: string
+      nullable: true
+    name:
+      type: string
+      nullable: true
+
+IdLabel:
+  type: object
+  description: Option entry (`{id, label}`) rendered by options endpoints.
+  properties:
+    id:
+      type: string
+      nullable: true
+    label:
+      type: string
+      nullable: true
+
+PrettyDate:
+  type: object
+  nullable: true
+  description: Date rendered as a pretty-time phrase plus an exact title.
+  properties:
+    pretty:
+      type: string
+      nullable: true
+    title:
+      type: string
+      nullable: true
+
+ShipmentSummary:
+  type: object
+  description: Shipment summary map rendered by ShipmentApiController.getShipmentSummary.
+  required: [id]
+  properties:
+    id:
+      type: string
+    version:
+      type: integer
+      nullable: true
+    name:
+      type: string
+      nullable: true
+    shipmentNumber:
+      type: string
+      nullable: true
+    shipmentType:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        defaultName:
+          type: string
+          nullable: true
+    origin:
+      $ref: '#/components/schemas/IdName'
+    destination:
+      $ref: '#/components/schemas/IdName'
+    hasShipped:
+      type: boolean
+      nullable: true
+    wasReceived:
+      type: boolean
+      nullable: true
+    expectedShippingDate:
+      type: string
+      nullable: true
+    actualShippingDate:
+      type: string
+      nullable: true
+    expectedDeliveryDate:
+      type: string
+      nullable: true
+    actualDeliveryDate:
+      type: string
+      nullable: true
+    numItems:
+      type: integer
+      nullable: true
+    totalValue:
+      type: number
+      nullable: true
+    currencyCode:
+      type: string
+      nullable: true
+    totalWeightInPounds:
+      type: number
+      nullable: true
+    status:
+      type: string
+      nullable: true
+    direction:
+      type: string
+      nullable: true
+      description: OUTBOUND / INBOUND relative to the session warehouse, or null.
+
+ShipmentSummaryResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      $ref: '#/components/schemas/ShipmentSummary'
+
+ShipmentListEntry:
+  type: object
+  description: One row of the shipment list (GET /api/shipments/shipmentList).
+  properties:
+    id:
+      type: string
+      nullable: true
+    shipmentNumber:
+      type: string
+      nullable: true
+    name:
+      type: string
+      nullable: true
+    statusCode:
+      type: string
+      nullable: true
+    statusName:
+      type: string
+      nullable: true
+    shipmentType:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        defaultName:
+          type: string
+          nullable: true
+    shipmentItemCount:
+      type: integer
+      nullable: true
+    origin:
+      type: string
+      nullable: true
+    destination:
+      type: string
+      nullable: true
+    actualShippingDate:
+      $ref: '#/components/schemas/PrettyDate'
+    expectedShippingDate:
+      $ref: '#/components/schemas/PrettyDate'
+    actualDeliveryDate:
+      $ref: '#/components/schemas/PrettyDate'
+    expectedDeliveryDate:
+      $ref: '#/components/schemas/PrettyDate'
+    lastUpdated:
+      $ref: '#/components/schemas/PrettyDate'
+
+ShipmentListResponse:
+  type: object
+  description: |
+    Response of GET /api/shipments/shipmentList. Note this is NOT the shared
+    `{data, totalCount}` pagination envelope: `data` is a map holding the rows
+    plus the echoed filters and filter options.
+  required: [data]
+  properties:
+    data:
+      type: object
+      properties:
+        incoming:
+          type: boolean
+        maxReached:
+          type: boolean
+          nullable: true
+        max:
+          type: integer
+        warehouseName:
+          type: string
+          nullable: true
+        shipments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipmentListEntry'
+        filters:
+          type: object
+          properties:
+            terms:
+              type: string
+              nullable: true
+            status:
+              type: string
+              nullable: true
+            type:
+              type: string
+            shipmentType:
+              type: string
+              nullable: true
+            origin:
+              type: string
+              nullable: true
+            destination:
+              type: string
+              nullable: true
+        filterOptions:
+          type: object
+          properties:
+            statuses:
+              type: array
+              items:
+                $ref: '#/components/schemas/IdName'
+            shipmentTypes:
+              type: array
+              items:
+                $ref: '#/components/schemas/IdName'
+            locations:
+              type: array
+              items:
+                $ref: '#/components/schemas/IdName'
+
+ShipmentContainerSummary:
+  type: object
+  nullable: true
+  description: Container summary rendered by ShipmentApiController.getContainerSummary.
+  properties:
+    id:
+      type: string
+      nullable: true
+    name:
+      type: string
+      nullable: true
+    parentContainerName:
+      type: string
+      nullable: true
+    containerTypeName:
+      type: string
+      nullable: true
+    weight:
+      type: number
+      nullable: true
+    weightUnits:
+      type: string
+      nullable: true
+    height:
+      type: number
+      nullable: true
+    width:
+      type: number
+      nullable: true
+    length:
+      type: number
+      nullable: true
+    volumeUnits:
+      type: string
+      nullable: true
+
+ShipmentDetailsResponse:
+  type: object
+  description: |
+    Response of GET /api/shipments/{id}/showDetails. `data` carries the summary
+    plus items, receipt items, events, and view context flags.
+  required: [data]
+  properties:
+    data:
+      type: object
+      properties:
+        summary:
+          $ref: '#/components/schemas/ShipmentSummary'
+        statusCode:
+          type: string
+          nullable: true
+        statusName:
+          type: string
+          nullable: true
+        isFromPurchaseOrder:
+          type: boolean
+          nullable: true
+        originCode:
+          type: string
+          nullable: true
+        originName:
+          type: string
+          nullable: true
+        destinationName:
+          type: string
+          nullable: true
+        totalWeightInPounds:
+          type: number
+          nullable: true
+        totalValue:
+          type: number
+          nullable: true
+        currencyCode:
+          type: string
+          nullable: true
+        showTotalValue:
+          type: boolean
+          nullable: true
+        carrier:
+          type: object
+          nullable: true
+          properties:
+            firstName:
+              type: string
+              nullable: true
+            lastName:
+              type: string
+              nullable: true
+        additionalInformation:
+          type: string
+          nullable: true
+        documentTemplate:
+          type: string
+          nullable: true
+        referenceNumbers:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                nullable: true
+              identifiers:
+                type: array
+                items:
+                  type: string
+        comments:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        documents:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        leadTime:
+          type: object
+          properties:
+            timeToProcess:
+              type: string
+              nullable: true
+            timeInCustoms:
+              type: string
+              nullable: true
+            timeInTransit:
+              type: string
+              nullable: true
+        shipmentItems:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        receiptItems:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        hasReceipt:
+          type: boolean
+        events:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        eventTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdName'
+        eventLocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdName'
+        documentTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdName'
+        defaultEventLocationId:
+          type: string
+          nullable: true
+        context:
+          type: object
+          additionalProperties: true
+
+ShipmentCommentFormResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: object
+      required: [users]
+      properties:
+        users:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              username:
+                type: string
+                nullable: true
+
+ShipmentDocumentFormResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: object
+      properties:
+        document:
+          type: object
+          nullable: true
+          additionalProperties: true
+        documentTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdName'
+
+ShipmentEventFormResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: object
+      properties:
+        event:
+          type: object
+          nullable: true
+          additionalProperties: true
+        eventTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdName'
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdName'
+
+ShipmentPackingListResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: object
+      properties:
+        summary:
+          $ref: '#/components/schemas/ShipmentSummary'
+        wasReceived:
+          type: boolean
+        shipmentItems:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+
+ShipmentPaginatedPackingListResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: object
+      properties:
+        shipment:
+          type: object
+          additionalProperties: true
+        containers:
+          type: array
+          items:
+            type: object
+            properties:
+              container:
+                $ref: '#/components/schemas/ShipmentContainerSummary'
+              shipmentItems:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+
+ShipmentPickListReportResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: object
+      properties:
+        shipment:
+          type: object
+          additionalProperties: true
+        printedBy:
+          type: string
+          nullable: true
+        printedOn:
+          type: string
+        containers:
+          type: array
+          items:
+            type: object
+            properties:
+              container:
+                $ref: '#/components/schemas/ShipmentContainerSummary'
+              pickListItems:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+
+ShipmentShippingReportResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: object
+      properties:
+        shipment:
+          type: object
+          additionalProperties: true
+        licensePlateNumber:
+          type: string
+          nullable: true
+        checklistItems:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+
+ShipmentSendFormResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: object
+      additionalProperties: true
+      properties:
+        summary:
+          $ref: '#/components/schemas/ShipmentSummary'
+        shipmentItems:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        recipients:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+
+ShipmentReceiveFormResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: object
+      additionalProperties: true
+      properties:
+        summary:
+          $ref: '#/components/schemas/ShipmentSummary'
+        warningMessage:
+          type: string
+          nullable: true
+        receiptId:
+          type: string
+          nullable: true
+        hasBinLocationSupport:
+          type: boolean
+        binLocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdName'
+        receiptItems:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+
+ShipmentActionResult:
+  type: object
+  description: |
+    `{success, message}` on success or `{success: false, errors: [...]}` on
+    failure — both rendered with HTTP 200 by ShipmentApiController actions.
+  required: [success]
+  properties:
+    success:
+      type: boolean
+    received:
+      type: boolean
+      nullable: true
+    message:
+      type: string
+      nullable: true
+    errors:
+      type: array
+      items:
+        type: string
+        nullable: true
+
+ShipmentPutawayLocationsResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: object
+      properties:
+        product:
+          $ref: '#/components/schemas/IdName'
+        binLocations:
+          type: array
+          items:
+            type: object
+            properties:
+              binLocationName:
+                type: string
+                nullable: true
+              lotNumber:
+                type: string
+                nullable: true
+              expirationDate:
+                type: string
+                nullable: true
+              quantity:
+                type: number
+                nullable: true
+              unitOfMeasure:
+                type: string
+                nullable: true
+
+ShipmentAddToShipmentFormResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        pendingShipments:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+
+ShipmentItem:
+  type: object
+  description: ShipmentItem JSON rendered by ShipmentItemApiController.toJson.
+  required: [id]
+  properties:
+    id:
+      type: string
+    container:
+      $ref: '#/components/schemas/IdName'
+    product:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        productCode:
+          type: string
+          nullable: true
+        unitOfMeasure:
+          type: string
+          nullable: true
+    lotNumber:
+      type: string
+      nullable: true
+    expirationDate:
+      type: string
+      nullable: true
+    quantity:
+      type: integer
+      nullable: true
+    recipient:
+      $ref: '#/components/schemas/IdName'
+    inventoryItem:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        lotNumber:
+          type: string
+          nullable: true
+    donor:
+      $ref: '#/components/schemas/IdName'
+    binLocation:
+      $ref: '#/components/schemas/IdName'
+    dateCreated:
+      type: string
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+    orderItems:
+      type: array
+      items:
+        $ref: '#/components/schemas/IdName'
+    shipment:
+      $ref: '#/components/schemas/IdName'
+    version:
+      type: integer
+      nullable: true
+
+ShipmentItemListResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/components/schemas/ShipmentItem'
+    totalCount:
+      type: integer
+
+ShipmentItemResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      $ref: '#/components/schemas/ShipmentItem'
+
+ShipmentItemInput:
+  type: object
+  description: |
+    Request body accepted by ShipmentItemApiController create/update
+    (bindShipmentItemData). All association fields take ids.
+  properties:
+    container:
+      type: string
+      nullable: true
+    product:
+      type: string
+      nullable: true
+    lotNumber:
+      type: string
+      nullable: true
+    expirationDate:
+      type: string
+      nullable: true
+      description: yyyy-MM-dd (only the first 10 characters are parsed).
+    quantity:
+      type: integer
+      nullable: true
+    recipient:
+      type: string
+      nullable: true
+    inventoryItem:
+      type: string
+      nullable: true
+    donor:
+      type: string
+      nullable: true
+    shipment:
+      type: string
+      nullable: true
+    version:
+      type: integer
+      nullable: true
+      description: Optimistic-locking version (update only).
+
+ShipmentItemOptionsResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: object
+      properties:
+        containers:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdLabel'
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdLabel'
+        persons:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdLabel'
+        inventoryItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdLabel'
+        donors:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdLabel'
+        shipments:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdLabel'
+
+ShipmentItemBinLocationEntry:
+  type: object
+  properties:
+    binLocation:
+      $ref: '#/components/schemas/IdName'
+    inventoryItem:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+          nullable: true
+        lotNumber:
+          type: string
+          nullable: true
+        expirationDate:
+          type: string
+          nullable: true
+    quantity:
+      type: number
+      nullable: true
+
+ShipmentItemPickResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: object
+      properties:
+        shipmentItem:
+          $ref: '#/components/schemas/ShipmentItem'
+        binLocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipmentItemBinLocationEntry'
+        binLocationSelected:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipmentItemBinLocationEntry'
+
+ShipmentItemSplitResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: object
+      properties:
+        shipmentItem:
+          $ref: '#/components/schemas/ShipmentItem'
+        splitItem:
+          $ref: '#/components/schemas/ShipmentItem'
+
+ShipmentWorkflow:
+  type: object
+  description: ShipmentWorkflow JSON rendered by ShipmentWorkflowApiController.toJson.
+  required: [id]
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+      nullable: true
+    shipmentType:
+      $ref: '#/components/schemas/IdName'
+    excludedFields:
+      type: string
+      nullable: true
+    documentTemplate:
+      type: string
+      nullable: true
+    dateCreated:
+      type: string
+      nullable: true
+    lastUpdated:
+      type: string
+      nullable: true
+    referenceNumberTypes:
+      type: array
+      items:
+        $ref: '#/components/schemas/IdName'
+    containerTypes:
+      type: array
+      items:
+        $ref: '#/components/schemas/IdName'
+    documentTemplates:
+      type: array
+      items:
+        $ref: '#/components/schemas/IdName'
+    version:
+      type: integer
+      nullable: true
+
+ShipmentWorkflowListResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/components/schemas/ShipmentWorkflow'
+    totalCount:
+      type: integer
+
+ShipmentWorkflowResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      $ref: '#/components/schemas/ShipmentWorkflow'
+
+ShipmentWorkflowInput:
+  type: object
+  description: Request body accepted by ShipmentWorkflowApiController create/update.
+  properties:
+    name:
+      type: string
+      nullable: true
+    shipmentType:
+      type: string
+      nullable: true
+      description: ShipmentType id.
+    excludedFields:
+      type: string
+      nullable: true
+    documentTemplate:
+      type: string
+      nullable: true
+    referenceNumberTypes:
+      type: array
+      items:
+        type: string
+    containerTypes:
+      type: array
+      items:
+        type: string
+    documentTemplates:
+      type: array
+      items:
+        type: string
+    version:
+      type: integer
+      nullable: true
+
+ShipmentWorkflowOptionsResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: object
+      properties:
+        shipmentTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdLabel'
+        referenceNumberTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdLabel'
+        containerTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdLabel'
+        documentTemplates:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdLabel'
+
+CreateShipmentErrors:
+  type: object
+  description: |
+    Error body rendered by CreateShipmentApiController (renderNotFound /
+    renderErrors). NOTE: unlike the shared ErrorResponse this is just
+    `{errorMessages: [...]}` with no errorCode field.
+  required: [errorMessages]
+  properties:
+    errorMessages:
+      type: array
+      items:
+        type: string
+
+CreateShipmentReadResponse:
+  type: object
+  description: |
+    Response of the create-shipment workflow endpoints: the shipment, its
+    workflow configuration, select options, containers, items, and candidate
+    email recipients (CreateShipmentApiController.buildReadData).
+  required: [data]
+  properties:
+    data:
+      type: object
+      properties:
+        shipment:
+          type: object
+          additionalProperties: true
+        workflow:
+          type: object
+          additionalProperties: true
+        options:
+          type: object
+          properties:
+            shipmentTypes:
+              type: array
+              items:
+                $ref: '#/components/schemas/IdName'
+            origins:
+              type: array
+              items:
+                $ref: '#/components/schemas/IdName'
+            destinations:
+              type: array
+              items:
+                $ref: '#/components/schemas/IdName'
+            shippers:
+              type: array
+              items:
+                $ref: '#/components/schemas/IdName'
+        containers:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        shipmentItems:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        emailRecipients:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+
+CreateShipmentDetailsInput:
+  type: object
+  description: Body of POST /api/createShipment[/{id}] (saveDetails).
+  properties:
+    shipmentId:
+      type: string
+      nullable: true
+    name:
+      type: string
+      nullable: true
+    shipmentTypeId:
+      type: string
+      nullable: true
+    originId:
+      type: string
+      nullable: true
+    destinationId:
+      type: string
+      nullable: true
+    expectedShippingDate:
+      type: string
+      nullable: true
+      description: MM/dd/yyyy
+    expectedDeliveryDate:
+      type: string
+      nullable: true
+      description: MM/dd/yyyy
+
+CreateShipmentBinLocationsResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        type: object
+        properties:
+          binLocationId:
+            type: string
+            nullable: true
+          binLocationName:
+            type: string
+            nullable: true
+          inventoryItemId:
+            type: string
+            nullable: true
+          lotNumber:
+            type: string
+            nullable: true
+          expirationDate:
+            type: string
+            nullable: true
+          quantity:
+            type: number
+            nullable: true
+
+CreateShipmentSendResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: object
+      required: [shipmentId]
+      properties:
+        shipmentId:
+          type: string
+
+CreateShipmentValidatePicklistResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: object
+      properties:
+        valid:
+          type: boolean
+        message:
+          type: string
+          nullable: true
+
+CombineShipmentOrderResponse:
+  type: object
+  description: |
+    Response of GET /api/combineShipments/{id}: the raw Order domain object
+    rendered by the default Grails JSON converter (deep object graph), or
+    `data: null` when the id does not exist (still HTTP 200).
+  required: [data]
+  properties:
+    data:
+      type: object
+      nullable: true
+      additionalProperties: true
+
+CombinedShipmentOrderOptionsResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          orderNumber:
+            type: string
+            nullable: true
+
+CombinedShipmentProductsInOrdersResponse:
+  type: object
+  description: |
+    Response of GET /api/combinedShipmentItems/getProductsInOrders: raw Product
+    domain objects rendered by the default Grails JSON converter.
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+
+CombinedShipmentFindOrderItemsInput:
+  type: object
+  description: Body of POST /api/combinedShipmentItems/findOrderItems.
+  properties:
+    orderIds:
+      type: array
+      items:
+        type: string
+    vendor:
+      type: string
+      nullable: true
+    destination:
+      type: string
+      nullable: true
+    productId:
+      type: string
+      nullable: true
+
+CombinedShipmentOrderItemsResponse:
+  type: object
+  description: |
+    Response of findOrderItems. NOTE: the list is rendered under a top-level
+    `orderItems` key, not the usual `data` envelope.
+  required: [orderItems]
+  properties:
+    orderItems:
+      type: array
+      items:
+        type: object
+        properties:
+          orderId:
+            type: string
+            nullable: true
+          orderItemId:
+            type: string
+            nullable: true
+          orderNumber:
+            type: string
+            nullable: true
+          productCode:
+            type: string
+            nullable: true
+          productName:
+            type: string
+            nullable: true
+          displayName:
+            type: string
+            nullable: true
+          budgetCode:
+            type: string
+            nullable: true
+          recipient:
+            type: string
+            nullable: true
+          quantityAvailable:
+            type: integer
+            nullable: true
+          quantityToShip:
+            type: string
+            nullable: true
+          uom:
+            type: string
+            nullable: true
+          supplierCode:
+            type: string
+            nullable: true
+          productSupplierName:
+            type: string
+            nullable: true
+          color:
+            type: string
+            nullable: true
+
+CombinedShipmentAddItemsInput:
+  type: object
+  description: Body of POST /api/combinedShipmentItems/addToShipment/{id}.
+  properties:
+    itemsToAdd:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+
+CombinedShipmentShipmentResponse:
+  type: object
+  description: |
+    Response of addToShipment: the raw Shipment domain object rendered by the
+    default Grails JSON converter (deep object graph).
+  required: [data]
+  properties:
+    data:
+      type: object
+      nullable: true
+      additionalProperties: true
+
+PackListImportResponse:
+  type: object
+  description: |
+    Response of POST /api/stockMovements/importPackListItems/{id}. When the
+    import has row errors the controller renders `{message, errors}` and then
+    also renders the success body (both with HTTP 200).
+  required: [message]
+  properties:
+    message:
+      type: string
+    errors:
+      type: array
+      items:
+        type: string
+
+DeliveryNoteNotFound:
+  type: object
+  description: |
+    404 body of the print-data endpoints. NOTE: only `{errorMessage}` — no
+    errorCode field, unlike the shared ErrorResponse.
+  required: [errorMessage]
+  properties:
+    errorMessage:
+      type: string
+
+DeliveryNotePrintDataResponse:
+  type: object
+  description: Report payload of GET /api/deliveryNotes/{id}/printData.
+  required: [data]
+  properties:
+    data:
+      type: object
+      additionalProperties: true
+      properties:
+        logoUrl:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        documentNumber:
+          type: string
+          nullable: true
+        documentName:
+          type: string
+          nullable: true
+        origin:
+          type: object
+          nullable: true
+          additionalProperties: true
+        destination:
+          type: object
+          nullable: true
+          additionalProperties: true
+        sections:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        notes:
+          type: object
+          additionalProperties: true
+
+DeliveryNoteOutboundReturnResponse:
+  type: object
+  description: Report payload of GET /api/deliveryNotes/{id}/printOutboundReturnData.
+  required: [data]
+  properties:
+    data:
+      type: object
+      additionalProperties: true
+      properties:
+        documentNumber:
+          type: string
+          nullable: true
+        rows:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        notes:
+          type: object
+          additionalProperties: true
+
+GoodsReceiptNotePrintDataResponse:
+  type: object
+  description: Report payload of GET /api/goodsReceiptNotes/{id}/printData.
+  required: [data]
+  properties:
+    data:
+      type: object
+      additionalProperties: true
+      properties:
+        shipmentNumber:
+          type: string
+          nullable: true
+        receipts:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+
+PutawayItemEntry:
+  type: object
+  description: |
+    PutawayItem JSON (PutawayItem.toJson). Property names include dotted keys
+    like `product.id`. `splitItems` recursively contains entries of this same
+    shape (left untyped here to keep the document acyclic).
+  additionalProperties: true
+  properties:
+    id:
+      type: string
+      nullable: true
+    putawayStatus:
+      type: string
+      nullable: true
+    quantity:
+      type: number
+      nullable: true
+    quantityAvailable:
+      type: integer
+      nullable: true
+    currentBins:
+      type: string
+      nullable: true
+    currentBinsAbbreviated:
+      type: string
+      nullable: true
+    splitItems:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+
+PutawayCandidatesResponse:
+  type: object
+  description: Response of GET /api/putaways (putaway candidate items, no totalCount).
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/components/schemas/PutawayItemEntry'
+
+Putaway:
+  type: object
+  description: Putaway JSON (Putaway.toJson). Property names include dotted keys.
+  additionalProperties: true
+  properties:
+    id:
+      type: string
+      nullable: true
+    putawayNumber:
+      type: string
+      nullable: true
+    putawayStatus:
+      type: string
+      nullable: true
+    putawayDate:
+      type: string
+      nullable: true
+    dateCreated:
+      type: string
+      nullable: true
+    putawayAssignee:
+      type: object
+      nullable: true
+      additionalProperties: true
+    putawayItems:
+      type: array
+      items:
+        $ref: '#/components/schemas/PutawayItemEntry'
+    orderedBy:
+      type: string
+      nullable: true
+    sortBy:
+      type: string
+      nullable: true
+
+PutawayResponse:
+  type: object
+  required: [data]
+  properties:
+    data:
+      $ref: '#/components/schemas/Putaway'
+
+PutawayInput:
+  type: object
+  description: |
+    Body of POST /api/putaways. Bound onto the Putaway command object via
+    Grails data binding; `putawayStatus: COMPLETED` completes the putaway.
+  additionalProperties: true
+  properties:
+    id:
+      type: string
+      nullable: true
+      description: Existing putaway order id (omit to create).
+    putawayNumber:
+      type: string
+      nullable: true
+    putawayStatus:
+      type: string
+      nullable: true
+      enum: [PENDING, COMPLETED, CANCELED]
+    putawayItems:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+    sortBy:
+      type: string
+      nullable: true

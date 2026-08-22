@@ -1,0 +1,60 @@
+# Supplier API (SupplierApiController).
+
+/api/suppliers/search:
+  get:
+    tags: [supplier]
+    summary: Search supplier locations by name or organization name
+    operationId: searchSuppliers
+    parameters:
+      - name: q
+        in: query
+        required: false
+        description: Search term (ilike match on supplier or organization name).
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    responses:
+      '200':
+        description: Paginated supplier locations (max capped at 100, default 10).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplierSearchList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/suppliers/{id}/details:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Supplier organization id (Organization, not Location).
+      schema:
+        type: string
+  get:
+    tags: [supplier]
+    summary: Read supplier organization details (locations + documents)
+    operationId: readSupplierDetails
+    x-contract-tests:
+      - name: seeded organization
+        params:
+          id: '{organizationId}'
+        status: 200
+      - name: unknown id returns 404
+        params:
+          id: no-such-organization
+        status: 404
+    responses:
+      '200':
+        description: Supplier organization details.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplierDetails'
+      '404':
+        description: Supplier organization not found (rendered directly by the controller).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'

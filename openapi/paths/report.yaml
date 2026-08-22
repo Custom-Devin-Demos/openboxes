@@ -1,0 +1,156 @@
+# Reporting API: reports (ReportApiController) and KPI indicators
+# (IndicatorApiController).
+
+/api/reports/transactionReportMetadata:
+  get:
+    tags: [report]
+    summary: Transaction fact table metadata for the current facility
+    operationId: getTransactionReportMetadata
+    responses:
+      '200':
+        description: Transaction fact counts and refresh-job fire times.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionReportMetadata'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/reports/cycleCountReport:
+  get:
+    tags: [report]
+    summary: Cycle count report rows for the current facility
+    operationId: getCycleCountReport
+    responses:
+      '200':
+        description: Bin-location quantity rows for the session warehouse.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CycleCountReport'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/reports/inventoryByLocationReport:
+  get:
+    tags: [report]
+    summary: Quantity on hand by product across selected locations
+    operationId: getInventoryByLocationReport
+    parameters:
+      - name: locations
+        in: query
+        required: false
+        description: Location id(s) to report on (repeatable).
+        schema:
+          type: string
+      - name: categories
+        in: query
+        required: false
+        description: Category id(s) to filter by (repeatable).
+        schema:
+          type: string
+      - name: includeSubcategories
+        in: query
+        required: false
+        schema:
+          type: boolean
+    x-contract-tests:
+      - name: seeded facility
+        query:
+          locations: '{facilityId}'
+        status: 200
+      - name: no filters
+        status: 200
+    responses:
+      '200':
+        description: Inventory report entries per product.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryByLocationReport'
+      '400':
+        description: Command validation failure (non-standard body without errorMessage).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryByLocationReportError'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/reports/indicators/productsInventoried:
+  get:
+    tags: [report]
+    summary: Products inventoried KPI (single value)
+    operationId: getProductsInventoriedIndicator
+    parameters:
+      - name: facility.id
+        in: query
+        required: false
+        description: Facility to compute the KPI for.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: facility.id={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: SINGLE indicator value.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IndicatorNumberResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/reports/indicators/inventoryAccuracy:
+  get:
+    tags: [report]
+    summary: Inventory accuracy KPI (double value)
+    operationId: getInventoryAccuracyIndicator
+    parameters:
+      - name: facility.id
+        in: query
+        required: false
+        description: Facility to compute the KPI for.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: facility.id={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: DOUBLE indicator value.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IndicatorNumberResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/reports/indicators/inventoryShrinkage:
+  get:
+    tags: [report]
+    summary: Inventory shrinkage KPI (double value)
+    operationId: getInventoryShrinkageIndicator
+    parameters:
+      - name: facility.id
+        in: query
+        required: false
+        description: Facility to compute the KPI for.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded facility
+        query: facility.id={facilityId}
+        status: 200
+    responses:
+      '200':
+        description: DOUBLE indicator value.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IndicatorNumberResponse'
+      '500':
+        $ref: '#/components/responses/ServerError'
