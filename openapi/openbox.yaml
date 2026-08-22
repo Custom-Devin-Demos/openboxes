@@ -20,16 +20,58 @@ servers:
 security:
   - sessionCookie: []
 tags:
+  - name: attributes
+    description: Product/entity attributes (AttributeApiController)
+  - name: categories
+    description: Product categories (CategoryApiController)
+  - name: dashboard
+    description: Dashboard configuration and widget data (DashboardApiController)
+  - name: finance
+    description: GL accounts, GL account types, budget codes, payment terms (GlAccountApiController, GlAccountTypeApiController, BudgetCodeApiController, PaymentTermApiController)
+  - name: invoice
+    description: Invoicing (InvoiceApiController, PrepaymentInvoiceApiController, PrepaymentInvoiceItemApiController)
   - name: localization
     description: Translations / localized messages (LocalizationApiController)
   - name: orders
     description: Orders, purchase orders, receiving, fulfillment, consumption, batch import, data exports and documents (Order/PurchaseOrder/OrderAdjustmentType/ReceiveOrder/PartialReceiving/Fulfillment/Consumption/Batch/DataExport/Document API controllers)
+  - name: preferenceTypes
+    description: Preference types (PreferenceTypeApiController)
+  - name: productSuppliers
+    description: Product suppliers, their attributes and preferences (ProductSupplierApiController, ProductSupplierAttributeApiController, ProductSupplierPreferenceApiController)
+  - name: reasonCodes
+    description: Reason codes (ReasonCodeApiController)
+  - name: report
+    description: Reports and KPI indicators (ReportApiController, IndicatorApiController)
+  - name: shipments
+    description: Shipments, shipment items/workflows, create-shipment workflow, combined shipments, pack lists, delivery/receipt notes, putaways
+  - name: stock-requisitions
+    description: Stock movements, stock transfers, picklists, replenishments, requisitions, stocklists and mobile APIs (StockMovement/StockMovementItem/StockTransfer/Picklist/Replenishment/Requisition/RequisitionTemplate/Stocklist/StocklistItem/Mobile ApiControllers)
+  - name: supplier
+    description: Supplier search and details (SupplierApiController)
+  - name: tags
+    description: Product tags (TagApiController)
+  - name: unitOfMeasure
+    description: Units of measure and conversions (UnitOfMeasureApiController, UnitOfMeasureConversionApiController)
 
 # One line per per-domain fragment file under paths/. Sibling sessions add
 # their fragment here (append a single line; keep the list alphabetized).
 x-fragments:
+  - paths/attributes.yaml
+  - paths/categories.yaml
+  - paths/dashboard.yaml
+  - paths/finance.yaml
+  - paths/invoice.yaml
   - paths/localization.yaml
   - paths/orders.yaml
+  - paths/preference-types.yaml
+  - paths/product-suppliers.yaml
+  - paths/reason-codes.yaml
+  - paths/report.yaml
+  - paths/shipments.yaml
+  - paths/stock-requisitions.yaml
+  - paths/supplier.yaml
+  - paths/tags.yaml
+  - paths/unit-of-measure.yaml
 
 paths: {}
 

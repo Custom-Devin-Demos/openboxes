@@ -1,0 +1,341 @@
+# Category API (CategoryApiController). Map of <path> -> PathItem; registered
+# in openbox.yaml x-fragments. See docs/migration/openapi-conventions.md.
+
+/api/categories:
+  get:
+    tags: [categories]
+    summary: List the full category tree (root categories with nested children)
+    operationId: listCategories
+    responses:
+      '200':
+        description: "All categories rendered as a tree (`{data: [...]}`, no totalCount)."
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Category'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [categories]
+    summary: Create a category
+    operationId: createCategory
+    description: |
+      Creates a new category from the JSON body (the `save` action; returns
+      200, not 201). On a freshly created instance `dateCreated`,
+      `lastUpdated` and `categories` are rendered as null.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CategoryInput'
+          example:
+            name: Scratch Category
+            isRoot: false
+            sortOrder: 0
+    responses:
+      '200':
+        description: The created category (Category.toJson(), no data wrapper).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+            example:
+              id: ff8081817f0e3f80017f0e40a1b20003
+              description: null
+              name: Scratch Category
+              version: 0
+              dateCreated: null
+              lastUpdated: null
+              sortOrder: 0
+              deleted: false
+              isRoot: false
+              categories: null
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/categories/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Category id.
+      schema:
+        type: string
+  get:
+    tags: [categories]
+    summary: Read a category by id
+    operationId: readCategory
+    x-contract-tests:
+      - name: seeded category
+        params:
+          id: '{categoryId}'
+        status: 200
+      - name: missing id returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The category (Category.toJson(), no data wrapper).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  post:
+    tags: [categories]
+    summary: Update a category (POST alias of PUT)
+    operationId: updateCategoryPost
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CategoryInput'
+          example:
+            name: Renamed Category
+    responses:
+      '200':
+        description: The updated category.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+            example:
+              id: ff8081817f0e3f80017f0e40a1b20003
+              description: null
+              name: Renamed Category
+              version: 1
+              dateCreated: 01/Jan/2024 12:00 AM
+              lastUpdated: 02/Jan/2024 12:00 AM
+              sortOrder: 0
+              deleted: false
+              isRoot: false
+              categories: []
+      '400':
+        $ref: '#/components/responses/BadRequest'
+  put:
+    tags: [categories]
+    summary: Update a category
+    operationId: updateCategory
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CategoryInput'
+          example:
+            name: Renamed Category
+    responses:
+      '200':
+        description: The updated category.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+            example:
+              id: ff8081817f0e3f80017f0e40a1b20003
+              description: null
+              name: Renamed Category
+              version: 1
+              dateCreated: 01/Jan/2024 12:00 AM
+              lastUpdated: 02/Jan/2024 12:00 AM
+              sortOrder: 0
+              deleted: false
+              isRoot: false
+              categories: []
+      '400':
+        $ref: '#/components/responses/BadRequest'
+  delete:
+    tags: [categories]
+    summary: Delete a category
+    operationId: deleteCategory
+    responses:
+      '204':
+        description: Deleted (no content).
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/categories/tree:
+  get:
+    tags: [categories]
+    summary: Category tree data for the category management screen
+    operationId: categoryTreeData
+    parameters:
+      - name: categoryId
+        in: query
+        required: false
+        description: Category to select; defaults to the root category.
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Selected category tree, orphan categories and the assigning-parent flag.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryTreeData'
+
+/api/categories/move:
+  post:
+    tags: [categories]
+    summary: Move a category to a new parent
+    operationId: moveCategory
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [child]
+            properties:
+              child:
+                type: string
+                description: Id of the category to move.
+              newParent:
+                type: string
+                nullable: true
+                description: Id of the new parent category (null clears the parent).
+          example:
+            child: ff8081817f0e3f80017f0e40a1b20003
+            newParent: seed-category-root
+    responses:
+      '200':
+        description: Localized success message.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [message]
+              properties:
+                message:
+                  type: string
+            example:
+              message: Successful
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/categories/saveCategory:
+  post:
+    tags: [categories]
+    summary: Create or update a category (category management screen)
+    operationId: saveCategory
+    description: |
+      Creates (no `id` in body) or updates (with `id`) a category with
+      optimistic-locking version check. Unknown `id` returns 404.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CategoryInput'
+              - type: object
+                properties:
+                  id:
+                    type: string
+                    nullable: true
+                  version:
+                    type: integer
+                    nullable: true
+          example:
+            name: Scratch Category
+            parentCategory:
+              id: seed-category-root
+            sortOrder: 5
+    responses:
+      '200':
+        description: Id, name and localized confirmation message.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategorySaveCategoryResponse'
+            example:
+              id: ff8081817f0e3f80017f0e40a1b20003
+              name: Scratch Category
+              message: Category Scratch Category has been saved
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/categories/{id}/details:
+  get:
+    tags: [categories]
+    summary: Category details with parent, children and assigned products
+    operationId: categoryDetails
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded category
+        params:
+          id: '{categoryId}'
+        status: 200
+      - name: missing id returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The category details (no data wrapper).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryDetails'
+      '404':
+        $ref: '#/components/responses/NotFound'
+
+/api/categories/{id}/deleteCategory:
+  delete:
+    tags: [categories]
+    summary: Delete a category (category management screen)
+    operationId: deleteCategoryChecked
+    description: |
+      Deletes the category if it exists; returns 204 even when the id does
+      not exist. Returns 400 when the category is still referenced
+      (data-integrity violation).
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '204':
+        description: Deleted, or id did not exist (no content either way).
+      '400':
+        $ref: '#/components/responses/BadRequest'
+
+/api/categories/updateAssigningParentToProduct:
+  post:
+    tags: [categories]
+    summary: Toggle the assigning-parent-to-product setting
+    operationId: updateAssigningParentToProduct
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              assigningParentToProductEnabled:
+                type: boolean
+          example:
+            assigningParentToProductEnabled: true
+    responses:
+      '204':
+        description: Setting updated (no content).

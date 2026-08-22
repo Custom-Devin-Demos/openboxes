@@ -1,0 +1,70 @@
+# Supplier schemas (SupplierApiController).
+
+SupplierSearchResult:
+  type: object
+  description: Supplier location row from /api/suppliers/search.
+  required: [id]
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+      nullable: true
+    organization:
+      nullable: true
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          nullable: true
+    pendingOrdersCount:
+      type: integer
+      nullable: true
+    pendingShipmentsCount:
+      type: integer
+      nullable: true
+
+SupplierSearchList:
+  type: object
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/components/schemas/SupplierSearchResult'
+    totalCount:
+      type: integer
+      nullable: true
+
+SupplierDetails:
+  type: object
+  description: Supplier organization details from /api/suppliers/{id}/details.
+  required: [data]
+  properties:
+    data:
+      type: object
+      required: [id]
+      properties:
+        id:
+          type: string
+        displayName:
+          type: string
+          nullable: true
+        locations:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+                nullable: true
+        documents:
+          type: array
+          description: Documents attached to the supplier organization (loose shape).
+          items:
+            type: object
+            additionalProperties: true

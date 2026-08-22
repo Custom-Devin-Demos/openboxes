@@ -1,0 +1,3866 @@
+# Stock requisitions domain fragment: StockMovementApiController,
+# StockMovementItemApiController, StockTransferApiController,
+# PicklistApiController, ReplenishmentApiController, RequisitionApiController,
+# RequisitionTemplateApiController, StocklistApiController,
+# StocklistItemApiController, MobileApiController.
+#
+# Characterization of CURRENT behavior (this is not a redesign). Routes come
+# from grails-app/controllers/org/pih/warehouse/UrlMappings.groovy (including
+# the generic "/api/${resource}s" REST mappings). Where controllers render
+# error bodies directly (without the shared errorCode field) the responses use
+# the StockReqErrorMessage/StockReqErrorMessages components instead of the
+# shared ErrorResponse.
+
+########################################################################
+# StockMovementApiController
+########################################################################
+
+/api/stockMovements:
+  get:
+    tags: [stock-requisitions]
+    summary: List stock movements (requires direction; origin/destination filters)
+    operationId: listStockMovements
+    parameters:
+      - name: direction
+        in: query
+        required: false
+        description: INBOUND or OUTBOUND. Missing direction (or origin == destination) yields HTTP 400.
+        schema:
+          type: string
+          enum: [INBOUND, OUTBOUND]
+      - name: origin
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: destination
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: q
+        in: query
+        required: false
+        description: Matches identifier, name or description.
+        schema:
+          type: string
+      - name: format
+        in: query
+        required: false
+        description: "`csv` returns a CSV attachment instead of JSON."
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/sortParam'
+      - $ref: '#/components/parameters/orderParam'
+    x-contract-tests:
+      - name: outbound list
+        query:
+          direction: OUTBOUND
+          origin: '{facilityId}'
+          max: '5'
+        status: 200
+      - name: missing direction returns 400
+        status: 400
+    responses:
+      '200':
+        description: Paginated stock movements, or CSV when format=csv.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqPagedList'
+          text/csv: {}
+      '400':
+        description: >-
+          Direction parameter missing, or origin equals destination (both
+          being absent/null also triggers this).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessages'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [stock-requisitions]
+    summary: Create a stock movement
+    operationId: createStockMovement
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            name: Test movement
+            description: Test movement
+            origin: { id: originLocationId }
+            destination: { id: destinationLocationId }
+            requestedBy: { id: personId }
+            dateRequested: 01/01/2024
+    responses:
+      '201':
+        description: Created stock movement.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+            example:
+              data:
+                id: ff80818188f0d8bc0188f0e001230001
+                name: Test movement
+                statusCode: CREATED
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovements/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [stock-requisitions]
+    summary: Read a stock movement (totalCount varies with stepNumber workflow state)
+    operationId: readStockMovement
+    parameters:
+      - name: stepNumber
+        in: query
+        required: false
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "requires the id of a seeded stock movement (no fixture placeholder); missing ids throw NPE (HTTP 500)"
+    responses:
+      '200':
+        description: The stock movement with a workflow-step-dependent totalCount.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqPagedList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  delete:
+    tags: [stock-requisitions]
+    summary: Delete a stock movement (requisition-, shipment- or order-based)
+    operationId: deleteStockMovement
+    x-contract-tests:
+      - name: missing stock movement returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '204':
+        description: Deleted (no content).
+      '400':
+        description: Not deletable (invoiced items, shipped status, wrong location...).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+      '404':
+        description: Stock movement not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/stockMovements/{id}/status:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [stock-requisitions]
+    summary: Read the status of a stock movement
+    operationId: stockMovementStatus
+    x-contract-tests:
+      - skip: "requires the id of a seeded stock movement (no fixture placeholder)"
+    responses:
+      '200':
+        description: Status string wrapped in a data envelope.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data: {}
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [stock-requisitions]
+    summary: Transition a stock movement to a new status
+    operationId: updateStockMovementStatus
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            status: DISPATCHED
+    responses:
+      '200':
+        description: Transitioned (empty body).
+      '500':
+        $ref: '#/components/responses/ServerError'
+  delete:
+    tags: [stock-requisitions]
+    summary: Rollback a stock movement status (redirects to the read action)
+    operationId: deleteStockMovementStatus
+    x-contract-tests:
+      - skip: "live rollback would mutate seeded data"
+    responses:
+      '302':
+        description: Redirect to GET /api/stockMovements/{id} after rollback.
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovements/{id}/updateRequisition:
+  post:
+    tags: [stock-requisitions]
+    summary: Update the requisition of a stock movement (redirects to read)
+    operationId: updateStockMovementRequisition
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            description: Updated description
+    responses:
+      '302':
+        description: Redirect to GET /api/stockMovements/{id}.
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovements/{id}/updateShipment:
+  post:
+    tags: [stock-requisitions]
+    summary: Update the shipment of a stock movement
+    operationId: updateStockMovementShipment
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            dateShipped: 01/01/2024 12:00
+    responses:
+      '200':
+        description: Updated (empty body).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovements/{id}/reviseItems:
+  post:
+    tags: [stock-requisitions]
+    summary: Revise stock movement line items
+    operationId: reviseStockMovementItems
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            lineItems:
+              - id: requisitionItemId
+                quantityRevised: 5
+                reasonCode: STOCKOUT
+    responses:
+      '200':
+        description: Revised (empty body).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovements/{id}/updateItems:
+  post:
+    tags: [stock-requisitions]
+    summary: Update stock movement line items
+    operationId: updateStockMovementItems
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            lineItems:
+              - product: { id: productId }
+                quantityRequested: 10
+    responses:
+      '200':
+        description: The updated stock movement.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+            example:
+              data:
+                id: ff80818188f0d8bc0188f0e001230001
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovements/{id}/updateInventoryItems:
+  post:
+    tags: [stock-requisitions]
+    summary: Update inventory items (lot/expiry) on a stock movement
+    operationId: updateStockMovementInventoryItems
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            lineItems:
+              - id: itemId
+                lotNumber: LOT-1
+                expirationDate: 01/01/2030
+    responses:
+      '200':
+        description: Updated (empty body).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovements/{id}/updateShipmentItems:
+  post:
+    tags: [stock-requisitions]
+    summary: Update pack-page (shipment) items on a stock movement
+    operationId: updateStockMovementShipmentItems
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            packPageItems:
+              - shipmentItemId: shipmentItemId
+                palletName: Pallet 1
+    responses:
+      '200':
+        description: Current pack page items.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataList'
+            example:
+              data: []
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovements/{id}/updateAdjustedItems:
+  post:
+    tags: [stock-requisitions]
+    summary: Update adjusted items for a product on a stock movement
+    operationId: updateStockMovementAdjustedItems
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: adjustedProduct
+        in: query
+        required: false
+        schema:
+          type: string
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            type: object
+          example: {}
+    responses:
+      '200':
+        description: The refreshed stock movement.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+            example:
+              data:
+                id: ff80818188f0d8bc0188f0e001230001
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovements/{id}/removeAllItems:
+  delete:
+    tags: [stock-requisitions]
+    summary: Remove all requisition or shipment items from a stock movement
+    operationId: removeAllStockMovementItems
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "live delete would mutate seeded data"
+    responses:
+      '204':
+        description: Removed (no content).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovements/createPickList/{id}:
+  get:
+    tags: [stock-requisitions]
+    summary: Create a picklist for a stock movement (mutating GET)
+    operationId: createStockMovementPickList
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "mutating GET — a live call would allocate picklist items on seeded data"
+    responses:
+      '200':
+        description: Picklist created (empty body).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovements/{id}/validatePicklist:
+  get:
+    tags: [stock-requisitions]
+    summary: Validate the picklist of a stock movement
+    operationId: validateStockMovementPicklist
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "requires the id of a seeded stock movement with a picklist (no fixture placeholder)"
+    responses:
+      '200':
+        description: Picklist valid (empty body).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovements/pendingRequisitionDetails:
+  get:
+    tags: [stock-requisitions]
+    summary: Pending requisition details for an origin location and product
+    operationId: pendingRequisitionDetails
+    parameters:
+      - name: origin.id
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: product.id
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: stockMovementId
+        in: query
+        required: false
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded origin and product
+        query:
+          origin.id: '{facilityId}'
+          product.id: '{productId}'
+        status: 200
+    responses:
+      '200':
+        description: Pending requisition details (list).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataList'
+      '500':
+        description: Missing origin or product (IllegalArgumentException).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+
+/api/stockMovements/shippedItems:
+  get:
+    tags: [stock-requisitions]
+    summary: Shipped-not-received items for a destination, as CSV
+    operationId: shippedItems
+    parameters:
+      - name: destination
+        in: query
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing destination returns 400
+        status: 400
+      - name: seeded destination
+        query:
+          destination: '{facilityId}'
+    responses:
+      '200':
+        description: CSV of shipped items awaiting receipt.
+        content:
+          text/csv: {}
+      '400':
+        description: Destination parameter missing.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessages'
+      '404':
+        description: Destination does not exist, or no shipment items found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/stockMovements/pendingRequisitionItems:
+  get:
+    tags: [stock-requisitions]
+    summary: Pending requisition items for an origin, as CSV
+    operationId: pendingRequisitionItems
+    parameters:
+      - name: origin
+        in: query
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing origin returns 400
+        status: 400
+      - name: seeded origin
+        query:
+          origin: '{facilityId}'
+    responses:
+      '200':
+        description: CSV of pending requisition items.
+        content:
+          text/csv: {}
+      '400':
+        description: Origin parameter missing.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessages'
+      '404':
+        description: Origin does not exist, or no pending requisition items found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/stockMovements/requisitionsStatusCodes:
+  get:
+    tags: [stock-requisitions]
+    summary: Requisition status codes for the outbound/request list filters
+    operationId: requisitionStatusCodes
+    parameters:
+      - name: sourceType
+        in: query
+        required: false
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Status options.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqOptionList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovements/{id}/rollbackApproval:
+  put:
+    tags: [stock-requisitions]
+    summary: Rollback the approval of a request stock movement
+    operationId: rollbackStockMovementApproval
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "live rollback would mutate seeded data"
+    responses:
+      '200':
+        description: Rolled back (empty body).
+      '500':
+        description: Rollback failed.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/stockMovements/packingList/template:
+  get:
+    tags: [stock-requisitions]
+    summary: Download the completed packing list Excel template
+    operationId: downloadPackingListTemplate
+    responses:
+      '200':
+        description: Binary Excel template (completedPackingList.xls) as attachment.
+      '404':
+        description: Template file not found (empty body).
+
+/api/stockMovements/{id}/documents:
+  get:
+    tags: [stock-requisitions]
+    summary: List documents attached to a stock movement
+    operationId: stockMovementDocuments
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "requires the id of a seeded stock movement (no fixture placeholder)"
+    responses:
+      '200':
+        description: Documents.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovements/{id}/returnShowDetails:
+  get:
+    tags: [stock-requisitions]
+    summary: Show-page details for a return stock movement
+    operationId: stockMovementReturnShowDetails
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing stock movement returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Return show details (header, packing list, receipts...).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Stock movement not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/stockMovements/{id}/showDetails:
+  get:
+    tags: [stock-requisitions]
+    summary: Show-page details for a stock movement
+    operationId: stockMovementShowDetails
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing stock movement returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Show details.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Stock movement not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/stockMovements/{id}/requisitionItemsData:
+  get:
+    tags: [stock-requisitions]
+    summary: Requisition items table data for the stock movement show page
+    operationId: stockMovementRequisitionItemsData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "requires the id of a seeded stock movement (no fixture placeholder)"
+    responses:
+      '200':
+        description: Requisition items data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovements/{id}/packingListData:
+  get:
+    tags: [stock-requisitions]
+    summary: Packing list table data for the stock movement show page
+    operationId: stockMovementPackingListData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "requires the id of a seeded stock movement (no fixture placeholder)"
+    responses:
+      '200':
+        description: Packing list data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovements/{id}/receiptsData:
+  get:
+    tags: [stock-requisitions]
+    summary: Receipts table data for the stock movement show page
+    operationId: stockMovementReceiptsData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "requires the id of a seeded stock movement (no fixture placeholder)"
+    responses:
+      '200':
+        description: Receipts data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovements/{id}/eventsData:
+  get:
+    tags: [stock-requisitions]
+    summary: Events table data for the stock movement show page
+    operationId: stockMovementEventsData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "requires the id of a seeded stock movement (no fixture placeholder)"
+    responses:
+      '200':
+        description: Events data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovements/{id}/commentsData:
+  get:
+    tags: [stock-requisitions]
+    summary: Comments table data for the stock movement show page
+    operationId: stockMovementCommentsData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "requires the id of a seeded stock movement (no fixture placeholder)"
+    responses:
+      '200':
+        description: Comments data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovements/{id}/commentFormData:
+  get:
+    tags: [stock-requisitions]
+    summary: Comment form data for a stock movement
+    operationId: stockMovementCommentFormData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing stock movement returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Comment form data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Stock movement not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/stockMovements/{id}/documentFormData:
+  get:
+    tags: [stock-requisitions]
+    summary: Document form data for a stock movement
+    operationId: stockMovementDocumentFormData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing stock movement returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Document form data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Stock movement not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/stockMovements/createCombinedShipments:
+  post:
+    tags: [stock-requisitions]
+    summary: Create a shipment-based (combined shipments) stock movement
+    operationId: createCombinedShipments
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            name: Combined shipment
+            origin: { id: originLocationId }
+            destination: { id: destinationLocationId }
+    responses:
+      '201':
+        description: Created stock movement.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+            example:
+              data:
+                id: ff80818188f0d8bc0188f0e001230001
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+########################################################################
+# StockMovementItemApiController
+########################################################################
+
+/api/stockMovementItems:
+  get:
+    tags: [stock-requisitions]
+    summary: List line items of a stock movement
+    operationId: listStockMovementItems
+    parameters:
+      - name: stockMovement.id
+        in: query
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "requires the id of a seeded stock movement (no fixture placeholder); a missing id raises MissingPropertyException (HTTP 500)"
+    responses:
+      '200':
+        description: Line items.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovementItems/{id}:
+  get:
+    tags: [stock-requisitions]
+    summary: Read a stock movement item
+    operationId: readStockMovementItem
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "requires the id of a seeded stock movement item (no fixture placeholder)"
+    responses:
+      '200':
+        description: The stock movement item.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovementItems/{id}/details:
+  get:
+    tags: [stock-requisitions]
+    summary: Read a stock movement item with details
+    operationId: stockMovementItemDetails
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "requires the id of a seeded stock movement item (no fixture placeholder)"
+    responses:
+      '200':
+        description: The stock movement item with details.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovements/{id}/stockMovementItems:
+  get:
+    tags: [stock-requisitions]
+    summary: List stock movement items for a stock movement (paged command)
+    operationId: getStockMovementItems
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    x-contract-tests:
+      - skip: "requires the id of a seeded stock movement (no fixture placeholder)"
+    responses:
+      '200':
+        description: Stock movement items.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovements/{id}/substitutionItems:
+  get:
+    tags: [stock-requisitions]
+    summary: List available substitutions for a requisition item
+    operationId: getSubstitutionItems
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Requisition item id.
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "requires the id of a seeded requisition item (no fixture placeholder)"
+    responses:
+      '200':
+        description: Substitution items.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovementItems/{id}/updatePicklist:
+  post:
+    tags: [stock-requisitions]
+    summary: Update picklist items for a stock movement item
+    operationId: updateStockMovementItemPicklist
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            picklistItems:
+              - id: picklistItemId
+                quantityPicked: 5
+            reasonCode: null
+    responses:
+      '200':
+        description: Picklist updated (empty body).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovementItems/{id}/createPicklist:
+  post:
+    tags: [stock-requisitions]
+    summary: Auto-create a picklist for a stock movement item
+    operationId: createStockMovementItemPicklist
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "live call would allocate picklist items on seeded data"
+    responses:
+      '200':
+        description: Picklist created (empty body).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovementItems/{id}/clearPicklist:
+  post:
+    tags: [stock-requisitions]
+    summary: Clear the picklist of a stock movement item
+    operationId: clearStockMovementItemPicklist
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "live call would clear picklist items on seeded data"
+    responses:
+      '200':
+        description: Picklist cleared (empty body).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovementItems/{id}/picklistItems:
+  delete:
+    tags: [stock-requisitions]
+    summary: Revert the pick of a stock movement item
+    operationId: revertStockMovementItemPick
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "live call would revert picks on seeded data"
+    responses:
+      '204':
+        description: Pick reverted (no content).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovementItems/{id}/substituteItem:
+  post:
+    tags: [stock-requisitions]
+    summary: Substitute a product on a stock movement item
+    operationId: substituteStockMovementItem
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            substitutionItems:
+              - newProduct: { id: productId }
+                newQuantity: 5
+    responses:
+      '200':
+        description: Substituted (empty body).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovementItems/{id}/revertItem:
+  post:
+    tags: [stock-requisitions]
+    summary: Revert changes on a stock movement item
+    operationId: revertStockMovementItem
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "live call would revert item changes on seeded data"
+    responses:
+      '200':
+        description: Reverted (empty body).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovementItems/{id}/cancelItem:
+  post:
+    tags: [stock-requisitions]
+    summary: Cancel the quantity of a stock movement item
+    operationId: cancelStockMovementItem
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: The canceled stock movement item.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+            example:
+              data:
+                id: requisitionItemId
+                quantityRequested: 0
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockMovementItems/{id}/removeItem:
+  delete:
+    tags: [stock-requisitions]
+    summary: Erase (remove) a stock movement item
+    operationId: eraseStockMovementItem
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "live delete would mutate seeded data"
+    responses:
+      '204':
+        description: Removed (no content).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+########################################################################
+# StockTransferApiController
+########################################################################
+
+/api/stockTransfers:
+  get:
+    tags: [stock-requisitions]
+    summary: List stock transfers for a location
+    operationId: listStockTransfers
+    parameters:
+      - name: location
+        in: query
+        required: true
+        description: Location id; missing yields HTTP 400.
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    x-contract-tests:
+      - name: missing location returns 400
+        status: 400
+      - name: seeded location
+        query:
+          location: '{facilityId}'
+        status: 200
+    responses:
+      '200':
+        description: Stock transfers.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqPagedList'
+      '400':
+        description: Location parameter missing.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [stock-requisitions]
+    summary: Create a stock transfer order
+    operationId: createStockTransfer
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            status: PENDING
+            stockTransferItems: []
+    responses:
+      '200':
+        description: The created stock transfer (HTTP 200, not 201).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+            example:
+              data:
+                id: orderId
+                status: PENDING
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockTransfers/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [stock-requisitions]
+    summary: Read a stock transfer
+    operationId: readStockTransfer
+    x-contract-tests:
+      - skip: "requires the id of a seeded transfer order (no fixture placeholder); missing ids throw IllegalArgumentException (HTTP 500)"
+    responses:
+      '200':
+        description: The stock transfer.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [stock-requisitions]
+    summary: Update a stock transfer (POST)
+    operationId: updateStockTransfer
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            status: COMPLETED
+            stockTransferItems: []
+    responses:
+      '200':
+        description: The updated stock transfer.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+            example:
+              data:
+                id: orderId
+                status: COMPLETED
+      '500':
+        $ref: '#/components/responses/ServerError'
+  put:
+    tags: [stock-requisitions]
+    summary: Update a stock transfer (PUT)
+    operationId: updateStockTransferPut
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            status: PLACED
+            stockTransferItems: []
+    responses:
+      '200':
+        description: The updated stock transfer.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+            example:
+              data:
+                id: orderId
+                status: PLACED
+      '500':
+        $ref: '#/components/responses/ServerError'
+  delete:
+    tags: [stock-requisitions]
+    summary: Delete a transfer order
+    operationId: deleteStockTransfer
+    x-contract-tests:
+      - name: missing order returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '204':
+        description: Deleted (no content).
+      '400':
+        description: Order not deletable (status beyond APPROVED, or not a transfer order).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+      '404':
+        description: Order does not exist.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/stockTransfers/statusOptions:
+  get:
+    tags: [stock-requisitions]
+    summary: Stock transfer status options
+    operationId: stockTransferStatusOptions
+    responses:
+      '200':
+        description: Status options.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqOptionList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockTransfers/candidates:
+  get:
+    tags: [stock-requisitions]
+    summary: Stock transfer candidates for the current (or given) location
+    operationId: stockTransferCandidates
+    parameters:
+      - name: location.id
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: showExpiredItemsOnly
+        in: query
+        required: false
+        schema:
+          type: boolean
+    responses:
+      '200':
+        description: Candidate items.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [stock-requisitions]
+    summary: Return candidates for a location (body filters)
+    operationId: returnCandidates
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            locationId: locationId
+    responses:
+      '200':
+        description: Candidate items.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataList'
+            example:
+              data: []
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockTransferItems/{id}:
+  delete:
+    tags: [stock-requisitions]
+    summary: Remove an item from a stock transfer
+    operationId: removeStockTransferItem
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "live delete would mutate seeded data"
+    responses:
+      '200':
+        description: The stock transfer after removal.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockTransfers/{id}/showDetails:
+  get:
+    tags: [stock-requisitions]
+    summary: Show-page details for a stock transfer
+    operationId: stockTransferShowDetails
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing order returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Show details.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Stock transfer not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/stockTransfers/{id}/printData:
+  get:
+    tags: [stock-requisitions]
+    summary: Print data for a stock transfer
+    operationId: stockTransferPrintData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing order returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Print data grouped by zone.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Stock transfer not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/stockTransfers/{id}/sendShipment:
+  post:
+    tags: [stock-requisitions]
+    summary: Send the shipment of a return order
+    operationId: sendStockTransferShipment
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "live call would ship seeded data"
+    responses:
+      '200':
+        description: Shipment sent (empty body).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockTransfers/{id}/rollback:
+  post:
+    tags: [stock-requisitions]
+    summary: Rollback a return order
+    operationId: rollbackStockTransfer
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "live rollback would mutate seeded data"
+    responses:
+      '200':
+        description: Rolled back (empty body).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stockTransfers/{id}/removeAllItems:
+  delete:
+    tags: [stock-requisitions]
+    summary: Remove all items from a stock transfer
+    operationId: removeAllStockTransferItems
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "live delete would mutate seeded data"
+    responses:
+      '200':
+        description: The stock transfer after removal.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+########################################################################
+# PicklistApiController (extends BaseDomainApiController -> genericApi)
+########################################################################
+
+/api/picklists:
+  get:
+    tags: [stock-requisitions]
+    summary: List picklists (generic domain list)
+    operationId: listPicklists
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    responses:
+      '200':
+        description: Picklists.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [stock-requisitions]
+    summary: Create a picklist (generic domain create)
+    operationId: createPicklistGeneric
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            requisition: { id: requisitionId }
+    responses:
+      '201':
+        description: Created picklist.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+            example:
+              data:
+                id: picklistId
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/picklists/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [stock-requisitions]
+    summary: Read a picklist (generic domain read)
+    operationId: readPicklist
+    x-contract-tests:
+      - skip: "requires the id of a seeded picklist (no fixture placeholder)"
+    responses:
+      '200':
+        description: The picklist.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        $ref: '#/components/responses/NotFound'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [stock-requisitions]
+    summary: Update a picklist (generic domain update, POST)
+    operationId: updatePicklistGeneric
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            description: Updated picklist
+    responses:
+      '200':
+        description: The updated picklist.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+            example:
+              data:
+                id: picklistId
+      '500':
+        $ref: '#/components/responses/ServerError'
+  put:
+    tags: [stock-requisitions]
+    summary: Update a picklist (generic domain update, PUT)
+    operationId: updatePicklistGenericPut
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            description: Updated picklist
+    responses:
+      '200':
+        description: The updated picklist.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+            example:
+              data:
+                id: picklistId
+      '500':
+        $ref: '#/components/responses/ServerError'
+  delete:
+    tags: [stock-requisitions]
+    summary: Delete a picklist (generic domain delete)
+    operationId: deletePicklistGeneric
+    x-contract-tests:
+      - skip: "live delete would mutate seeded data"
+    responses:
+      '204':
+        description: Deleted (no content).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/picklists/{id}/items:
+  delete:
+    tags: [stock-requisitions]
+    summary: Clear all items of a picklist
+    operationId: clearPicklistItems
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "live delete would clear picklist items on seeded data"
+    responses:
+      '204':
+        description: Cleared (no content).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/picklists/{id}/printData:
+  get:
+    tags: [stock-requisitions]
+    summary: Print data for the picklist of a requisition
+    operationId: picklistPrintData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Requisition id.
+        schema:
+          type: string
+      - name: sorted
+        in: query
+        required: false
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing requisition returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Picklist print data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Requisition not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/picklists/{id}/returnPrintData:
+  get:
+    tags: [stock-requisitions]
+    summary: Print data for the picklist of a return order
+    operationId: picklistReturnPrintData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Order id.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing order returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Return picklist print data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Order not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+########################################################################
+# ReplenishmentApiController
+########################################################################
+
+/api/replenishments:
+  get:
+    tags: [stock-requisitions]
+    summary: List replenishment orders
+    operationId: listReplenishments
+    responses:
+      '200':
+        description: Replenishments.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [stock-requisitions]
+    summary: Create a replenishment order
+    operationId: createReplenishment
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            replenishmentItems: []
+    responses:
+      '201':
+        description: Created replenishment.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+            example:
+              data:
+                id: orderId
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/replenishments/{id}/:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [stock-requisitions]
+    summary: Read a replenishment order
+    operationId: readReplenishment
+    x-contract-tests:
+      - skip: "requires the id of a seeded replenishment order (no fixture placeholder); missing ids throw IllegalArgumentException (HTTP 500)"
+    responses:
+      '200':
+        description: The replenishment.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [stock-requisitions]
+    summary: Update a replenishment order (POST)
+    operationId: updateReplenishment
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            status: COMPLETED
+    responses:
+      '200':
+        description: Updated (empty body).
+      '500':
+        $ref: '#/components/responses/ServerError'
+  put:
+    tags: [stock-requisitions]
+    summary: Update a replenishment order (PUT)
+    operationId: updateReplenishmentPut
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            status: COMPLETED
+    responses:
+      '200':
+        description: Updated (empty body).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/replenishments/statusOptions:
+  get:
+    tags: [stock-requisitions]
+    summary: Replenishment status options
+    operationId: replenishmentStatusOptions
+    responses:
+      '200':
+        description: Status options.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqOptionList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/replenishments/{id}/removeItem:
+  delete:
+    tags: [stock-requisitions]
+    summary: Remove an item from a replenishment order
+    operationId: removeReplenishmentItem
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Order item id.
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "live delete would mutate seeded data"
+    responses:
+      '204':
+        description: Removed (no content).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/replenishments/{id}/picklists:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Order item id.
+      schema:
+        type: string
+  get:
+    tags: [stock-requisitions]
+    summary: Read the pick page item for a replenishment order item
+    operationId: replenishmentPicklist
+    x-contract-tests:
+      - skip: "requires the id of a seeded replenishment order item (no fixture placeholder)"
+    responses:
+      '200':
+        description: Pick page item.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [stock-requisitions]
+    summary: Create a picklist for a replenishment order item
+    operationId: createReplenishmentPicklist
+    x-contract-tests:
+      - skip: "live call would allocate picklist items on seeded data"
+    responses:
+      '201':
+        description: Created (empty body).
+      '500':
+        $ref: '#/components/responses/ServerError'
+  put:
+    tags: [stock-requisitions]
+    summary: Update the picklist of a replenishment order item
+    operationId: updateReplenishmentPicklist
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            picklistItems:
+              - id: picklistItemId
+                quantityPicked: 5
+    responses:
+      '200':
+        description: Updated (empty body).
+      '500':
+        $ref: '#/components/responses/ServerError'
+  delete:
+    tags: [stock-requisitions]
+    summary: Delete the picklist of a replenishment order item
+    operationId: deleteReplenishmentPicklist
+    x-contract-tests:
+      - skip: "live delete would mutate seeded data"
+    responses:
+      '200':
+        description: Deleted (empty body).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/replenishments/{id}/picklistItem:
+  post:
+    tags: [stock-requisitions]
+    summary: Create a single picklist item for a replenishment order item
+    operationId: createReplenishmentPicklistItem
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Order item id.
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            binLocation: { id: binLocationId }
+            quantityPicked: 5
+    responses:
+      '200':
+        description: Created (empty body).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/replenishments/{id}/printData:
+  get:
+    tags: [stock-requisitions]
+    summary: Print data for a replenishment order
+    operationId: replenishmentPrintData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Order id.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing order returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Replenishment print data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Order not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/requirements:
+  get:
+    tags: [stock-requisitions]
+    summary: List replenishment requirements for a location
+    operationId: listRequirements
+    parameters:
+      - name: location.id
+        in: query
+        required: true
+        description: Missing location yields an exception (HTTP 500).
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded location
+        query:
+          location.id: '{facilityId}'
+        status: 200
+    responses:
+      '200':
+        description: Requirements.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [stock-requisitions]
+    summary: Create a replenishment from requirements
+    operationId: createRequirementReplenishment
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            replenishmentItems: []
+    responses:
+      '201':
+        description: Created replenishment.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+            example:
+              data:
+                id: orderId
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+########################################################################
+# RequisitionApiController
+########################################################################
+
+/api/requisitions:
+  post:
+    tags: [stock-requisitions]
+    summary: Create a requisition
+    operationId: createRequisition
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            name: Test requisition
+            origin: { id: originLocationId }
+            destination: { id: destinationLocationId }
+    responses:
+      '200':
+        description: >-
+          Success or validation-failure envelope (HTTP status stays 200 on
+          validation failure; body carries success=false with errors).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqSuccessEnvelope'
+            example:
+              success: true
+              data:
+                id: requisitionId
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/requisitions/templates:
+  get:
+    tags: [stock-requisitions]
+    summary: List requisition templates
+    operationId: listRequisitionTemplates
+    responses:
+      '200':
+        description: Requisition templates.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/requisitions/templates/{id}:
+  get:
+    tags: [stock-requisitions]
+    summary: Read a requisition template
+    operationId: readRequisitionTemplate
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing template returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The requisition template.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Template not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/requisitions/list:
+  get:
+    tags: [stock-requisitions]
+    summary: List requisitions
+    operationId: listRequisitions
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    responses:
+      '200':
+        description: "`{data: {totalCount, requisitions, statistics, statusOptions}}` envelope."
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/requisitions/{id}/edit:
+  get:
+    tags: [stock-requisitions]
+    summary: Edit-page context for a requisition (mutating GET — may change status)
+    operationId: editRequisition
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing requisition returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Edit context.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Requisition not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/requisitions/{id}/confirm:
+  get:
+    tags: [stock-requisitions]
+    summary: Confirm-page context for a requisition
+    operationId: confirmRequisition
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing requisition returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Confirm context.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Requisition not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/requisitions/{id}/details:
+  post:
+    tags: [stock-requisitions]
+    summary: Update the details of a requisition
+    operationId: updateRequisitionDetails
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            description: Updated requisition
+    responses:
+      '200':
+        description: Success or validation-failure envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqSuccessEnvelope'
+            example:
+              success: true
+              data:
+                id: requisitionId
+      '404':
+        description: Requisition not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/requisitions/{id}/editHeader:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [stock-requisitions]
+    summary: Edit-header context for a requisition
+    operationId: requisitionEditHeader
+    x-contract-tests:
+      - name: missing requisition returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Edit-header context.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Requisition not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+  post:
+    tags: [stock-requisitions]
+    summary: Save the header of a requisition
+    operationId: requisitionSaveHeader
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            name: Updated name
+    responses:
+      '200':
+        description: Success or validation-failure envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqSuccessEnvelope'
+            example:
+              success: true
+              data:
+                id: requisitionId
+      '404':
+        description: Requisition not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/requisitions/{id}/review:
+  get:
+    tags: [stock-requisitions]
+    summary: Review-page context for a requisition
+    operationId: reviewRequisition
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing requisition returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Review context.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Requisition not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/requisitions/{id}/items/{itemId}:
+  post:
+    tags: [stock-requisitions]
+    summary: Update a requisition item
+    operationId: updateRequisitionItem
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            quantityApproved: 5
+    responses:
+      '200':
+        description: Success or validation-failure envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqSuccessEnvelope'
+            example:
+              success: true
+              data:
+                id: requisitionItemId
+      '404':
+        description: Requisition or item not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/requisitions/{id}/items/{itemId}/details:
+  get:
+    tags: [stock-requisitions]
+    summary: Details of a requisition item
+    operationId: requisitionItemDetails
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing item returns 404
+        params:
+          id: does-not-exist
+          itemId: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Requisition item details.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Requisition or item not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/requisitions/{id}/pick:
+  get:
+    tags: [stock-requisitions]
+    summary: Pick-page context for a requisition (may report verifiedByMissing)
+    operationId: requisitionPick
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing requisition returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Pick context (may include verifiedByMissing=true instead of an error).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Requisition not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/requisitions/{id}/items/{itemId}/picklistItems:
+  get:
+    tags: [stock-requisitions]
+    summary: Picklist items of a requisition item
+    operationId: requisitionPicklistItems
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing item returns 404
+        params:
+          id: does-not-exist
+          itemId: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Picklist items.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Requisition or item not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/requisitions/{id}/picklistItems:
+  post:
+    tags: [stock-requisitions]
+    summary: Update picklist items of a requisition
+    operationId: updateRequisitionPicklistItems
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            picklistItems:
+              - id: picklistItemId
+                quantityPicked: 5
+    responses:
+      '200':
+        description: Success or validation-failure envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqSuccessEnvelope'
+            example:
+              success: true
+      '404':
+        description: Requisition not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/requisitions/{id}/printDraft:
+  get:
+    tags: [stock-requisitions]
+    summary: Print-draft data for a requisition
+    operationId: requisitionPrintDraft
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing requisition returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Print draft data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Requisition not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/requisitions/{id}/process:
+  get:
+    tags: [stock-requisitions]
+    summary: Process-page context for a requisition
+    operationId: processRequisition
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing requisition returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Process context.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Requisition not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/requisitions/{id}/show:
+  get:
+    tags: [stock-requisitions]
+    summary: Show-page context for a requisition
+    operationId: showRequisition
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing requisition returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Show context.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Requisition not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/requisitions/{id}/transfer:
+  get:
+    tags: [stock-requisitions]
+    summary: Transfer-page context for a requisition
+    operationId: transferRequisition
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing requisition returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Transfer context.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Requisition not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/requisitions/{id}/complete:
+  post:
+    tags: [stock-requisitions]
+    summary: Complete a requisition
+    operationId: completeRequisition
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            type: object
+          example: {}
+    responses:
+      '200':
+        description: Success or validation-failure envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqSuccessEnvelope'
+            example:
+              success: true
+      '404':
+        description: Requisition not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/requisitionItems/list:
+  get:
+    tags: [stock-requisitions]
+    summary: List canceled requisition items
+    operationId: listCanceledRequisitionItems
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    responses:
+      '200':
+        description: Canceled requisition items with reason codes.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/requisitionItems/{itemId}/change:
+  parameters:
+    - name: itemId
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [stock-requisitions]
+    summary: Change-context for a requisition item
+    operationId: requisitionItemChange
+    x-contract-tests:
+      - name: missing item returns 404
+        params:
+          itemId: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Change context.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Requisition item not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+  post:
+    tags: [stock-requisitions]
+    summary: Change the quantity of a requisition item
+    operationId: changeRequisitionItemQuantity
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            quantity: 5
+            reasonCode: STOCKOUT
+    responses:
+      '200':
+        description: Success or validation-failure envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqSuccessEnvelope'
+            example:
+              success: true
+      '404':
+        description: Requisition item not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+########################################################################
+# RequisitionTemplateApiController
+########################################################################
+
+/api/requisitionTemplates:
+  post:
+    tags: [stock-requisitions]
+    summary: Create (save) a requisition template
+    operationId: saveRequisitionTemplate
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            name: Template A
+            origin: { id: originLocationId }
+            destination: { id: destinationLocationId }
+    responses:
+      '200':
+        description: Success envelope with the new template id.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqSuccessEnvelope'
+            example:
+              success: true
+              data:
+                id: requisitionTemplateId
+      '400':
+        description: Validation failure.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqSuccessEnvelope'
+            example:
+              success: false
+              errors: ["Property [name] cannot be null"]
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/requisitionTemplates/createContext:
+  get:
+    tags: [stock-requisitions]
+    summary: Create-page context for requisition templates
+    operationId: requisitionTemplateCreateContext
+    responses:
+      '200':
+        description: Options and permissions for the create page.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/requisitionTemplates/{id}/details:
+  get:
+    tags: [stock-requisitions]
+    summary: Details of a requisition template
+    operationId: requisitionTemplateDetails
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing template returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Template details.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Template not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/requisitionTemplates/{id}/header:
+  post:
+    tags: [stock-requisitions]
+    summary: Update the header of a requisition template
+    operationId: updateRequisitionTemplateHeader
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            name: Renamed template
+    responses:
+      '200':
+        description: Success envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqSuccessEnvelope'
+            example:
+              success: true
+              data:
+                id: requisitionTemplateId
+      '400':
+        description: Validation failure.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqSuccessEnvelope'
+            example:
+              success: false
+              errors: ["Property [name] cannot be null"]
+      '404':
+        description: Template not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/requisitionTemplates/{id}/importData:
+  post:
+    tags: [stock-requisitions]
+    summary: Parse CSV import data for a requisition template
+    operationId: requisitionTemplateImportData
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            data: "Product Code,Quantity\n10001,5"
+    responses:
+      '200':
+        description: Parsed rows and per-row errors.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data: {}
+                errors: {}
+            example:
+              data: []
+              errors: []
+      '404':
+        description: Template not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/requisitionTemplates/{id}/import:
+  post:
+    tags: [stock-requisitions]
+    summary: Import items into a requisition template
+    operationId: requisitionTemplateDoImport
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            data: []
+    responses:
+      '200':
+        description: Import result envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqSuccessEnvelope'
+            example:
+              success: true
+              message: Import completed
+      '404':
+        description: Template not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/requisitionTemplates/{id}/addItems:
+  post:
+    tags: [stock-requisitions]
+    summary: Add items to a requisition template
+    operationId: requisitionTemplateAddItems
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            items:
+              - product: { id: productId }
+                quantity: 5
+    responses:
+      '200':
+        description: Success envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqSuccessEnvelope'
+            example:
+              success: true
+              message: Items added
+      '404':
+        description: Template not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/requisitionTemplates/{id}/sendMailContext:
+  get:
+    tags: [stock-requisitions]
+    summary: Send-mail context for a requisition template
+    operationId: requisitionTemplateSendMailContext
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - name: missing template returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Send-mail context.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Template not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/requisitionTemplates/{id}/sendMail:
+  post:
+    tags: [stock-requisitions]
+    summary: Send a requisition template by mail
+    operationId: requisitionTemplateSendMail
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            manager: { id: personId }
+    responses:
+      '200':
+        description: Mail sent envelope.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqSuccessEnvelope'
+            example:
+              success: true
+      '400':
+        description: Missing parameters or manager not selected.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqSuccessEnvelope'
+            example:
+              success: false
+              errors: ["Manager is required"]
+      '404':
+        description: Template not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+########################################################################
+# StocklistApiController
+########################################################################
+
+/api/stocklists:
+  get:
+    tags: [stock-requisitions]
+    summary: List stocklists (JSON, or CSV with format=csv)
+    operationId: listStocklists
+    parameters:
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    responses:
+      '200':
+        description: Stocklists.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqPagedList'
+          text/csv: {}
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [stock-requisitions]
+    summary: Create a stocklist
+    operationId: createStocklist
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            name: Stocklist A
+            origin: { id: originLocationId }
+            destination: { id: destinationLocationId }
+    responses:
+      '201':
+        description: Created stocklist.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+            example:
+              data:
+                id: stocklistId
+                name: Stocklist A
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stocklists/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [stock-requisitions]
+    summary: Read a stocklist
+    operationId: readStocklist
+    x-contract-tests:
+      - name: missing stocklist returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The stocklist.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  post:
+    tags: [stock-requisitions]
+    summary: Update a stocklist (POST)
+    operationId: updateStocklist
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            name: Renamed stocklist
+    responses:
+      '200':
+        description: The updated stocklist.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+            example:
+              data:
+                id: stocklistId
+                name: Renamed stocklist
+      '500':
+        $ref: '#/components/responses/ServerError'
+  put:
+    tags: [stock-requisitions]
+    summary: Update a stocklist (PUT)
+    operationId: updateStocklistPut
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            name: Renamed stocklist
+    responses:
+      '200':
+        description: The updated stocklist.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+            example:
+              data:
+                id: stocklistId
+                name: Renamed stocklist
+      '500':
+        $ref: '#/components/responses/ServerError'
+  delete:
+    tags: [stock-requisitions]
+    summary: Delete a stocklist
+    operationId: deleteStocklist
+    x-contract-tests:
+      - skip: "live delete would mutate seeded data"
+    responses:
+      '204':
+        description: Deleted (no content).
+      '400':
+        description: Existing associations prevent deletion.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [errorMessages]
+              properties:
+                errorMessages:
+                  type: array
+                  items:
+                    type: string
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stocklists/location/{id}:
+  get:
+    tags: [stock-requisitions]
+    summary: Stocklist details for a location
+    operationId: stocklistLocationDetails
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Location id.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded location
+        params:
+          id: '{facilityId}'
+        status: 200
+      - name: missing location returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Location stocklist details.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Location not found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/stocklists/sendMail/{id}:
+  post:
+    tags: [stock-requisitions]
+    summary: Send a stocklist by mail
+    operationId: stocklistSendMail
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "live call would send mail"
+    responses:
+      '200':
+        description: Mail sent (empty body).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stocklists/{id}/export:
+  get:
+    tags: [stock-requisitions]
+    summary: Export a stocklist as CSV
+    operationId: exportStocklist
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "requires the id of a seeded stocklist (no fixture placeholder); a missing id falls through `return 404` without rendering (behavioral quirk)"
+    responses:
+      '200':
+        description: CSV export.
+        content:
+          text/csv: {}
+      '404':
+        description: Stocklist not found (controller `return 404` — response body/status vary).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stocklists/{id}/clone:
+  post:
+    tags: [stock-requisitions]
+    summary: Clone a stocklist
+    operationId: cloneStocklist
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "live clone would create data derived from seeded rows"
+    responses:
+      '200':
+        description: Cloned (empty body).
+      '404':
+        description: Stocklist not found (controller `return 404` — response body/status vary).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stocklists/{id}/publish:
+  post:
+    tags: [stock-requisitions]
+    summary: Publish a stocklist
+    operationId: publishStocklist
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "live publish would mutate seeded data"
+    responses:
+      '200':
+        description: Published (empty body).
+      '404':
+        description: Stocklist not found (controller `return 404` — response body/status vary).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stocklists/{id}/unpublish:
+  post:
+    tags: [stock-requisitions]
+    summary: Unpublish a stocklist
+    operationId: unpublishStocklist
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "live unpublish would mutate seeded data"
+    responses:
+      '200':
+        description: Unpublished (empty body).
+      '404':
+        description: Stocklist not found (controller `return 404` — response body/status vary).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stocklists/{id}/clear:
+  post:
+    tags: [stock-requisitions]
+    summary: Clear all items of a stocklist
+    operationId: clearStocklist
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-contract-tests:
+      - skip: "live clear would mutate seeded data"
+    responses:
+      '200':
+        description: Cleared (empty body).
+      '404':
+        description: Stocklist not found (controller `return 404` — response body/status vary).
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+########################################################################
+# StocklistItemApiController
+########################################################################
+
+/api/stocklistItems:
+  get:
+    tags: [stock-requisitions]
+    summary: List stocklist items for a product
+    operationId: listStocklistItems
+    parameters:
+      - name: product.id
+        in: query
+        required: true
+        description: Missing product id throws IllegalArgumentException (HTTP 500).
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        query:
+          product.id: '{productId}'
+        status: 200
+    responses:
+      '200':
+        description: Stocklist items.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [stock-requisitions]
+    summary: Create a stocklist item
+    operationId: createStocklistItem
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            stocklist: { id: stocklistId }
+            product: { id: productId }
+            maxQuantity: 10
+    responses:
+      '201':
+        description: Created stocklist item.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+            example:
+              data:
+                id: stocklistItemId
+                maxQuantity: 10
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stocklistItems/{id}:
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  get:
+    tags: [stock-requisitions]
+    summary: Read a stocklist item
+    operationId: readStocklistItem
+    x-contract-tests:
+      - name: missing item returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: The stocklist item.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        $ref: '#/components/responses/NotFound'
+  put:
+    tags: [stock-requisitions]
+    summary: Update a stocklist item
+    operationId: updateStocklistItem
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            maxQuantity: 20
+    responses:
+      '200':
+        description: The updated stocklist item.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+            example:
+              data:
+                id: stocklistItemId
+                maxQuantity: 20
+      '500':
+        $ref: '#/components/responses/ServerError'
+  delete:
+    tags: [stock-requisitions]
+    summary: Remove a stocklist item
+    operationId: removeStocklistItem
+    x-contract-tests:
+      - skip: "live delete would mutate seeded data"
+    responses:
+      '204':
+        description: Removed (no content).
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    tags: [stock-requisitions]
+    summary: Save a stocklist item (routed to "save", behaves like update)
+    operationId: saveStocklistItem
+    description: >-
+      UrlMappings maps POST to a "save" action that does not exist on
+      StocklistItemApiController; in practice the request executes the
+      update flow, throwing IllegalArgumentException (HTTP 500 with message
+      "No stocklist item fund with ID ...") for unknown ids.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            maxQuantity: 20
+    responses:
+      '200':
+        description: The updated stocklist item.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+            example:
+              data:
+                id: stocklistItemId
+                maxQuantity: 20
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/stocklistItems/availableStocklists:
+  get:
+    tags: [stock-requisitions]
+    summary: List available stocklists
+    operationId: availableStocklists
+    responses:
+      '200':
+        description: Available stocklists.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataList'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+########################################################################
+# MobileApiController
+########################################################################
+
+/api/mobile/dashboard:
+  get:
+    tags: [stock-requisitions]
+    summary: Mobile dashboard counters
+    operationId: mobileDashboard
+    responses:
+      '200':
+        description: Dashboard tiles (name, icon class, count, url).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required: [name, class, count, url]
+                    properties:
+                      name:
+                        type: string
+                      class:
+                        type: string
+                      count:
+                        type: integer
+                      url:
+                        type: string
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/mobile/chooseLocationOptions:
+  get:
+    tags: [stock-requisitions]
+    summary: Mobile login-location options
+    operationId: mobileChooseLocationOptions
+    responses:
+      '200':
+        description: Saved locations and login locations grouped by organization.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+                  required: [savedLocations, loginLocationsMap]
+                  properties:
+                    savedLocations:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                    loginLocationsMap:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          organization:
+                            type: string
+                            nullable: true
+                          locations:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                name:
+                                  type: string
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/mobile/errorDetails:
+  get:
+    tags: [stock-requisitions]
+    summary: Mobile session error details
+    operationId: mobileErrorDetails
+    responses:
+      '200':
+        description: The last mobile error stored in the session (empty object when none).
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/mobile/productSummaries:
+  get:
+    tags: [stock-requisitions]
+    summary: Mobile product summaries at the current location
+    operationId: mobileProductSummaryList
+    parameters:
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    responses:
+      '200':
+        description: Product summaries with totalCount.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data, totalCount]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/MobileProductSummary'
+                totalCount:
+                  type: integer
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/mobile/productSummaries/{id}:
+  get:
+    tags: [stock-requisitions]
+    summary: Mobile product summary details (by product id or product code)
+    operationId: mobileProductSummaryDetails
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Product id or product code.
+        schema:
+          type: string
+    x-contract-tests:
+      - name: seeded product
+        params:
+          id: '{productCode}'
+      - name: missing product returns 404
+        params:
+          id: does-not-exist
+        status: 404
+    responses:
+      '200':
+        description: Product summary with attributes.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqDataObject'
+      '404':
+        description: Product not available at the current location.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockReqErrorMessage'
+
+/api/mobile/outboundItems:
+  get:
+    tags: [stock-requisitions]
+    summary: Mobile pending outbound stock movements
+    operationId: mobileOutboundList
+    parameters:
+      - name: origin.id
+        in: query
+        required: false
+        schema:
+          type: string
+      - $ref: '#/components/parameters/maxParam'
+      - $ref: '#/components/parameters/offsetParam'
+    responses:
+      '200':
+        description: Pending outbound stock movements.
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      identifier:
+                        type: string
+                        nullable: true
+                      status:
+                        type: string
+                        nullable: true
+                      destination:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            nullable: true
+                          locationNumber:
+                            type: string
+                            nullable: true
+                      requestedDeliveryDate:
+                        type: string
+                        nullable: true
+                totalCount:
+                  description: >-
+                    Behavioral quirk: an integer when results exist, but an
+                    empty array when the result list is empty.
+      '500':
+        $ref: '#/components/responses/ServerError'

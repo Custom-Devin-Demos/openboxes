@@ -1,0 +1,149 @@
+# Shared schema components for the stock-requisitions domain fragment
+# (stock movements, stock movement items, stock transfers, picklists,
+# replenishments, requisitions, requisition templates, stocklists,
+# stocklist items, mobile). Characterization of current behavior only.
+#
+# Note: many endpoints in this domain render error bodies directly from the
+# controller as `{errorMessage}` or `{errorMessages}` WITHOUT the shared
+# `errorCode` field, so they cannot reuse #/components/schemas/ErrorResponse.
+# Those shapes are captured here as new components (additive; shared schemas
+# untouched).
+
+StockReqErrorMessage:
+  type: object
+  description: >-
+    Controller-rendered error body used across stock movement / requisition
+    controllers (differs from the shared ErrorResponse: no errorCode).
+  required: [errorMessage]
+  properties:
+    errorMessage:
+      type: string
+      example: Stock Movement with id 123 not found
+
+StockReqErrorMessages:
+  type: object
+  description: >-
+    Controller-rendered error body carrying a list of messages
+    (differs from the shared ErrorResponse: no errorCode/errorMessage).
+  required: [errorMessages]
+  properties:
+    errorMessages:
+      type: array
+      items:
+        type: string
+      example: ["Direction parameter is required. Origin and destination cannot be the same."]
+
+StockReqDataObject:
+  type: object
+  description: "Generic single-resource envelope `{data: <object>}`."
+  required: [data]
+  properties:
+    data:
+      type: object
+      nullable: true
+
+StockReqDataList:
+  type: object
+  description: "Generic list envelope `{data: [<object>...]}` without totalCount."
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        type: object
+      nullable: true
+
+StockReqPagedList:
+  type: object
+  description: "Paginated list envelope `{data, totalCount}`."
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        type: object
+      nullable: true
+    totalCount:
+      description: >-
+        Behavioral quirk: usually an integer, but some endpoints render an
+        empty array (or null) when the result list is empty.
+
+StockReqOptionList:
+  type: object
+  description: Select-option list envelope used by statusOptions-style endpoints.
+  required: [data]
+  properties:
+    data:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+            nullable: true
+          value:
+            type: string
+            nullable: true
+          label:
+            type: string
+            nullable: true
+
+StockReqSuccessEnvelope:
+  type: object
+  description: >-
+    `{success, data|errors|message}` envelope used by several requisition
+    mutation endpoints. On validation failure the controller often renders
+    `success: false` with `errors` while leaving the HTTP status at 200.
+  properties:
+    success:
+      type: boolean
+    message:
+      type: string
+      nullable: true
+    data: {}
+    errors:
+      type: array
+      items:
+        type: string
+      nullable: true
+
+MobileProductSummary:
+  type: object
+  description: Product summary entry returned by the mobile API.
+  required: [product, quantityOnHand]
+  properties:
+    product:
+      type: object
+      required: [id, productCode, name]
+      properties:
+        id:
+          type: string
+        productCode:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        unitOfMeasure:
+          type: string
+          nullable: true
+        thumbnailId:
+          type: string
+          nullable: true
+        handlingIcons:
+          type: array
+          items:
+            type: object
+            properties:
+              icon:
+                type: string
+                nullable: true
+              color:
+                type: string
+                nullable: true
+              label:
+                type: string
+                nullable: true
+    quantityOnHand:
+      type: number
